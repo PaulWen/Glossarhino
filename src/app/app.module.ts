@@ -7,6 +7,9 @@ import {MyApp} from "./app.component";
 import {HomePage} from "../pages/home/home";
 import {ModelProvider} from "../providers/model/model";
 import {MyErrorHandler} from "./my-error-handler";
+import {SuperloginHttpRequestor} from "../providers/super_login_client/superlogin_http_requestor";
+import {SuperLoginClientDatabaseInitializer} from "../providers/super_login_client/super_login_client_database_initializer";
+import {SuperLoginClient} from "../providers/super_login_client/super_login_client";
 
 @NgModule({
   declarations: [
@@ -23,10 +26,13 @@ import {MyErrorHandler} from "./my-error-handler";
     HomePage
   ],
   providers: [
+    SuperloginHttpRequestor,
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: MyErrorHandler},
-    ModelProvider
+    ModelProvider,
+    {provide: SuperLoginClientDatabaseInitializer, useClass: ModelProvider},
+    SuperLoginClient
   ]
 })
 export class AppModule {}

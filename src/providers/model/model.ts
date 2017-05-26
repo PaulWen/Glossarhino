@@ -1,18 +1,17 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
+import {SuperLoginClientDatabaseInitializer} from "../super_login_client/super_login_client_database_initializer";
 
-/*
-  Generated class for the ModelProvider provider.
-
-  See https://angular.io/docs/ts/latest/guide/dependency-injection.html
-  for more info on providers and Angular 2 DI.
-*/
 @Injectable()
-export class ModelProvider {
+export class ModelProvider extends SuperLoginClientDatabaseInitializer {
 
-  constructor(public http: Http) {
+  constructor() {
+    super();
     console.log('Hello ModelProvider Provider');
   }
 
+
+  public initializeDatabases(user_databases: any): void {
+    //TODO: lade alle Datenbanken
+  }
 }

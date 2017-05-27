@@ -1,10 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
-import { SingleArticlePage } from '../single-article/single-article';
-
-export interface HomePage {
- get 
-}
+import { SingleEntryPage } from "../single-entry/single-entry";
 
 @Component({
   selector: 'page-home',
@@ -12,20 +8,24 @@ export interface HomePage {
 })
 
 export class HomePage {
-  singleArticlePage = SingleArticlePage;
+  // Variable SingleEntryPage for navigation purposes
+  singleEntryPage = SingleEntryPage;
 
-  public toggled: boolean;
+  // Toggle variable for searchbar
+  public searchbarToggled: boolean;
 
   constructor(public navCtrl: NavController) {
-    this.toggled = false;
+    this.searchbarToggled = false;
   }
 
+  // Toggle searchbar variable to show/hide searchbar and icons
   toggleSearch() {
-       this.toggled = this.toggled ? false : true;
+       this.searchbarToggled = this.searchbarToggled ? false : true;
   }
 
+
+  // Handle events of searchbar
   onInput (event: Event) {
-    this.toggleSearch()
   }
 
   onCancel (event: Event) {

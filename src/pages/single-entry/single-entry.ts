@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Entry } from "../../providers/model/entry-model";
 
+
+// Interface to define what this page needs implemented in order to work
 export interface SingleEntryInterface {
   getEntry: (id: number) => Entry;
 }

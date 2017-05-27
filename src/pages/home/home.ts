@@ -1,13 +1,18 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
-import { ShowWordPage } from '../show-word/show-word';
+import { SingleArticlePage } from '../single-article/single-article';
+
+export interface HomePage {
+ get 
+}
 
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
 })
+
 export class HomePage {
-  showWordPage = ShowWordPage;
+  singleArticlePage = SingleArticlePage;
 
   public toggled: boolean;
 

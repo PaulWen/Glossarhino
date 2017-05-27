@@ -8,7 +8,7 @@
 
      <ion-searchbar
       *ngIf="toggled"
-      placeholder="Search words"
+      placeholder="Search articles"
       autocorrect="off"
       type="text"
       [(ngModel)]="searchText"
@@ -43,9 +43,9 @@
 <ion-content padding class="card-background-page">
 
   <ion-card>
-    <img [navPush]="showWordPage" src="assets/img/example1.jpg"/>
-    <div [navPush]="showWordPage" class="card-title">Show one word</div>
-    <div [navPush]="showWordPage" class="card-subtitle">Show view of one word just as an example</div>
+    <img [navPush]="singleArticlePage" src="assets/img/example1.jpg"/>
+    <div [navPush]="singleArticlePage" class="card-title">Show single Article</div>
+    <div [navPush]="singleArticlePage" class="card-subtitle">Show view of a single article just as an example</div>
   </ion-card>
 
   <ion-card>

@@ -12,11 +12,13 @@ import {SuperLoginClientDatabaseInitializer} from "../providers/super_login_clie
 import {SuperLoginClient} from "../providers/super_login_client/super_login_client";
 
 import { ShowWordPage } from "../pages/show-word/show-word";
+import { SingleEntryPage } from "../pages/single-entry/single-entry";
+
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
-    ShowWordPage
+    SingleEntryPage
   ],
   imports: [
     BrowserModule,
@@ -26,7 +28,7 @@ import { ShowWordPage } from "../pages/show-word/show-word";
   entryComponents: [
     MyApp,
     HomePage,
-    ShowWordPage
+    SingleEntryPage
   ],
   providers: [
     SuperloginHttpRequestor,

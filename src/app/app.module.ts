@@ -11,10 +11,12 @@ import {SuperloginHttpRequestor} from "../providers/super_login_client/superlogi
 import {SuperLoginClientDatabaseInitializer} from "../providers/super_login_client/super_login_client_database_initializer";
 import {SuperLoginClient} from "../providers/super_login_client/super_login_client";
 
+import { ShowWordPage } from "../pages/show-word/show-word";
 @NgModule({
   declarations: [
     MyApp,
-    HomePage
+    HomePage,
+    ShowWordPage
   ],
   imports: [
     BrowserModule,
@@ -23,7 +25,8 @@ import {SuperLoginClient} from "../providers/super_login_client/super_login_clie
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage
+    HomePage,
+    ShowWordPage
   ],
   providers: [
     SuperloginHttpRequestor,

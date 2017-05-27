@@ -1,14 +1,69 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>
-      Ionic Blank
-    </ion-title>
+
+    <button ion-button icon-only menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title *ngIf="!toggled">Glossarhino</ion-title>
+
+     <ion-searchbar
+      *ngIf="toggled"
+      placeholder="Search words"
+      autocorrect="off"
+      type="text"
+      [(ngModel)]="searchText"
+      showCancelButton="false"
+      (ionInput)="onInput($event)"
+      (ionCancel)="onCancel($event)">
+      </ion-searchbar>
+
+    <ion-buttons end *ngIf="!toggled">
+      <button ion-button icon-only (click)="toggleSearch()">
+        <ion-icon name="search"></ion-icon>
+      </button>
+
+      <button ion-button icon-only>
+        <ion-icon name="chatbubbles"></ion-icon>
+      </button>
+    </ion-buttons>
+
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+<ion-menu [content]="mycontent" [persistent]="true">
+  <ion-content padding>
+    <ion-list>
+      <p>some menu content, could be list items</p>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+
+<ion-nav #mycontent [root]="rootPage"></ion-nav>
+
+<ion-content padding class="card-background-page">
+
+  <ion-card>
+    <img [navPush]="showWordPage" src="assets/img/example1.jpg"/>
+    <div [navPush]="showWordPage" class="card-title">Show one word</div>
+    <div [navPush]="showWordPage" class="card-subtitle">Show view of one word just as an example</div>
+  </ion-card>
+
+  <ion-card>
+    <img src="assets/img/example2.jpg"/>
+    <div class="card-title">Amsterdam</div>
+    <div class="card-subtitle">64 Listings</div>
+  </ion-card>
+
+  <ion-card>
+    <img src="assets/img/example3.jpg"/>
+    <div class="card-title">San Francisco</div>
+    <div class="card-subtitle">72 Listings</div>
+  </ion-card>
+
+  <ion-card>
+    <img src="assets/img/example4.jpg"/>
+    <div class="card-title">Madison</div>
+    <div class="card-subtitle">28 Listings</div>
+  </ion-card>
+
 </ion-content>

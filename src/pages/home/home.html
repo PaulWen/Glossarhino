@@ -1,22 +1,20 @@
 <ion-header>
   <ion-navbar>
 
+    <!-- Menu toggle for burger menu -->
     <button ion-button icon-only menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
+
+    <!-- Title, hided if searchbar unhided -->
     <ion-title *ngIf="!toggled">Glossarhino</ion-title>
 
-     <ion-searchbar
-      *ngIf="toggled"
-      placeholder="Search articles"
-      autocorrect="off"
-      type="text"
-      [(ngModel)]="searchText"
-      showCancelButton="false"
-      (ionInput)="onInput($event)"
-      (ionCancel)="onCancel($event)">
-      </ion-searchbar>
+    <!-- Searchbar, if unhidden Title and Buttons(end) will be hidden -->
+    <ion-searchbar *ngIf="toggled" placeholder="Search articles" autocorrect="off" type="text" [(ngModel)]="searchText" showCancelButton="false"
+      (ionInput)="onInput($event)" (ionCancel)="onCancel($event)">
+    </ion-searchbar>
 
+    <!-- Hide buttons if Searchbar unhided -->
     <ion-buttons end *ngIf="!toggled">
       <button ion-button icon-only (click)="toggleSearch()">
         <ion-icon name="search"></ion-icon>
@@ -30,40 +28,26 @@
   </ion-navbar>
 </ion-header>
 
+<!-- Burger Side Menu -->
 <ion-menu [content]="mycontent" [persistent]="true">
   <ion-content padding>
     <ion-list>
-      <p>some menu content, could be list items</p>
+      <p>Menu content will go here</p>
     </ion-list>
   </ion-content>
 </ion-menu>
 
+<!-- Set root component for Burger Side Menu -->
 <ion-nav #mycontent [root]="rootPage"></ion-nav>
 
+<!-- Content of the Homepage -->
 <ion-content padding class="card-background-page">
 
-  <ion-card>
-    <img [navPush]="singleEntryPage" src="assets/img/example1.jpg"/>
-    <div [navPush]="singleEntryPage" class="card-title">Show single Entry</div>
-    <div [navPush]="singleEntryPage" class="card-subtitle">Show view of a single entry just as an example</div>
-  </ion-card>
-
-  <ion-card>
-    <img src="assets/img/example2.jpg"/>
-    <div class="card-title">Amsterdam</div>
-    <div class="card-subtitle">64 Listings</div>
-  </ion-card>
-
-  <ion-card>
-    <img src="assets/img/example3.jpg"/>
-    <div class="card-title">San Francisco</div>
-    <div class="card-subtitle">72 Listings</div>
-  </ion-card>
-
-  <ion-card>
-    <img src="assets/img/example4.jpg"/>
-    <div class="card-title">Madison</div>
-    <div class="card-subtitle">28 Listings</div>
+  <!-- Cards show one category each, currently using dummy implementation -->
+  <ion-card *ngFor="let department of departments">
+    <img [navPush]="singleEntryPage" src="assets/img/example4.jpg" />
+    <div [navPush]="singleEntryPage" class="card-title">{{ department }}</div>
+    <div [navPush]="singleEntryPage" class="card-subtitle">28 Listings</div>
   </ion-card>
 
 </ion-content>

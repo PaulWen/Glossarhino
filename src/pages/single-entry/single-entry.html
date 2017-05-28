@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Single Entry</ion-title>
+    <ion-title>{{ entry.name }}</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -20,26 +20,16 @@
       Description
     </ion-card-header>
     <ion-card-content>
-      {{ loremIpsum }}
+      {{ entry.description }}
     </ion-card-content>
-    <ion-card-header>
-      Marketing
-    </ion-card-header>
-    <ion-card-content>
-      {{ loremIpsum }}
-    </ion-card-content>
-    <ion-card-header>
-      Production
-    </ion-card-header>
-    <ion-card-content>
-      {{ loremIpsum }}
-    </ion-card-content>
-    <ion-card-header>
-      Management
-    </ion-card-header>
-    <ion-card-content>
-      {{ loremIpsum }}
-    </ion-card-content>
+    <div *ngFor="let department of entry.departments">
+      <ion-card-header>
+        {{ department.departmentIdentifier }}
+      </ion-card-header>
+      <ion-card-content>
+        {{ department.departmentContent }}
+      </ion-card-content>
+    </div>
   </ion-card>
 
 </ion-content>

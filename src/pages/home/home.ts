@@ -22,14 +22,12 @@ export class HomePage {
 
   constructor(public navCtrl: NavController) {
     this.searchbarToggled = false;
-    console.log(this.departments)
   }
 
   // Toggle searchbar variable to show/hide searchbar and icons
   toggleSearch() {
     this.searchbarToggled = this.searchbarToggled ? false : true;
   }
-
 
   // Handle events of searchbar
   onInput(event: Event) {

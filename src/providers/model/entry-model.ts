@@ -1,9 +1,7 @@
 // Define type for entry descriptions in every department for usage as array
-
 export type DepartmentDetails = { departmentIdentifier: String, departmentContent: String }
 
 // Entry class for usage in model and controller. Class defines how entries should be specified
-
 export class Entry {
     private name: String;
     private id: number;

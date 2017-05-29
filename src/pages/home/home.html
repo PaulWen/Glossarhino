@@ -43,11 +43,18 @@
 <!-- Content of the Homepage -->
 <ion-content padding class="card-background-page">
 
-  <!-- Cards show one category each, currently using dummy implementation -->
-  <ion-card *ngFor="let department of departments">
-    <img [navPush]="singleEntryPage" src="assets/img/example4.jpg" />
-    <div [navPush]="singleEntryPage" class="card-title">{{ department }}</div>
-    <div [navPush]="singleEntryPage" class="card-subtitle">28 Listings</div>
-  </ion-card>
+  <!-- ion-grid for responsive design across devices -->
+  <ion-grid>
+    <ion-row align-items-center justify-content-center>
+      <ion-col col-auto col-md-3 *ngFor="let department of departments">
+        <!-- Cards show one category each, currently using dummy implementation -->
+        <ion-card>
+          <img [navPush]="singleEntryPage" src="assets/img/example4.jpg" />
+          <div [navPush]="singleEntryPage" class="card-title">{{ department }}</div>
+          <div [navPush]="singleEntryPage" class="card-subtitle">28 Listings</div>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
 </ion-content>

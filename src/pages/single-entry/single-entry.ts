@@ -19,7 +19,6 @@ export class SingleEntryPage {
 
   // interact with model
   private singleEntryInterface: SingleEntryInterface;
-  private entry: Entry;
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     // get navParams
@@ -30,6 +29,6 @@ export class SingleEntryPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad SingleEntryPage');
+    Logger.log('ionViewDidLoad SingleEntryPage');
   }
 }

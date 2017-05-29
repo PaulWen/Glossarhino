@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { EntryListInterface } from "./entry-list-interface";
 import { DummyEntryList } from "./dummy-class-entry-list";
-import { Logger } from "../../app/logger";
 import { SingleEntryPage } from "../single-entry/single-entry";
+import { Logger } from "../../app/logger";
 
 /**
  * Class for the EntryListPage page.
@@ -29,7 +29,7 @@ export class EntryListPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad EntryListPage');
+    Logger.log('ionViewDidLoad EntryListPage');
   }
 
   // Navigation method for single entry

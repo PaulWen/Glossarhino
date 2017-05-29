@@ -9,9 +9,9 @@ export class DummyEntryList implements EntryListInterface {
     
     private departments: Array<DepartmentDetails> = [{departmentIdentifier: "Marketing", departmentContent: AppConfig.LOREM_IPSUM}, {departmentIdentifier: "Production", departmentContent: AppConfig.LOREM_IPSUM}, {departmentIdentifier: "Management", departmentContent: AppConfig.LOREM_IPSUM}];
     
-    private entry1: Entry = new Entry("Eintrag 1", 1, AppConfig.LOREM_IPSUM, this.departments);
+    private entry1: Entry = new Entry("Entry 1", 1, AppConfig.LOREM_IPSUM, this.departments);
 
-    private entry2: Entry = new Entry("Eintrag 2", 2, AppConfig.LOREM_IPSUM, this.departments)
+    private entry2: Entry = new Entry("Entry 2", 2, AppConfig.LOREM_IPSUM, this.departments)
 
     private entries: Array<Entry> = [this.entry1, this.entry2]
 

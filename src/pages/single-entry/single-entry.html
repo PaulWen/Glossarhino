@@ -1,29 +1,36 @@
 <ion-header>
-
   <ion-navbar>
     <ion-title>{{ singleEntryInterface.getEntry(entryId).name }}</ion-title>
   </ion-navbar>
-
 </ion-header>
-
 
 <ion-content padding>
 
-  <ion-card>
-    <ion-card-header>
-      Description
-    </ion-card-header>
-    <ion-card-content>
-      {{ singleEntryInterface.getEntry(entryId).description }}
-    </ion-card-content>
-    <div *ngFor="let department of singleEntryInterface.getEntry(entryId).departments">
-      <ion-card-header>
-        {{ department.departmentIdentifier }}
-      </ion-card-header>
-      <ion-card-content>
-        {{ department.departmentContent }}
-      </ion-card-content>
-    </div>
-  </ion-card>
+  <ion-grid>
+
+    <ion-row align-items-center justify-content-center>
+      <ion-card>
+        <ion-card-header>
+          Description
+        </ion-card-header>
+        <ion-card-content>
+          {{ singleEntryInterface.getEntry(entryId).description }}
+        </ion-card-content>
+      </ion-card>
+    </ion-row>
+
+    <ion-row align-items-center justify-content-center>
+      <ion-col col-xl-3 col-lg-3 col-md-6 col-sm-6 col-xs-6 col-6 *ngFor="let department of singleEntryInterface.getEntry(entryId).departments">
+        <ion-card>
+          <ion-card-header>
+            {{ department.departmentIdentifier }}
+          </ion-card-header>
+          <ion-card-content>
+            {{ department.departmentContent }}
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
 </ion-content>

@@ -8,11 +8,29 @@ import { Component } from '@angular/core';
   templateUrl: 'title-bar.html'
 })
 export class TitleBarComponent {
-
-  text: string;
+  // toggle for searchbar
+  public searchbarToggled: boolean;
 
   constructor() {
-    console.log('Hello TitleBarComponent Component');
+    // set default value
+    this.searchbarToggled = false;
+  }
+
+  // Toggle searchbar variable to show/hide searchbar and icons
+  toggleSearch() {
+    this.searchbarToggled = this.searchbarToggled ? false : true;
+  }
+
+  // Handle events of searchbar
+  onInput(event: Event) {
+  }
+
+  onCancel(event: Event) {
+    this.toggleSearch()
+  }
+
+  onClear(event: Event) {
+    this.toggleSearch()
   }
 
 }

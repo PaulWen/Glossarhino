@@ -1,12 +1,9 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
-import { SingleEntryPage } from "../single-entry/single-entry";
 import { DummyHome } from "./dummy-class-home";
-
-// Interface to define what this page needs implemented in order to work
-export interface HomePageInterface {
-  getDepartments: () => Array<String>;
-}
+import { HomePageInterface } from "./home-interface";
+import { Logger } from "../../app/logger";
+import { EntryListPage } from "../entry-list/entry-list";
 
 @Component({
   selector: 'page-home',
@@ -14,14 +11,18 @@ export interface HomePageInterface {
 })
 
 export class HomePage {
-  // Variable SingleEntryPage for navigation purposes
-  singleEntryPage = SingleEntryPage;
-
-  // Toggle variable for searchbar
+  // toggle for searchbar
   public searchbarToggled: boolean;
 
+  // interact with model
+  private homePageInterface: HomePageInterface;
+
   constructor(public navCtrl: NavController) {
+    // set default value
     this.searchbarToggled = false;
+
+    // instantiate model object for interaction and get data
+    this.homePageInterface = new DummyHome();
   }
 
   // Toggle searchbar variable to show/hide searchbar and icons
@@ -37,8 +38,14 @@ export class HomePage {
     this.toggleSearch()
   }
 
-  // Get departments, currently out of dummy implementation
-  private dummyObject: DummyHome = new DummyHome();
-  private departments: Array<String> = this.dummyObject.getDepartments();
+  onClear(event: Event) {
+    this.toggleSearch()
+  }
 
+  // Navigation method for departments
+  pushList(department: String) {
+    this.navCtrl.push(EntryListPage, {
+      department: department
+    })
+  }
 }

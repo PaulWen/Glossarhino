@@ -1,44 +1,33 @@
-<ion-header>
-  <ion-navbar>
+<title-bar>
+</title-bar>
 
-    <!-- Menu toggle for burger menu -->
-    <button ion-button icon-only menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
-
-    <!-- Title, hided if searchbar unhided -->
-    <ion-title *ngIf="!toggled">Glossarhino</ion-title>
-
-    <!-- Searchbar, if unhidden Title and Buttons(end) will be hidden -->
-    <ion-searchbar *ngIf="toggled" placeholder="Search articles" autocorrect="off" type="text" [(ngModel)]="searchText" showCancelButton="false"
-      (ionInput)="onInput($event)" (ionCancel)="onCancel($event)">
-    </ion-searchbar>
-
-    <!-- Hide buttons if Searchbar unhided -->
-    <ion-buttons end *ngIf="!toggled">
-      <button ion-button icon-only (click)="toggleSearch()">
-        <ion-icon name="search"></ion-icon>
-      </button>
-
-      <button ion-button icon-only>
-        <ion-icon name="chatbubbles"></ion-icon>
-      </button>
-    </ion-buttons>
-
-  </ion-navbar>
-</ion-header>
-
-<!-- Burger Side Menu -->
-<ion-menu [content]="mycontent" [persistent]="true">
-  <ion-content padding>
+<!-- left side menu -->
+<ion-menu [content]="content">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Menu</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
     <ion-list>
-      <p>Menu content will go here</p>
+      <button ion-item menu-close>
+        Dummy
+      </button>
+      <button ion-item menu-close>
+        Dummy
+      </button>
+      <button ion-item menu-close>
+        Dummy
+      </button>
+      <button ion-item menu-close>
+        Dummy
+      </button>
     </ion-list>
   </ion-content>
 </ion-menu>
 
-<!-- Set root component for Burger Side Menu -->
-<ion-nav #mycontent [root]="rootPage"></ion-nav>
+<!-- root component for the left side menu-->
+<ion-nav id="nav" #content [root]="rootPage"></ion-nav>
 
 <!-- Content of the Homepage -->
 <ion-content padding class="card-background-page">
@@ -46,12 +35,12 @@
   <!-- ion-grid for responsive design across devices -->
   <ion-grid>
     <ion-row align-items-center justify-content-center>
-      <ion-col col-auto col-md-3 *ngFor="let department of departments">
+      <ion-col col-xl-3 col-lg-3 col-md-6 col-sm-6 col-xs-6 col-6 *ngFor="let department of homePageInterface.getDepartments()">
         <!-- Cards show one category each, currently using dummy implementation -->
         <ion-card>
-          <img [navPush]="singleEntryPage" src="assets/img/example4.jpg" />
-          <div [navPush]="singleEntryPage" class="card-title">{{ department }}</div>
-          <div [navPush]="singleEntryPage" class="card-subtitle">28 Listings</div>
+          <img (click)="pushList(department)" src="assets/img/example4.jpg" />
+          <div (click)="pushList(department)" class="card-title">{{ department }}</div>
+          <div (click)="pushList(department)" class="card-subtitle">{{ homePageInterface.getListings(department) }} Listings</div>
         </ion-card>
       </ion-col>
     </ion-row>

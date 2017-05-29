@@ -2,18 +2,11 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Entry } from "../../providers/model/entry-model";
 import { DummySingleEntry } from "./dummy-class-single-entry";
-
-
-// Interface to define what this page needs implemented in order to work
-export interface SingleEntryInterface {
-  getEntry: (id: number) => Entry;
-}
+import { SingleEntryInterface } from "./single-entry-interface";
+import { Logger } from "../../app/logger";
 
 /**
- * Generated class for the SingleEntryPage page.
- *
- * See http://ionicframework.com/docs/components/#navigation for more info
- * on Ionic pages and navigation.
+ * Class for the SingleEntryPage page.
  */
 @IonicPage()
 @Component({
@@ -21,15 +14,22 @@ export interface SingleEntryInterface {
   templateUrl: 'single-entry.html',
 })
 export class SingleEntryPage {
+  // navParams
+  private entryId: number;
+
+  // interact with model
+  private singleEntryInterface: SingleEntryInterface;
+  private entry: Entry;
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
+    // get navParams
+    this.entryId = this.navParams.get("entryId");
+    
+    // instantiate model object for interaction and get data
+    this.singleEntryInterface = new DummySingleEntry();
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad SingleEntryPage');
   }
-
-  private dummyObject: DummySingleEntry = new DummySingleEntry();
-  private entry: Entry = this.dummyObject.getEntry(1);
-
 }

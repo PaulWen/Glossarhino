@@ -10,7 +10,6 @@ export class Entry {
     private departments: Array<DepartmentDetails>
 
     constructor (name: String, id: number, description: String, departments: Array<DepartmentDetails>) {
-
         this.name = name;
         this.id = id;
         this.description = description;

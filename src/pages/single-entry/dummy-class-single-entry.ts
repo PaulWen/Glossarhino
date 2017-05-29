@@ -1,4 +1,4 @@
-import { SingleEntryInterface } from "./single-entry";
+import { SingleEntryInterface } from "./single-entry-interface";
 import { Entry, DepartmentDetails } from "../../providers/model/entry-model";
 import { AppConfig } from "../../app/app-config";
 

@@ -11,14 +11,17 @@ import {SuperloginHttpRequestor} from "../providers/super_login_client/superlogi
 import {SuperLoginClientDatabaseInitializer} from "../providers/super_login_client/super_login_client_database_initializer";
 import {SuperLoginClient} from "../providers/super_login_client/super_login_client";
 
-import { ShowWordPage } from "../pages/show-word/show-word";
 import { SingleEntryPage } from "../pages/single-entry/single-entry";
+import { EntryListPage } from "../pages/entry-list/entry-list";
+import { TitleBarComponent } from '../components/title-bar/title-bar';
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
-    SingleEntryPage
+    SingleEntryPage,
+    EntryListPage,
+    TitleBarComponent
   ],
   imports: [
     BrowserModule,
@@ -28,7 +31,8 @@ import { SingleEntryPage } from "../pages/single-entry/single-entry";
   entryComponents: [
     MyApp,
     HomePage,
-    SingleEntryPage
+    SingleEntryPage,
+    EntryListPage
   ],
   providers: [
     SuperloginHttpRequestor,

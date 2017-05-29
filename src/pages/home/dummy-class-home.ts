@@ -4,7 +4,7 @@
 import { HomePageInterface } from "./home-interface";
 
 export class DummyHome implements HomePageInterface {
-    private departments: Array<String> = ["Marketing", "Production", "Management"];
+    private departments: Array<String> = ["Management", "Marketing", "Production"];
 
     public getDepartments(): Array<String> {
         return this.departments;

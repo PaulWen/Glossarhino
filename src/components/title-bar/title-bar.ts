@@ -1,22 +1,26 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { Logger } from "../../app/logger";
 
-/**
- * class for the TitleBarComponent component.
- */
 @Component({
   selector: 'title-bar',
   templateUrl: 'title-bar.html'
 })
 export class TitleBarComponent {
-  // toggle for searchbar
+  ////////////////////////////////////////////Properties/////////////////////////////////////////////
+  // input variables
+  @Input() title: String;
+  
+  // searchbar toggle
   public searchbarToggled: boolean;
 
+  ////////////////////////////////////////////Constructor////////////////////////////////////////////
   constructor() {
     // set default value
     this.searchbarToggled = false;
   }
 
-  // Toggle searchbar variable to show/hide searchbar and icons
+  /////////////////////////////////////////////Methods///////////////////////////////////////////////
+  // method to toggle searchbar and icons
   toggleSearch() {
     this.searchbarToggled = this.searchbarToggled ? false : true;
   }
@@ -28,7 +32,7 @@ export class TitleBarComponent {
   onCancel(event: Event) {
     this.toggleSearch()
   }
-
+  
   onClear(event: Event) {
     this.toggleSearch()
   }

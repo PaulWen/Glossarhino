@@ -1,13 +1,12 @@
-<ion-header>
-  <ion-navbar>
-    <ion-title>{{ singleEntryInterface.getEntry(entryId).name }}</ion-title>
-  </ion-navbar>
-</ion-header>
+<!-- title bar directive representing the component -->
+<title-bar [title]="singleEntryInterface.getEntry(entryId).name">
+</title-bar>
 
-<ion-content padding>
-
+<ion-content padding style="margin-top:56px">
+  <!-- ion-grid for responsive design -->
   <ion-grid>
 
+    <!-- Card for general description of entry -->
     <ion-row align-items-center justify-content-center>
       <ion-card>
         <ion-card-header>
@@ -19,6 +18,7 @@
       </ion-card>
     </ion-row>
 
+    <!-- auto-generated cards for meaning in different departments -->
     <ion-row align-items-center justify-content-center>
       <ion-col col-xl-3 col-lg-3 col-md-6 col-sm-6 col-xs-6 col-6 *ngFor="let department of singleEntryInterface.getEntry(entryId).departments">
         <ion-card>

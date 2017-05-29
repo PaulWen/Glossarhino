@@ -1,4 +1,5 @@
-<title-bar>
+<!-- title bar directive representing the component -->
+<title-bar [title]="'Glossarhino'">
 </title-bar>
 
 <!-- left side menu -->
@@ -24,21 +25,21 @@
       </button>
     </ion-list>
   </ion-content>
+
+  <!-- root component for the left side menu-->
+  <ion-nav id="nav" #content [root]="rootPage"></ion-nav>
 </ion-menu>
 
-<!-- root component for the left side menu-->
-<ion-nav id="nav" #content [root]="rootPage"></ion-nav>
-
 <!-- Content of the Homepage -->
-<ion-content padding class="card-background-page">
+<ion-content padding class="card-background-page" style="margin-top:56px">
 
-  <!-- ion-grid for responsive design across devices -->
+  <!-- ion-grid for responsive design -->
   <ion-grid>
     <ion-row align-items-center justify-content-center>
       <ion-col col-xl-3 col-lg-3 col-md-6 col-sm-6 col-xs-6 col-6 *ngFor="let department of homePageInterface.getDepartments()">
         <!-- Cards show one category each, currently using dummy implementation -->
         <ion-card>
-          <img (click)="pushList(department)" src="assets/img/example4.jpg" />
+          <img (click)="pushList(department)" src="assets/img/{{department}}.jpg" />
           <div (click)="pushList(department)" class="card-title">{{ department }}</div>
           <div (click)="pushList(department)" class="card-subtitle">{{ homePageInterface.getListings(department) }} Listings</div>
         </ion-card>

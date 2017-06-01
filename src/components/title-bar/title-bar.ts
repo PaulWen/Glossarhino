@@ -1,5 +1,4 @@
 import { Component, Input } from '@angular/core';
-import { Logger } from "../../app/logger";
 
 @Component({
   selector: 'title-bar',

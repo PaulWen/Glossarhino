@@ -15,6 +15,17 @@
         <ion-card-content>
           {{ singleEntryInterface.getEntry(entryId).description }}
         </ion-card-content>
+        <ion-row>
+          <ion-col>
+            <button ion-button icon-left clear small (click)="sendMail(singleEntryInterface.getContact(entryId, 'General').email)">
+                <ion-icon name="contact"></ion-icon>
+                <div>{{ singleEntryInterface.getContact(entryId, "'General'").name }}</div>
+              </button>
+            <button ion-button icon-left clear small>
+                <ion-icon name="attach"></ion-icon>
+              </button>
+          </ion-col>
+        </ion-row>
       </ion-card>
     </ion-row>
 
@@ -28,6 +39,17 @@
           <ion-card-content>
             {{ department.departmentContent }}
           </ion-card-content>
+          <ion-row>
+            <ion-col>
+              <button ion-button icon-left clear small (click)="sendMail(singleEntryInterface.getContact(entryId, department.departmentIdentifier).email)">
+                <ion-icon name="contact"></ion-icon>
+                <div>{{ singleEntryInterface.getContact(entryId, department.departmentIdentifier).name }}</div>
+              </button>
+              <button ion-button icon-left clear small>
+                <ion-icon name="attach"></ion-icon>
+              </button>
+            </ion-col>
+          </ion-row>
         </ion-card>
       </ion-col>
     </ion-row>

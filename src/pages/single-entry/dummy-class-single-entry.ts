@@ -1,8 +1,11 @@
 import { SingleEntryInterface } from "./single-entry-interface";
 import { Entry, DepartmentDetails } from "../../providers/model/entry-model";
 import { AppConfig } from "../../app/app-config";
+import { Contact } from "../../providers/model/contact-model";
 
-// This is a dummy class for testing purposes. Will implement the SingleEntryInterface.
+/**
+ * This is a dummy class for testing purposes. Will implement the SingleEntryInterface.
+ */ 
 export class DummySingleEntry implements SingleEntryInterface {
 
     // Array for implementation of SingleEntryInterface
@@ -12,5 +15,9 @@ export class DummySingleEntry implements SingleEntryInterface {
 
     public getEntry(id: number): Entry {
         return this.entry
+    }
+
+    public getContact(entryId: number, departmentId: String) {
+        return new Contact("Max Mustermann", 1, "max.mustermann@dhbw-stuttgart.de")
     }
 }

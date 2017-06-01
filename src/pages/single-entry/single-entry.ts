@@ -30,4 +30,8 @@ export class SingleEntryPage {
   ionViewDidLoad() {
     Logger.log('ionViewDidLoad SingleEntryPage');
   }
+
+  private sendMail (emailAddress: String) {
+    window.location.href = "mailto:" + emailAddress;
+  }
 }

@@ -21,7 +21,7 @@
                 <ion-icon name="contact"></ion-icon>
                 <div>{{ singleEntryInterface.getContact(entryId, "'General'").name }}</div>
               </button>
-            <button ion-button icon-left clear small>
+            <button ion-button icon-left clear small (click)="openAttachmentModal(entryId, 'General')">
                 <ion-icon name="attach"></ion-icon>
               </button>
           </ion-col>
@@ -45,7 +45,7 @@
                 <ion-icon name="contact"></ion-icon>
                 <div>{{ singleEntryInterface.getContact(entryId, department.departmentIdentifier).name }}</div>
               </button>
-              <button ion-button icon-left clear small>
+              <button ion-button icon-left clear small (click)="openAttachmentModal(entryId, department.departmentIdentifier)">
                 <ion-icon name="attach"></ion-icon>
               </button>
             </ion-col>

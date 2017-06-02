@@ -17,7 +17,7 @@ export class DummySingleEntry implements SingleEntryInterface {
         return this.entry
     }
 
-    public getContact(entryId: number, departmentId: String) {
+    public getContact(entryId: number, departmentId: String): Contact {
         return new Contact("Max Mustermann", 1, "max.mustermann@dhbw-stuttgart.de")
     }
 }

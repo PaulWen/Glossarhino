@@ -14,6 +14,7 @@ import {SuperLoginClient} from "../providers/super_login_client/super_login_clie
 import { SingleEntryPage } from "../pages/single-entry/single-entry";
 import { EntryListPage } from "../pages/entry-list/entry-list";
 import { TitleBarComponent } from '../components/title-bar/title-bar';
+import { AttachmentModalPage } from "../pages/attachment-modal/attachment-modal";
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { TitleBarComponent } from '../components/title-bar/title-bar';
     HomePage,
     SingleEntryPage,
     EntryListPage,
-    TitleBarComponent
+    TitleBarComponent,
+    AttachmentModalPage
   ],
   imports: [
     BrowserModule,
@@ -32,7 +34,8 @@ import { TitleBarComponent } from '../components/title-bar/title-bar';
     MyApp,
     HomePage,
     SingleEntryPage,
-    EntryListPage
+    EntryListPage,
+    AttachmentModalPage
   ],
   providers: [
     SuperloginHttpRequestor,

@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
 import { DummySingleEntry } from "./dummy-class-single-entry";
 import { SingleEntryInterface } from "./single-entry-interface";
 import { Logger } from "../../app/logger";
+import { AttachmentModalPage } from "../attachment-modal/attachment-modal";
 
 @IonicPage()
 @Component({
@@ -18,7 +19,7 @@ export class SingleEntryPage {
   private singleEntryInterface: SingleEntryInterface;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController) {
     // get navParams
     this.entryId = this.navParams.get("entryId");
 
@@ -33,5 +34,13 @@ export class SingleEntryPage {
 
   private sendMail (emailAddress: String) {
     window.location.href = "mailto:" + emailAddress;
+  }
+
+  private openAttachmentModal(entryId: number, departmentName: String) {
+    let attachmentModal = this.modalCtrl.create(AttachmentModalPage, {
+        entryId: entryId,
+        departmentName: departmentName
+    });
+    attachmentModal.present();
   }
 }

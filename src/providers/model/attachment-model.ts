@@ -1,16 +1,14 @@
 /**
- * Contact class for usage in model and controller. Class specifies contacts
+ * Attachment class for uage in model and controller. Class specifies attachments
  */
-export class Contact {
+export class Attachment {
     ////////////////////////////////////////////Properties/////////////////////////////////////////////
     private name: String;
-    private id: number;
-    private email: String;
+    private url: URL;
 
     ////////////////////////////////////////////Constructor////////////////////////////////////////////
-    constructor(name: String, id: number, email: String) {
+    constructor(name: String, url: URL) {
         this.name = name;
-        this.id = id;
-        this.email = email;
+        this. url = url;
     }
 }

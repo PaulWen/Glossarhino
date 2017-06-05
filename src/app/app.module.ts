@@ -27,7 +27,13 @@ import { AttachmentModalPage } from "../pages/attachment-modal/attachment-modal"
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp, {
+      platforms: {
+        ios: {
+          statusbarPadding: true,
+        }
+      }
+    })
   ],
   bootstrap: [IonicApp],
   entryComponents: [

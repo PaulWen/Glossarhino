@@ -43,7 +43,8 @@ export class AttachmentModalPage {
   }
 
   private openAttachment(url: URL) {
-    window.location.href = url.href;
+    //window.location.href = url.href;
+    window.open(url.href, "_system")
   }
 
 }

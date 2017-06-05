@@ -2,7 +2,7 @@
 <title-bar [title]="singleEntryInterface.getEntry(entryId).name">
 </title-bar>
 
-<ion-content padding style="margin-top:56px">
+<ion-content style="margin-top:56px">
   <!-- ion-grid for responsive design -->
   <ion-grid>
 
@@ -31,7 +31,7 @@
 
     <!-- auto-generated cards for meaning in different departments -->
     <ion-row align-items-center justify-content-center>
-      <ion-col col-xl-3 col-lg-3 col-md-6 col-sm-6 col-xs-6 col-6 *ngFor="let department of singleEntryInterface.getEntry(entryId).departments">
+      <ion-col col-xl-3 col-lg-3 col-md-6 col-sm-6 col-xs-6 col-12 *ngFor="let department of singleEntryInterface.getEntry(entryId).departments">
         <ion-card>
           <ion-card-header>
             {{ department.departmentIdentifier }}

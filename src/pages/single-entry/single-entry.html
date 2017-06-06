@@ -1,6 +1,6 @@
 <ion-header>
   <!-- title bar directive representing the component -->
-  <title-bar [title]="singleEntryInterface.getEntry(entryId).name">
+  <title-bar [title]="name">
   </title-bar>
 </ion-header>
 
@@ -8,46 +8,23 @@
   <!-- ion-grid for responsive design -->
   <ion-grid>
 
-    <!-- Card for general description of entry -->
-    <ion-row align-items-center justify-content-center>
-      <ion-card>
-        <ion-card-header>
-          Description
-        </ion-card-header>
-        <ion-card-content>
-          {{ singleEntryInterface.getEntry(entryId).description }}
-        </ion-card-content>
-        <ion-row>
-          <ion-col>
-            <button ion-button icon-left clear small (click)="sendMail(singleEntryInterface.getContact(entryId, 'General').email)">
-                <ion-icon name="contact"></ion-icon>
-                <div>{{ singleEntryInterface.getContact(entryId, "'General'").name }}</div>
-              </button>
-            <button ion-button icon-left clear small (click)="openAttachmentModal(entryId, 'General')">
-                <ion-icon name="attach"></ion-icon>
-              </button>
-          </ion-col>
-        </ion-row>
-      </ion-card>
-    </ion-row>
-
     <!-- auto-generated cards for meaning in different departments -->
     <ion-row align-items-center justify-content-center>
-      <ion-col col-xl-3 col-lg-3 col-md-6 col-sm-6 col-xs-6 col-12 *ngFor="let department of singleEntryInterface.getEntry(entryId).departments">
+      <ion-col col-xl-3 col-lg-3 col-md-6 col-sm-6 col-xs-6 col-12 *ngFor="let department of singleEntryInterface.getEntry(name).departments">
         <ion-card>
           <ion-card-header>
-            {{ department.departmentIdentifier }}
+            {{ department.departmentId }}
           </ion-card-header>
           <ion-card-content>
-            {{ department.departmentContent }}
+            {{ department.description }}
           </ion-card-content>
           <ion-row>
             <ion-col>
-              <button ion-button icon-left clear small (click)="sendMail(singleEntryInterface.getContact(entryId, department.departmentIdentifier).email)">
+              <button ion-button icon-left clear small (click)="sendMail(department.email)">
                 <ion-icon name="contact"></ion-icon>
-                <div>{{ singleEntryInterface.getContact(entryId, department.departmentIdentifier).name }}</div>
+                <div>{{ department.name }}</div>
               </button>
-              <button ion-button icon-left clear small (click)="openAttachmentModal(entryId, department.departmentIdentifier)">
+              <button ion-button icon-left clear small (click)="openAttachmentModal(department.attachments)">
                 <ion-icon name="attach"></ion-icon>
               </button>
             </ion-col>

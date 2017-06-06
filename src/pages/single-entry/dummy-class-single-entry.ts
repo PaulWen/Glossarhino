@@ -1,23 +1,15 @@
 import { SingleEntryInterface } from "./single-entry-interface";
-import { Entry, DepartmentDetails } from "../../providers/model/entry-model";
+import { Entry } from "../../providers/model/entry-model";
 import { AppConfig } from "../../app/app-config";
-import { Contact } from "../../providers/model/contact-model";
+import { Department } from "../../providers/model/department-model";
+import { Attachment } from "../../providers/model/attachment-model";
 
 /**
  * This is a dummy class for testing purposes. Will implement the SingleEntryInterface.
  */ 
 export class DummySingleEntry implements SingleEntryInterface {
 
-    // Array for implementation of SingleEntryInterface
-    private departments: Array<DepartmentDetails> = [{departmentIdentifier: "Management", departmentContent: AppConfig.LOREM_IPSUM}, {departmentIdentifier: "Marketing", departmentContent: AppConfig.LOREM_IPSUM}, {departmentIdentifier: "Production", departmentContent: AppConfig.LOREM_IPSUM}];
-    
-    private entry: Entry = new Entry("Entry 1", 1, AppConfig.LOREM_IPSUM, this.departments)
-
-    public getEntry(id: number): Entry {
-        return this.entry
-    }
-
-    public getContact(entryId: number, departmentId: String): Contact {
-        return new Contact("Max Mustermann", 1, "max.mustermann@dhbw-stuttgart.de")
+    public getEntry(name: String): Entry {
+        return new Entry("Lorem Ipsum Entry", [new Department(0, AppConfig.LOREM_IPSUM, [new Attachment("Test Image", new URL("https://c1.staticflickr.com/6/5337/8940995208_5da979c52f.jpg")), new Attachment("DHBW Broschüre", new URL("http://www.dhbw.de/fileadmin/user_upload/Dokumente/Hochschulkommunikation/DHBW_Imagebroschuere_web.pdf"))], "Max Mustermann", "max.mustermann@dhbw-stuttgart.de")])
     }
 }

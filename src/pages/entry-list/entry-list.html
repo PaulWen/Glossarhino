@@ -1,6 +1,6 @@
 <ion-header>
   <!-- title bar directive representing the component -->
-  <title-bar [title]="department">
+  <title-bar [title]="departmentId">
   </title-bar>
 </ion-header>
 
@@ -8,8 +8,8 @@
 
   <!-- Print list with all entries retreived in department -->
   <ion-list>
-    <button ion-item *ngFor="let entry of entryListInterface.getEntries(department)" (click)="pushEntry(entry.id)">
-    {{ entry.name }}
+    <button ion-item *ngFor="let entry of entryListInterface.getEntryList(departmentId)" (click)="pushEntry(entry)">
+    {{ entry }}
   </button>
   </ion-list>
 

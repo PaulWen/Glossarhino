@@ -1,5 +1,4 @@
-// Define type for entry descriptions in every department for usage as array
-export type DepartmentDetails = { departmentIdentifier: String, departmentContent: String }
+import { Department } from "./department-model";
 
 /**
  * Entry class for usage in model and controller. Class defines how entries should be specified
@@ -7,16 +6,11 @@ export type DepartmentDetails = { departmentIdentifier: String, departmentConten
 export class Entry {
     ////////////////////////////////////////////Properties/////////////////////////////////////////////
     private name: String;
-    private id: number;
-    private description: String;
-
-    private departments: Array<DepartmentDetails>
+    private departments: Array<Department>
 
     ////////////////////////////////////////////Constructor////////////////////////////////////////////
-    constructor(name: String, id: number, description: String, departments: Array<DepartmentDetails>) {
+    constructor(name: String, departments: Array<Department>) {
         this.name = name;
-        this.id = id;
-        this.description = description;
         this.departments = departments
     }
 }

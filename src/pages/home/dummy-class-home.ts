@@ -4,13 +4,13 @@
 import { HomePageInterface } from "./home-interface";
 
 export class DummyHome implements HomePageInterface {
-    private departments: Array<String> = ["Management", "Marketing", "Production"];
+    private departments: Array<number> = [1, 2, 3];
 
-    public getDepartments(): Array<String> {
+    public getDepartments(): Array<number> {
         return this.departments;
     };
 
-    public getListings(department: String) {
+    public getListings(departmentId: number): number {
         return 42;
     }
 

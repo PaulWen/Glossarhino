@@ -11,26 +11,20 @@ import { EntryListPage } from "../entry-list/entry-list";
 
 export class HomePage {
   ////////////////////////////////////////////Properties/////////////////////////////////////////////
-  // toggle for searchbar
-  public searchbarToggled: boolean;
-
   // access interface implementation
   private homePageInterface: HomePageInterface;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
   constructor(public navCtrl: NavController) {
-    // set default value
-    this.searchbarToggled = false;
-
     // instantiate model object for interaction
     this.homePageInterface = new DummyHome();
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
   // Navigate to entry list and hand over department
-  pushList(department: String) {
+  pushList(departmentId: number) {
     this.navCtrl.push(EntryListPage, {
-      department: department
+      departmentId: departmentId
     })
   }
 }

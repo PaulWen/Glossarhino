@@ -17,7 +17,7 @@
 
 <!-- Print list with all attachments retreived for entry and department -->
   <ion-list>
-    <button ion-item *ngFor="let attachment of attachmentModalInterface.getAttachments(entryId, departmentName)" (click)="openAttachment(attachment.url)">
+    <button ion-item *ngFor="let attachment of attachments" (click)="openAttachment(attachment.url)">
     {{ attachment.name }}
   </button>
   </ion-list>

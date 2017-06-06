@@ -4,6 +4,7 @@ import { DummySingleEntry } from "./dummy-class-single-entry";
 import { SingleEntryInterface } from "./single-entry-interface";
 import { Logger } from "../../app/logger";
 import { AttachmentModalPage } from "../attachment-modal/attachment-modal";
+import { Attachment } from "../../providers/model/attachment-model";
 
 @IonicPage()
 @Component({
@@ -13,7 +14,7 @@ import { AttachmentModalPage } from "../attachment-modal/attachment-modal";
 export class SingleEntryPage {
   ////////////////////////////////////////////Properties/////////////////////////////////////////////
   // navParams
-  private entryId: number;
+  private name: String;
 
   // access interface implementation
   private singleEntryInterface: SingleEntryInterface;
@@ -21,7 +22,7 @@ export class SingleEntryPage {
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
   constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController) {
     // get navParams
-    this.entryId = this.navParams.get("entryId");
+    this.name = this.navParams.get("name");
 
     // instantiate model object for interaction
     this.singleEntryInterface = new DummySingleEntry();
@@ -37,10 +38,9 @@ export class SingleEntryPage {
     window.open("mailto:" + emailAddress, "_system")
   }
 
-  private openAttachmentModal(entryId: number, departmentName: String) {
+  private openAttachmentModal(attachments: Array<Attachment>) {
     let attachmentModal = this.modalCtrl.create(AttachmentModalPage, {
-        entryId: entryId,
-        departmentName: departmentName
+        attachments: attachments
     });
     attachmentModal.present();
   }

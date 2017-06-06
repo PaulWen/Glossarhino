@@ -1,16 +1,14 @@
 /**
- * Contact class for usage in model and controller. Class specifies contacts
+ * Department Config class for uage in model and controller. Class specifies department config
  */
-export class Contact {
+export class DepartmentConfig {
     ////////////////////////////////////////////Properties/////////////////////////////////////////////
-    private name: String;
     private id: number;
-    private email: String;
+    private name: String;
 
     ////////////////////////////////////////////Constructor////////////////////////////////////////////
-    constructor(name: String, id: number, email: String) {
-        this.name = name;
+    constructor(id: number, name: String) {
         this.id = id;
-        this.email = email;
+        this.name = name;
     }
 }

@@ -13,7 +13,7 @@ import { Logger } from "../../app/logger";
 export class EntryListPage {
   ////////////////////////////////////////////Properties/////////////////////////////////////////////
   // navParams
-  private department: String;
+  private departmentId: number;
 
   // access interface implementation
   private entryListInterface: EntryListInterface;
@@ -21,7 +21,7 @@ export class EntryListPage {
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     // get navParams
-    this.department = this.navParams.get("department");
+    this.departmentId = this.navParams.get("departmentId");
 
     // instantiate model object for interaction
     this.entryListInterface = new DummyEntryList();
@@ -33,9 +33,9 @@ export class EntryListPage {
   }
 
   // Navigation method for single entry
-  pushEntry(entryId: number) {
+  pushEntry(name: String) {
     this.navCtrl.push(SingleEntryPage, {
-      entryId: entryId
+      name: name
     })
   }
 

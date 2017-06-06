@@ -33,7 +33,8 @@ export class SingleEntryPage {
   }
 
   private sendMail (emailAddress: String) {
-    window.location.href = "mailto:" + emailAddress;
+    //window.location.href = "mailto:" + emailAddress;
+    window.open("mailto:" + emailAddress, "_system")
   }
 
   private openAttachmentModal(entryId: number, departmentName: String) {

@@ -1,10 +1,12 @@
-<!-- title bar directive representing the component -->
-<title-bar [title]="department">
-</title-bar>
+<ion-header>
+  <!-- title bar directive representing the component -->
+  <title-bar [title]="department">
+  </title-bar>
+</ion-header>
 
-<ion-content padding style="margin-top:56px">
+<ion-content padding>
 
-<!-- Print list with all entries retreived in department -->
+  <!-- Print list with all entries retreived in department -->
   <ion-list>
     <button ion-item *ngFor="let entry of entryListInterface.getEntries(department)" (click)="pushEntry(entry.id)">
     {{ entry.name }}

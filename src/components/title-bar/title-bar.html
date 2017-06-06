@@ -1,57 +1,25 @@
-<ion-header>
-  <ion-navbar>
-
-    <!-- Menu toggle for burger menu -->
-    <button ion-button icon-only menuToggle>
+<ion-navbar>
+  <!-- Menu toggle for burger menu -->
+  <button ion-button icon-only menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
 
-    <!-- Title, hided if searchbar unhided -->
-    <ion-title *ngIf="!searchbarToggled">{{ title }}</ion-title>
+  <!-- Title, hided if searchbar unhided -->
+  <ion-title *ngIf="!searchbarToggled">{{ title }}</ion-title>
 
-    <!-- Searchbar, if unhidden Title and Buttons(end) will be hidden -->
-    <ion-searchbar *ngIf="searchbarToggled" placeholder="Search articles" autocorrect="off" type="text" [(ngModel)]="searchText"
-      showCancelButton="true" (ionInput)="onInput($event)" (ionCancel)="onCancel($event)" (ionClear)="onClear($event)">
-    </ion-searchbar>
+  <!-- Searchbar, if unhidden Title and Buttons(end) will be hidden -->
+  <ion-searchbar *ngIf="searchbarToggled" placeholder="Search articles" autocorrect="off" type="text" [(ngModel)]="searchText"
+    showCancelButton="true" (ionInput)="onInput($event)" (ionCancel)="onCancel($event)" (ionClear)="onClear($event)">
+  </ion-searchbar>
 
-    <!-- Hide buttons if Searchbar unhided -->
-    <ion-buttons end *ngIf="!searchbarToggled">
-      <button ion-button icon-only (click)="toggleSearch()">
+  <!-- Hide buttons if Searchbar unhided -->
+  <ion-buttons end *ngIf="!searchbarToggled">
+    <button ion-button icon-only (click)="toggleSearch()">
         <ion-icon name="search"></ion-icon>
       </button>
 
-      <button ion-button icon-only>
+    <button ion-button icon-only>
         <ion-icon name="chatbubbles"></ion-icon>
       </button>
-    </ion-buttons>
-
-  </ion-navbar>
-</ion-header>
-
-<!-- left side menu -->
-<ion-menu [content]="content">
-  <ion-header>
-    <ion-toolbar>
-      <ion-title>Menu</ion-title>
-    </ion-toolbar>
-  </ion-header>
-  <ion-content>
-    <ion-list>
-      <button ion-item menu-close>
-        Dummy
-      </button>
-      <button ion-item menu-close>
-        Dummy
-      </button>
-      <button ion-item menu-close>
-        Dummy
-      </button>
-      <button ion-item menu-close>
-        Dummy
-      </button>
-    </ion-list>
-  </ion-content>
-</ion-menu>
-
-<!-- root component for the left side menu-->
-<ion-nav id="nav" #content [root]="rootPage"></ion-nav>
+  </ion-buttons>
+</ion-navbar>

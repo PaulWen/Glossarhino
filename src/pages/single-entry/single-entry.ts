@@ -5,6 +5,7 @@ import { SingleEntryInterface } from "./single-entry-interface";
 import { Logger } from "../../app/logger";
 import { AttachmentModalPage } from "../attachment-modal/attachment-modal";
 import { Attachment } from "../../providers/model/attachment-model";
+import { DummyResolveDepartment } from "../../providers/model/dummy-resolve-department";
 
 @IonicPage()
 @Component({
@@ -19,6 +20,9 @@ export class SingleEntryPage {
   // access interface implementation
   private singleEntryInterface: SingleEntryInterface;
 
+  // dummy resolver object
+  private dummyResolveDepartment: DummyResolveDepartment;
+
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
   constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController) {
     // get navParams
@@ -26,6 +30,9 @@ export class SingleEntryPage {
 
     // instantiate model object for interaction
     this.singleEntryInterface = new DummySingleEntry();
+
+    // instatiate resolver object
+    this.dummyResolveDepartment = new DummyResolveDepartment();
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////

@@ -4,6 +4,7 @@ import { EntryListInterface } from "./entry-list-interface";
 import { DummyEntryList } from "./dummy-class-entry-list";
 import { SingleEntryPage } from "../single-entry/single-entry";
 import { Logger } from "../../app/logger";
+import { DummyResolveDepartment } from "../../providers/model/dummy-resolve-department";
 
 @IonicPage()
 @Component({
@@ -18,6 +19,9 @@ export class EntryListPage {
   // access interface implementation
   private entryListInterface: EntryListInterface;
 
+  // dummy resolver object
+  private dummyResolveDepartment: DummyResolveDepartment;
+
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     // get navParams
@@ -25,6 +29,9 @@ export class EntryListPage {
 
     // instantiate model object for interaction
     this.entryListInterface = new DummyEntryList();
+
+    // instatiate resolver object
+    this.dummyResolveDepartment = new DummyResolveDepartment();
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////

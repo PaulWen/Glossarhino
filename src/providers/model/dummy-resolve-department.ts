@@ -9,7 +9,7 @@ export class DummyResolveDepartment {
 
     }
 
-    public static resolveDepartment(departmentId: number): String {
+    public resolveDepartment(departmentId: number): String {
         switch (departmentId) {
             case 0: {
                 //statements; 

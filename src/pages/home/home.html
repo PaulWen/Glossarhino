@@ -1,29 +1,9 @@
 <ion-header>
-  <ion-navbar>
-    <!-- Menu toggle for burger menu -->
-    <button ion-button icon-only menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
+  
+  <!-- Title Bar Component for reusability -->
+  <title-bar>
+  </title-bar>
 
-    <!-- Title, hided if searchbar unhided -->
-    <ion-title *ngIf="!searchbarToggled">Glossarhino</ion-title>
-
-    <!-- Searchbar, if unhidden Title and Buttons(end) will be hidden -->
-    <ion-searchbar *ngIf="searchbarToggled" placeholder="Search articles" autocorrect="off" type="text" [(ngModel)]="searchText"
-      showCancelButton="false" (ionInput)="onInput($event)" (ionCancel)="onCancel($event)" (ionClear)="onClear($event)">
-    </ion-searchbar>
-
-    <!-- Hide buttons if Searchbar unhided -->
-    <ion-buttons end *ngIf="!searchbarToggled">
-      <button ion-button icon-only (click)="toggleSearch()">
-        <ion-icon name="search"></ion-icon>
-      </button>
-
-      <button ion-button icon-only>
-        <ion-icon name="chatbubbles"></ion-icon>
-      </button>
-    </ion-buttons>
-  </ion-navbar>
 </ion-header>
 
 <ion-content class="card-background-page">

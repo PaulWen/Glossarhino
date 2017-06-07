@@ -10,7 +10,7 @@
         "spec": ">=4.0.1 <4.1.0",
         "type": "range"
       },
-      "C:\\Users\\Wenze\\Desktop\\Glossarhino2.0-App\\node_modules"
+      "/Users/simonweber/Documents/Entwicklung/glossarhino2.0-new/node_modules"
     ]
   ],
   "_from": "cordova-plugin-splashscreen@>=4.0.1 <4.1.0",
@@ -45,7 +45,7 @@
   "_shasum": "773cd1363c1f3bacb9901663e9e3793dd3e0a19d",
   "_shrinkwrap": null,
   "_spec": "cordova-plugin-splashscreen@~4.0.1",
-  "_where": "C:\\Users\\Wenze\\Desktop\\Glossarhino2.0-App\\node_modules",
+  "_where": "/Users/simonweber/Documents/Entwicklung/glossarhino2.0-new/node_modules",
   "author": {
     "name": "Apache Software Foundation"
   },

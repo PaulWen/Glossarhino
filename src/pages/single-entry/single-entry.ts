@@ -2,8 +2,6 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
 import { DummySingleEntry } from "./dummy-class-single-entry";
 import { SingleEntryInterface } from "./single-entry-interface";
-import { Logger } from "../../app/logger";
-import { AttachmentModalPage } from "../attachment-modal/attachment-modal";
 import { Attachment } from "../../providers/model/attachment-model";
 import { DummyResolveDepartment } from "../../providers/model/dummy-resolve-department";
 
@@ -37,7 +35,7 @@ export class SingleEntryPage {
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
   ionViewDidLoad() {
-    Logger.log('ionViewDidLoad SingleEntryPage');
+    console.log('ionViewDidLoad SingleEntryPage');
   }
 
   private sendMail (emailAddress: String) {
@@ -46,9 +44,9 @@ export class SingleEntryPage {
   }
 
   private openAttachmentModal(attachments: Array<Attachment>) {
-    let attachmentModal = this.modalCtrl.create(AttachmentModalPage, {
+    let attachmentModal = this.modalCtrl.create("AttachmentModalPage", {
         attachments: attachments
     });
     attachmentModal.present();
-  }
+}
 }

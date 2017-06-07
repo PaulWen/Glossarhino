@@ -10,7 +10,7 @@
         "spec": "1.3.1",
         "type": "version"
       },
-      "C:\\Users\\Wenze\\Desktop\\Glossarhino2.0-App\\node_modules"
+      "/Users/simonweber/Documents/Entwicklung/glossarhino2.0-new/node_modules"
     ]
   ],
   "_from": "cordova-plugin-whitelist@1.3.1",
@@ -45,7 +45,7 @@
   "_shasum": "9fd1db7fd6c956951d34771cdcd97f66ced516df",
   "_shrinkwrap": null,
   "_spec": "cordova-plugin-whitelist@1.3.1",
-  "_where": "C:\\Users\\Wenze\\Desktop\\Glossarhino2.0-App\\node_modules",
+  "_where": "/Users/simonweber/Documents/Entwicklung/glossarhino2.0-new/node_modules",
   "author": {
     "name": "Apache Software Foundation"
   },

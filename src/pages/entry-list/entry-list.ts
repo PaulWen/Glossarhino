@@ -2,8 +2,6 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { EntryListInterface } from "./entry-list-interface";
 import { DummyEntryList } from "./dummy-class-entry-list";
-import { SingleEntryPage } from "../single-entry/single-entry";
-import { Logger } from "../../app/logger";
 import { DummyResolveDepartment } from "../../providers/model/dummy-resolve-department";
 
 @IonicPage()
@@ -36,12 +34,12 @@ export class EntryListPage {
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
   ionViewDidLoad() {
-    Logger.log('ionViewDidLoad EntryListPage');
+    console.log('ionViewDidLoad EntryListPage');
   }
 
   // Navigation method for single entry
   pushEntry(name: String) {
-    this.navCtrl.push(SingleEntryPage, {
+    this.navCtrl.push("SingleEntryPage", {
       name: name
     })
   }

@@ -1,17 +1,19 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
-import { DummyHome } from "./dummy-class-home";
 import { HomePageInterface } from "./home-interface";
-import { EntryListPage } from "../entry-list/entry-list";
+import { DummyHome } from "./dummy-home";
 import { DummyResolveDepartment } from "../../providers/model/dummy-resolve-department";
 
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
 })
-
 export class HomePage {
-  ////////////////////////////////////////////Properties/////////////////////////////////////////////
+
+  ////////////////////////////////////////////Properties////////////////////////////////////////////
+  // searchbar toggle
+  public searchbarToggled: boolean;
+
   // access interface implementation
   private homePageInterface: HomePageInterface;
 
@@ -20,6 +22,9 @@ export class HomePage {
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
   constructor(public navCtrl: NavController) {
+    // set default value
+    this.searchbarToggled = false;
+
     // instantiate model object for interaction
     this.homePageInterface = new DummyHome();
 
@@ -28,10 +33,28 @@ export class HomePage {
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
+  // method to toggle searchbar and icons
+  toggleSearch() {
+    this.searchbarToggled = this.searchbarToggled ? false : true;
+  }
+
+  // Handle events of searchbar
+  onInput(event: Event) {
+  }
+
+  onCancel(event: Event) {
+    this.toggleSearch()
+  }
+
+  onClear(event: Event) {
+    this.toggleSearch()
+  }
+
   // Navigate to entry list and hand over department
   pushList(departmentId: number) {
-    this.navCtrl.push(EntryListPage, {
+    this.navCtrl.push("EntryListPage", {
       departmentId: departmentId
     })
   }
+
 }

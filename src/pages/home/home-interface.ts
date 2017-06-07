@@ -1,5 +1,5 @@
 /**
- * Interface to define what this page needs implemented in order to work
+ * Interface to define what HomePage needs implemented in order to work
  */
 export interface HomePageInterface {
     getDepartments: () => Array<number>;

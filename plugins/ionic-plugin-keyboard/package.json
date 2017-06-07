@@ -10,7 +10,7 @@
         "spec": ">=2.2.1 <2.3.0",
         "type": "range"
       },
-      "C:\\Users\\Wenze\\Desktop\\Glossarhino2.0-App\\node_modules"
+      "/Users/simonweber/Documents/Entwicklung/glossarhino2.0-new/node_modules"
     ]
   ],
   "_from": "ionic-plugin-keyboard@>=2.2.1 <2.3.0",
@@ -45,7 +45,7 @@
   "_shasum": "f2a9e169bbe9b5522400347c9fd6d3467ee3fa12",
   "_shrinkwrap": null,
   "_spec": "ionic-plugin-keyboard@~2.2.1",
-  "_where": "C:\\Users\\Wenze\\Desktop\\Glossarhino2.0-App\\node_modules",
+  "_where": "/Users/simonweber/Documents/Entwicklung/glossarhino2.0-new/node_modules",
   "author": {
     "name": "Ionic"
   },

@@ -1,20 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
-/**
- * Generated class for the TitleBarComponent component.
- *
- * See https://angular.io/docs/ts/latest/api/core/index/ComponentMetadata-class.html
- * for more info on Angular Components.
- */
 @Component({
   selector: 'title-bar',
   templateUrl: 'title-bar.html'
 })
 export class TitleBarComponent {
-
   ////////////////////////////////////////////Properties////////////////////////////////////////////
   // searchbar toggle
   public searchbarToggled: boolean;
+
+  // input variables
+  @Input() title: String;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
   constructor() {

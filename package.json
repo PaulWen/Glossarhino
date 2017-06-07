@@ -9,7 +9,8 @@
         "build": "ionic-app-scripts build",
         "lint": "ionic-app-scripts lint",
         "ionic:build": "ionic-app-scripts build",
-        "ionic:serve": "ionic-app-scripts serve"
+        "ionic:serve": "ionic-app-scripts serve",
+        "postinstall": "ionic cordova prepare"
     },
     "dependencies": {
         "@angular/common": "4.1.2",
@@ -54,6 +55,7 @@
             "ionic-plugin-keyboard": {}
         },
         "platforms": [
+            "android",
             "ios"
         ]
     }

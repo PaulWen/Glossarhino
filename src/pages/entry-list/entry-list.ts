@@ -13,6 +13,7 @@ export class EntryListPage {
   ////////////////////////////////////////////Properties/////////////////////////////////////////////
   // navParams
   private departmentId: number;
+  private searchbarFocus: boolean = false;
 
   // access interface implementation
   private entryListInterface: EntryListInterface;
@@ -24,6 +25,7 @@ export class EntryListPage {
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     // get navParams
     this.departmentId = this.navParams.get("departmentId");
+    this.searchbarFocus = this.navParams.get("searchbarFocus");
 
     // instantiate model object for interaction
     this.entryListInterface = new DummyEntryList();
@@ -33,10 +35,6 @@ export class EntryListPage {
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad EntryListPage');
-  }
-
   // Navigation method for single entry
   pushEntry(name: String) {
     this.navCtrl.push("SingleEntryPage", {
@@ -47,8 +45,8 @@ export class EntryListPage {
   // Resolve department and handle departmentId undefined
   resolveDepartment(departmendId?: number): String {
     if (departmendId)
-    return this.dummyResolveDepartment.resolveDepartment(this.departmentId);
+      return this.dummyResolveDepartment.resolveDepartment(this.departmentId);
     else
-    return "All";
+      return "All";
   }
 }

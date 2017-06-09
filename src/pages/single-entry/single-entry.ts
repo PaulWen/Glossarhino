@@ -34,10 +34,6 @@ export class SingleEntryPage {
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad SingleEntryPage');
-  }
-
   /**
    * Method to send an email to the contact specified for the entry and department
    * @param emailAddress 

@@ -1,7 +1,7 @@
 <ion-header>
   
   <!-- Title Bar Component for reusability -->
-  <title-bar [title]="'Glossarhino'">
+  <title-bar [title]="'Glossarhino'" [searchbarToggled]="false">
   </title-bar>
 
 </ion-header>
@@ -11,6 +11,20 @@
   <!-- ion-grid for responsive design -->
   <ion-grid>
     <ion-row align-items-center justify-content-center>
+      <!-- col for "All" departments -->
+
+      <ion-col col-xl-3 col-lg-3 col-md-6 col-sm-6 col-xs-6 col-6>
+        <ion-card>
+          <img (click)="pushList()" src="assets/img/homePage/all.jpg" />
+          <div (click)="pushList()" class="card-title">All</div>
+          <div (click)="pushList()" class="card-subtitle">{{ homePageInterface.getListings() }} Listings</div>
+        </ion-card>
+      </ion-col>
+
+
+
+<!-- col for the different departments -->
+
       <ion-col col-xl-3 col-lg-3 col-md-6 col-sm-6 col-xs-6 col-6 *ngFor="let departmentId of homePageInterface.getDepartments()">
         <!-- Cards show one category each, currently using dummy implementation -->
         <ion-card>

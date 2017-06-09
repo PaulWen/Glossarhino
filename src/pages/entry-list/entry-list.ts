@@ -44,4 +44,11 @@ export class EntryListPage {
     })
   }
 
+  // Resolve department and handle departmentId undefined
+  resolveDepartment(departmendId?: number): String {
+    if (departmendId)
+    return this.dummyResolveDepartment.resolveDepartment(this.departmentId);
+    else
+    return "All";
+  }
 }

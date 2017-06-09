@@ -6,17 +6,13 @@ import { Component, Input } from '@angular/core';
 })
 export class TitleBarComponent {
   ////////////////////////////////////////////Properties////////////////////////////////////////////
-  // searchbar toggle
-  public searchbarToggled: boolean;
 
   // input variables
   @Input() title: String;
+  @Input() searchbarToggled: Boolean;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
   constructor() {
-    // set default value
-    this.searchbarToggled = false;
-
     console.log('Hello TitleBarComponent Component');
   }
 

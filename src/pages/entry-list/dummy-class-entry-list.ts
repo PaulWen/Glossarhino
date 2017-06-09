@@ -5,7 +5,7 @@ import { EntryListInterface } from "./entry-list-interface";
 
 export class DummyEntryList implements EntryListInterface {
 
-    public getEntryList(departmentId: number): Array<String> {
+    public getEntryList(searchString: String, departmentId?: number): Array<String> {
         return ["Entry 1", "Entry 2", "Entry 3"]
     }
 }

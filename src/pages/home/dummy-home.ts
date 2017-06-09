@@ -10,7 +10,7 @@ export class DummyHome implements HomePageInterface {
         return this.departments;
     };
 
-    public getListings(departmentId: number): number {
+    public getListings(departmentId?: number): number {
         return 42;
     }
 

@@ -1,7 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, EventEmitter } from '@angular/core';
 
 @Component({
-  selector: 'title-bar',
+  selector: '[title-bar]',
   templateUrl: 'title-bar.html'
 })
 export class TitleBarComponent {
@@ -9,29 +9,42 @@ export class TitleBarComponent {
 
   // input variables
   @Input() title: String;
-  @Input() searchbarToggled: Boolean;
+  @Input() searchbarToggled: boolean;
+  @Input() searchbarFocus: boolean;
+
+  // variable for setting focus on searchbar
+  public focusTriggerEventEmitter = new EventEmitter<boolean>();
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
   constructor() {
-    console.log('Hello TitleBarComponent Component');
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
   // method to toggle searchbar and icons
-  toggleSearch() {
+  private toggleSearch() {
     this.searchbarToggled = this.searchbarToggled ? false : true;
   }
 
   // Handle events of searchbar
-  onInput(event: Event) {
+  private onInput(event: Event) {
   }
 
-  onCancel(event: Event) {
+  private onCancel(event: Event) {
     this.toggleSearch()
   }
 
-  onClear(event: Event) {
+  private onClear(event: Event) {
     this.toggleSearch()
   }
 
+  // set focus on searchbar with directive
+  private setFocus() {
+    this.focusTriggerEventEmitter.emit(true);
+  }
+
+  // resolve input for searchbarFocus and set searchbarFocus onInit
+  ngOnInit() {
+    if (this.searchbarFocus)
+      this.setFocus()
+  }
 }

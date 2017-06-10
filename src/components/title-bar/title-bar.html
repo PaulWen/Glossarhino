@@ -8,8 +8,8 @@
   <ion-title *ngIf="!searchbarToggled">{{ title }}</ion-title>
 
   <!-- Searchbar, if unhidden Title and Buttons(end) will be hidden -->
-  <ion-searchbar *ngIf="searchbarToggled" placeholder="Search articles" autocorrect="off" type="text" [(ngModel)]="searchText"
-    showCancelButton="false" (ionInput)="onInput($event)" (ionCancel)="onCancel($event)" (ionClear)="onClear($event)" [focus]="focusTriggerEventEmitter">
+  <ion-searchbar #searchbar *ngIf="searchbarToggled" placeholder="Search articles" autocorrect="off" type="text" [(ngModel)]="searchText"
+    showCancelButton="false" (ionInput)="onInput($event)" (ionCancel)="onCancel($event)" (ionClear)="onClear($event)">
   </ion-searchbar>
 
   <!-- Hide buttons if Searchbar unhided -->

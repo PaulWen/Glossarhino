@@ -1,4 +1,5 @@
-import { Component, Input, EventEmitter } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
+import { Searchbar } from "ionic-angular";
 
 @Component({
   selector: '[title-bar]',
@@ -12,8 +13,8 @@ export class TitleBarComponent {
   @Input() searchbarToggled: boolean;
   @Input() searchbarFocus: boolean;
 
-  // variable for setting focus on searchbar
-  public focusTriggerEventEmitter = new EventEmitter<boolean>();
+  // Searchbar Variable for access on searchbar
+  @ViewChild('searchbar') searchbar: Searchbar;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
   constructor() {
@@ -37,14 +38,11 @@ export class TitleBarComponent {
     this.toggleSearch()
   }
 
-  // set focus on searchbar with directive
-  private setFocus() {
-    this.focusTriggerEventEmitter.emit(true);
-  }
-
   // resolve input for searchbarFocus and set searchbarFocus onInit
   ngOnInit() {
-    if (this.searchbarFocus)
-      this.setFocus()
+    this.toggleSearch();
+    setTimeout(() => {
+      this.searchbar.setFocus();
+    }, 2000);
   }
 }

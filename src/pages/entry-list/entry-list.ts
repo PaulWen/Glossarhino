@@ -66,9 +66,9 @@ export class EntryListPage {
   }
 
   // setFocus on searchbar
-  private ngOnInit() {
+  private ionViewDidEnter() {
     if (this.searchbarFocus) {
-      setTimeout(() => { this.searchbar.setFocus(); }, 500);
+      setTimeout(() => { this.searchbar.setFocus(); }, 150);
     }
   }
 }

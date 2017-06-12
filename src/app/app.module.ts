@@ -1,5 +1,6 @@
 import {BrowserModule} from "@angular/platform-browser";
 import {ErrorHandler, NgModule} from "@angular/core";
+import {HttpModule} from "@angular/http";
 import {IonicApp, IonicErrorHandler, IonicModule} from "ionic-angular";
 import {MyApp} from "./app.component";
 import {StatusBar} from "@ionic-native/status-bar";
@@ -7,7 +8,6 @@ import {SplashScreen} from "@ionic-native/splash-screen";
 import {SuperloginHttpRequestor} from "../providers/super_login_client/superlogin_http_requestor";
 import {SuperLoginClient} from "../providers/super_login_client/super_login_client";
 import {AppModelService} from "../providers/model/app-model-service";
-import {SuperLoginClientDatabaseInitializer} from "../providers/super_login_client/super_login_client_database_initializer";
 
 @NgModule({
   declarations: [
@@ -15,6 +15,7 @@ import {SuperLoginClientDatabaseInitializer} from "../providers/super_login_clie
   ],
   imports: [
     BrowserModule,
+    HttpModule,
     IonicModule.forRoot(MyApp,
     ),
   ],

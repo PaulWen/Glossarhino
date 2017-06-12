@@ -1,0 +1,49 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Login</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col col-6>
+        <button ion-button block [color]="loginOpened ? 'primary' : 'light'" (click)="loginOpened=true">Login</button>
+      </ion-col>
+      <ion-col col-6>
+        <button ion-button block [color]="loginOpened ? 'light' : 'primary'" (click)="loginOpened=false">New Account</button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-item>
+        <ion-label floating>E-Mail</ion-label>
+        <ion-input #email type="email"></ion-input>
+      </ion-item>
+    </ion-row>
+    <ion-row>
+      <ion-item>
+        <ion-label floating>Password</ion-label>
+        <ion-input #password type="password"></ion-input>
+      </ion-item>
+    </ion-row>
+    <ion-row>
+      <ion-item [style.display]="loginOpened ? 'none' : 'block'">
+        <ion-label floating>Repeat Password</ion-label>
+        <ion-input #repeat_password type="password"></ion-input>
+      </ion-item>
+    </ion-row>
+    <ion-row style="justify-content: flex-end">
+      <button ion-button round outline [style.display]="loginOpened ? 'block' : 'none'" (click)="login(email.value, password.value, true)">
+        Login
+      </button>
+      <button ion-button round outline [style.display]="loginOpened ? 'none' : 'block'" (click)="register(email.value, password.value, repeat_password.value, true)">
+        Creat New Account
+      </button>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

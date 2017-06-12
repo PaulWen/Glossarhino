@@ -1,4 +1,27 @@
-<ion-header title-bar [title]="'Glossarhino'" [searchbarToggled]="false"></ion-header>
+<ion-header>
+
+  <ion-navbar>
+    <!-- Menu toggle for burger menu -->
+    <button ion-button icon-only menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+
+    <!-- Title, hided if searchbar unhided -->
+    <ion-title>Glossarhino</ion-title>
+
+    <!-- Hide buttons if Searchbar unhided -->
+    <ion-buttons end>
+      <button ion-button icon-only >
+        <ion-icon name="search"></ion-icon>
+      </button>
+
+      <button ion-button icon-only>
+        <ion-icon name="chatbubbles"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
 
 <ion-content class="card-background-page">
 
@@ -17,7 +40,7 @@
 
 
 
-<!-- col for the different departments -->
+      <!-- col for the different departments -->
 
       <ion-col col-xl-3 col-lg-3 col-md-6 col-sm-6 col-xs-6 col-6 *ngFor="let departmentId of homePageInterface.getDepartments()">
         <!-- Cards show one category each, currently using dummy implementation -->

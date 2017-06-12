@@ -24,26 +24,18 @@
 
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1200px) {
   .card-background-page {
 
   .card-title {
-    font-size: 2.0em;
+    top: 40%;
+    font-size: 1.5em;
   }
   
   .card-subtitle {
-    font-size: 1.0em;
     top: 55%;
+    font-size: 1.0em;
   }
 
 }
 }
-
-@media (min-width: 960px) {
-  .card-background-page {
-    .card-subtitle {
-      font-size: 1.5em;
-    }
-  }
-}
-

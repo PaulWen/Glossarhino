@@ -30,13 +30,9 @@ export class HomePage {
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
   // Navigate to entry list and hand over department
   pushList(departmentId?: number) {
-    if (departmentId)
-      this.navCtrl.push("EntryListPage", {
-        departmentId: departmentId
-      });
-    else
-      this.navCtrl.push("EntryListPage", {
-      });
+    this.navCtrl.push("EntryListPage", {
+      departmentId: departmentId
+    });
   }
 
 }

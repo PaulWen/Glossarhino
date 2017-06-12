@@ -20,7 +20,7 @@ export class MyApp {
     this.pages = [
       { title: 'Home', component: "HomePage" },
       { title: "Settings", component: "SettingsPage"}
-      
+
     ];
 
   }

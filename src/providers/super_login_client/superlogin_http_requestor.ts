@@ -2,6 +2,7 @@ import {Response, Http, Headers} from "@angular/http";
 import "rxjs/add/operator/map";
 import {Injectable} from "@angular/core";
 import postParam from "jquery-param";
+import {Logger} from "../../app/logger";
 
 /**
  * The class is a service which provides basic methods for making HTTP requests.
@@ -98,7 +99,10 @@ export class SuperloginHttpRequestor {
      * @returns {Observable<R>}
      */
     public postJsonData(url:string, authorizationBearer: string, bodyParametersAsJson: any) {
-        // generate request header
+      Logger.debug(bodyParametersAsJson);
+      Logger.debug(url);
+
+      // generate request header
         let headers = new Headers();
         // config post parameter content type in header
         headers.append('Content-Type', 'application/x-www-form-urlencoded');

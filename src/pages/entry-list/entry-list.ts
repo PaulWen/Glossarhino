@@ -13,7 +13,6 @@ export class EntryListPage {
   ////////////////////////////////////////////Properties/////////////////////////////////////////////
   // navParams
   private departmentId: number;
-  private searchbarFocus: boolean;
 
   // access interface implementation
   private entryListInterface: EntryListInterface;
@@ -24,15 +23,17 @@ export class EntryListPage {
   // dummy resolver object
   private dummyResolveDepartment: DummyResolveDepartment;
 
+  // searchText from searchbar
+  private searchText: String;
+
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     // get navParams
     this.departmentId = this.navParams.get("departmentId");
-    this.searchbarFocus = this.navParams.get("searchbarFocus");
 
     // instantiate model object for interaction and load entrylist
     this.entryListInterface = new DummyEntryList();
-    this.entryList = this.entryListInterface.getEntryList('', this.departmentId);
+    this.entryList = this.entryListInterface.getEntryList("", this.departmentId);
 
     // instatiate resolver object
     this.dummyResolveDepartment = new DummyResolveDepartment();
@@ -54,8 +55,8 @@ export class EntryListPage {
       return "All";
   }
 
-  // set method for entryList to set entryList from title-bar component on searchbar input
-  public setEntryList(entryList: Array<String>) {
-    this.entryList = entryList;
+  // Methods for searchbar
+  private onInput() {
+    this.entryList = this.entryListInterface.getEntryList(this.searchText, this.departmentId);
   }
 }

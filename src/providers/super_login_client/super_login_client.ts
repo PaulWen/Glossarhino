@@ -313,15 +313,17 @@ export class SuperLoginClient {
      * The function uses superlogin-client to register the user with the given information. The user will not
      * be logged in afterwards.
      *
+     * @param name of the user
      * @param email of the user
      * @param password of the user
      * @param confirmPassword of the user
      * @param done callback function once the request was successful
      * @param error callback function in case an error occurred
      */
-    public register(email: string, password: string, confirmPassword: string, done: SuperLoginClientDoneResponse, error: SuperLoginClientErrorResponse) {
+    public register(name: string, email: string, password: string, confirmPassword: string, done: SuperLoginClientDoneResponse, error: SuperLoginClientErrorResponse) {
         this.httpRequestor.postJsonData(AppConfig.WEB_SERVER_DOMAIN + "/auth/register", null, {
             // since the username is not allowed to include Capital letters we have to make sure that it does not
+            name: name,
             email: email.toLocaleLowerCase(),
             password: password,
             confirmPassword: confirmPassword

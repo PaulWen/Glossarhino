@@ -33,10 +33,10 @@ export class LoginPage {
     console.log('ionViewDidLoad LoginPage');
   }
 
-  private register(email: string, password: string, confirmPassword: string, rememberLogin: boolean) {
+  private register(name: string, email: string, password: string, confirmPassword: string, rememberLogin: boolean) {
     Logger.log("Register: " + email + "; " + password + "; " + confirmPassword + "; " + rememberLogin);
 
-    this.superLoginClient.register(email, password, confirmPassword, () => {
+    this.superLoginClient.register(name, email, password, confirmPassword, () => {
       // successfully registred
       this.navCtrl.push("HomePage");
 

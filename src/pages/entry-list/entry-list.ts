@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { IonicPage, NavController, NavParams, Searchbar } from 'ionic-angular';
 import { EntryListInterface } from "./entry-list-interface";
 import { DummyEntryList } from "./dummy-class-entry-list";
 import { DummyResolveDepartment } from "../../providers/model/dummy-resolve-department";
@@ -13,6 +13,7 @@ export class EntryListPage {
   ////////////////////////////////////////////Properties/////////////////////////////////////////////
   // navParams
   private departmentId: number;
+  private searchbarFocus: boolean;
 
   // access interface implementation
   private entryListInterface: EntryListInterface;
@@ -26,10 +27,14 @@ export class EntryListPage {
   // searchText from searchbar
   private searchText: String;
 
+  // get access to seachbar itself
+  @ViewChild("searchbar") searchbar: Searchbar;
+
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     // get navParams
     this.departmentId = this.navParams.get("departmentId");
+    this.searchbarFocus = this.navParams.get("searchbarFocus");
 
     // instantiate model object for interaction and load entrylist
     this.entryListInterface = new DummyEntryList();
@@ -58,5 +63,12 @@ export class EntryListPage {
   // Methods for searchbar
   private onInput() {
     this.entryList = this.entryListInterface.getEntryList(this.searchText, this.departmentId);
+  }
+
+  // setFocus on searchbar
+  private ngOnInit() {
+    if (this.searchbarFocus) {
+      setTimeout(() => { this.searchbar.setFocus(); }, 500);
+    }
   }
 }

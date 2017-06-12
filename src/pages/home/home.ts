@@ -35,4 +35,11 @@ export class HomePage {
     });
   }
 
+  // Navigate to entry list and open searchbar
+  pushSearch() {
+    this.navCtrl.push("EntryListPage", {
+      searchbarFocus: true
+    });
+  }
+
 }

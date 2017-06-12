@@ -1,10 +1,26 @@
-<ion-header title-bar [title]="resolveDepartment(departmentId)" [searchbarToggled]="false"></ion-header>
+<ion-header>
+
+  <ion-navbar>
+    
+    <!-- Menu toggle for burger menu -->
+    <button ion-button icon-only menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+
+    <!-- Searchbar, if unhidden Title and Buttons(end) will be hidden -->
+    <ion-searchbar placeholder="Search entries" autocorrect="off" type="text" [(ngModel)]="searchText" showCancelButton="false"
+      (ionInput)="onInput($event)" (ionCancel)="onCancel($event)" (ionClear)="onClear($event)">
+    </ion-searchbar>
+
+  </ion-navbar>
+
+</ion-header>
 
 <ion-content padding>
 
   <!-- Print list with all entries retreived in department -->
   <ion-list>
-    <button ion-item *ngFor="let entry of entryListInterface.getEntryList(departmentId)" (click)="pushEntry(entry)">
+    <button ion-item *ngFor="let entry of entryList" (click)="pushEntry(entry)">
     {{ entry }}
   </button>
   </ion-list>

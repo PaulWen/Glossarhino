@@ -372,32 +372,6 @@ export class SuperLoginClient {
     }
 
     /**
-     * This function checks if a email is already in use.
-     *
-     * @param email
-     * @param trueCallback gets called if the email is already in use
-     * @param falseCallback gets called if the email is not yet in use
-     */
-    public isEmailInUse(email: string, trueCallback: SuperLoginClientDoneResponse, falseCallback: SuperLoginClientDoneResponse) {
-        this.httpRequestor.getJsonData(AppConfig.WEB_SERVER_DOMAIN + "/auth/validateEmailUsername/" + email, null).subscribe(
-            (data: any) => {
-                trueCallback();
-            },
-            (errorObject) => {
-                let superLoginClientError: SuperLoginClientError = new SuperLoginClientError(errorObject);
-
-                // Log the Error
-                Logger.error(superLoginClientError.getErrorMessage());
-
-                // check if error = email already in use
-                if (superLoginClientError.checkForError(SuperLoginClientError.AUTH_ERR_1)) {
-                    falseCallback();
-                }
-            }
-       );
-    }
-
-    /**
      * This method renews the current session token.
      */
     private extendSessionToken(): void {

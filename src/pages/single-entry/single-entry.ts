@@ -44,7 +44,7 @@ export class SingleEntryPage {
   }
 
   /**
-   * Method to create and open the AttachmentModal to show list of attachments. AttachmentModalPage is the template
+   * Method to create and open the AttachmentModal to show list of attachments. AttachmentModalPage is the template for the modal.
    * @param attachments 
    */
   private openAttachmentModal(attachments: Array<Attachment>) {
@@ -52,6 +52,14 @@ export class SingleEntryPage {
       attachments: attachments
     });
     attachmentModal.present();
+  }
+
+  /**
+   * Method to create and open the SettingsModal to show settings for the user. SettingsPage is the template for the modal.
+   */
+  private openSettingsModal() {
+    let settingsModal = this.modalCtrl.create("SettingsPage");
+    settingsModal.present();
   }
 
   presentActionSheet() {
@@ -64,9 +72,10 @@ export class SingleEntryPage {
             console.log('Edit clicked');
           }
         },{
-          text: 'Favorit',
+          text: 'Filter',
           handler: () => {
-            console.log('Favorit clicked');
+            console.log('Filter clicked');
+            this.openSettingsModal();
           }
         },{
           text: 'Cancel',

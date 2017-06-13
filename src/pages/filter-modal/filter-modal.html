@@ -1,0 +1,23 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-buttons start>
+      <button ion-button (click)="closeFilterModal()">
+        <span ion-text color="primary" showWhen="ios">Close</span>
+        <ion-icon name="md-close" showWhen="android,windows, core"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title>Filter</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+  <ion-item *ngFor="let departmentId of filterModalInterface.getDepartments()">
+    <ion-label>{{ resolveDepartment.resolveDepartment(departmentId) }}</ion-label>
+    <ion-checkbox [(ngModel)]="filterSettings[departmentId]" (ionChange)="filterModalInterface.setFilter(filterSettings)"></ion-checkbox>
+  </ion-item>
+
+</ion-content>

@@ -46,7 +46,7 @@
         <!-- Cards show one category each, currently using dummy implementation -->
         <ion-card>
           <img (click)="pushList(departmentId)" src="assets/img/homePage/{{departmentId}}.jpg" />
-          <div (click)="pushList(departmentId)" class="card-title">{{ dummyResolveDepartment.resolveDepartment(departmentId) }}</div>
+          <div (click)="pushList(departmentId)" class="card-title">{{ resolveDepartment.resolveDepartment(departmentId) }}</div>
           <div (click)="pushList(departmentId)" class="card-subtitle">{{ homePageInterface.getListings(departmentId) }} Listings</div>
         </ion-card>
       </ion-col>

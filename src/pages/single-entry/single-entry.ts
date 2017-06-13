@@ -57,9 +57,9 @@ export class SingleEntryPage {
   /**
    * Method to create and open the SettingsModal to show settings for the user. SettingsPage is the template for the modal.
    */
-  private openSettingsModal() {
-    let settingsModal = this.modalCtrl.create("SettingsPage");
-    settingsModal.present();
+  private openFilterModal() {
+    let filterModal = this.modalCtrl.create("FilterModalPage");
+    filterModal.present();
   }
 
   presentActionSheet() {
@@ -75,7 +75,7 @@ export class SingleEntryPage {
           text: 'Filter',
           handler: () => {
             console.log('Filter clicked');
-            this.openSettingsModal();
+            this.openFilterModal();
           }
         },{
           text: 'Cancel',

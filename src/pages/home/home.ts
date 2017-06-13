@@ -16,7 +16,7 @@ export class HomePage {
   private homePageInterface: HomePageInterface;
 
   // dummy resolver object
-  private dummyResolveDepartment: DummyResolveDepartment;
+  private resolveDepartment: DummyResolveDepartment;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
   constructor(public navCtrl: NavController) {
@@ -24,7 +24,7 @@ export class HomePage {
     this.homePageInterface = new DummyHome();
 
     // instatiate resolver object
-    this.dummyResolveDepartment = new DummyResolveDepartment();
+    this.resolveDepartment = new DummyResolveDepartment();
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////

@@ -18,14 +18,18 @@ export class AttachmentModalPage {
     this.attachments = this.navParams.get("attachments");
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad AttachmentModalPage');
-  }
-
+  /////////////////////////////////////////////Methods///////////////////////////////////////////////
+  /**
+   * Method to close the AttachmentModal when pressing the assigned button
+   */
   private closeAttachmentModal() {
     this.viewCtrl.dismiss();
   }
 
+  /**
+   * Method to open an attachment when selected by the user. Will open in the systems browser.
+   * @param url 
+   */
   private openAttachment(url: URL) {
     //window.location.href = url.href;
     window.open(url.href, "_system")

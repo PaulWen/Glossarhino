@@ -19,7 +19,8 @@ export class SettingsPage {
   // dummy resolver object
   private dummyResolveDepartment: DummyResolveDepartment;
 
-  private checked: Array<boolean> = [];
+  // array to save inputs for saving them later on
+  private checkedDepartments: Array<boolean> = [];
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
   constructor(public navCtrl: NavController, public navParams: NavParams) {
@@ -35,8 +36,8 @@ export class SettingsPage {
   // method to handle changes on checkboxes
   private updatePreferences(departmentId: number, index: number) {
     Logger.log("Department ID: " + departmentId + " Index: " + index)
-    Logger.log("Value: " + this.checked[index]);
-    this.settingsPageInterface.setPreferences(departmentId, this.checked[index]);
+    Logger.log("Value: " + this.checkedDepartments[index]);
+    this.settingsPageInterface.setPreferences(departmentId, this.checkedDepartments[index]);
   }
 
 }

@@ -44,7 +44,7 @@
 
               <ion-item *ngFor="let departmentId of settingsPageInterface.getDepartments(), let in = index">
                 <ion-label> {{ dummyResolveDepartment.resolveDepartment(departmentId) }} </ion-label>
-                <ion-checkbox [(ngModel)]="checked[in]" (ionChange)="updatePreferences(departmentId, in)"></ion-checkbox>
+                <ion-checkbox [(ngModel)]="checkedDepartments[in]" (ionChange)="updatePreferences(departmentId, in)"></ion-checkbox>
               </ion-item>
 
             </ion-list>

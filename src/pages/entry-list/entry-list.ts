@@ -68,7 +68,7 @@ export class EntryListPage {
   // setFocus on searchbar
   private ionViewDidEnter() {
     if (this.searchbarFocus) {
-      setTimeout(() => { this.searchbar.setFocus(); }, 150);
+      setTimeout(() => { this.searchbar.setFocus(); }, 50);
     }
   }
 }

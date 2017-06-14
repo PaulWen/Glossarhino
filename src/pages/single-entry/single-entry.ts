@@ -18,8 +18,11 @@ export class SingleEntryPage {
   // access interface implementation
   private singleEntryInterface: SingleEntryInterface;
 
-  // dummy resolver object
-  private dummyResolveDepartment: DummyResolveDepartment;
+  // filter preferences of user
+  private filter: Array<boolean>;
+
+  // resolver object
+  private resolveDepartment: DummyResolveDepartment;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
   constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public actionSheetCtrl: ActionSheetController) {
@@ -29,8 +32,11 @@ export class SingleEntryPage {
     // instantiate model object for interaction
     this.singleEntryInterface = new DummySingleEntry();
 
+    // instantiate user filter preferences
+    this.filter = this.singleEntryInterface.getFilter();
+
     // instatiate resolver object
-    this.dummyResolveDepartment = new DummyResolveDepartment();
+    this.resolveDepartment = new DummyResolveDepartment();
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
@@ -62,6 +68,11 @@ export class SingleEntryPage {
     filterModal.present();
   }
 
+  private openEditModal() {
+    let editModal = this.modalCtrl.create("EditModalPage");
+    editModal.present();
+  }
+
   presentActionSheet() {
     let actionSheet = this.actionSheetCtrl.create({
       title: 'More Actions',
@@ -70,6 +81,7 @@ export class SingleEntryPage {
           text: 'Edit',
           handler: () => {
             console.log('Edit clicked');
+            this.openEditModal();
           }
         },{
           text: 'Filter',

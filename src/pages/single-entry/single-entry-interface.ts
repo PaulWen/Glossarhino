@@ -5,4 +5,5 @@ import { Entry } from "../../providers/model/entry-model";
  */ 
 export interface SingleEntryInterface {
   getEntry: (name: String) => Entry;
+  getFilter: () => Array<boolean>;
 }

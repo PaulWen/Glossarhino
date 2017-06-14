@@ -4,4 +4,5 @@
 export interface HomePageInterface {
     getDepartments: () => Array<number>;
     getListings: (departmentId?: number) => number;
+    getFilter: () => Array<boolean>;
 }

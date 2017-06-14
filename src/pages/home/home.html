@@ -29,7 +29,6 @@
   <ion-grid>
     <ion-row align-items-center justify-content-center>
       <!-- col for "All" departments -->
-
       <ion-col col-xl-3 col-lg-3 col-md-6 col-sm-6 col-xs-6 col-6>
         <ion-card>
           <img (click)="pushList()" src="assets/img/homePage/all.jpg" />
@@ -41,15 +40,16 @@
 
 
       <!-- col for the different departments -->
-
-      <ion-col col-xl-3 col-lg-3 col-md-6 col-sm-6 col-xs-6 col-6 *ngFor="let departmentId of homePageInterface.getDepartments()">
-        <!-- Cards show one category each, currently using dummy implementation -->
-        <ion-card>
-          <img (click)="pushList(departmentId)" src="assets/img/homePage/{{departmentId}}.jpg" />
-          <div (click)="pushList(departmentId)" class="card-title">{{ resolveDepartment.resolveDepartment(departmentId) }}</div>
-          <div (click)="pushList(departmentId)" class="card-subtitle">{{ homePageInterface.getListings(departmentId) }} Listings</div>
-        </ion-card>
-      </ion-col>
+      <ng-container *ngFor="let departmentId of homePageInterface.getDepartments()">
+        <ion-col col-xl-3 col-lg-3 col-md-6 col-sm-6 col-xs-6 col-6 *ngIf="filter[departmentId]">
+          <!-- Cards show one category each, currently using dummy implementation -->
+          <ion-card>
+            <img (click)="pushList(departmentId)" src="assets/img/homePage/{{departmentId}}.jpg" />
+            <div (click)="pushList(departmentId)" class="card-title">{{ resolveDepartment.resolveDepartment(departmentId) }}</div>
+            <div (click)="pushList(departmentId)" class="card-subtitle">{{ homePageInterface.getListings(departmentId) }} Listings</div>
+          </ion-card>
+        </ion-col>
+      </ng-container>
     </ion-row>
   </ion-grid>
 

@@ -15,7 +15,10 @@ export class HomePage {
   // access interface implementation
   private homePageInterface: HomePageInterface;
 
-  // dummy resolver object
+  // filter preferences of user
+  private filter: Array<boolean>;
+
+  // resolver object
   private resolveDepartment: DummyResolveDepartment;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
@@ -23,7 +26,10 @@ export class HomePage {
     // instantiate model object for interaction
     this.homePageInterface = new DummyHome();
 
-    // instatiate resolver object
+    // instantiate user filter preferences
+    this.filter = this.homePageInterface.getFilter();
+
+    // instantiate resolver object
     this.resolveDepartment = new DummyResolveDepartment();
   }
 

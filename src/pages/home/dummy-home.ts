@@ -1,8 +1,8 @@
+import { HomePageInterface } from "./home-interface";
+
 /**
  * Dummy Class to fake the behaviour of the model in order to have some presentation. Will be replaced by the model implementation
  */
-import { HomePageInterface } from "./home-interface";
-
 export class DummyHome implements HomePageInterface {
     public getDepartments(): Array<number> {
         let departments: Array<number> = [1, 2, 3];

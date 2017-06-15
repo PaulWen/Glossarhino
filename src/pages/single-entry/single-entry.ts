@@ -26,7 +26,7 @@ export class SingleEntryPage {
   private filter: Array<boolean>;
 
   // resolver object
-  private resolveDepartment: DummyResolveDepartment;
+  private departmentResolver: DummyResolveDepartment;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
   constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public actionSheetCtrl: ActionSheetController) {
@@ -43,7 +43,7 @@ export class SingleEntryPage {
     this.filter = this.singleEntryInterface.getFilter();
 
     // instatiate resolver object
-    this.resolveDepartment = new DummyResolveDepartment();
+    this.departmentResolver = new DummyResolveDepartment();
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////

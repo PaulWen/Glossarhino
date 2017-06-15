@@ -20,7 +20,7 @@ export class EditModalPage {
   private editModalInterface: EditModalInterface;
 
   // resolver object
-  private resolveDepartment: DummyResolveDepartment;
+  private departmentResolver: DummyResolveDepartment;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
   constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController) {
@@ -31,7 +31,7 @@ export class EditModalPage {
     this.editModalInterface = new DummyEditModal();
 
     // instantiate resolver object
-    this.resolveDepartment = new DummyResolveDepartment();
+    this.departmentResolver = new DummyResolveDepartment();
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////

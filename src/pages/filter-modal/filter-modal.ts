@@ -18,8 +18,8 @@ export class FilterModalPage {
   // Map to temp store the filter settings
   private filterSettings: Array<boolean>;
 
-  // dummy resolver object
-  private resolveDepartment: DummyResolveDepartment;
+  // resolver object
+  private departmentResolver: DummyResolveDepartment;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
   constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController) {
@@ -27,7 +27,7 @@ export class FilterModalPage {
     this.filterModalInterface = new DummyFilterModal();
 
     // instantiate resolver object
-    this.resolveDepartment = new DummyResolveDepartment();
+    this.departmentResolver = new DummyResolveDepartment();
 
     // load settings from the model
     this.filterSettings = this.filterModalInterface.getFilter();

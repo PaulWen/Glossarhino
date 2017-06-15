@@ -44,7 +44,7 @@
       <ion-col col-12 *ngFor="let departmentId of editModalInterface.getDepartments()">
 
         <ion-card>
-          <ion-card-header> {{ resolveDepartment.resolveDepartment(departmentId) }} </ion-card-header>
+          <ion-card-header> {{ departmentResolver.resolveDepartment(departmentId) }} </ion-card-header>
 
           <ion-card-content>
 

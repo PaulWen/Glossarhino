@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, Searchbar } from 'ionic-angular';
 import { EntryListInterface } from "./entry-list-interface";
 import { DummyEntryList } from "./dummy-class-entry-list";
 import { DummyResolveDepartment } from "../../providers/model/dummy-resolve-department";
+import { AppConfig } from "../../app/app-config";
 
 @IonicPage()
 @Component({
@@ -21,8 +22,8 @@ export class EntryListPage {
   // model object for two-way binding and storage of entries
   private entryList: Array<String>;
 
-  // dummy resolver object
-  private dummyResolveDepartment: DummyResolveDepartment;
+  // resolver object
+  private departmentResolver: DummyResolveDepartment;
 
   // searchText from searchbar
   private searchText: String;
@@ -38,10 +39,10 @@ export class EntryListPage {
 
     // instantiate model object for interaction and load entrylist
     this.entryListInterface = new DummyEntryList();
-    this.entryList = this.entryListInterface.getEntryList("", this.departmentId);
+    this.entryList = this.entryListInterface.getEntryList("", AppConfig.LANGUAGE, this.departmentId);
 
     // instatiate resolver object
-    this.dummyResolveDepartment = new DummyResolveDepartment();
+    this.departmentResolver = new DummyResolveDepartment();
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
@@ -55,14 +56,14 @@ export class EntryListPage {
   // Resolve department and handle departmentId undefined
   private resolveDepartment(departmendId?: number): String {
     if (departmendId)
-      return this.dummyResolveDepartment.resolveDepartment(this.departmentId);
+      return this.departmentResolver.resolveDepartment(this.departmentId);
     else
       return "All";
   }
 
   // Methods for searchbar
   private onInput() {
-    this.entryList = this.entryListInterface.getEntryList(this.searchText, this.departmentId);
+    this.entryList = this.entryListInterface.getEntryList(this.searchText, AppConfig.LANGUAGE, this.departmentId);
   }
 
   // setFocus on searchbar

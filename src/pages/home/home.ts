@@ -19,7 +19,7 @@ export class HomePage {
   private filter: Array<boolean>;
 
   // resolver object
-  private resolveDepartment: DummyResolveDepartment;
+  private departmentResolver: DummyResolveDepartment;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
   constructor(public navCtrl: NavController) {
@@ -30,7 +30,7 @@ export class HomePage {
     this.filter = this.homePageInterface.getFilter();
 
     // instantiate resolver object
-    this.resolveDepartment = new DummyResolveDepartment();
+    this.departmentResolver = new DummyResolveDepartment();
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////

@@ -6,6 +6,8 @@ import { Department } from "./department-model";
 export class Entry {
     ////////////////////////////////////////////Properties/////////////////////////////////////////////
     private name: String;
+
+    // the index of the department matches the departmendId for easier access and less effort to find the correct department
     private departments: Array<Department>
 
     ////////////////////////////////////////////Constructor////////////////////////////////////////////

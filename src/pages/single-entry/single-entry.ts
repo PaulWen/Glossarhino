@@ -4,6 +4,7 @@ import { DummySingleEntry } from "./dummy-class-single-entry";
 import { SingleEntryInterface } from "./single-entry-interface";
 import { Attachment } from "../../providers/model/attachment-model";
 import { DummyResolveDepartment } from "../../providers/model/dummy-resolve-department";
+import { Entry } from "../../providers/model/entry-model";
 
 @IonicPage()
 @Component({
@@ -18,6 +19,9 @@ export class SingleEntryPage {
   // access interface implementation
   private singleEntryInterface: SingleEntryInterface;
 
+  // entry object
+  private entry: Entry;
+
   // filter preferences of user
   private filter: Array<boolean>;
 
@@ -31,6 +35,9 @@ export class SingleEntryPage {
 
     // instantiate model object for interaction
     this.singleEntryInterface = new DummySingleEntry();
+
+    // instantiate entry object
+    this.entry = this.singleEntryInterface.getEntry(this.name);
 
     // instantiate user filter preferences
     this.filter = this.singleEntryInterface.getFilter();
@@ -68,8 +75,10 @@ export class SingleEntryPage {
     filterModal.present();
   }
 
-  private openEditModal() {
-    let editModal = this.modalCtrl.create("EditModalPage");
+  private openEditModal(entry: Entry) {
+    let editModal = this.modalCtrl.create("EditModalPage", {
+      entry: entry
+    });
     editModal.present();
   }
 
@@ -81,7 +90,7 @@ export class SingleEntryPage {
           text: 'Edit',
           handler: () => {
             console.log('Edit clicked');
-            this.openEditModal();
+            this.openEditModal(this.entry);
           }
         },{
           text: 'Filter',

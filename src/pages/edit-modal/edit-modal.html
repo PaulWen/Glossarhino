@@ -1,0 +1,74 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-buttons start>
+      <button ion-button (click)="closeEditModal(false)">
+        <span ion-text color="primary" showWhen="ios">Cancel</span>
+        <ion-icon name="md-close" showWhen="android,windows, core"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title>Edit Entry</ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="closeEditModal(true)">
+        <span ion-text color="primary" showWhen="ios">Done</span>
+        <ion-icon name="md-checkmark" showWhen="android,windows, core"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+  <ion-grid>
+
+    <!-- auto-generated cards for different fields of entry -->
+    <ion-row align-items-center justify-content-center>
+
+      <ion-col col-12>
+
+        <ion-card>
+          <ion-card-header> General </ion-card-header>
+          <ion-card-content>
+
+            <ion-item>
+              <ion-label floating>Title</ion-label>
+              <ion-input type="text" [(ngModel)]="entry.name"></ion-input>
+            </ion-item>
+
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <ion-col col-12 *ngFor="let departmentId of editModalInterface.getDepartments()">
+
+        <ion-card>
+          <ion-card-header> {{ resolveDepartment.resolveDepartment(departmentId) }} </ion-card-header>
+
+          <ion-card-content>
+
+            <ion-item>
+              <ion-label floating>Text</ion-label>
+              <ion-textarea rows="5" type="text" [(ngModel)]="entry.departments[departmentId].description"></ion-textarea>
+            </ion-item>
+
+            <ion-item>
+              <ion-label floating>Contact</ion-label>
+              <ion-input type="text" [(ngModel)]="entry.departments[departmentId].name"></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label floating>Contact E-Mail</ion-label>
+              <ion-input type="email" [(ngModel)]="entry.departments[departmentId].email"></ion-input>
+            </ion-item>
+
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+    </ion-row>
+
+  </ion-grid>
+
+</ion-content>

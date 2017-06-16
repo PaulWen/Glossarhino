@@ -10,7 +10,7 @@ export class DummyHome implements HomePageInterface {
     };
 
     public getListings(departmentId?: number): number {
-        return 42;
+        return departmentId ? departmentId * 10 + 13 : 42;
     };
 
     public getFilter(): Array<boolean> {

@@ -4,7 +4,6 @@ import {SuperLoginClientError} from "./super_login_client_error";
 import {SuperLoginClientDoneResponse} from "./super_login_client_done_reponse";
 import {SuperLoginClientErrorResponse} from "./super_login_client_error_reponse";
 import {Logger} from "../../app/logger";
-import {SuperLoginClientDatabaseInitializer} from "./super_login_client_database_initializer";
 import {Observable} from "rxjs/Rx";
 import {AppConfig} from "../../app/app-config";
 
@@ -34,7 +33,7 @@ import {AppConfig} from "../../app/app-config";
  * The Service can only handle one login at a time!
  */
 @Injectable()
-export class SuperLoginClient {
+export abstract class SuperLoginClient {
 
 ////////////////////////////////////////////Constants/////////////////////////////////////////////
 
@@ -44,9 +43,6 @@ export class SuperLoginClient {
 
     /** provides functions to easily perform http requests */
     private httpRequestor: SuperloginHttpRequestor;
-
-    /** a {@link SuperLoginClientDatabaseInitializer} that defines a function which gets called to configure the correct database URLs of CouchDB */
-    private _databaseInitializer: SuperLoginClientDatabaseInitializer;
 
     /** indicates if the user is currently authenticated */
     private authenticated: boolean;
@@ -60,21 +56,11 @@ export class SuperLoginClient {
      */
     constructor(httpRequestor: SuperloginHttpRequestor) {
         this.httpRequestor = httpRequestor;
-        this._databaseInitializer = null;
         this.authenticated = false;
     }
 
 ////////////////////////////////////////Getter and Setter//////////////////////////////////////////
 
-  /**
-   * Sets the {@link SuperLoginClientDatabaseInitializer} that should receive the database URLs whenever the user
-   * authenticates himself.
-   *
-   * @param databaseInitializer
-   */
-  set databaseInitializer(databaseInitializer: SuperLoginClientDatabaseInitializer) {
-    this._databaseInitializer = databaseInitializer;
-  }
 
 ////////////////////////////////////////Inherited Methods//////////////////////////////////////////
 
@@ -115,6 +101,14 @@ export class SuperLoginClient {
     }
 
 /////////////////////////////////////////////Methods///////////////////////////////////////////////
+
+    /**
+     * This function gets called by the SuperLoginClient when ever the user logs in successfully.
+     *
+     * @param user_databases array of all user databases and the URL's to those
+     */
+    abstract initializeDatabases(user_databases: any): void
+
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     // METHODS TO STORE SESSION TOKEN IN THE LOCAL OR SESSION STORAGE
@@ -292,7 +286,7 @@ export class SuperLoginClient {
             // if the database names got loaded successfully
             (data: any) => {
                 // give the database names to the database initializer
-                this._databaseInitializer.initializeDatabases(data);
+                this.initializeDatabases(data);
                 done();
             },
 

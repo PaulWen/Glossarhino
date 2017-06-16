@@ -11,11 +11,11 @@
 
     <!-- Hide buttons if Searchbar unhided -->
     <ion-buttons end>
-      <button ion-button icon-only>
+      <button ion-button icon-only (click)="pushSearch()">
         <ion-icon name="search"></ion-icon>
       </button>
 
-      <button ion-button icon-only>
+      <button ion-button icon-only (click)="presentLanguagePopover($event)">
         <ion-icon name="chatbubbles"></ion-icon>
       </button>
 

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController, ActionSheetController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController, ActionSheetController, PopoverController } from 'ionic-angular';
 import { DummySingleEntry } from "./dummy-class-single-entry";
 import { SingleEntryInterface } from "./single-entry-interface";
 import { Attachment } from "../../providers/model/attachment-model";
@@ -29,7 +29,7 @@ export class SingleEntryPage {
   private departmentResolver: DummyResolveDepartment;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
-  constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public actionSheetCtrl: ActionSheetController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public actionSheetCtrl: ActionSheetController, public popoverCtrl: PopoverController) {
     // get navParams
     this.name = this.navParams.get("name");
 
@@ -54,7 +54,7 @@ export class SingleEntryPage {
   private sendMail(emailAddress: String) {
     //window.location.href = "mailto:" + emailAddress;
     window.open("mailto:" + emailAddress, "_system")
-  }
+  };
 
   /**
    * Method to create and open the AttachmentModal to show list of attachments. AttachmentModalPage is the template for the modal.
@@ -65,23 +65,31 @@ export class SingleEntryPage {
       attachments: attachments
     });
     attachmentModal.present();
-  }
+  };
 
   /**
-   * Method to create and open the SettingsModal to show settings for the user. SettingsPage is the template for the modal.
+   * navigate to entry list and open searchbar
    */
-  private openFilterModal() {
-    let filterModal = this.modalCtrl.create("FilterModalPage");
-    filterModal.present();
-  }
-
-  private openEditModal(entry: Entry) {
-    let editModal = this.modalCtrl.create("EditModalPage", {
-      entry: entry
+  private pushSearch() {
+    this.navCtrl.push("EntryListPage", {
+      searchbarFocus: true
     });
-    editModal.present();
-  }
+  };
 
+  /**
+   * create and present LanguagePopover to enable changing languages
+   * @param event 
+   */
+  private presentLanguagePopover(event: any) {
+    let popover = this.popoverCtrl.create("LanguagePopoverPage");
+    popover.present({
+      ev: event
+    });
+  };
+
+  /**
+   * create and present ActionSheet to show more actions for the user
+   */
   presentActionSheet() {
     let actionSheet = this.actionSheetCtrl.create({
       title: 'More Actions',
@@ -92,13 +100,13 @@ export class SingleEntryPage {
             console.log('Edit clicked');
             this.openEditModal(this.entry);
           }
-        },{
+        }, {
           text: 'Filter',
           handler: () => {
             console.log('Filter clicked');
             this.openFilterModal();
           }
-        },{
+        }, {
           text: 'Cancel',
           role: 'cancel',
           handler: () => {
@@ -108,7 +116,23 @@ export class SingleEntryPage {
       ]
     });
     actionSheet.present();
+  };
+
+  /**
+   * create and present the SettingsModal to show settings for the user. SettingsPage is the template for the modal.
+   */
+  private openFilterModal() {
+    let filterModal = this.modalCtrl.create("FilterModalPage");
+    filterModal.present();
   }
 
-
-}
+  /**
+   * create and present the EditModal to show settings for the user. EditPage is the template for the modal.
+   */
+  private openEditModal(entry: Entry) {
+    let editModal = this.modalCtrl.create("EditModalPage", {
+      entry: entry
+    });
+    editModal.present();
+  }
+};

@@ -28,7 +28,6 @@ import {AppModelService} from "../providers/model/app-model-service";
     StatusBar,
     SplashScreen,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
-    SuperLoginClient,
     AppModelService
   ]
 })

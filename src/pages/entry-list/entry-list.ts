@@ -16,11 +16,10 @@ export class EntryListPage {
   private departmentId: number;
   private searchbarFocus: boolean;
 
-  // access interface implementation
+  // model objects
   private entryListInterface: EntryListInterface;
-
-  // model object for two-way binding and storage of entries
   private entryList: Array<String>;
+  private currentLanguage: String;
 
   // resolver object
   private departmentResolver: DummyResolveDepartment;
@@ -37,9 +36,10 @@ export class EntryListPage {
     this.departmentId = this.navParams.get("departmentId");
     this.searchbarFocus = this.navParams.get("searchbarFocus");
 
-    // instantiate model object for interaction and load entrylist
+    // instantiate model objects
     this.entryListInterface = new DummyEntryList();
-    this.entryList = this.entryListInterface.getEntryList("", AppConfig.LANGUAGE, this.departmentId);
+    this.currentLanguage = this.entryListInterface.getLanguage();
+    this.entryList = this.entryListInterface.getEntryList("", this.currentLanguage, this.departmentId);
 
     // instatiate resolver object
     this.departmentResolver = new DummyResolveDepartment();
@@ -63,7 +63,7 @@ export class EntryListPage {
 
   // Methods for searchbar
   private onInput() {
-    this.entryList = this.entryListInterface.getEntryList(this.searchText, AppConfig.LANGUAGE, this.departmentId);
+    this.entryList = this.entryListInterface.getEntryList(this.searchText, "", this.departmentId);
   }
 
   // setFocus on searchbar

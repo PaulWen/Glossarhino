@@ -11,7 +11,7 @@ export class DummyHome implements HomePageInterface {
 
     public getListings(departmentId?: number): number {
         return 42;
-    }
+    };
 
     public getFilter(): Array<boolean> {
         let filter: Array<boolean> = [];
@@ -20,6 +20,10 @@ export class DummyHome implements HomePageInterface {
         filter[3] = true;
 
         return filter;
-    }
+    };
+
+    public getLanguage() {
+        return "";
+    };
 
 }

@@ -15,7 +15,7 @@
         <ion-icon name="search"></ion-icon>
       </button>
 
-      <button ion-button icon-only>
+      <button ion-button icon-only (click)="presentLanguagePopover($event)">
         <ion-icon name="chatbubbles"></ion-icon>
       </button>
     </ion-buttons>
@@ -40,7 +40,7 @@
 
 
       <!-- col for the different departments -->
-      <ng-container *ngFor="let departmentId of homePageInterface.getDepartments()">
+      <ng-container *ngFor="let departmentId of departments">
         <ion-col col-xl-3 col-lg-3 col-md-6 col-sm-6 col-xs-6 col-6 *ngIf="filter[departmentId]">
           <!-- Cards show one category each, currently using dummy implementation -->
           <ion-card>

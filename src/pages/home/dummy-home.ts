@@ -21,9 +21,9 @@ export class DummyHome implements HomePageInterface {
         return departments;
   };
 
-  public getListings(departmentId?: number): number {
-      return 42;
-  };
+    public getListings(departmentId?: number): number {
+        return departmentId ? departmentId * 10 + 13 : 42;
+    };
 
   public getFilter(): Array<boolean> {
       let filter: Array<boolean> = [];

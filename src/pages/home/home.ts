@@ -94,6 +94,11 @@ export class HomePage {
     let popover = this.popoverCtrl.create("LanguagePopoverPage");
     popover.present({
       ev: event
+    }).then((canEnterView)=>{
+      if (!canEnterView) {
+        // in the case that the view can not be entered redirect the user to the login page
+        this.navCtrl.setRoot("LoginPage")
+      }
     });
   }
 

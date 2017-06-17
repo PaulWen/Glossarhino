@@ -12,13 +12,13 @@ export class DummyEntryList implements EntryListInterface {
 
     public getEntryList(searchString: String, language: String, departmentId?: number): Array<String> {
         if (searchString == "") {
-            return ["Entry 1", "Entry 2", "Entry 3"];
+            return ["A-Muster", "B10-Lebensdauer", "C-Muster", "Dauerfestigkeit", "Digital Mockup Unit (DMU)", "Erstmusterprüfbericht (EMPB)", "Lieferantenentwicklungskosten (LEK)", "Entwicklungs- und Fertigungstiefe (EFTI)", "Quality Gate(QG)", "Qualitätsplan (Q-Plan)", "P-Freigabe", "Production Part Approval Process (PPAP)", "Rafferprobung"];
         } else {
-            return ["Entry 1", "Entry 2"];
+            return [];
         }
     }
 
     public getLanguage() {
-        return "";
+        return "English";
     };
 }

@@ -2,7 +2,6 @@ import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, Searchbar } from 'ionic-angular';
 import { EntryListInterface } from "./entry-list-interface";
 import { DummyEntryList } from "./dummy-class-entry-list";
-import { DummyResolveDepartment } from "../../providers/model/dummy-resolve-department";
 import { AppConfig } from "../../app/app-config";
 import {Promise} from "es6-promise";
 import {AppModelService} from "../../providers/model/app-model-service";
@@ -23,9 +22,6 @@ export class EntryListPage {
   private entryList: Array<String>;
   private currentLanguage: String;
 
-  // resolver object
-  private departmentResolver: DummyResolveDepartment;
-
   // searchText from searchbar
   private searchText: String;
 
@@ -42,9 +38,6 @@ export class EntryListPage {
     this.entryListInterface = appModel;
     this.currentLanguage = this.entryListInterface.getLanguage();
     this.entryList = this.entryListInterface.getEntryList("", this.currentLanguage, this.departmentId);
-
-    // instatiate resolver object
-    this.departmentResolver = new DummyResolveDepartment();
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
@@ -68,7 +61,7 @@ export class EntryListPage {
   // Resolve department and handle departmentId undefined
   private resolveDepartment(departmendId?: number): String {
     if (departmendId)
-      return this.departmentResolver.resolveDepartment(this.departmentId);
+      return this.entryListInterface.resolveDepartmentId(this.departmentId);
     else
       return "All";
   }

@@ -65,7 +65,7 @@
           <!-- Cards show one category each, currently using dummy implementation -->
           <ion-card (click)="pushList(departmentId)" tappable>
             <img src="assets/img/homePage/{{departmentId}}.jpg" />
-            <div class="card-title">{{ departmentResolver.resolveDepartment(departmentId) }}</div>
+            <div class="card-title">{{ homePageInterface.resolveDepartmentId(departmentId) }}</div>
             <div class="card-subtitle">{{ homePageInterface.getListings(departmentId) }} Listings</div>
           </ion-card>
         </ion-col>

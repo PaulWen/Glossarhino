@@ -4,7 +4,6 @@ import { Entry } from "../../providers/model/entry-model";
 import { EditModalInterface } from "./edit-modal-interface";
 import { DummyEditModal } from "./dummy-class-edit-modal";
 import { Logger } from "../../app/logger";
-import { DummyResolveDepartment } from "../../providers/model/dummy-resolve-department";
 import {Promise} from "es6-promise";
 import {AppModelService} from "../../providers/model/app-model-service";
 
@@ -21,9 +20,6 @@ export class EditModalPage {
   //access interface implementation
   private editModalInterface: EditModalInterface;
 
-  // resolver object
-  private departmentResolver: DummyResolveDepartment;
-
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
   constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, appModel: AppModelService) {
     // get navParams
@@ -31,9 +27,6 @@ export class EditModalPage {
 
     // instantiate model object for interaction
     this.editModalInterface = appModel;
-
-    // instantiate resolver object
-    this.departmentResolver = new DummyResolveDepartment();
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////

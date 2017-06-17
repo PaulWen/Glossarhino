@@ -23,6 +23,7 @@ export interface HomePageInterface {
     logout(done: SuperLoginClientDoneResponse, error: SuperLoginClientErrorResponse): void;
 
     getAllDepartments: () => Array<number>;
+    resolveDepartmentId: (departmentId: number) => String;
     getListings: (departmentId?: number) => number;
     getFilter: () => Array<boolean>;
     getLanguage: () => String;

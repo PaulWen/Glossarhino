@@ -38,4 +38,36 @@ export class DummyHome implements HomePageInterface {
       return "";
   };
 
+      ////////////////////////////////////////////Properties/////////////////////////////////////////////
+
+    ////////////////////////////////////////////Constructor////////////////////////////////////////////
+    constructor() {
+
+    }
+
+    public resolveDepartmentId(departmentId: number): String {
+        switch (departmentId) {
+            case 0: {
+                //statements; 
+                return "Description";
+            }
+            case 1: {
+                //statements; 
+                return "Management";
+            }
+            case 2: {
+                //statements; 
+                return "Marketing";
+            }
+            case 3: {
+                //statements;
+                return "Production";
+            }
+            default: {
+                //statements;
+                return "No department found with id: " + departmentId
+            }
+        }
+    };
+
 }

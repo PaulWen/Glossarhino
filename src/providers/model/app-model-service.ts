@@ -1,32 +1,32 @@
-import {Injectable} from "@angular/core";
+import { Injectable } from "@angular/core";
 import "rxjs/add/operator/map";
-import {SuperLoginClient} from "../super_login_client/super_login_client";
-import {Logger} from "../../app/logger";
-import {SuperloginHttpRequestor} from "../super_login_client/superlogin_http_requestor";
-import {LoginPageInterface} from "../../pages/login/login-interface";
-import {HomePageInterface} from "../../pages/home/home-interface";
-import {EntryListInterface} from "../../pages/entry-list/entry-list-interface";
-import {SingleEntryInterface} from "../../pages/single-entry/single-entry-interface";
-import {AppConfig} from "../../app/app-config";
-import {Entry} from "./entry-model";
-import {Attachment} from "./attachment-model";
-import {Department} from "./department-model";
-import {LanguagePopoverPageInterface} from "../../pages/language-popover/language-popover-interface";
-import {FilterModalInterface} from "../../pages/filter-modal/filter-modal-interface";
-import {EditModalInterface} from "../../pages/edit-modal/edit-modal-interface";
+import { SuperLoginClient } from "../super_login_client/super_login_client";
+import { Logger } from "../../app/logger";
+import { SuperloginHttpRequestor } from "../super_login_client/superlogin_http_requestor";
+import { LoginPageInterface } from "../../pages/login/login-interface";
+import { HomePageInterface } from "../../pages/home/home-interface";
+import { EntryListInterface } from "../../pages/entry-list/entry-list-interface";
+import { SingleEntryInterface } from "../../pages/single-entry/single-entry-interface";
+import { AppConfig } from "../../app/app-config";
+import { Entry } from "./entry-model";
+import { Attachment } from "./attachment-model";
+import { Department } from "./department-model";
+import { LanguagePopoverPageInterface } from "../../pages/language-popover/language-popover-interface";
+import { FilterModalInterface } from "../../pages/filter-modal/filter-modal-interface";
+import { EditModalInterface } from "../../pages/edit-modal/edit-modal-interface";
 
 @Injectable()
 export class AppModelService extends SuperLoginClient implements LoginPageInterface, HomePageInterface, EntryListInterface, SingleEntryInterface, LanguagePopoverPageInterface, FilterModalInterface, EditModalInterface {
-////////////////////////////////////////////Properties////////////////////////////////////////////
+  ////////////////////////////////////////////Properties////////////////////////////////////////////
 
 
-////////////////////////////////////////////Constructor////////////////////////////////////////////
+  ////////////////////////////////////////////Constructor////////////////////////////////////////////
 
   constructor(httpRequestor: SuperloginHttpRequestor) {
     super(httpRequestor);
   }
 
-////////////////////////////////////////Inherited Methods//////////////////////////////////////////
+  ////////////////////////////////////////Inherited Methods//////////////////////////////////////////
 
   //////////////////////////////////////////
   //            Shared Methods            //
@@ -43,7 +43,32 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
 
   public getAllDepartments(): Array<number> {
     return [1, 2, 3];
-  }
+  };
+
+  public resolveDepartmentId(departmentId: number): String {
+    switch (departmentId) {
+      case 0: {
+        //statements; 
+        return "Description";
+      }
+      case 1: {
+        //statements; 
+        return "Management";
+      }
+      case 2: {
+        //statements; 
+        return "Marketing";
+      }
+      case 3: {
+        //statements;
+        return "Production";
+      }
+      default: {
+        //statements;
+        return "No department found with id: " + departmentId
+      }
+    }
+  };
 
   //////////////////////////////////////////
   //            SuperLoginClient Methods            //
@@ -65,12 +90,6 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     return 42;
   };
 
-
-
-
-  //////////////////////////////////////////
-  //       HomePageInterface Methods      //
-  //////////////////////////////////////////
   public getEntryList(searchString: String, language: String, departmentId?: number): Array<String> {
     if (searchString == "") {
       return ["Entry 1", "Entry 2", "Entry 3"];
@@ -121,8 +140,8 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   //       EditModalInterface Methods     //
   //////////////////////////////////////////
 
-  public setEntry(entry: Entry) {};
+  public setEntry(entry: Entry) { };
 
-/////////////////////////////////////////////Methods///////////////////////////////////////////////
+  /////////////////////////////////////////////Methods///////////////////////////////////////////////
 
 }

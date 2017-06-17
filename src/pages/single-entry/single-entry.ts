@@ -3,7 +3,6 @@ import { IonicPage, NavController, NavParams, ModalController, ActionSheetContro
 import { DummySingleEntry } from "./dummy-class-single-entry";
 import { SingleEntryInterface } from "./single-entry-interface";
 import { Attachment } from "../../providers/model/attachment-model";
-import { DummyResolveDepartment } from "../../providers/model/dummy-resolve-department";
 import { Entry } from "../../providers/model/entry-model";
 import {Promise} from "es6-promise";
 import {AppModelService} from "../../providers/model/app-model-service";
@@ -27,9 +26,6 @@ export class SingleEntryPage {
   // filter preferences of user
   private filter: Array<boolean>;
 
-  // resolver object
-  private departmentResolver: DummyResolveDepartment;
-
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
   constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public actionSheetCtrl: ActionSheetController, public popoverCtrl: PopoverController, appModel: AppModelService) {
     // get navParams
@@ -43,9 +39,6 @@ export class SingleEntryPage {
 
     // instantiate user filter preferences
     this.filter = this.singleEntryInterface.getFilter();
-
-    // instatiate resolver object
-    this.departmentResolver = new DummyResolveDepartment();
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
@@ -77,7 +70,7 @@ export class SingleEntryPage {
         this.navCtrl.setRoot("LoginPage")
       }
     });
-  }
+  };
 
   /**
    * create and present LanguagePopover to enable changing languages
@@ -93,7 +86,7 @@ export class SingleEntryPage {
         this.navCtrl.setRoot("LoginPage")
       }
     });
-  }
+  };
 
   /**
    * create and present ActionSheet to show more actions for the user
@@ -137,7 +130,7 @@ export class SingleEntryPage {
         this.navCtrl.setRoot("LoginPage")
       }
     });
-  }
+  };
 
   /**
    * create and present the EditModal to show settings for the user. EditPage is the template for the modal.
@@ -152,5 +145,5 @@ export class SingleEntryPage {
         this.navCtrl.setRoot("LoginPage")
       }
     });
-  }
+  };
 };

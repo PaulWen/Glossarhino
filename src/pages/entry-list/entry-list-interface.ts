@@ -1,4 +1,4 @@
-import {Promise} from "es6-promise";
+import { Promise } from "es6-promise";
 /**
  * Interface to define what the EntryListPage needs implemented in order to work
  */
@@ -13,4 +13,5 @@ export interface EntryListInterface {
 
     getLanguage: () => String;
     getEntryList: (searchString: String, language: String, departmentId?: number) => Array<String>;
+    resolveDepartmentId: (departmentId: number) => String;
 }

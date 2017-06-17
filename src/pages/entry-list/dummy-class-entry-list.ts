@@ -8,7 +8,7 @@ export class DummyEntryList implements EntryListInterface {
 
     public isAuthenticated(): Promise<boolean>|boolean {
       return true;
-    }
+    };
 
     public getEntryList(searchString: String, language: String, departmentId?: number): Array<String> {
         if (searchString == "") {
@@ -16,9 +16,34 @@ export class DummyEntryList implements EntryListInterface {
         } else {
             return [];
         }
-    }
+    };
 
     public getLanguage() {
         return "English";
+    };
+
+    public resolveDepartmentId(departmentId: number): String {
+        switch (departmentId) {
+            case 0: {
+                //statements; 
+                return "Description";
+            }
+            case 1: {
+                //statements; 
+                return "Management";
+            }
+            case 2: {
+                //statements; 
+                return "Marketing";
+            }
+            case 3: {
+                //statements;
+                return "Production";
+            }
+            default: {
+                //statements;
+                return "No department found with id: " + departmentId
+            }
+        }
     };
 }

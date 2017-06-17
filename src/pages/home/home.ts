@@ -1,7 +1,6 @@
 import {Component} from "@angular/core";
 import {NavController, IonicPage, PopoverController, ModalController} from "ionic-angular";
 import {HomePageInterface} from "./home-interface";
-import {DummyResolveDepartment} from "../../providers/model/dummy-resolve-department";
 import {Logger} from "../../app/logger";
 import {AppModelService} from "../../providers/model/app-model-service";
 import {SuperLoginClientError} from "../../providers/super_login_client/super_login_client_error";
@@ -21,9 +20,6 @@ export class HomePage {
   private filter: Array<boolean>;
   private language: String;
 
-  // resolver object
-  private departmentResolver: DummyResolveDepartment;
-
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
 
   constructor(public navCtrl: NavController, public popoverCtrl: PopoverController, appModel: AppModelService) {
@@ -32,9 +28,6 @@ export class HomePage {
     this.departments = this.homePageInterface.getAllDepartments();
     this.filter = this.homePageInterface.getFilter();
     this.language = this.homePageInterface.getLanguage();
-
-    // instantiate resolver object
-    this.departmentResolver = new DummyResolveDepartment();
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////

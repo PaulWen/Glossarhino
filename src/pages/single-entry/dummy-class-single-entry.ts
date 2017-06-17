@@ -3,11 +3,16 @@ import { Entry } from "../../providers/model/entry-model";
 import { AppConfig } from "../../app/app-config";
 import { Department } from "../../providers/model/department-model";
 import { Attachment } from "../../providers/model/attachment-model";
+import {Promise} from "es6-promise";
 
 /**
  * This is a dummy class for testing purposes. Will implement the SingleEntryInterface.
  */
 export class DummySingleEntry implements SingleEntryInterface {
+
+    public isAuthenticated(): Promise<boolean>|boolean {
+      return true;
+    }
 
     public getEntry(name: String): Entry {
         return new Entry("Lorem Ipsum Entry", 0, [

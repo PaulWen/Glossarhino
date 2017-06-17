@@ -6,6 +6,7 @@ import {SuperLoginClientErrorResponse} from "./super_login_client_error_reponse"
 import {Logger} from "../../app/logger";
 import {Observable} from "rxjs/Rx";
 import {AppConfig} from "../../app/app-config";
+import {Promise} from "es6-promise";
 
 /**
  * This class is a service which implements TypeScript methods to communicate
@@ -64,41 +65,7 @@ export abstract class SuperLoginClient {
 
 ////////////////////////////////////////Inherited Methods//////////////////////////////////////////
 
-    /**
-     *  This method checks if the user is already authenticated.
-     *
-     * @returns true or false depending on if the user is already authenticated
-     */
-    public isAuthenticated(): Observable<boolean> | boolean {
-        // check if the user is already authenticated
-        if (this.authenticated) {
-            return true;
 
-        // if the user is not yet authenticated try to authenticate him by using the session/local storage data
-        } else {
-           if (this.isSessionTokenStoredPersistent() != null) {
-               return Observable.create((observer) => {
-                   this.loginWithSessionToken(this.getSessionToken(), this.isSessionTokenStoredPersistent(),
-                       () => {
-                           // end the observable and return the result
-                           observer.next(true);
-                           observer.complete();
-                       },
-                       (error: SuperLoginClientError) => {
-                           // remove the invalid session token stored in the session/local storage
-                           this.deleteSessionToken();
-
-                           // end the observable and return the result
-                           observer.next(false);
-                           observer.complete();
-                       }
-                   );
-               });
-           } else {
-               return false;
-           }
-        }
-    }
 
 /////////////////////////////////////////////Methods///////////////////////////////////////////////
 
@@ -108,6 +75,43 @@ export abstract class SuperLoginClient {
      * @param user_databases array of all user databases and the URL's to those
      */
     abstract initializeDatabases(user_databases: any): void
+
+
+    /**
+     *  This method checks if the user is already authenticated.
+     *
+     * @returns true or false depending on if the user is already authenticated
+     */
+    public isAuthenticated(): Promise<boolean> | boolean {
+      // check if the user is already authenticated
+      if (this.authenticated) {
+        return true;
+
+        // if the user is not yet authenticated try to authenticate him by using the session/local storage data
+      } else {
+        if (this.isSessionTokenStoredPersistent() != null) {
+          return Observable.create((observer) => {
+            this.loginWithSessionToken(this.getSessionToken(), this.isSessionTokenStoredPersistent(),
+              () => {
+                // end the observable and return the result
+                observer.next(true);
+                observer.complete();
+              },
+              (error: SuperLoginClientError) => {
+                // remove the invalid session token stored in the session/local storage
+                this.deleteSessionToken();
+
+                // end the observable and return the result
+                observer.next(false);
+                observer.complete();
+              }
+            );
+          }).toPromise();
+        } else {
+          return false;
+        }
+      }
+    }
 
 
     ///////////////////////////////////////////////////////////////////////////////////////////////

@@ -4,6 +4,8 @@ import { EntryListInterface } from "./entry-list-interface";
 import { DummyEntryList } from "./dummy-class-entry-list";
 import { DummyResolveDepartment } from "../../providers/model/dummy-resolve-department";
 import { AppConfig } from "../../app/app-config";
+import {Promise} from "es6-promise";
+import {AppModelService} from "../../providers/model/app-model-service";
 
 @IonicPage()
 @Component({
@@ -31,13 +33,13 @@ export class EntryListPage {
   @ViewChild("searchbar") searchbar: Searchbar;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, appModel: AppModelService) {
     // get navParams
     this.departmentId = this.navParams.get("departmentId");
     this.searchbarFocus = this.navParams.get("searchbarFocus");
 
     // instantiate model objects
-    this.entryListInterface = new DummyEntryList();
+    this.entryListInterface = appModel;
     this.currentLanguage = this.entryListInterface.getLanguage();
     this.entryList = this.entryListInterface.getEntryList("", this.currentLanguage, this.departmentId);
 
@@ -46,11 +48,21 @@ export class EntryListPage {
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
+
+  private ionViewCanEnter(): Promise<boolean> | boolean {
+    return this.entryListInterface.isAuthenticated();
+  }
+
   // Navigation method for single entry
   private pushEntry(name: String) {
     this.navCtrl.push("SingleEntryPage", {
       name: name
-    })
+    }).then((canEnterView)=>{
+      if (!canEnterView) {
+        // in the case that the view can not be entered redirect the user to the login page
+        this.navCtrl.setRoot("LoginPage")
+      }
+    });
   }
 
   // Resolve department and handle departmentId undefined

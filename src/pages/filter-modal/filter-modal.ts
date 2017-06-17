@@ -4,6 +4,8 @@ import { FilterModalInterface } from "./filter-modal-interface";
 import { DummyResolveDepartment } from "../../providers/model/dummy-resolve-department";
 import { DummyFilterModal } from "./dummy-class-filter-modal";
 import { Logger } from "../../app/logger";
+import {AppModelService} from "../../providers/model/app-model-service";
+import {Promise} from "es6-promise";
 
 @IonicPage()
 @Component({
@@ -22,9 +24,9 @@ export class FilterModalPage {
   private departmentResolver: DummyResolveDepartment;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
-  constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, appModel: AppModelService) {
     // instantiate model object for interaction
-    this.filterModalInterface = new DummyFilterModal();
+    this.filterModalInterface = appModel;
 
     // instantiate resolver object
     this.departmentResolver = new DummyResolveDepartment();
@@ -34,6 +36,12 @@ export class FilterModalPage {
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
+
+  private ionViewCanEnter(): Promise<boolean> | boolean {
+    return this.filterModalInterface.isAuthenticated();
+  }
+
+
   /**
    * Method to close the FilterModal when pressing the assigned button
    */

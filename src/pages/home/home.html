@@ -1,3 +1,23 @@
+<ion-menu [content]="content">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Menu</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content>
+    <ion-list>
+      <button ion-item>
+        Settings
+      </button>
+      <button ion-item (click)="logout()">
+        Logout
+      </button>
+    </ion-list>
+  </ion-content>
+
+</ion-menu>
+
 <ion-header>
 
   <ion-navbar>
@@ -23,7 +43,7 @@
 
 </ion-header>
 
-<ion-content class="card-background-page">
+<ion-content #content class="card-background-page">
 
   <!-- ion-grid for responsive design -->
   <ion-grid>

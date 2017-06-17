@@ -5,6 +5,8 @@ import { SingleEntryInterface } from "./single-entry-interface";
 import { Attachment } from "../../providers/model/attachment-model";
 import { DummyResolveDepartment } from "../../providers/model/dummy-resolve-department";
 import { Entry } from "../../providers/model/entry-model";
+import {Promise} from "es6-promise";
+import {AppModelService} from "../../providers/model/app-model-service";
 
 @IonicPage()
 @Component({
@@ -29,12 +31,12 @@ export class SingleEntryPage {
   private departmentResolver: DummyResolveDepartment;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
-  constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public actionSheetCtrl: ActionSheetController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public actionSheetCtrl: ActionSheetController, appModel: AppModelService) {
     // get navParams
     this.name = this.navParams.get("name");
 
     // instantiate model object for interaction
-    this.singleEntryInterface = new DummySingleEntry();
+    this.singleEntryInterface = appModel;
 
     // instantiate entry object
     this.entry = this.singleEntryInterface.getEntry(this.name);
@@ -47,9 +49,14 @@ export class SingleEntryPage {
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
+
+  private ionViewCanEnter(): Promise<boolean> | boolean {
+    return this.singleEntryInterface.isAuthenticated();
+  }
+
   /**
    * Method to send an email to the contact specified for the entry and department
-   * @param emailAddress 
+   * @param emailAddress
    */
   private sendMail(emailAddress: String) {
     //window.location.href = "mailto:" + emailAddress;
@@ -58,13 +65,18 @@ export class SingleEntryPage {
 
   /**
    * Method to create and open the AttachmentModal to show list of attachments. AttachmentModalPage is the template for the modal.
-   * @param attachments 
+   * @param attachments
    */
   private openAttachmentModal(attachments: Array<Attachment>) {
     let attachmentModal = this.modalCtrl.create("AttachmentModalPage", {
       attachments: attachments
     });
-    attachmentModal.present();
+    attachmentModal.present().then((canEnterView)=>{
+      if (!canEnterView) {
+        // in the case that the view can not be entered redirect the user to the login page
+        this.navCtrl.setRoot("LoginPage")
+      }
+    });
   }
 
   /**
@@ -72,14 +84,24 @@ export class SingleEntryPage {
    */
   private openFilterModal() {
     let filterModal = this.modalCtrl.create("FilterModalPage");
-    filterModal.present();
+    filterModal.present().then((canEnterView)=>{
+      if (!canEnterView) {
+        // in the case that the view can not be entered redirect the user to the login page
+        this.navCtrl.setRoot("LoginPage")
+      }
+    });
   }
 
   private openEditModal(entry: Entry) {
     let editModal = this.modalCtrl.create("EditModalPage", {
       entry: entry
     });
-    editModal.present();
+    editModal.present().then((canEnterView)=>{
+      if (!canEnterView) {
+        // in the case that the view can not be entered redirect the user to the login page
+        this.navCtrl.setRoot("LoginPage")
+      }
+    });
   }
 
   presentActionSheet() {

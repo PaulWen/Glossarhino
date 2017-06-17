@@ -1,8 +1,10 @@
 import {Component} from "@angular/core";
 import {IonicPage, NavController, NavParams} from "ionic-angular";
-import {SuperLoginClient} from "../../providers/super_login_client/super_login_client";
 import {SuperLoginClientError} from "../../providers/super_login_client/super_login_client_error";
 import {Logger} from "../../app/logger";
+import {LoginPageInterface} from "./login-interface";
+import {AppModelService} from "../../providers/model/app-model-service";
+import {Promise} from "es6-promise";
 
 /**
  * LoginPage where the user authenticates itself and is also able to create a new account.
@@ -16,29 +18,70 @@ export class LoginPage {
 
 ////////////////////////////////////////////Properties/////////////////////////////////////////////
 
-  private superLoginClient: SuperLoginClient;
+  private model: LoginPageInterface;
 
   private loginOpened: boolean;
 
 ////////////////////////////////////////////Constructor////////////////////////////////////////////
 
-  constructor(private navCtrl: NavController, private navParams: NavParams, superLoginClient: SuperLoginClient) {
-    this.superLoginClient = superLoginClient;
+  constructor(private navCtrl: NavController, private navParams: NavParams, appModelService: AppModelService) {
+    this.model = appModelService;
     this.loginOpened = true;
   }
 
 /////////////////////////////////////////////Methods///////////////////////////////////////////////
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad LoginPage');
+  private ionViewCanEnter(): Promise<boolean> | boolean {
+    return true;
   }
+
+  private ionViewWillEnter() {
+    console.log('LoginPage check if loged in');
+    let isAuthenticatedResult: Promise<boolean> | boolean = this.model.isAuthenticated();
+
+
+    // test if the returned value is a Promise
+    if( isAuthenticatedResult instanceof Promise) {
+
+      isAuthenticatedResult.then((isAuthenticated: boolean) => {
+        if (isAuthenticated) {
+          // redirect to home page
+          this.navCtrl.setRoot("HomePage").then((canEnterView)=>{
+            if (!canEnterView) {
+              // in the case that the view can not be entered redirect the user to the login page
+              this.navCtrl.setRoot("LoginPage")
+            }
+          });
+        }
+      });
+
+    // otherwise it is a boolean
+    } else {
+        if (isAuthenticatedResult) {
+          // redirect to home page
+          this.navCtrl.setRoot("HomePage").then((canEnterView)=>{
+            if (!canEnterView) {
+              // in the case that the view can not be entered redirect the user to the login page
+              this.navCtrl.setRoot("LoginPage")
+            }
+          });
+        }
+    }
+
+  }
+
 
   private register(name: string, email: string, password: string, confirmPassword: string, rememberLogin: boolean) {
     Logger.log("Register: " + email + "; " + password + "; " + confirmPassword + "; " + rememberLogin);
 
-    this.superLoginClient.register(name, email, password, confirmPassword, () => {
+    this.model.register(name, email, password, confirmPassword, () => {
       // successfully registred
-      this.navCtrl.push("HomePage");
+      this.navCtrl.setRoot("HomePage").then((canEnterView)=>{
+        if (!canEnterView) {
+          // in the case that the view can not be entered redirect the user to the login page
+          this.navCtrl.setRoot("LoginPage")
+        }
+      });
 
       // log user in
       this.login(email, password, rememberLogin);
@@ -68,9 +111,14 @@ export class LoginPage {
   private login(email: string, password: string, rememberLogin: boolean) {
     Logger.log("Login: " + email + "; " + password + "; " + rememberLogin);
 
-    this.superLoginClient.loginWithCredentials(email, password, rememberLogin, () => {
+    this.model.loginWithCredentials(email, password, rememberLogin, () => {
       // successfully loged-in
-      this.navCtrl.push("HomePage");
+      this.navCtrl.setRoot("HomePage").then((canEnterView)=>{
+        if (!canEnterView) {
+          // in the case that the view can not be entered redirect the user to the login page
+          this.navCtrl.setRoot("LoginPage")
+        }
+      });
 
     }, (error: SuperLoginClientError) => {
       // error

@@ -71,7 +71,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   };
 
   //////////////////////////////////////////
-  //            SuperLoginClient Methods            //
+  //       SuperLoginClient Methods       //
   //////////////////////////////////////////
 
   public initializeDatabases(user_databases: any): void {
@@ -90,14 +90,6 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     return 42;
   };
 
-  public getEntryList(searchString: String, language: String, departmentId?: number): Array<String> {
-    if (searchString == "") {
-      return ["Entry 1", "Entry 2", "Entry 3"];
-    } else {
-      return ["Entry 1", "Entry 2"];
-    }
-  }
-
   //////////////////////////////////////////
   //     SingleEntryInterface Methods     //
   //////////////////////////////////////////
@@ -109,6 +101,19 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
       new Department(2, AppConfig.LOREM_IPSUM, [new Attachment("Test Image", new URL("https://c1.staticflickr.com/6/5337/8940995208_5da979c52f.jpg")), new Attachment("DHBW Broschüre", new URL("http://www.dhbw.de/fileadmin/user_upload/Dokumente/Hochschulkommunikation/DHBW_Imagebroschuere_web.pdf"))], "Max Mustermann", "max.mustermann@dhbw-stuttgart.de"),
       new Department(3, AppConfig.LOREM_IPSUM, [new Attachment("Test Image", new URL("https://c1.staticflickr.com/6/5337/8940995208_5da979c52f.jpg")), new Attachment("DHBW Broschüre", new URL("http://www.dhbw.de/fileadmin/user_upload/Dokumente/Hochschulkommunikation/DHBW_Imagebroschuere_web.pdf"))], "Max Mustermann", "max.mustermann@dhbw-stuttgart.de")])
   }
+
+  //////////////////////////////////////////
+  //      EntryListInterface Methods      //
+  //////////////////////////////////////////
+
+  public getEntryList(searchString: String, language: String, departmentId?: number): Array<String> {
+    if (searchString == "") {
+      return ["A-Muster", "B10-Lebensdauer", "C-Muster", "Dauerfestigkeit", "Digital Mockup Unit (DMU)", "Erstmusterprüfbericht (EMPB)", "Lieferantenentwicklungskosten (LEK)", "Entwicklungs- und Fertigungstiefe (EFTI)", "Quality Gate(QG)", "Qualitätsplan (Q-Plan)", "P-Freigabe", "Production Part Approval Process (PPAP)", "Rafferprobung"];
+    } else {
+      return [];
+    }
+  };
+  
 
   //////////////////////////////////////////
   // LanguagePopoverPageInterface Methods //

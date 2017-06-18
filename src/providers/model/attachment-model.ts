@@ -1,14 +1,12 @@
 /**
  * Attachment class for uage in model and controller. Class specifies attachments
  */
-export class Attachment {
-    ////////////////////////////////////////////Properties/////////////////////////////////////////////
-    private name: String;
-    private url: URL;
+export abstract class Attachment {
 
-    ////////////////////////////////////////////Constructor////////////////////////////////////////////
-    constructor(name: String, url: URL) {
-        this.name = name;
-        this. url = url;
-    }
+  abstract get name():string;
+  abstract set name(name: string);
+
+  abstract get url():URL;
+  abstract set url(url: URL);
+
 }

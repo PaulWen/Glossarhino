@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {SuperloginHttpRequestor} from "./superlogin_http_requestor";
+import {SuperloginHttpRequester} from "./superlogin_http_requester";
 import {SuperLoginClientError} from "./super_login_client_error";
 import {SuperLoginClientDoneResponse} from "./super_login_client_done_reponse";
 import {SuperLoginClientErrorResponse} from "./super_login_client_error_reponse";
@@ -43,7 +43,7 @@ export abstract class SuperLoginClient {
 ////////////////////////////////////////////Properties////////////////////////////////////////////
 
     /** provides functions to easily perform http requests */
-    private httpRequestor: SuperloginHttpRequestor;
+    private httpRequestor: SuperloginHttpRequester;
 
     /** indicates if the user is currently authenticated */
     private authenticated: boolean;
@@ -55,7 +55,7 @@ export abstract class SuperLoginClient {
      *
      * @param httpRequestor
      */
-    constructor(httpRequestor: SuperloginHttpRequestor) {
+    constructor(httpRequestor: SuperloginHttpRequester) {
         this.httpRequestor = httpRequestor;
         this.authenticated = false;
     }

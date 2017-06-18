@@ -5,7 +5,7 @@ import {IonicApp, IonicErrorHandler, IonicModule} from "ionic-angular";
 import {MyApp} from "./app.component";
 import {StatusBar} from "@ionic-native/status-bar";
 import {SplashScreen} from "@ionic-native/splash-screen";
-import {SuperloginHttpRequestor} from "../providers/super_login_client/superlogin_http_requestor";
+import {SuperloginHttpRequester} from "../providers/super_login_client/superlogin_http_requester";
 import {SuperLoginClient} from "../providers/super_login_client/super_login_client";
 import {AppModelService} from "../providers/model/app-model-service";
 
@@ -24,7 +24,7 @@ import {AppModelService} from "../providers/model/app-model-service";
     MyApp
   ],
   providers: [
-    SuperloginHttpRequestor,
+    SuperloginHttpRequester,
     StatusBar,
     SplashScreen,
     { provide: ErrorHandler, useClass: IonicErrorHandler },

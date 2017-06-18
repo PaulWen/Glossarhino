@@ -9,7 +9,7 @@ import {Logger} from "../../app/logger";
  * The methods are specifically optimized for SuperLogin.
  */
 @Injectable()
-export class SuperloginHttpRequestor {
+export class SuperloginHttpRequester {
 
 ////////////////////////////////////////////Properties////////////////////////////////////////////
 

@@ -28,11 +28,11 @@ export class AttachmentModalPage {
 
   /**
    * Method to open an attachment when selected by the user. Will open in the systems browser.
-   * @param url 
+   * @param url
    */
-  private openAttachment(url: URL) {
+  private openAttachment(url: string) {
     //window.location.href = url.href;
-    window.open(url.href, "_system")
+    window.open(url, "_system")
   }
 
 }

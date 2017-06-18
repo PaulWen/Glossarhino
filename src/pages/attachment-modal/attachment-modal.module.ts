@@ -1,16 +1,17 @@
-import { NgModule } from '@angular/core';
-import { IonicPageModule } from 'ionic-angular';
-import { AttachmentModalPage } from './attachment-modal';
+import {NgModule} from "@angular/core";
+import {IonicPageModule} from "ionic-angular";
+import {AttachmentModalPage} from "./attachment-modal";
 
 @NgModule({
   declarations: [
-    AttachmentModalPage,
+    AttachmentModalPage
   ],
   imports: [
-    IonicPageModule.forChild(AttachmentModalPage),
+    IonicPageModule.forChild(AttachmentModalPage)
   ],
   exports: [
     AttachmentModalPage
   ]
 })
-export class AttachmentModalPageModule {}
+export class AttachmentModalPageModule {
+}

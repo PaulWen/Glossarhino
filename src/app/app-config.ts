@@ -5,9 +5,17 @@ export class AppConfig {
 
 ////////////////////////////////////////////Properties////////////////////////////////////////////
 
-    public static get DEVELOPMENT(): boolean {return true;};
-    // public static get WEB_SERVER_DOMAIN(): string {return "http://localhost:3000";};
-    public static get WEB_SERVER_DOMAIN(): string {return "http://wwiappdev1.dhbw-stuttgart.de:3000";};
-    public static get LOREM_IPSUM(): string {return "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.";};
+  public static get DEVELOPMENT(): boolean {
+    return true;
+  };
+
+  // public static get WEB_SERVER_DOMAIN(): string {return "http://localhost:3000";};
+  public static get WEB_SERVER_DOMAIN(): string {
+    return "http://wwiappdev1.dhbw-stuttgart.de:3000";
+  };
+
+  public static get LOREM_IPSUM(): string {
+    return "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.";
+  };
 
 }

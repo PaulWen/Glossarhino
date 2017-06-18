@@ -1,15 +1,13 @@
-import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, Searchbar } from 'ionic-angular';
-import { EntryListInterface } from "./entry-list-interface";
-import { DummyEntryList } from "./dummy-class-entry-list";
-import { AppConfig } from "../../app/app-config";
+import {Component, ViewChild} from "@angular/core";
 import {Promise} from "es6-promise";
+import {IonicPage, NavController, NavParams, Searchbar} from "ionic-angular";
 import {AppModelService} from "../../providers/model/app-model-service";
+import {EntryListInterface} from "./entry-list-interface";
 
 @IonicPage()
 @Component({
-  selector: 'page-entry-list',
-  templateUrl: 'entry-list.html',
+  selector: "page-entry-list",
+  templateUrl: "entry-list.html"
 })
 export class EntryListPage {
   ////////////////////////////////////////////Properties/////////////////////////////////////////////
@@ -50,10 +48,10 @@ export class EntryListPage {
   private pushEntry(name: String) {
     this.navCtrl.push("SingleEntryPage", {
       name: name
-    }).then((canEnterView)=>{
+    }).then((canEnterView) => {
       if (!canEnterView) {
         // in the case that the view can not be entered redirect the user to the login page
-        this.navCtrl.setRoot("LoginPage")
+        this.navCtrl.setRoot("LoginPage");
       }
     });
   }
@@ -74,7 +72,9 @@ export class EntryListPage {
   // setFocus on searchbar
   private ionViewDidEnter() {
     if (this.searchbarFocus) {
-      setTimeout(() => { this.searchbar.setFocus(); }, 50);
+      setTimeout(() => {
+        this.searchbar.setFocus();
+      }, 50);
     }
   }
 }

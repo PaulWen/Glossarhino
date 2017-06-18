@@ -1,23 +1,23 @@
-import { Injectable } from '@angular/core';
-import PouchDB from 'pouchdb';
+import {Injectable} from "@angular/core";
+import PouchDB from "pouchdb";
 
 @Injectable()
 export class Data {
 
-	db: any;
-	remote: string = 'http://127.0.0.1:5984/couchblog';
+  db: any;
+  remote: string = "http://127.0.0.1:5984/couchblog";
 
-	constructor() {
+  constructor() {
 
-	    this.db = new PouchDB('couchblog');
+    this.db = new PouchDB("couchblog");
 
-	    let options = {
-	      live: true,
-	      retry: true
-	    };
+    let options = {
+      live: true,
+      retry: true
+    };
 
-	    this.db.sync(this.remote, options);
+    this.db.sync(this.remote, options);
 
-	}
+  }
 
 }

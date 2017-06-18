@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
-import { Attachment } from "../../providers/model/attachment-model";
+import {Component} from "@angular/core";
+import {IonicPage, NavController, NavParams, ViewController} from "ionic-angular";
+import {Attachment} from "../../providers/model/attachment-model";
 
 @IonicPage()
 @Component({
-  selector: 'page-attachment-modal',
-  templateUrl: 'attachment-modal.html',
+  selector: "page-attachment-modal",
+  templateUrl: "attachment-modal.html"
 })
 export class AttachmentModalPage {
   ////////////////////////////////////////////Properties/////////////////////////////////////////////
@@ -32,7 +32,7 @@ export class AttachmentModalPage {
    */
   private openAttachment(url: string) {
     //window.location.href = url.href;
-    window.open(url, "_system")
+    window.open(url, "_system");
   }
 
 }

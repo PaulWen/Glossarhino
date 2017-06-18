@@ -9,5 +9,5 @@ export interface SuperLoginClientErrorResponse {
 
 /////////////////////////////////////////////Methods///////////////////////////////////////////////
 
-    (error: SuperLoginClientError): void;
+  (error: SuperLoginClientError): void;
 }

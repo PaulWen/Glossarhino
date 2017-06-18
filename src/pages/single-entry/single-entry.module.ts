@@ -1,6 +1,6 @@
-import { NgModule } from '@angular/core';
-import { IonicPageModule } from 'ionic-angular';
-import { SingleEntryPage } from './single-entry';
+import {NgModule} from "@angular/core";
+import {IonicPageModule} from "ionic-angular";
+import {SingleEntryPage} from "./single-entry";
 
 @NgModule({
   declarations: [
@@ -13,4 +13,5 @@ import { SingleEntryPage } from './single-entry';
     SingleEntryPage
   ]
 })
-export class SingleEntryPageModule {}
+export class SingleEntryPageModule {
+}

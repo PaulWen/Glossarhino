@@ -1,16 +1,15 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
-import { Entry } from "../../providers/model/entry-model";
-import { EditModalInterface } from "./edit-modal-interface";
-import { DummyEditModal } from "./dummy-class-edit-modal";
-import { Logger } from "../../app/logger";
+import {Component} from "@angular/core";
 import {Promise} from "es6-promise";
+import {IonicPage, NavController, NavParams, ViewController} from "ionic-angular";
+import {Logger} from "../../app/logger";
 import {AppModelService} from "../../providers/model/app-model-service";
+import {Entry} from "../../providers/model/entry-model";
+import {EditModalInterface} from "./edit-modal-interface";
 
 @IonicPage()
 @Component({
-  selector: 'page-edit-modal',
-  templateUrl: 'edit-modal.html',
+  selector: "page-edit-modal",
+  templateUrl: "edit-modal.html"
 })
 export class EditModalPage {
   ////////////////////////////////////////////Properties////////////////////////////////////////////

@@ -1,14 +1,13 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
-import { LanguagePopoverPageInterface } from "./language-popover-interface";
-import { DummyLanguagePopover } from "./dummy-class-language-popover";
+import {Component} from "@angular/core";
 import {Promise} from "es6-promise";
+import {IonicPage, NavController, NavParams, ViewController} from "ionic-angular";
 import {AppModelService} from "../../providers/model/app-model-service";
+import {LanguagePopoverPageInterface} from "./language-popover-interface";
 
 @IonicPage()
 @Component({
-  selector: 'page-language-popover',
-  templateUrl: 'language-popover.html',
+  selector: "page-language-popover",
+  templateUrl: "language-popover.html"
 })
 export class LanguagePopoverPage {
   ////////////////////////////////////////////Properties////////////////////////////////////////////

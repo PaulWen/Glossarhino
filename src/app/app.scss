@@ -1,6 +1,5 @@
 // http://ionicframework.com/docs/v2/theming/
 
-
 // App Global Sass
 // --------------------------------------------------
 // Put style rules here that you want to apply globally. These
@@ -17,11 +16,11 @@
 
 // adjustments to the size and position of the modal-wrapper for better usage of screen-space
 @media only screen and (min-height: 768px) and (min-width: 768px) {
-    .modal-wrapper {
-        left: calc(50% - (80%/2));
-        top: calc(50% - (80%/2));
-        position: absolute;
-        width: 80%;
-        height: 80%;
-    }
+  .modal-wrapper {
+    left: calc(50% - (80% / 2));
+    top: calc(50% - (80% / 2));
+    position: absolute;
+    width: 80%;
+    height: 80%;
+  }
 }

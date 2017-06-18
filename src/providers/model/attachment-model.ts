@@ -3,10 +3,10 @@
  */
 export abstract class Attachment {
 
-  abstract get name():string;
+  abstract get name(): string;
   abstract set name(name: string);
 
-  abstract get url():string;
+  abstract get url(): string;
   abstract set url(url: string);
 
 }

@@ -1,16 +1,22 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController, ActionSheetController, PopoverController } from 'ionic-angular';
-import { DummySingleEntry } from "./dummy-class-single-entry";
-import { SingleEntryInterface } from "./single-entry-interface";
-import { Attachment } from "../../providers/model/attachment-model";
-import { Entry } from "../../providers/model/entry-model";
+import {Component} from "@angular/core";
 import {Promise} from "es6-promise";
+import {
+  ActionSheetController,
+  IonicPage,
+  ModalController,
+  NavController,
+  NavParams,
+  PopoverController
+} from "ionic-angular";
 import {AppModelService} from "../../providers/model/app-model-service";
+import {Attachment} from "../../providers/model/attachment-model";
+import {Entry} from "../../providers/model/entry-model";
+import {SingleEntryInterface} from "./single-entry-interface";
 
 @IonicPage()
 @Component({
-  selector: 'page-single-entry',
-  templateUrl: 'single-entry.html',
+  selector: "page-single-entry",
+  templateUrl: "single-entry.html"
 })
 export class SingleEntryPage {
   ////////////////////////////////////////////Properties/////////////////////////////////////////////
@@ -53,7 +59,7 @@ export class SingleEntryPage {
    */
   private sendMail(emailAddress: String) {
     //window.location.href = "mailto:" + emailAddress;
-    window.open("mailto:" + emailAddress, "_system")
+    window.open("mailto:" + emailAddress, "_system");
   };
 
   /**
@@ -64,10 +70,10 @@ export class SingleEntryPage {
     let attachmentModal = this.modalCtrl.create("AttachmentModalPage", {
       attachments: attachments
     });
-    attachmentModal.present().then((canEnterView)=>{
+    attachmentModal.present().then((canEnterView) => {
       if (!canEnterView) {
         // in the case that the view can not be entered redirect the user to the login page
-        this.navCtrl.setRoot("LoginPage")
+        this.navCtrl.setRoot("LoginPage");
       }
     });
   };
@@ -80,10 +86,10 @@ export class SingleEntryPage {
     let popover = this.popoverCtrl.create("LanguagePopoverPage");
     popover.present({
       ev: event
-    }).then((canEnterView)=>{
+    }).then((canEnterView) => {
       if (!canEnterView) {
         // in the case that the view can not be entered redirect the user to the login page
-        this.navCtrl.setRoot("LoginPage")
+        this.navCtrl.setRoot("LoginPage");
       }
     });
   };
@@ -93,25 +99,25 @@ export class SingleEntryPage {
    */
   presentActionSheet() {
     let actionSheet = this.actionSheetCtrl.create({
-      title: 'More Actions',
+      title: "More Actions",
       buttons: [
         {
-          text: 'Edit',
+          text: "Edit",
           handler: () => {
-            console.log('Edit clicked');
+            console.log("Edit clicked");
             this.openEditModal(this.entry);
           }
         }, {
-          text: 'Filter',
+          text: "Filter",
           handler: () => {
-            console.log('Filter clicked');
+            console.log("Filter clicked");
             this.openFilterModal();
           }
         }, {
-          text: 'Cancel',
-          role: 'cancel',
+          text: "Cancel",
+          role: "cancel",
           handler: () => {
-            console.log('Cancel clicked');
+            console.log("Cancel clicked");
           }
         }
       ]
@@ -124,10 +130,10 @@ export class SingleEntryPage {
    */
   private openFilterModal() {
     let filterModal = this.modalCtrl.create("FilterModalPage");
-    filterModal.present().then((canEnterView)=>{
+    filterModal.present().then((canEnterView) => {
       if (!canEnterView) {
         // in the case that the view can not be entered redirect the user to the login page
-        this.navCtrl.setRoot("LoginPage")
+        this.navCtrl.setRoot("LoginPage");
       }
     });
   };
@@ -139,11 +145,12 @@ export class SingleEntryPage {
     let editModal = this.modalCtrl.create("EditModalPage", {
       entry: entry
     });
-    editModal.present().then((canEnterView)=>{
+    editModal.present().then((canEnterView) => {
       if (!canEnterView) {
         // in the case that the view can not be entered redirect the user to the login page
-        this.navCtrl.setRoot("LoginPage")
+        this.navCtrl.setRoot("LoginPage");
       }
     });
   };
-};
+}
+;

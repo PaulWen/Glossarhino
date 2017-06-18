@@ -1,16 +1,17 @@
-import { NgModule } from '@angular/core';
-import { IonicPageModule } from 'ionic-angular';
-import { FilterModalPage } from './filter-modal';
+import {NgModule} from "@angular/core";
+import {IonicPageModule} from "ionic-angular";
+import {FilterModalPage} from "./filter-modal";
 
 @NgModule({
   declarations: [
-    FilterModalPage,
+    FilterModalPage
   ],
   imports: [
-    IonicPageModule.forChild(FilterModalPage),
+    IonicPageModule.forChild(FilterModalPage)
   ],
   exports: [
     FilterModalPage
   ]
 })
-export class FilterModalPageModule {}
+export class FilterModalPageModule {
+}

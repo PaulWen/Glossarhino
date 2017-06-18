@@ -34,7 +34,8 @@
     <!-- auto-generated cards for meaning in different departments -->
     <ion-row align-items-center justify-content-center>
       <ng-container *ngFor="let department of entry.departments">
-        <ion-col col-xl-3 col-lg-3 col-md-6 col-sm-6 col-xs-6 col-12 *ngIf="filter[department.departmentId]">
+        <ion-col col-xl-3 col-lg-3 col-md-6 col-sm-6 col-xs-6 col-12
+                 *ngIf="filter[department.departmentId]">
           <ion-card>
             <ion-card-header>
               {{ singleEntryInterface.resolveDepartmentId(department.departmentId) }}
@@ -45,12 +46,13 @@
             <ion-row>
               <ion-col>
                 <button ion-button icon-left clear small (click)="sendMail(department.email)">
-                <ion-icon name="contact"></ion-icon>
-                <div>{{ department.name }}</div>
-              </button>
-                <button ion-button icon-left clear small (click)="openAttachmentModal(department.attachments)">
-                <ion-icon name="attach"></ion-icon>
-              </button>
+                  <ion-icon name="contact"></ion-icon>
+                  <div>{{ department.name }}</div>
+                </button>
+                <button ion-button icon-left clear small
+                        (click)="openAttachmentModal(department.attachments)">
+                  <ion-icon name="attach"></ion-icon>
+                </button>
               </ion-col>
             </ion-row>
           </ion-card>

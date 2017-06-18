@@ -1,15 +1,14 @@
 import {Component} from "@angular/core";
-import {NavController, IonicPage, PopoverController, ModalController} from "ionic-angular";
-import {HomePageInterface} from "./home-interface";
-import {Logger} from "../../app/logger";
+import {Promise} from "es6-promise";
+import {IonicPage, NavController, PopoverController} from "ionic-angular";
 import {AppModelService} from "../../providers/model/app-model-service";
 import {SuperLoginClientError} from "../../providers/super_login_client/super_login_client_error";
-import {Promise} from "es6-promise";
+import {HomePageInterface} from "./home-interface";
 
 @IonicPage()
 @Component({
-  selector: 'page-home',
-  templateUrl: 'home.html'
+  selector: "page-home",
+  templateUrl: "home.html"
 })
 export class HomePage {
 
@@ -45,7 +44,7 @@ export class HomePage {
       this.navCtrl.setRoot("LoginPage");
 
     }, (error: SuperLoginClientError) => {
-        alert(error.getErrorMessage());
+      alert(error.getErrorMessage());
     });
   }
 
@@ -57,11 +56,11 @@ export class HomePage {
   private pushList(departmentId?: number) {
     this.navCtrl.push("EntryListPage", {
       departmentId: departmentId
-    }).then((canEnterView)=>{
-        if (!canEnterView) {
-          // in the case that the view can not be entered redirect the user to the login page
-          this.navCtrl.setRoot("LoginPage")
-        }
+    }).then((canEnterView) => {
+      if (!canEnterView) {
+        // in the case that the view can not be entered redirect the user to the login page
+        this.navCtrl.setRoot("LoginPage");
+      }
     });
   }
 
@@ -71,10 +70,10 @@ export class HomePage {
   private pushSearch() {
     this.navCtrl.push("EntryListPage", {
       searchbarFocus: true
-    }).then((canEnterView)=>{
+    }).then((canEnterView) => {
       if (!canEnterView) {
         // in the case that the view can not be entered redirect the user to the login page
-        this.navCtrl.setRoot("LoginPage")
+        this.navCtrl.setRoot("LoginPage");
       }
     });
   }
@@ -87,10 +86,10 @@ export class HomePage {
     let popover = this.popoverCtrl.create("LanguagePopoverPage");
     popover.present({
       ev: event
-    }).then((canEnterView)=>{
+    }).then((canEnterView) => {
       if (!canEnterView) {
         // in the case that the view can not be entered redirect the user to the login page
-        this.navCtrl.setRoot("LoginPage")
+        this.navCtrl.setRoot("LoginPage");
       }
     });
   }

@@ -1,13 +1,12 @@
-import {BrowserModule} from "@angular/platform-browser";
 import {ErrorHandler, NgModule} from "@angular/core";
 import {HttpModule} from "@angular/http";
-import {IonicApp, IonicErrorHandler, IonicModule} from "ionic-angular";
-import {MyApp} from "./app.component";
-import {StatusBar} from "@ionic-native/status-bar";
+import {BrowserModule} from "@angular/platform-browser";
 import {SplashScreen} from "@ionic-native/splash-screen";
-import {SuperloginHttpRequester} from "../providers/super_login_client/superlogin_http_requester";
-import {SuperLoginClient} from "../providers/super_login_client/super_login_client";
+import {StatusBar} from "@ionic-native/status-bar";
+import {IonicApp, IonicErrorHandler, IonicModule} from "ionic-angular";
 import {AppModelService} from "../providers/model/app-model-service";
+import {SuperloginHttpRequester} from "../providers/super_login_client/superlogin_http_requester";
+import {MyApp} from "./app.component";
 
 @NgModule({
   declarations: [
@@ -16,8 +15,8 @@ import {AppModelService} from "../providers/model/app-model-service";
   imports: [
     BrowserModule,
     HttpModule,
-    IonicModule.forRoot(MyApp,
-    ),
+    IonicModule.forRoot(MyApp
+    )
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -27,8 +26,9 @@ import {AppModelService} from "../providers/model/app-model-service";
     SuperloginHttpRequester,
     StatusBar,
     SplashScreen,
-    { provide: ErrorHandler, useClass: IonicErrorHandler },
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
     AppModelService
   ]
 })
-export class AppModule { }
+export class AppModule {
+}

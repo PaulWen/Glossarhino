@@ -1,18 +1,18 @@
 import {Component} from "@angular/core";
-import {IonicPage, NavController, NavParams} from "ionic-angular";
-import {SuperLoginClientError} from "../../providers/super_login_client/super_login_client_error";
-import {Logger} from "../../app/logger";
-import {LoginPageInterface} from "./login-interface";
-import {AppModelService} from "../../providers/model/app-model-service";
 import {Promise} from "es6-promise";
+import {IonicPage, NavController, NavParams} from "ionic-angular";
+import {Logger} from "../../app/logger";
+import {AppModelService} from "../../providers/model/app-model-service";
+import {SuperLoginClientError} from "../../providers/super_login_client/super_login_client_error";
+import {LoginPageInterface} from "./login-interface";
 
 /**
  * LoginPage where the user authenticates itself and is also able to create a new account.
  */
 @IonicPage()
 @Component({
-  selector: 'page-login',
-  templateUrl: 'login.html',
+  selector: "page-login",
+  templateUrl: "login.html"
 })
 export class LoginPage {
 
@@ -36,36 +36,36 @@ export class LoginPage {
   }
 
   private ionViewWillEnter() {
-    console.log('LoginPage check if loged in');
+    console.log("LoginPage check if loged in");
     let isAuthenticatedResult: Promise<boolean> | boolean = this.model.isAuthenticated();
 
 
     // test if the returned value is a Promise
-    if( isAuthenticatedResult instanceof Promise) {
+    if (isAuthenticatedResult instanceof Promise) {
 
       isAuthenticatedResult.then((isAuthenticated: boolean) => {
         if (isAuthenticated) {
           // redirect to home page
-          this.navCtrl.setRoot("HomePage").then((canEnterView)=>{
+          this.navCtrl.setRoot("HomePage").then((canEnterView) => {
             if (!canEnterView) {
               // in the case that the view can not be entered redirect the user to the login page
-              this.navCtrl.setRoot("LoginPage")
+              this.navCtrl.setRoot("LoginPage");
             }
           });
         }
       });
 
-    // otherwise it is a boolean
+      // otherwise it is a boolean
     } else {
-        if (isAuthenticatedResult) {
-          // redirect to home page
-          this.navCtrl.setRoot("HomePage").then((canEnterView)=>{
-            if (!canEnterView) {
-              // in the case that the view can not be entered redirect the user to the login page
-              this.navCtrl.setRoot("LoginPage")
-            }
-          });
-        }
+      if (isAuthenticatedResult) {
+        // redirect to home page
+        this.navCtrl.setRoot("HomePage").then((canEnterView) => {
+          if (!canEnterView) {
+            // in the case that the view can not be entered redirect the user to the login page
+            this.navCtrl.setRoot("LoginPage");
+          }
+        });
+      }
     }
 
   }
@@ -76,10 +76,10 @@ export class LoginPage {
 
     this.model.register(name, email, password, confirmPassword, () => {
       // successfully registred
-      this.navCtrl.setRoot("HomePage").then((canEnterView)=>{
+      this.navCtrl.setRoot("HomePage").then((canEnterView) => {
         if (!canEnterView) {
           // in the case that the view can not be entered redirect the user to the login page
-          this.navCtrl.setRoot("LoginPage")
+          this.navCtrl.setRoot("LoginPage");
         }
       });
 
@@ -113,10 +113,10 @@ export class LoginPage {
 
     this.model.loginWithCredentials(email, password, rememberLogin, () => {
       // successfully loged-in
-      this.navCtrl.setRoot("HomePage").then((canEnterView)=>{
+      this.navCtrl.setRoot("HomePage").then((canEnterView) => {
         if (!canEnterView) {
           // in the case that the view can not be entered redirect the user to the login page
-          this.navCtrl.setRoot("LoginPage")
+          this.navCtrl.setRoot("LoginPage");
         }
       });
 

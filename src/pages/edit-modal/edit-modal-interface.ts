@@ -1,5 +1,5 @@
-import { Entry } from "../../providers/model/entry-model";
-import { Promise } from "es6-promise";
+import {Promise} from "es6-promise";
+import {Entry} from "../../providers/model/entry-model";
 
 /**
  * Interface to define what the modal EditModal needs implemented in order to work

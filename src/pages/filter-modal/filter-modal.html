@@ -17,7 +17,8 @@
 
   <ion-item *ngFor="let departmentId of filterModalInterface.getAllDepartments()">
     <ion-label>{{ filterModalInterface.resolveDepartmentId(departmentId) }}</ion-label>
-    <ion-checkbox [(ngModel)]="filterSettings[departmentId]" (ionChange)="filterModalInterface.setFilter(filterSettings)"></ion-checkbox>
+    <ion-checkbox [(ngModel)]="filterSettings[departmentId]"
+                  (ionChange)="filterModalInterface.setFilter(filterSettings)"></ion-checkbox>
   </ion-item>
 
 </ion-content>

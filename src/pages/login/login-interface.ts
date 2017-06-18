@@ -1,6 +1,6 @@
-import {SuperLoginClientErrorResponse} from "../../providers/super_login_client/super_login_client_error_reponse";
-import {SuperLoginClientDoneResponse} from "../../providers/super_login_client/super_login_client_done_reponse";
 import {Promise} from "es6-promise";
+import {SuperLoginClientDoneResponse} from "../../providers/super_login_client/super_login_client_done_reponse";
+import {SuperLoginClientErrorResponse} from "../../providers/super_login_client/super_login_client_error_reponse";
 /**
  * Interface to define what the App-Model needs implemented in order to work
  */

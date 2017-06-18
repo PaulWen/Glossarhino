@@ -1,15 +1,13 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
-import { FilterModalInterface } from "./filter-modal-interface";
-import { DummyFilterModal } from "./dummy-class-filter-modal";
-import { Logger } from "../../app/logger";
-import {AppModelService} from "../../providers/model/app-model-service";
+import {Component} from "@angular/core";
 import {Promise} from "es6-promise";
+import {IonicPage, NavController, NavParams, ViewController} from "ionic-angular";
+import {AppModelService} from "../../providers/model/app-model-service";
+import {FilterModalInterface} from "./filter-modal-interface";
 
 @IonicPage()
 @Component({
-  selector: 'page-filter-modal',
-  templateUrl: 'filter-modal.html',
+  selector: "page-filter-modal",
+  templateUrl: "filter-modal.html"
 })
 export class FilterModalPage {
   ////////////////////////////////////////////Properties////////////////////////////////////////////

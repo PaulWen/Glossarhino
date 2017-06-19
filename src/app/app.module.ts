@@ -4,7 +4,7 @@ import {BrowserModule} from "@angular/platform-browser";
 import {SplashScreen} from "@ionic-native/splash-screen";
 import {StatusBar} from "@ionic-native/status-bar";
 import {IonicApp, IonicErrorHandler, IonicModule} from "ionic-angular";
-import {AppModelService} from "../providers/model/app-model-service";
+import {AppModelService} from "../providers/app-model-service";
 import {SuperloginHttpRequester} from "../providers/super_login_client/superlogin_http_requester";
 import {MyApp} from "./app.component";
 

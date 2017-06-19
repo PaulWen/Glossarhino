@@ -1,5 +1,5 @@
 import {Promise} from "es6-promise";
-import {Entry} from "../../providers/model/entry-model";
+import {EntryDataobject} from "../../providers/dataobjects/entry.dataobject";
 import {EditModalInterface} from "./edit-modal-interface";
 
 /**
@@ -16,21 +16,21 @@ export class DummyEditModal implements EditModalInterface {
     return departments;
   };
 
-  public setEntry(entry: Entry) {
+  public setEntry(entry: EntryDataobject) {
   };
 
   public resolveDepartmentId(departmentId: number): String {
     switch (departmentId) {
       case 0: {
-        //statements; 
+        //statements;
         return "Description";
       }
       case 1: {
-        //statements; 
+        //statements;
         return "Management";
       }
       case 2: {
-        //statements; 
+        //statements;
         return "Marketing";
       }
       case 3: {

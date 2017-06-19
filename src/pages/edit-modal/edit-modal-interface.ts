@@ -1,5 +1,5 @@
 import {Promise} from "es6-promise";
-import {Entry} from "../../providers/model/entry-model";
+import {EntryDataobject} from "../../providers/dataobjects/entry.dataobject";
 
 /**
  * Interface to define what the modal EditModal needs implemented in order to work
@@ -15,7 +15,7 @@ export interface EditModalInterface {
 
 
   getAllDepartments: () => Array<number>;
-  setEntry: (entry: Entry) => void;
+  setEntry: (entry: EntryDataobject) => void;
   resolveDepartmentId: (departmentId: number) => String;
 
 }

@@ -1,8 +1,8 @@
 import {Promise} from "es6-promise";
 import {AppConfig} from "../../app/app-config";
-import {Attachment} from "../../providers/model/attachment-model";
-import {Department} from "../../providers/model/department-model";
-import {Entry} from "../../providers/model/entry-model";
+import {AttachmentDataobject} from "../../providers/dataobjects/attachment.dataobject";
+import {DepartmentEntryDescriptionDataobject} from "../../providers/dataobjects/department-entry-description.dataobject";
+import {EntryDataobject} from "../../providers/dataobjects/entry.dataobject";
 import {SingleEntryInterface} from "./single-entry-interface";
 
 /**
@@ -14,12 +14,12 @@ export class DummySingleEntry implements SingleEntryInterface {
     return true;
   }
 
-  public getEntry(name: String): Entry {
-    return new Entry("B10-Lebensdauer", 0, [
-      new Department(0, "Bezeichnet die Lebensdauer im Rahmen des Zuverlässigkeitsmana- gements; Der B10-Wert ist jene Zeit, bei der unter gegebenen Bedin- gungen 10% aller Produkte/Komponenten etc. ausgefallen sind, das heißt, eine Zuverlässigkeit von 90% besteht.", [new Attachment("Test Image", new URL("https://c1.staticflickr.com/6/5337/8940995208_5da979c52f.jpg")), new Attachment("DHBW Broschüre", new URL("http://www.dhbw.de/fileadmin/user_upload/Dokumente/Hochschulkommunikation/DHBW_Imagebroschuere_web.pdf"))], "Max Mustermann", "max.mustermann@dhbw-stuttgart.de"),
-      new Department(1, AppConfig.LOREM_IPSUM, [new Attachment("Test Image", new URL("https://c1.staticflickr.com/6/5337/8940995208_5da979c52f.jpg")), new Attachment("DHBW Broschüre", new URL("http://www.dhbw.de/fileadmin/user_upload/Dokumente/Hochschulkommunikation/DHBW_Imagebroschuere_web.pdf"))], "Max Mustermann", "max.mustermann@dhbw-stuttgart.de"),
-      new Department(2, AppConfig.LOREM_IPSUM, [new Attachment("Test Image", new URL("https://c1.staticflickr.com/6/5337/8940995208_5da979c52f.jpg")), new Attachment("DHBW Broschüre", new URL("http://www.dhbw.de/fileadmin/user_upload/Dokumente/Hochschulkommunikation/DHBW_Imagebroschuere_web.pdf"))], "Max Mustermann", "max.mustermann@dhbw-stuttgart.de"),
-      new Department(3, AppConfig.LOREM_IPSUM, [new Attachment("Test Image", new URL("https://c1.staticflickr.com/6/5337/8940995208_5da979c52f.jpg")), new Attachment("DHBW Broschüre", new URL("http://www.dhbw.de/fileadmin/user_upload/Dokumente/Hochschulkommunikation/DHBW_Imagebroschuere_web.pdf"))], "Max Mustermann", "max.mustermann@dhbw-stuttgart.de")]);
+  public getEntry(name: String): EntryDataobject {
+    return new EntryDataobject("B10-Lebensdauer", 0, [
+      new DepartmentEntryDescriptionDataobject(0, "Bezeichnet die Lebensdauer im Rahmen des Zuverlässigkeitsmana- gements; Der B10-Wert ist jene Zeit, bei der unter gegebenen Bedin- gungen 10% aller Produkte/Komponenten etc. ausgefallen sind, das heißt, eine Zuverlässigkeit von 90% besteht.", [new AttachmentDataobject("Test Image", new URL("https://c1.staticflickr.com/6/5337/8940995208_5da979c52f.jpg")), new AttachmentDataobject("DHBW Broschüre", new URL("http://www.dhbw.de/fileadmin/user_upload/Dokumente/Hochschulkommunikation/DHBW_Imagebroschuere_web.pdf"))], "Max Mustermann", "max.mustermann@dhbw-stuttgart.de"),
+      new DepartmentEntryDescriptionDataobject(1, AppConfig.LOREM_IPSUM, [new AttachmentDataobject("Test Image", new URL("https://c1.staticflickr.com/6/5337/8940995208_5da979c52f.jpg")), new AttachmentDataobject("DHBW Broschüre", new URL("http://www.dhbw.de/fileadmin/user_upload/Dokumente/Hochschulkommunikation/DHBW_Imagebroschuere_web.pdf"))], "Max Mustermann", "max.mustermann@dhbw-stuttgart.de"),
+      new DepartmentEntryDescriptionDataobject(2, AppConfig.LOREM_IPSUM, [new AttachmentDataobject("Test Image", new URL("https://c1.staticflickr.com/6/5337/8940995208_5da979c52f.jpg")), new AttachmentDataobject("DHBW Broschüre", new URL("http://www.dhbw.de/fileadmin/user_upload/Dokumente/Hochschulkommunikation/DHBW_Imagebroschuere_web.pdf"))], "Max Mustermann", "max.mustermann@dhbw-stuttgart.de"),
+      new DepartmentEntryDescriptionDataobject(3, AppConfig.LOREM_IPSUM, [new AttachmentDataobject("Test Image", new URL("https://c1.staticflickr.com/6/5337/8940995208_5da979c52f.jpg")), new AttachmentDataobject("DHBW Broschüre", new URL("http://www.dhbw.de/fileadmin/user_upload/Dokumente/Hochschulkommunikation/DHBW_Imagebroschuere_web.pdf"))], "Max Mustermann", "max.mustermann@dhbw-stuttgart.de")]);
   }
 
   public getFilter(): Array<boolean> {

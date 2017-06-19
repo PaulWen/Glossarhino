@@ -99,9 +99,6 @@ export class SuperloginHttpRequester {
    * @returns {Observable<R>}
    */
   public postJsonData(url: string, authorizationBearer: string, bodyParametersAsJson: any) {
-    Logger.debug(bodyParametersAsJson);
-    Logger.debug(url);
-
     // generate request header
     let headers = new Headers();
     // config post parameter content type in header

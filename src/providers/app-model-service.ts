@@ -1,17 +1,17 @@
 import {Injectable} from "@angular/core";
 import PouchDB from "pouchdb";
 import "rxjs/add/operator/map";
-import {Logger} from "../../app/logger";
-import {EditModalInterface} from "../../pages/edit-modal/edit-modal-interface";
-import {EntryListInterface} from "../../pages/entry-list/entry-list-interface";
-import {FilterModalInterface} from "../../pages/filter-modal/filter-modal-interface";
-import {HomePageInterface} from "../../pages/home/home-interface";
-import {LanguagePopoverPageInterface} from "../../pages/language-popover/language-popover-interface";
-import {LoginPageInterface} from "../../pages/login/login-interface";
-import {SingleEntryInterface} from "../../pages/single-entry/single-entry-interface";
-import {SuperLoginClient} from "../super_login_client/super_login_client";
-import {SuperloginHttpRequester} from "../super_login_client/superlogin_http_requester";
-import {Entry} from "./entry-model";
+import {Logger} from "../app/logger";
+import {EditModalInterface} from "../pages/edit-modal/edit-modal-interface";
+import {EntryListInterface} from "../pages/entry-list/entry-list-interface";
+import {FilterModalInterface} from "../pages/filter-modal/filter-modal-interface";
+import {HomePageInterface} from "../pages/home/home-interface";
+import {LanguagePopoverPageInterface} from "../pages/language-popover/language-popover-interface";
+import {LoginPageInterface} from "../pages/login/login-interface";
+import {SingleEntryInterface} from "../pages/single-entry/single-entry-interface";
+import {SuperLoginClient} from "./super_login_client/super_login_client";
+import {SuperloginHttpRequester} from "./super_login_client/superlogin_http_requester";
+import {EntryDataobject} from "./dataobjects/entry.dataobject";
 
 @Injectable()
 export class AppModelService extends SuperLoginClient implements LoginPageInterface, HomePageInterface, EntryListInterface, SingleEntryInterface, LanguagePopoverPageInterface, FilterModalInterface, EditModalInterface {
@@ -19,7 +19,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
 
   //////////////Databases////////////
   /** all the databases for the different languages <Key: Language, Value: PouchDB database object>  */
-  private entryDatabases: Map<string, any>;
+  private entryDatabases: Map<number, any>;
 
   /** database that stores all the global app settings */
   private appSettingsDatabase: any;
@@ -32,7 +32,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   constructor(httpRequester: SuperloginHttpRequester) {
     super(httpRequester);
 
-    this.entryDatabases = new Map<string, any>();
+    this.entryDatabases = new Map<number, any>();
     this.appSettingsDatabase = null;
     this.userSettingsDatabase = null;
   }
@@ -56,7 +56,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     return [1, 2, 3];
   };
 
-  public resolveDepartmentId(departmentId: number): String {
+  public resolveDepartmentId(departmentId: number): string {
     switch (departmentId) {
       case 0: {
         //statements;
@@ -86,9 +86,17 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   //////////////////////////////////////////
 
   public initializeDatabases(user_databases: any): void {
-    //TODO: lade alle Datenbanken
-    Logger.debug("Datenbanken:");
     Logger.log(user_databases);
+
+    // initilize settings databases
+    this.appSettingsDatabase = this.initializeDatabase("application_settings", user_databases.application_settings);
+    this.userSettingsDatabase = this.initializeDatabase("settings", user_databases.settings);
+
+
+    // initilize entry databases
+    for (let languageId of this.getAllLanguagIds()) {
+      this.entryDatabases.set(languageId, this.initializeDatabase("application_settings", user_databases["language_" + languageId]));
+    }
   }
 
 
@@ -100,11 +108,11 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     return 42;
   };
 
-  public getEntryList(searchString: String, language: String, departmentId?: number): Array<String> {
-    if (searchString == "") {
-      return ["Entry 1", "Entry 2", "Entry 3"];
+  public getEntryList(searchstring: string, language: string, departmentId?: number): Array<string> {
+    if (searchstring == "") {
+      return ["EntryDataobject 1", "EntryDataobject 2", "EntryDataobject 3"];
     } else {
-      return ["Entry 1", "Entry 2"];
+      return ["EntryDataobject 1", "EntryDataobject 2"];
     }
   }
 
@@ -112,29 +120,33 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   //     SingleEntryInterface Methods     //
   //////////////////////////////////////////
 
-  public getEntry(name: String): Entry {
+  public getEntry(name: string): EntryDataobject {
 
     return null;
-    // return new Entry("Lorem Ipsum Entry", 0, [
-    //   new Department(0, AppConfig.LOREM_IPSUM, [new Attachment("Test Image", new URL("https://c1.staticflickr.com/6/5337/8940995208_5da979c52f.jpg")), new Attachment("DHBW Broschüre", new URL("http://www.dhbw.de/fileadmin/user_upload/Dokumente/Hochschulkommunikation/DHBW_Imagebroschuere_web.pdf"))], "Max Mustermann", "max.mustermann@dhbw-stuttgart.de"),
-    //   new Department(1, AppConfig.LOREM_IPSUM, [new Attachment("Test Image", new URL("https://c1.staticflickr.com/6/5337/8940995208_5da979c52f.jpg")), new Attachment("DHBW Broschüre", new URL("http://www.dhbw.de/fileadmin/user_upload/Dokumente/Hochschulkommunikation/DHBW_Imagebroschuere_web.pdf"))], "Max Mustermann", "max.mustermann@dhbw-stuttgart.de"),
-    //   new Department(2, AppConfig.LOREM_IPSUM, [new Attachment("Test Image", new URL("https://c1.staticflickr.com/6/5337/8940995208_5da979c52f.jpg")), new Attachment("DHBW Broschüre", new URL("http://www.dhbw.de/fileadmin/user_upload/Dokumente/Hochschulkommunikation/DHBW_Imagebroschuere_web.pdf"))], "Max Mustermann", "max.mustermann@dhbw-stuttgart.de"),
-    //   new Department(3, AppConfig.LOREM_IPSUM, [new Attachment("Test Image", new URL("https://c1.staticflickr.com/6/5337/8940995208_5da979c52f.jpg")), new Attachment("DHBW Broschüre", new URL("http://www.dhbw.de/fileadmin/user_upload/Dokumente/Hochschulkommunikation/DHBW_Imagebroschuere_web.pdf"))], "Max Mustermann", "max.mustermann@dhbw-stuttgart.de")])
+    // return new EntryDataobject("Lorem Ipsum EntryDataobject", 0, [
+    //   new DepartmentEntryDescriptionDataobject(0, AppConfig.LOREM_IPSUM, [new AttachmentDataobject("Test Image", new URL("https://c1.staticflickr.com/6/5337/8940995208_5da979c52f.jpg")), new AttachmentDataobject("DHBW Broschüre", new URL("http://www.dhbw.de/fileadmin/user_upload/Dokumente/Hochschulkommunikation/DHBW_Imagebroschuere_web.pdf"))], "Max Mustermann", "max.mustermann@dhbw-stuttgart.de"),
+    //   new DepartmentEntryDescriptionDataobject(1, AppConfig.LOREM_IPSUM, [new AttachmentDataobject("Test Image", new URL("https://c1.staticflickr.com/6/5337/8940995208_5da979c52f.jpg")), new AttachmentDataobject("DHBW Broschüre", new URL("http://www.dhbw.de/fileadmin/user_upload/Dokumente/Hochschulkommunikation/DHBW_Imagebroschuere_web.pdf"))], "Max Mustermann", "max.mustermann@dhbw-stuttgart.de"),
+    //   new DepartmentEntryDescriptionDataobject(2, AppConfig.LOREM_IPSUM, [new AttachmentDataobject("Test Image", new URL("https://c1.staticflickr.com/6/5337/8940995208_5da979c52f.jpg")), new AttachmentDataobject("DHBW Broschüre", new URL("http://www.dhbw.de/fileadmin/user_upload/Dokumente/Hochschulkommunikation/DHBW_Imagebroschuere_web.pdf"))], "Max Mustermann", "max.mustermann@dhbw-stuttgart.de"),
+    //   new DepartmentEntryDescriptionDataobject(3, AppConfig.LOREM_IPSUM, [new AttachmentDataobject("Test Image", new URL("https://c1.staticflickr.com/6/5337/8940995208_5da979c52f.jpg")), new AttachmentDataobject("DHBW Broschüre", new URL("http://www.dhbw.de/fileadmin/user_upload/Dokumente/Hochschulkommunikation/DHBW_Imagebroschuere_web.pdf"))], "Max Mustermann", "max.mustermann@dhbw-stuttgart.de")])
   }
 
   //////////////////////////////////////////
   // LanguagePopoverPageInterface Methods //
   //////////////////////////////////////////
 
-  public getAllLanguages(): Array<String> {
+  public getAllLanguages(): Array<string> {
     return ["English", "German"];
   };
 
-  public getLanguage(): String {
+  private getAllLanguagIds(): Array<number> {
+    return [1, 2];
+  };
+
+  public getLanguage(): string {
     return "English";
   }
 
-  public setLanguage(language: String) {
+  public setLanguage(language: string) {
     Logger.log("Language successfully changed to: " + language);
   }
 
@@ -152,7 +164,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   //       EditModalInterface Methods     //
   //////////////////////////////////////////
 
-  public setEntry(entry: Entry) {
+  public setEntry(entry: EntryDataobject) {
   };
 
 /////////////////////////////////////////////Methods///////////////////////////////////////////////
@@ -171,7 +183,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
    * @param databaseName name of the database
    * @param url to the CouchDB database
    */
-  public initializeDatabase(databaseName: string, url: string): any {
+  private initializeDatabase(databaseName: string, url: string): any {
     // create PouchDB database objects
     let remoteDatabase: any = new PouchDB(url);
     let database: any = new PouchDB(databaseName);

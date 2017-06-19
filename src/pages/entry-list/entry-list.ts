@@ -1,7 +1,7 @@
 import {Component, ViewChild} from "@angular/core";
 import {Promise} from "es6-promise";
 import {IonicPage, NavController, NavParams, Searchbar} from "ionic-angular";
-import {AppModelService} from "../../providers/model/app-model-service";
+import {AppModelService} from "../../providers/app-model-service";
 import {EntryListInterface} from "./entry-list-interface";
 
 @IonicPage()

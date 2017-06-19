@@ -1,6 +1,6 @@
 import {Component} from "@angular/core";
 import {IonicPage, NavController, NavParams, ViewController} from "ionic-angular";
-import {Attachment} from "../../providers/model/attachment-model";
+import {AttachmentDataobject} from "../../providers/dataobjects/attachment.dataobject";
 
 @IonicPage()
 @Component({
@@ -10,7 +10,7 @@ import {Attachment} from "../../providers/model/attachment-model";
 export class AttachmentModalPage {
   ////////////////////////////////////////////Properties/////////////////////////////////////////////
   // navParam
-  private attachments: Array<Attachment>;
+  private attachments: Array<AttachmentDataobject>;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
   constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController) {

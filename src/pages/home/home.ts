@@ -1,7 +1,7 @@
 import {Component} from "@angular/core";
 import {Promise} from "es6-promise";
 import {IonicPage, NavController, PopoverController} from "ionic-angular";
-import {AppModelService} from "../../providers/model/app-model-service";
+import {AppModelService} from "../../providers/app-model-service";
 import {SuperLoginClientError} from "../../providers/super_login_client/super_login_client_error";
 import {HomePageInterface} from "./home-interface";
 

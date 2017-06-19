@@ -8,9 +8,9 @@ import {
   NavParams,
   PopoverController
 } from "ionic-angular";
-import {AppModelService} from "../../providers/model/app-model-service";
-import {Attachment} from "../../providers/model/attachment-model";
-import {Entry} from "../../providers/model/entry-model";
+import {AppModelService} from "../../providers/app-model-service";
+import {AttachmentDataobject} from "../../providers/dataobjects/attachment.dataobject";
+import {EntryDataobject} from "../../providers/dataobjects/entry.dataobject";
 import {SingleEntryInterface} from "./single-entry-interface";
 
 @IonicPage()
@@ -27,7 +27,7 @@ export class SingleEntryPage {
   private singleEntryInterface: SingleEntryInterface;
 
   // entry object
-  private entry: Entry;
+  private entry: EntryDataobject;
 
   // filter preferences of user
   private filter: Array<boolean>;
@@ -66,7 +66,7 @@ export class SingleEntryPage {
    * Method to create and open the AttachmentModal to show list of attachments. AttachmentModalPage is the template for the modal.
    * @param attachments
    */
-  private openAttachmentModal(attachments: Array<Attachment>) {
+  private openAttachmentModal(attachments: Array<AttachmentDataobject>) {
     let attachmentModal = this.modalCtrl.create("AttachmentModalPage", {
       attachments: attachments
     });
@@ -141,7 +141,7 @@ export class SingleEntryPage {
   /**
    * create and present the EditModal to show settings for the user. EditPage is the template for the modal.
    */
-  private openEditModal(entry: Entry) {
+  private openEditModal(entry: EntryDataobject) {
     let editModal = this.modalCtrl.create("EditModalPage", {
       entry: entry
     });

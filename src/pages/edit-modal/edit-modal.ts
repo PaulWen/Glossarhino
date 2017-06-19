@@ -2,8 +2,8 @@ import {Component} from "@angular/core";
 import {Promise} from "es6-promise";
 import {IonicPage, NavController, NavParams, ViewController} from "ionic-angular";
 import {Logger} from "../../app/logger";
-import {AppModelService} from "../../providers/model/app-model-service";
-import {Entry} from "../../providers/model/entry-model";
+import {AppModelService} from "../../providers/app-model-service";
+import {EntryDataobject} from "../../providers/dataobjects/entry.dataobject";
 import {EditModalInterface} from "./edit-modal-interface";
 
 @IonicPage()
@@ -14,7 +14,7 @@ import {EditModalInterface} from "./edit-modal-interface";
 export class EditModalPage {
   ////////////////////////////////////////////Properties////////////////////////////////////////////
   // navParams
-  private entry: Entry;
+  private entry: EntryDataobject;
 
   //access interface implementation
   private editModalInterface: EditModalInterface;

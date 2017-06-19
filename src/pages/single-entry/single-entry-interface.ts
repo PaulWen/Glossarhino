@@ -1,8 +1,8 @@
 import {Promise} from "es6-promise";
-import {Entry} from "../../providers/model/entry-model";
+import {EntryDataobject} from "../../providers/dataobjects/entry.dataobject";
 
 /**
- * Interface to define what the page Single Entry needs implemented in order to work
+ * Interface to define what the page Single EntryDataobject needs implemented in order to work
  */
 export interface SingleEntryInterface {
 
@@ -13,7 +13,7 @@ export interface SingleEntryInterface {
    */
   isAuthenticated(): Promise<boolean> | boolean;
 
-  getEntry: (name: String) => Entry;
+  getEntry: (name: String) => EntryDataobject;
   getFilter: () => Array<boolean>;
   resolveDepartmentId: (departmentId: number) => String;
 

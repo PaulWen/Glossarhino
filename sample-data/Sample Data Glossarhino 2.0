@@ -1,0 +1,176 @@
+###################################
+Language Database
+###################################
+
+///////////Entry//////////
+{
+  "_id": "b77b523985dbac007c8c3340b0002892",
+  "_rev": "12-abf0f913f20b452c209ca619cb4e8b5d",
+  "name": "Lorem Ipsum Entry",
+  "departments": [
+    {
+      "departmentId": 0,
+      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
+      "attachments": [
+        {
+          "name": "Test Image",
+          "url": "https://c1.staticflickr.com/6/5337/8940995208_5da979c52f.jpg"
+        },
+        {
+          "name": "DHBW Broschüre",
+          "url": "http://www.dhbw.de/fileadmin/user_upload/Dokumente/Hochschulkommunikation/DHBW_Imagebroschuere_web.pdf"
+        }
+      ],
+      "name": "Max Mustermann",
+      "email": "max.mustermann@dhbw-stuttgart.de"
+    },
+    {
+      "departmentId": 1,
+      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
+      "attachments": [
+        {
+          "name": "Test Image",
+          "url": "https://c1.staticflickr.com/6/5337/8940995208_5da979c52f.jpg"
+        },
+        {
+          "name": "DHBW Broschüre",
+          "url": "http://www.dhbw.de/fileadmin/user_upload/Dokumente/Hochschulkommunikation/DHBW_Imagebroschuere_web.pdf"
+        }
+      ],
+      "name": "Max Mustermann",
+      "email": "max.mustermann@dhbw-stuttgart.de"
+    },
+    {
+      "departmentId": 2,
+      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
+      "attachments": [
+        {
+          "name": "Test Image",
+          "url": "https://c1.staticflickr.com/6/5337/8940995208_5da979c52f.jpg"
+        },
+        {
+          "name": "DHBW Broschüre",
+          "url": "http://www.dhbw.de/fileadmin/user_upload/Dokumente/Hochschulkommunikation/DHBW_Imagebroschuere_web.pdf"
+        }
+      ],
+      "name": "Max Mustermann",
+      "email": "max.mustermann@dhbw-stuttgart.de"
+    },
+    {
+      "departmentId": 3,
+      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
+      "attachments": [
+        {
+          "name": "Test Image",
+          "url": "https://c1.staticflickr.com/6/5337/8940995208_5da979c52f.jpg"
+        },
+        {
+          "name": "DHBW Broschüre",
+          "url": "http://www.dhbw.de/fileadmin/user_upload/Dokumente/Hochschulkommunikation/DHBW_Imagebroschuere_web.pdf"
+        }
+      ],
+      "name": "Max Mustermann",
+      "email": "max.mustermann@dhbw-stuttgart.de"
+    }
+  ],
+  "_attachments": {
+    "Dance Music.txt": {
+      "content_type": "text/plain",
+      "revpos": 9,
+      "digest": "md5-ziMOC1Arlnzu3OHGLJQUug==",
+      "length": 239,
+      "stub": true
+    },
+    "Dance Musi.txt": {
+      "content_type": "text/plain",
+      "revpos": 7,
+      "digest": "md5-N4BTZaNlFzFNNnQbkSef1A==",
+      "length": 229,
+      "stub": true
+    }
+  }
+}
+
+#############################################
+Global App Settings DB
+#############################################
+
+////////////////////Departments/////////////////
+{
+  "_id": "departments",
+  "_rev": "3-191c871f9cccf88005cd46428f12455a",
+  "departments": [
+    {
+      "departmentId": "0",
+      "departmentName": "Description"
+    },
+    {
+      "departmentId": "1",
+      "departmentName": "Management"
+    }
+  ]
+}
+
+
+////////////////////Languages/////////////////
+{
+  "_id": "languages",
+  "_rev": "3-360615a3ff649d337a2316de0cab7de1",
+  "languages": [
+    {
+      "languageId": "0",
+      "languageName": "German"
+    },
+    {
+      "languageId": "1",
+      "languageName": "English"
+    }
+  ]
+}
+
+#############################################
+User Settings DB
+#############################################
+
+//////////Departments Filter///////////////
+{
+  "_id": "department-filters",
+  "_rev": "1-244da39d6fcd73cf6198ddbd10fa12a6",
+  "departmentFilters": [
+    {
+      "departmentId": 0,
+      "filtered": true
+    },
+    {
+      "departmentId": 1,
+      "filtered": false
+    }
+  ]
+}
+
+//////////////Language Filter//////////////////////
+{
+  "_id": "langauge-filters",
+  "_rev": "1-244da39d6fcd73cf6198ddbd10fa12a6",
+  "languageFilters": [
+    {
+      "languageId": 0,
+      "filtered": true
+    },
+    {
+      "languageId": 1,
+      "filtered": false
+    }
+  ]
+}
+
+
+/////////////////Entry History//////////////////
+{
+  "_id": "entry-history",
+  "_rev": "2-86c9da072dec50d6a477036f09a23b06",
+  "entryIds": [
+    "test",
+    "test2"
+  ]
+}

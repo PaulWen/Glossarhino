@@ -1,5 +1,4 @@
 import {Injectable} from "@angular/core";
-import {Promise} from "es6-promise";
 import {Observable} from "rxjs/Rx";
 import {AppConfig} from "../../app/app-config";
 import {Logger} from "../../app/logger";

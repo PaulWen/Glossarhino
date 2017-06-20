@@ -1,12 +1,14 @@
-import {Promise} from "es6-promise";
-import {SuperLoginClientDoneResponse} from "../../providers/super_login_client/super_login_client_done_reponse";
-import {SuperLoginClientErrorResponse} from "../../providers/super_login_client/super_login_client_error_reponse";
-import {HomePageInterface} from "./home-interface";
+import { SuperLoginClientDoneResponse } from "../../providers/super_login_client/super_login_client_done_reponse";
+import { SuperLoginClientErrorResponse } from "../../providers/super_login_client/super_login_client_error_reponse";
+import { DepartmentDataobject } from "../../providers/dataobjects/department.dataobject";
+import { DepartmentFilterDataobject } from "../../providers/dataobjects/department-filter.dataobject";
+import { LanguageDataobject } from "../../providers/dataobjects/language.dataobject";
+import { HomePageModelInterface } from "./home.model-interface";
 
 /**
  * Dummy Class to fake the behaviour of the model in order to have some presentation. Will be replaced by the model implementation
  */
-export class DummyHome implements HomePageInterface {
+export class HomePageModelDummy implements HomePageModelInterface {
 
   public isAuthenticated(): Promise<boolean> | boolean {
     return true;
@@ -16,26 +18,29 @@ export class DummyHome implements HomePageInterface {
     done();
   }
 
-  public getAllDepartments(): Array<number> {
-    let departments: Array<number> = [1, 2, 3];
+  public getAllDepartments(): Array<DepartmentDataobject> {
+    let departments: Array<DepartmentDataobject> = [
+      { departmentId: 1, departmentName: "Management" }, { departmentId: 2, departmentName: "Marketing" }, { departmentId: 3, departmentName: "Production" }
+    ];
     return departments;
   };
 
-  public getListings(departmentId?: number): number {
+  public getListings(currentLanguage: LanguageDataobject, departmentId?: number): number {
     return departmentId ? departmentId * 10 + 13 : 42;
   };
 
-  public getFilter(): Array<boolean> {
-    let filter: Array<boolean> = [];
-    filter[1] = true;
-    filter[2] = false;
-    filter[3] = true;
-
+  public getDepartmentFilter(): Array<DepartmentFilterDataobject> {
+    let filter: Array<DepartmentFilterDataobject> = [
+      { departmentId: 1, filtered: true },
+      { departmentId: 2, filtered: true },
+      { departmentId: 3, filtered: true }
+    ];
     return filter;
   };
 
-  public getLanguage() {
-    return "";
+  public getCurrentLanguage(): LanguageDataobject {
+    let currentLanguage: LanguageDataobject = { languageId: 0, languageName: "English" }
+    return;
   };
 
   ////////////////////////////////////////////Properties/////////////////////////////////////////////
@@ -44,30 +49,4 @@ export class DummyHome implements HomePageInterface {
   constructor() {
 
   }
-
-  public resolveDepartmentId(departmentId: number): String {
-    switch (departmentId) {
-      case 0: {
-        //statements;
-        return "Description";
-      }
-      case 1: {
-        //statements;
-        return "Management";
-      }
-      case 2: {
-        //statements;
-        return "Marketing";
-      }
-      case 3: {
-        //statements;
-        return "Production";
-      }
-      default: {
-        //statements;
-        return "No department found with id: " + departmentId;
-      }
-    }
-  };
-
 }

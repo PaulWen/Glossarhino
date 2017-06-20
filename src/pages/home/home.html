@@ -53,19 +53,19 @@
         <ion-card (click)="pushList()" tappable>
           <img src="assets/img/homePage/all.jpg"/>
           <div class="card-title">All</div>
-          <div class="card-subtitle">{{ homePageInterface.getListings() }} Listings</div>
+          <div class="card-subtitle">{{ getListings(currentLanguage?) }} Listings</div>
         </ion-card>
       </ion-col>
 
 
       <!-- col for the different departments -->
-      <ng-container *ngFor="let departmentId of departments">
-        <ion-col col-xl-3 col-lg-3 col-md-6 col-sm-6 col-xs-6 col-6 *ngIf="filter[departmentId]">
+      <ng-container *ngFor="let department of departments?">
+        <ion-col col-xl-3 col-lg-3 col-md-6 col-sm-6 col-xs-6 col-6>
           <!-- Cards show one category each, currently using dummy implementation -->
-          <ion-card (click)="pushList(departmentId)" tappable>
-            <img src="assets/img/homePage/{{departmentId}}.jpg"/>
-            <div class="card-title">{{ homePageInterface.resolveDepartmentId(departmentId) }}</div>
-            <div class="card-subtitle">{{ homePageInterface.getListings(departmentId) }} Listings
+          <ion-card (click)="pushList(department.departmentId)" tappable>
+            <img src="assets/img/homePage/{{department.departmentId}}.jpg"/>
+            <div class="card-title">{{ department.departmentName }}</div>
+            <div class="card-subtitle">{{ getListings(currentLanguage?, department.departmentId) }} Listings
             </div>
           </ion-card>
         </ion-col>

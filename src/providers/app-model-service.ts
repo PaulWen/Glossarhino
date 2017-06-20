@@ -1,20 +1,23 @@
-import {Injectable} from "@angular/core";
+import { Injectable } from "@angular/core";
 import PouchDB from "pouchdb";
 import "rxjs/add/operator/map";
-import {Logger} from "../app/logger";
-import {EditModalInterface} from "../pages/edit-modal/edit-modal-interface";
-import {EntryListInterface} from "../pages/entry-list/entry-list-interface";
-import {FilterModalInterface} from "../pages/filter-modal/filter-modal-interface";
-import {HomePageInterface} from "../pages/home/home-interface";
-import {LanguagePopoverPageInterface} from "../pages/language-popover/language-popover-interface";
-import {LoginPageInterface} from "../pages/login/login-interface";
-import {SingleEntryInterface} from "../pages/single-entry/single-entry-interface";
-import {SuperLoginClient} from "./super_login_client/super_login_client";
-import {SuperloginHttpRequester} from "./super_login_client/superlogin_http_requester";
-import {EntryDataobject} from "./dataobjects/entry.dataobject";
+import { Logger } from "../app/logger";
+import { EditModalInterface } from "../pages/edit-modal/edit-modal-interface";
+import { EntryListInterface } from "../pages/entry-list/entry-list-interface";
+import { FilterModalInterface } from "../pages/filter-modal/filter-modal-interface";
+import { LanguagePopoverPageInterface } from "../pages/language-popover/language-popover-interface";
+import { LoginPageInterface } from "../pages/login/login-interface";
+import { SingleEntryInterface } from "../pages/single-entry/single-entry-interface";
+import { SuperLoginClient } from "./super_login_client/super_login_client";
+import { SuperloginHttpRequester } from "./super_login_client/superlogin_http_requester";
+import { EntryDataobject } from "./dataobjects/entry.dataobject";
+import { DepartmentFilterDataobject } from "./dataobjects/department-filter.dataobject";
+import { DepartmentDataobject } from "./dataobjects/department.dataobject";
+import { LanguageDataobject } from "./dataobjects/language.dataobject";
+import { HomePageModelInterface } from "../pages/home/home.model-interface";
 
 @Injectable()
-export class AppModelService extends SuperLoginClient implements LoginPageInterface, HomePageInterface, EntryListInterface, SingleEntryInterface, LanguagePopoverPageInterface, FilterModalInterface, EditModalInterface {
+export class AppModelService extends SuperLoginClient implements LoginPageInterface, HomePageModelInterface, EntryListInterface, SingleEntryInterface, LanguagePopoverPageInterface, FilterModalInterface, EditModalInterface {
   ////////////////////////////////////////////Properties////////////////////////////////////////////
 
   //////////////Databases////////////
@@ -43,42 +46,25 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   //            Shared Methods            //
   //////////////////////////////////////////
 
-  public getFilter(): Array<boolean> {
-    let filter: Array<boolean> = [];
-    filter[1] = true;
-    filter[2] = false;
-    filter[3] = true;
-
+  public getDepartmentFilter(): Array<DepartmentFilterDataobject> {
+    let filter: Array<DepartmentFilterDataobject> = [
+      { departmentId: 1, filtered: true },
+      { departmentId: 2, filtered: true },
+      { departmentId: 3, filtered: true }
+    ];
     return filter;
   };
 
-  public getAllDepartments(): Array<number> {
-    return [1, 2, 3];
+  public getAllDepartments(): Array<DepartmentDataobject> {
+    let departments: Array<DepartmentDataobject> = [
+      { departmentId: 1, departmentName: "Management" }, { departmentId: 2, departmentName: "Marketing" }, { departmentId: 3, departmentName: "Production" }
+    ];
+    return departments;
   };
 
-  public resolveDepartmentId(departmentId: number): string {
-    switch (departmentId) {
-      case 0: {
-        //statements;
-        return "Description";
-      }
-      case 1: {
-        //statements;
-        return "Management";
-      }
-      case 2: {
-        //statements;
-        return "Marketing";
-      }
-      case 3: {
-        //statements;
-        return "Production";
-      }
-      default: {
-        //statements;
-        return "No department found with id: " + departmentId;
-      }
-    }
+  public getCurrentLanguage(): LanguageDataobject {
+    let currentLanguage: LanguageDataobject = { languageId: 0, languageName: "English" }
+    return;
   };
 
   //////////////////////////////////////////
@@ -104,17 +90,9 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   //       HomePageInterface Methods      //
   //////////////////////////////////////////
 
-  public getListings(departmentId?: number): number {
-    return 42;
+  public getListings(currentLanguage: LanguageDataobject, departmentId?: number): number {
+    return departmentId ? departmentId * 10 + 13 : 42;
   };
-
-  public getEntryList(searchstring: string, language: string, departmentId?: number): Array<string> {
-    if (searchstring == "") {
-      return ["EntryDataobject 1", "EntryDataobject 2", "EntryDataobject 3"];
-    } else {
-      return ["EntryDataobject 1", "EntryDataobject 2"];
-    }
-  }
 
   //////////////////////////////////////////
   //     SingleEntryInterface Methods     //
@@ -167,7 +145,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   public setEntry(entry: EntryDataobject) {
   };
 
-/////////////////////////////////////////////Methods///////////////////////////////////////////////
+  /////////////////////////////////////////////Methods///////////////////////////////////////////////
 
   //////////////////////////////////////////
   //         PouchDB Helper-Methods       //

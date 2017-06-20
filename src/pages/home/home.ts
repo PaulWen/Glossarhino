@@ -1,9 +1,11 @@
-import {Component} from "@angular/core";
-import {Promise} from "es6-promise";
-import {IonicPage, NavController, PopoverController} from "ionic-angular";
-import {AppModelService} from "../../providers/app-model-service";
-import {SuperLoginClientError} from "../../providers/super_login_client/super_login_client_error";
-import {HomePageInterface} from "./home-interface";
+import { Component } from "@angular/core";
+import { IonicPage, NavController, PopoverController } from "ionic-angular";
+import { AppModelService } from "../../providers/app-model-service";
+import { SuperLoginClientError } from "../../providers/super_login_client/super_login_client_error";
+import { DepartmentDataobject } from "../../providers/dataobjects/department.dataobject";
+import { DepartmentFilterDataobject } from "../../providers/dataobjects/department-filter.dataobject";
+import { LanguageDataobject } from "../../providers/dataobjects/language.dataobject";
+import { HomePageModelInterface } from "./home.model-interface";
 
 @IonicPage()
 @Component({
@@ -13,27 +15,50 @@ import {HomePageInterface} from "./home-interface";
 export class HomePage {
 
   ////////////////////////////////////////////Properties////////////////////////////////////////////
-  // model objects
-  private homePageInterface: HomePageInterface;
-  private departments: Array<number>;
-  private filter: Array<boolean>;
-  private language: String;
+  // ionic injected components
+  private navCtrl: NavController;
+  private popoverCtrl: PopoverController;
+
+  // model object
+  private homePageInterface: HomePageModelInterface;
+
+  // dataobjects
+  private departments: Array<DepartmentDataobject>;
+  private departmentFilter: Array<DepartmentFilterDataobject>;
+  private currentLanguage: LanguageDataobject;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
 
-  constructor(public navCtrl: NavController, public popoverCtrl: PopoverController, appModel: AppModelService) {
-    // instantiate model objects
+  constructor(navCtrl: NavController, popoverCtrl: PopoverController, appModel: AppModelService) {
+    // instantiate model object
     this.homePageInterface = appModel;
-    this.departments = this.homePageInterface.getAllDepartments();
-    this.filter = this.homePageInterface.getFilter();
-    this.language = this.homePageInterface.getLanguage();
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
 
+  /**
+   * ionic lifecycle methods
+   */
+
+  private async ionViewDidLoad() {
+    // instantiate dataobjects
+    this.departments = await this.homePageInterface.getAllDepartments();
+    this.departmentFilter = await this.homePageInterface.getDepartmentFilter();
+    this.currentLanguage = await this.homePageInterface.getCurrentLanguage();
+  }
+
   private ionViewCanEnter(): Promise<boolean> | boolean {
     return this.homePageInterface.isAuthenticated();
   }
+
+  private async getListings(currentLanguage: LanguageDataobject, departmentId?: number): Promise<number> {
+    let listings: number = await this.homePageInterface.getListings(currentLanguage, departmentId);
+    return listings;
+  }
+
+  /**
+   * NAVIGATION METHODS
+   */
 
   /**
    * Logs the user out and directs him to the Login-Page.
@@ -47,7 +72,6 @@ export class HomePage {
       alert(error.getErrorMessage());
     });
   }
-
 
   /**
    * navigate to entry list and hand over department

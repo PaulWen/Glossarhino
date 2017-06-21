@@ -14,5 +14,5 @@ export interface LanguagePopoverPageModelInterface {
 
   getAllLanguages: () => Promise<Array<LanguageDataobject>>;
   getCurrentLanguage: () => Promise<LanguageDataobject>;
-  setCurrentLanguage: (language: LanguageDataobject) => Promise<boolean>;
+  setCurrentLanguage: (languageId: number) => Promise<boolean>;
 }

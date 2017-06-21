@@ -20,7 +20,7 @@ export class LanguagePopoverPage {
   // model objects
   private languagePopoverPageModelInterface: LanguagePopoverPageModelInterface;
   private allLanguages: Array<LanguageDataobject>;
-  private currentLanguage: LanguageDataobject;
+  private currentLanguageId: number;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
   constructor(navCtrl: NavController, navParams: NavParams, viewCtrl: ViewController, appModel: AppModelService) {
@@ -48,7 +48,7 @@ export class LanguagePopoverPage {
 
     // get current language
     this.languagePopoverPageModelInterface.getCurrentLanguage().then((data) => {
-      this.currentLanguage = data;
+      this.currentLanguageId = data.languageId;
     }, (error) => {
       Logger.log("Loading current language failed");
     });
@@ -62,8 +62,8 @@ export class LanguagePopoverPage {
    * Method to dismiss and close the popover once a language is selected
    */
   private close() {
-    Logger.log(this.currentLanguage);
-    this.languagePopoverPageModelInterface.setCurrentLanguage(this.currentLanguage);
+    Logger.log(this.currentLanguageId);
+    this.languagePopoverPageModelInterface.setCurrentLanguage(this.currentLanguageId);
     this.viewCtrl.dismiss();
   }
 }

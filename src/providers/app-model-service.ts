@@ -143,8 +143,8 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
         return allLanguages;
     }
 
-    public async setCurrentLanguage(currentLanguage: LanguageDataobject): Promise<boolean> {
-        Logger.log(currentLanguage.languageName);
+    public async setCurrentLanguage(currentLanguageId: number): Promise<boolean> {
+        Logger.log(currentLanguageId);
         return true;
     }
 

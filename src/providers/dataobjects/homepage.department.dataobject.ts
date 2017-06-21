@@ -3,8 +3,8 @@ import { DepartmentFilterDataobject } from "./department-filter.dataobject";
 
 export abstract class HomePageDepartmentDataobject extends DepartmentDataobject {
 
-    abstract get departmentListings(): number;
+    abstract get listings(): number;
 
-    abstract get departmentFilter(): Array<DepartmentFilterDataobject>;
+    abstract get filter(): boolean;
 
 }

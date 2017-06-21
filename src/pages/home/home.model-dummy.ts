@@ -17,24 +17,24 @@ export class HomePageModelDummy implements HomePageModelInterface {
     done();
   }
 
-  public async getAllDepartments(): Promise<Array<HomePageDepartmentDataobject>> {
+  public async getAllDepartments(currentLanguageId: number): Promise<Array<HomePageDepartmentDataobject>> {
     let departments: Array<HomePageDepartmentDataobject>
     departments = [
       {
         departmentId: 1,
         departmentName: "Management",
-        departmentFilter: [],
-        departmentListings: 42
+        filter: true,
+        listings: 42
       }, {
         departmentId: 2,
         departmentName: "Marketing",
-        departmentFilter: [],
-        departmentListings: 56
+        filter: true,
+        listings: 56
       }, {
         departmentId: 3,
         departmentName: "Production",
-        departmentFilter: [],
-        departmentListings: 69
+        filter: true,
+        listings: 69
       }
     ];
 

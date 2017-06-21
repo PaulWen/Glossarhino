@@ -22,7 +22,7 @@ export interface HomePageModelInterface {
    */
   logout(done: SuperLoginClientDoneResponse, error: SuperLoginClientErrorResponse): void;
 
-  getAllDepartments(): Promise<Array<HomePageDepartmentDataobject>>;
+  getAllDepartments(currentLanguageId: number): Promise<Array<HomePageDepartmentDataobject>>;
   getAllListings(currentLanguageId: number): Promise<number>;
   getCurrentLanguage(): Promise<LanguageDataobject>;
 }

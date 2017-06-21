@@ -89,18 +89,18 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
       {
         departmentId: 1,
         departmentName: "Management",
-        departmentFilter: [],
-        departmentListings: 42
+        filter: false,
+        listings: 42
       }, {
         departmentId: 2,
         departmentName: "Marketing",
-        departmentFilter: [],
-        departmentListings: 56
+        filter: true,
+        listings: 56
       }, {
         departmentId: 3,
         departmentName: "Production",
-        departmentFilter: [],
-        departmentListings: 69
+        filter: true,
+        listings: 69
       }
     ];
 
@@ -119,6 +119,24 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   //////////////////////////////////////////
   // LanguagePopoverPageInterface Methods //
   //////////////////////////////////////////
+
+ public async getAllLanguages(): Promise<Array<LanguageDataobject>> {
+        let allLanguages: Array<LanguageDataobject> = [
+            {
+                languageId: 0,
+                languageName: "English"
+            }, {
+                languageId: 1,
+                languageName: "German"
+            }
+        ];
+        return allLanguages;
+    }
+
+    public async setCurrentLanguage(currentLanguageId: number): Promise<boolean> {
+        Logger.log(currentLanguageId);
+        return true;
+    }
 
   //////////////////////////////////////////
   //      FilterModalInterface Methods    //
@@ -237,6 +255,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
 
     return true;
   }
+
 
 
   /**

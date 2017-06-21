@@ -42,36 +42,58 @@ export class HomePage {
     /////////////////////////////////////////////Methods///////////////////////////////////////////////
 
     /**
-     * ionic lifecycle methods
+     * IONIC LIFECYCLE METHODS
      */
     private ionViewDidLoad() {
+        // load data
+        this.loadData();
+    };
+
+    private ionViewCanEnter(): Promise<boolean> | boolean {
+        return this.homePageModelInterface.isAuthenticated();
+    };
+
+    /**
+     * PAGE METHODS
+     */
+    private async loadData() {
+        // get current language
+        this.currentLanguage = await this.homePageModelInterface.getCurrentLanguage();
+
+
+        // get all listings
+        this.homePageModelInterface.getAllListings(this.currentLanguage.languageId).then((data) => {
+            this.allListings = data;
+        }, (error) => {
+            Logger.log("Loading all listings failed");
+        });
+
         // get all departments
-        this.homePageModelInterface.getAllDepartments().then((data) => {
+        this.homePageModelInterface.getAllDepartments(this.currentLanguage.languageId).then((data) => {
             this.departments = data;
         }, (error) => {
             Logger.log("Loading all departments failed");
-        }
-        );
+        });
+    };
 
-        // get current language
-        this.homePageModelInterface.getCurrentLanguage().then((data) => {
-            this.currentLanguage = data;
-        }, (error) => {
-            Logger.log("Loading current language failed");
-        }
-        );
 
+    private getAllListings(currentLanguageId: number) {
         // get all listings
-        this.homePageModelInterface.getAllListings(2).then((data) => {
+        this.homePageModelInterface.getAllListings(this.currentLanguage.languageId).then((data) => {
             this.allListings = data;
         }, (error) => {
             Logger.log("Loading all listings failed");
         });
     };
 
-    private ionViewCanEnter(): Promise<boolean> | boolean {
-        return this.homePageModelInterface.isAuthenticated();
-    }
+    private getAllDepartments(currentLanguageId: number) {
+        // get all departments
+        this.homePageModelInterface.getAllDepartments(currentLanguageId).then((data) => {
+            this.departments = data;
+        }, (error) => {
+            Logger.log("Loading all departments failed");
+        });
+    };
 
     /**
      * NAVIGATION METHODS

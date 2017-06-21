@@ -1,5 +1,4 @@
 import {Component} from "@angular/core";
-import {Promise} from "es6-promise";
 import {IonicPage, NavController, NavParams} from "ionic-angular";
 import {Logger} from "../../app/logger";
 import {AppModelService} from "../../providers/app-model-service";

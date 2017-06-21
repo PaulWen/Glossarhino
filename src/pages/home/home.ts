@@ -6,6 +6,9 @@ import { DepartmentDataobject } from "../../providers/dataobjects/department.dat
 import { DepartmentFilterDataobject } from "../../providers/dataobjects/department-filter.dataobject";
 import { LanguageDataobject } from "../../providers/dataobjects/language.dataobject";
 import { HomePageModelInterface } from "./home.model-interface";
+import { Observable } from "rxjs/Observable";
+import { Logger } from "../../app/logger";
+import { Subscriber } from "rxjs/Subscriber";
 
 @IonicPage()
 @Component({
@@ -20,19 +23,25 @@ export class HomePage {
   private popoverCtrl: PopoverController;
 
   // model object
-  private homePageInterface: HomePageModelInterface;
+  private homePageModelInterface: HomePageModelInterface;
 
   // dataobjects
   private departments: Array<DepartmentDataobject>;
   private departmentFilter: Array<DepartmentFilterDataobject>;
   private currentLanguage: LanguageDataobject;
+  private departmentListings: Array<{ departmentId: number, listings: number }>;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
 
   constructor(navCtrl: NavController, popoverCtrl: PopoverController, appModel: AppModelService) {
+    // instantiate ionic injected components
+    this.navCtrl = navCtrl;
+    this.popoverCtrl = popoverCtrl;
+
     // instantiate model object
-    this.homePageInterface = appModel;
+    this.homePageModelInterface = appModel;
   }
+
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
 
@@ -42,18 +51,42 @@ export class HomePage {
 
   private async ionViewDidLoad() {
     // instantiate dataobjects
-    this.departments = await this.homePageInterface.getAllDepartments();
-    this.departmentFilter = await this.homePageInterface.getDepartmentFilter();
-    this.currentLanguage = await this.homePageInterface.getCurrentLanguage();
-  }
+    this.departments = await this.homePageModelInterface.getAllDepartments();
+    this.departmentFilter = await this.homePageModelInterface.getDepartmentFilter();
+    this.currentLanguage = await this.homePageModelInterface.getCurrentLanguage();
+
+    // Log objects to check if they are successfully retreived
+    Logger.log("Departments:");
+    Logger.log(this.departments);
+    Logger.log("Department filter:");
+    Logger.log(this.departmentFilter);
+    Logger.log("Current Language:");
+    Logger.log(this.currentLanguage);
+  };
+
+  private ionViewWillEnter() {
+    Logger.log("ionViewWillEnter");
+  };
+
+  private ionViewDidEnter() {
+    Logger.log("ionViewDidEnter");
+  };
+  private ionViewWillLeave() {
+    Logger.log("ionViewWillLeave");
+  };
+  private ionViewDidLeave() {
+    Logger.log("ionViewDidLeave");
+  };
+  private ionViewWillUnload() {
+    Logger.log("ionViewWillUnload");
+  };
+  private ionViewCanLeave() {
+    Logger.log("ionViewCanLeave");
+  };
 
   private ionViewCanEnter(): Promise<boolean> | boolean {
-    return this.homePageInterface.isAuthenticated();
-  }
-
-  private async getListings(currentLanguage: LanguageDataobject, departmentId?: number): Promise<number> {
-    let listings: number = await this.homePageInterface.getListings(currentLanguage, departmentId);
-    return listings;
+    Logger.log("ionViewCanEnter");
+    return this.homePageModelInterface.isAuthenticated();
   }
 
   /**
@@ -64,7 +97,7 @@ export class HomePage {
    * Logs the user out and directs him to the Login-Page.
    */
   private logout() {
-    this.homePageInterface.logout(() => {
+    this.homePageModelInterface.logout(() => {
       // successfully loged-out
       this.navCtrl.setRoot("LoginPage");
 

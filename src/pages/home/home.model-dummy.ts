@@ -18,18 +18,18 @@ export class HomePageModelDummy implements HomePageModelInterface {
     done();
   }
 
-  public getAllDepartments(): Array<DepartmentDataobject> {
+  public async getAllDepartments(): Promise<Array<DepartmentDataobject>> {
     let departments: Array<DepartmentDataobject> = [
       { departmentId: 1, departmentName: "Management" }, { departmentId: 2, departmentName: "Marketing" }, { departmentId: 3, departmentName: "Production" }
     ];
     return departments;
   };
 
-  public getListings(currentLanguage: LanguageDataobject, departmentId?: number): number {
+  public async getListings(currentLanguageId: number, departmentId?: number): Promise<number> {
     return departmentId ? departmentId * 10 + 13 : 42;
   };
 
-  public getDepartmentFilter(): Array<DepartmentFilterDataobject> {
+  public async getDepartmentFilter(): Promise<Array<DepartmentFilterDataobject>> {
     let filter: Array<DepartmentFilterDataobject> = [
       { departmentId: 1, filtered: true },
       { departmentId: 2, filtered: true },
@@ -38,7 +38,7 @@ export class HomePageModelDummy implements HomePageModelInterface {
     return filter;
   };
 
-  public getCurrentLanguage(): LanguageDataobject {
+  public async getCurrentLanguage(): Promise<LanguageDataobject> {
     let currentLanguage: LanguageDataobject = { languageId: 0, languageName: "English" }
     return;
   };

@@ -53,10 +53,9 @@
         <ion-card (click)="pushList()" tappable>
           <img src="assets/img/homePage/all.jpg" />
           <div class="card-title">All</div>
-          <div class="card-subtitle"> Listings</div>
+          <div class="card-subtitle"> {{ allListings }} Listings</div>
         </ion-card>
       </ion-col>
-
 
       <!-- col for the different departments -->
       <ng-container *ngFor="let department of departments">
@@ -65,7 +64,7 @@
           <ion-card (click)="pushList(department.departmentId)" tappable>
             <img src="assets/img/homePage/{{department.departmentId}}.jpg" />
             <div class="card-title">{{ department.departmentName }}</div>
-            <div class="card-subtitle"> Listings
+            <div class="card-subtitle"> {{ department.departmentListings }} Listings
             </div>
           </ion-card>
         </ion-col>

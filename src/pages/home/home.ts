@@ -48,44 +48,21 @@ export class HomePage {
   /**
    * ionic lifecycle methods
    */
+  private ionViewDidLoad() {
+    // instantiate dataobjects and load data
+    this.homePageModelInterface.getAllDepartments().then((data) => {
+      this.departments = data;
+    }, (error) => {
+      Logger.log("Loading all departments failed");
+    }
+    );
+    Logger.log("Hopefully without delay");
+    //this.departmentFilter = this.homePageModelInterface.getDepartmentFilter();
+    //this.currentLanguage = this.homePageModelInterface.getCurrentLanguage();
 
-  private async ionViewDidLoad() {
-    // instantiate dataobjects
-    this.departments = await this.homePageModelInterface.getAllDepartments();
-    this.departmentFilter = await this.homePageModelInterface.getDepartmentFilter();
-    this.currentLanguage = await this.homePageModelInterface.getCurrentLanguage();
-
-    // Log objects to check if they are successfully retreived
-    Logger.log("Departments:");
-    Logger.log(this.departments);
-    Logger.log("Department filter:");
-    Logger.log(this.departmentFilter);
-    Logger.log("Current Language:");
-    Logger.log(this.currentLanguage);
-  };
-
-  private ionViewWillEnter() {
-    Logger.log("ionViewWillEnter");
-  };
-
-  private ionViewDidEnter() {
-    Logger.log("ionViewDidEnter");
-  };
-  private ionViewWillLeave() {
-    Logger.log("ionViewWillLeave");
-  };
-  private ionViewDidLeave() {
-    Logger.log("ionViewDidLeave");
-  };
-  private ionViewWillUnload() {
-    Logger.log("ionViewWillUnload");
-  };
-  private ionViewCanLeave() {
-    Logger.log("ionViewCanLeave");
   };
 
   private ionViewCanEnter(): Promise<boolean> | boolean {
-    Logger.log("ionViewCanEnter");
     return this.homePageModelInterface.isAuthenticated();
   }
 

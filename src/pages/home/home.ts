@@ -56,21 +56,27 @@ export class HomePage {
         // get current language
         this.homePageModelInterface.getCurrentLanguage().then((data) => {
             this.currentLanguage = data;
+            this.getAllListings(this.currentLanguage.languageId);
         }, (error) => {
             Logger.log("Loading current language failed");
         }
         );
-
-        // get all listings
-        this.homePageModelInterface.getAllListings(2).then((data) => {
-            this.allListings = data;
-        }, (error) => {
-            Logger.log("Loading all listings failed");
-        });
     };
 
     private ionViewCanEnter(): Promise<boolean> | boolean {
         return this.homePageModelInterface.isAuthenticated();
+    };
+
+    /**
+     * PAGE METHODS
+     */
+    private getAllListings(currentLanguageId: number) {
+        // get all listings
+        this.homePageModelInterface.getAllListings(this.currentLanguage.languageId).then((data) => {
+            this.allListings = data;
+        }, (error) => {
+            Logger.log("Loading all listings failed");
+        });
     }
 
     /**

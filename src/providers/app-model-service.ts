@@ -6,7 +6,6 @@ import { LoginPageInterface } from "../pages/login/login-interface";
 import { SuperLoginClient } from "./super_login_client/super_login_client";
 import { SuperloginHttpRequester } from "./super_login_client/superlogin_http_requester";
 import { DepartmentFilterDataobject } from "./dataobjects/department-filter.dataobject";
-import { DepartmentDataobject } from "./dataobjects/department.dataobject";
 import { LanguageDataobject } from "./dataobjects/language.dataobject";
 import { HomePageModelInterface } from "../pages/home/home.model-interface";
 import { HomePageDepartmentDataobject } from "./dataobjects/homepage.department.dataobject";
@@ -42,9 +41,9 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     //////////////////////////////////////////
 
     // for testing of async calls
-    private delay(ms: number) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    }
+    private delay() {
+        return new Promise(resolve => setTimeout(resolve, 1000));
+    };
 
     public async getDepartmentFilter(): Promise<Array<DepartmentFilterDataobject>> {
         let filter: Array<DepartmentFilterDataobject> = [
@@ -96,29 +95,29 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
             {
                 departmentId: 1,
                 departmentName: "Management",
-                departmentFilter: [],
-                departmentListings: 42
+                filter: false,
+                listings: 42
             }, {
                 departmentId: 2,
                 departmentName: "Marketing",
-                departmentFilter: [],
-                departmentListings: 56
+                filter: true,
+                listings: 56
             }, {
                 departmentId: 3,
                 departmentName: "Production",
-                departmentFilter: [],
-                departmentListings: 69
+                filter: true,
+                listings: 69
             }
         ];
 
-        await this.delay(5000);
+        await this.delay();
 
         return departments;
     };
 
     public async getAllListings(currentLanguageId: number): Promise<number> {
         Logger.log("currentLanguageId: " + currentLanguageId);
-        await this.delay(5000);
+        await this.delay();
         return 102;
     }
 

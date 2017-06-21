@@ -23,18 +23,18 @@ export class HomePageModelDummy implements HomePageModelInterface {
       {
         departmentId: 1,
         departmentName: "Management",
-        departmentFilter: [],
-        departmentListings: 42
+        filter: true,
+        listings: 42
       }, {
         departmentId: 2,
         departmentName: "Marketing",
-        departmentFilter: [],
-        departmentListings: 56
+        filter: true,
+        listings: 56
       }, {
         departmentId: 3,
         departmentName: "Production",
-        departmentFilter: [],
-        departmentListings: 69
+        filter: true,
+        listings: 69
       }
     ];
 

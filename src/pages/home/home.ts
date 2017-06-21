@@ -42,7 +42,7 @@ export class HomePage {
     /////////////////////////////////////////////Methods///////////////////////////////////////////////
 
     /**
-     * ionic lifecycle methods
+     * IONIC LIFECYCLE METHODS
      */
     private ionViewDidLoad() {
         // get all departments
@@ -50,17 +50,15 @@ export class HomePage {
             this.departments = data;
         }, (error) => {
             Logger.log("Loading all departments failed");
-        }
-        );
+        });
 
-        // get current language
+        // get current language and update all listings with input
         this.homePageModelInterface.getCurrentLanguage().then((data) => {
             this.currentLanguage = data;
             this.getAllListings(this.currentLanguage.languageId);
         }, (error) => {
             Logger.log("Loading current language failed");
-        }
-        );
+        });
     };
 
     private ionViewCanEnter(): Promise<boolean> | boolean {

@@ -1,8 +1,7 @@
 import { SuperLoginClientDoneResponse } from "../../providers/super_login_client/super_login_client_done_reponse";
 import { SuperLoginClientErrorResponse } from "../../providers/super_login_client/super_login_client_error_reponse";
 import { LanguageDataobject } from "../../providers/dataobjects/language.dataobject";
-import { DepartmentFilterDataobject } from "../../providers/dataobjects/department-filter.dataobject";
-import { DepartmentDataobject } from "../../providers/dataobjects/department.dataobject";
+import { HomePageDepartmentDataobject } from "../../providers/dataobjects/homepage.department.dataobject";
 /**
  * Interface to define what HomePage needs implemented in order to work
  */
@@ -23,8 +22,7 @@ export interface HomePageModelInterface {
    */
   logout(done: SuperLoginClientDoneResponse, error: SuperLoginClientErrorResponse): void;
 
-  getAllDepartments(): Promise<Array<DepartmentDataobject>>;
-  getListings(currentLanguageId: number, departmentId?: number): Promise<number>;
-  getDepartmentFilter(): Promise<Array<DepartmentFilterDataobject>>;
+  getAllDepartments(): Promise<Array<HomePageDepartmentDataobject>>;
+  getAllListings(currentLanguageId: number): Promise<number>;
   getCurrentLanguage(): Promise<LanguageDataobject>;
 }

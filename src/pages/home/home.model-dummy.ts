@@ -1,9 +1,8 @@
 import { SuperLoginClientDoneResponse } from "../../providers/super_login_client/super_login_client_done_reponse";
 import { SuperLoginClientErrorResponse } from "../../providers/super_login_client/super_login_client_error_reponse";
-import { DepartmentDataobject } from "../../providers/dataobjects/department.dataobject";
-import { DepartmentFilterDataobject } from "../../providers/dataobjects/department-filter.dataobject";
 import { LanguageDataobject } from "../../providers/dataobjects/language.dataobject";
 import { HomePageModelInterface } from "./home.model-interface";
+import { HomePageDepartmentDataobject } from "../../providers/dataobjects/homepage.department.dataobject";
 
 /**
  * Dummy Class to fake the behaviour of the model in order to have some presentation. Will be replaced by the model implementation
@@ -18,10 +17,27 @@ export class HomePageModelDummy implements HomePageModelInterface {
     done();
   }
 
-  public async getAllDepartments(): Promise<Array<DepartmentDataobject>> {
-    let departments: Array<DepartmentDataobject> = [
-      { departmentId: 1, departmentName: "Management" }, { departmentId: 2, departmentName: "Marketing" }, { departmentId: 3, departmentName: "Production" }
+  public async getAllDepartments(): Promise<Array<HomePageDepartmentDataobject>> {
+    let departments: Array<HomePageDepartmentDataobject>
+    departments = [
+      {
+        departmentId: 1,
+        departmentName: "Management",
+        departmentFilter: [],
+        departmentListings: 42
+      }, {
+        departmentId: 2,
+        departmentName: "Marketing",
+        departmentFilter: [],
+        departmentListings: 56
+      }, {
+        departmentId: 3,
+        departmentName: "Production",
+        departmentFilter: [],
+        departmentListings: 69
+      }
     ];
+
     return departments;
   };
 
@@ -29,18 +45,13 @@ export class HomePageModelDummy implements HomePageModelInterface {
     return departmentId ? departmentId * 10 + 13 : 42;
   };
 
-  public async getDepartmentFilter(): Promise<Array<DepartmentFilterDataobject>> {
-    let filter: Array<DepartmentFilterDataobject> = [
-      { departmentId: 1, filtered: true },
-      { departmentId: 2, filtered: true },
-      { departmentId: 3, filtered: true }
-    ];
-    return filter;
-  };
+  public async getAllListings(currentLanguageId: number): Promise<number> {
+    return 102;
+  }
 
   public async getCurrentLanguage(): Promise<LanguageDataobject> {
     let currentLanguage: LanguageDataobject = { languageId: 0, languageName: "English" }
-    return;
+    return currentLanguage;
   };
 
   ////////////////////////////////////////////Properties/////////////////////////////////////////////

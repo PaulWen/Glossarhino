@@ -150,7 +150,7 @@ User Settings DB
 
 //////////////Language Filter//////////////////////
 {
-  "_id": "langauge-filters",
+  "_id": "language-filters",
   "_rev": "1-244da39d6fcd73cf6198ddbd10fa12a6",
   "languageFilters": [
     {

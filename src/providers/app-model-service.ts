@@ -9,9 +9,10 @@ import { DepartmentFilterDataobject } from "./dataobjects/department-filter.data
 import { LanguageDataobject } from "./dataobjects/language.dataobject";
 import { HomePageModelInterface } from "../pages/home/home.model-interface";
 import { HomePageDepartmentDataobject } from "./dataobjects/homepage.department.dataobject";
+import { LanguagePopoverPageModelInterface } from "../pages/language-popover/language-popover.model-interface";
 
 @Injectable()
-export class AppModelService extends SuperLoginClient implements LoginPageInterface, HomePageModelInterface {
+export class AppModelService extends SuperLoginClient implements LoginPageInterface, HomePageModelInterface, LanguagePopoverPageModelInterface {
     ////////////////////////////////////////////Properties////////////////////////////////////////////
 
     //////////////Databases////////////
@@ -55,11 +56,11 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     };
 
     public async getCurrentLanguage(): Promise<LanguageDataobject> {
-        let currentLanguage: LanguageDataobject = { languageId: 0, languageName: "English" };
-        let promise = new Promise<LanguageDataobject>((resolve, reject) => {
-            resolve(currentLanguage);
-        });
-        return promise;
+        let currentLanguage: LanguageDataobject = {
+            languageId: 1,
+            languageName: "German"
+        };
+        return currentLanguage;
     };
 
     //////////////////////////////////////////
@@ -128,6 +129,24 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     //////////////////////////////////////////
     // LanguagePopoverPageInterface Methods //
     //////////////////////////////////////////
+
+    public async getAllLanguages(): Promise<Array<LanguageDataobject>> {
+        let allLanguages: Array<LanguageDataobject> = [
+            {
+                languageId: 0,
+                languageName: "English"
+            }, {
+                languageId: 1,
+                languageName: "German"
+            }
+        ];
+        return allLanguages;
+    }
+
+    public async setCurrentLanguage(currentLanguage: LanguageDataobject): Promise<boolean> {
+        Logger.log(currentLanguage.languageName);
+        return true;
+    }
 
     //////////////////////////////////////////
     //      FilterModalInterface Methods    //

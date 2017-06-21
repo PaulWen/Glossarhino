@@ -1,0 +1,12 @@
+<ion-list radio-group [(ngModel)]="currentLanguage">
+
+  <ion-list-header>
+    Language
+  </ion-list-header>
+
+  <ion-item *ngFor="let language of allLanguages">
+    <ion-label>{{ language.languageName }}</ion-label>
+    <ion-radio value="{{language}}" (ionSelect)="close()"></ion-radio>
+  </ion-item>
+
+</ion-list>

@@ -45,20 +45,8 @@ export class HomePage {
      * IONIC LIFECYCLE METHODS
      */
     private ionViewDidLoad() {
-        // get all departments
-        this.homePageModelInterface.getAllDepartments().then((data) => {
-            this.departments = data;
-        }, (error) => {
-            Logger.log("Loading all departments failed");
-        });
-
-        // get current language and update all listings with input
-        this.homePageModelInterface.getCurrentLanguage().then((data) => {
-            this.currentLanguage = data;
-            this.getAllListings(this.currentLanguage.languageId);
-        }, (error) => {
-            Logger.log("Loading current language failed");
-        });
+        // load data
+        this.loadData();
     };
 
     private ionViewCanEnter(): Promise<boolean> | boolean {
@@ -68,6 +56,27 @@ export class HomePage {
     /**
      * PAGE METHODS
      */
+    private async loadData() {
+        // get current language
+        this.currentLanguage = await this.homePageModelInterface.getCurrentLanguage();
+
+
+        // get all listings
+        this.homePageModelInterface.getAllListings(this.currentLanguage.languageId).then((data) => {
+            this.allListings = data;
+        }, (error) => {
+            Logger.log("Loading all listings failed");
+        });
+
+        // get all departments
+        this.homePageModelInterface.getAllDepartments(this.currentLanguage.languageId).then((data) => {
+            this.departments = data;
+        }, (error) => {
+            Logger.log("Loading all departments failed");
+        });
+    };
+
+
     private getAllListings(currentLanguageId: number) {
         // get all listings
         this.homePageModelInterface.getAllListings(this.currentLanguage.languageId).then((data) => {
@@ -75,7 +84,16 @@ export class HomePage {
         }, (error) => {
             Logger.log("Loading all listings failed");
         });
-    }
+    };
+
+    private getAllDepartments(currentLanguageId: number) {
+        // get all departments
+        this.homePageModelInterface.getAllDepartments(currentLanguageId).then((data) => {
+            this.departments = data;
+        }, (error) => {
+            Logger.log("Loading all departments failed");
+        });
+    };
 
     /**
      * NAVIGATION METHODS

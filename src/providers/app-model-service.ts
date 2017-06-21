@@ -90,7 +90,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     //       HomePageInterface Methods      //
     //////////////////////////////////////////
 
-    public async getAllDepartments(): Promise<Array<HomePageDepartmentDataobject>> {
+    public async getAllDepartments(currentLanguageId: number): Promise<Array<HomePageDepartmentDataobject>> {
         let departments: Array<HomePageDepartmentDataobject>
         departments = [
             {

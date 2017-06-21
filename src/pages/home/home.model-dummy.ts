@@ -17,7 +17,7 @@ export class HomePageModelDummy implements HomePageModelInterface {
     done();
   }
 
-  public async getAllDepartments(): Promise<Array<HomePageDepartmentDataobject>> {
+  public async getAllDepartments(currentLanguageId: number): Promise<Array<HomePageDepartmentDataobject>> {
     let departments: Array<HomePageDepartmentDataobject>
     departments = [
       {

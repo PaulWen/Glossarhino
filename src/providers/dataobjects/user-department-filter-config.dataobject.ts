@@ -6,20 +6,20 @@ export abstract class UserDepartmentFilterConfigDataobject {
 
 
   abstract get _id(): string;
-  abstract get departmentFilters(): Array<DepartmentFilterDataobject>;
+  abstract get selectedDepartments(): Array<number>;
 
 
   public static init(allDepartments: GlobalDepartmentConfigDataobject): UserDepartmentFilterConfigDataobject {
-    let departmentFilters: Array<DepartmentFilterDataobject> = [];
+    let selectedDepartments: Array<number> = [];
 
     for (let department of allDepartments.departments) {
-      departmentFilters.push(DepartmentFilterDataobject.init(department.departmentId, true))
+      selectedDepartments.push(department.departmentId)
     }
 
 
     return {
       "_id": AppConfig.USER_APP_SETTINGS_DEPARTMENT_FILTERS,
-      "departmentFilters": departmentFilters
+      "selectedDepartments": selectedDepartments
     }
   }
 

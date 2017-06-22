@@ -96,15 +96,7 @@ export class EntryListPage {
         this.navCtrl.setRoot("LoginPage");
       }
     });
-  }
-
-  // Resolve department and handle departmentId undefined
-  private resolveDepartment(departmendId?: number): String {
-    if (departmendId)
-      return this.entryListPageModelInterface.resolveDepartmentId(this.departmentId);
-    else
-      return "All";
-  }
+  };
 
   // setFocus on searchbar
   private ionViewDidEnter() {

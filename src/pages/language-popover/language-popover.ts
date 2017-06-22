@@ -59,11 +59,18 @@ export class LanguagePopoverPage {
   }
 
   /**
-   * Method to dismiss and close the popover once a language is selected
+   * PAGE METHODS
    */
-  private close() {
+   private loadData() {
+
+   };
+
+  /**
+   * NAVIGATION METHODS
+   */
+  private dismissPopover() {
     Logger.log(this.currentLanguageId);
     this.languagePopoverPageModelInterface.setCurrentLanguage(this.currentLanguageId);
     this.viewCtrl.dismiss();
   }
-}
+};

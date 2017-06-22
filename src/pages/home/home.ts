@@ -25,8 +25,8 @@ export class HomePage {
 
     // dataobjects
     private departments: Array<HomePageDepartmentDataobject>;
-    private currentLanguage: UserLanguageFilterConfigDataobject;
-    private allListings: number;
+    private selectedLanguage: UserLanguageFilterConfigDataobject;
+    private countOfAllEntries: number;
 
     ////////////////////////////////////////////Constructor////////////////////////////////////////////
 
@@ -59,19 +59,19 @@ export class HomePage {
      */
     private async loadData() {
         // get current language
-        this.homePageModelInterface.getCurrentLanguage().then((data) => {
-            this.currentLanguage = data;
+        this.homePageModelInterface.getSelectedLanguage().then((data) => {
+            this.selectedLanguage = data;
             // load other data as soon as language loaded
 
             // get all listings
-            this.homePageModelInterface.getAllListings(this.currentLanguage.selectedLanguage).then((data) => {
-                this.allListings = data;
+            this.homePageModelInterface.getCountOfAllEntries(this.selectedLanguage.selectedLanguage).then((data) => {
+                this.countOfAllEntries = data;
             }, (error) => {
                 Logger.log("Loading all listings failed");
             });
 
             // get all departments
-            this.homePageModelInterface.getSelectedDepartments(this.currentLanguage.selectedLanguage).then((data) => {
+            this.homePageModelInterface.getSelectedHomePageDepartmentDataobjects(this.selectedLanguage.selectedLanguage).then((data) => {
                 this.departments = data;
             }, (error) => {
                 Logger.log("Loading selected departments failed");

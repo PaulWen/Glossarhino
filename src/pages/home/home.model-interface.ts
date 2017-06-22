@@ -23,7 +23,7 @@ export interface HomePageModelInterface {
    */
   logout(done: SuperLoginClientDoneResponse, error: SuperLoginClientErrorResponse): void;
 
-  getCurrentLanguage(): Promise<UserLanguageFilterConfigDataobject>;
-  getSelectedDepartments(currentLanguageId: number): Promise<Array<HomePageDepartmentDataobject>>;
-  getAllListings(currentLanguageId: number): Promise<number>;
+  getSelectedLanguage(): Promise<UserLanguageFilterConfigDataobject>;
+  getSelectedHomePageDepartmentDataobjects(currentLanguageId: number): Promise<Array<HomePageDepartmentDataobject>>;
+  getCountOfAllEntries(currentLanguageId: number): Promise<number>;
 }

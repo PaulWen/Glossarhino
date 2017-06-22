@@ -6,6 +6,7 @@ import { LanguageDataobject } from "../../providers/dataobjects/language.dataobj
 import { HomePageDepartmentDataobject } from "../../providers/dataobjects/homepage.department.dataobject"
 import { HomePageModelInterface } from "./home.model-interface";
 import { Logger } from "../../app/logger";
+import { UserLanguageFilterConfigDataobject } from "../../providers/dataobjects/user-language-filter-config.dataobject";
 
 @IonicPage()
 @Component({
@@ -24,7 +25,7 @@ export class HomePage {
 
     // dataobjects
     private departments: Array<HomePageDepartmentDataobject>;
-    private currentLanguage: LanguageDataobject;
+    private currentLanguage: UserLanguageFilterConfigDataobject;
     private allListings: number;
 
     ////////////////////////////////////////////Constructor////////////////////////////////////////////
@@ -58,40 +59,26 @@ export class HomePage {
      */
     private async loadData() {
         // get current language
-        this.currentLanguage = await this.homePageModelInterface.getCurrentLanguage();
+        this.homePageModelInterface.getCurrentLanguage().then((data) => {
+            this.currentLanguage = data;
+            // load other data as soon as language loaded
 
+            // get all listings
+            this.homePageModelInterface.getAllListings(this.currentLanguage.selectedLanguage).then((data) => {
+                this.allListings = data;
+            }, (error) => {
+                Logger.log("Loading all listings failed");
+            });
 
-        // get all listings
-        this.homePageModelInterface.getAllListings(this.currentLanguage.languageId).then((data) => {
-            this.allListings = data;
+            // get all departments
+            this.homePageModelInterface.getSelectedDepartments(this.currentLanguage.selectedLanguage).then((data) => {
+                this.departments = data;
+            }, (error) => {
+                Logger.log("Loading selected departments failed");
+            });
+
         }, (error) => {
-            Logger.log("Loading all listings failed");
-        });
-
-        // get all departments
-        this.homePageModelInterface.getAllDepartments(this.currentLanguage.languageId).then((data) => {
-            this.departments = data;
-        }, (error) => {
-            Logger.log("Loading all departments failed");
-        });
-    };
-
-
-    private getAllListings(currentLanguageId: number) {
-        // get all listings
-        this.homePageModelInterface.getAllListings(this.currentLanguage.languageId).then((data) => {
-            this.allListings = data;
-        }, (error) => {
-            Logger.log("Loading all listings failed");
-        });
-    };
-
-    private getAllDepartments(currentLanguageId: number) {
-        // get all departments
-        this.homePageModelInterface.getAllDepartments(currentLanguageId).then((data) => {
-            this.departments = data;
-        }, (error) => {
-            Logger.log("Loading all departments failed");
+            Logger.log("Loading currentLanguage failed");
         });
     };
 

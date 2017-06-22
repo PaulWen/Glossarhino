@@ -6,7 +6,7 @@
 
   <ion-item *ngFor="let language of allLanguages">
     <ion-label>{{ language.languageName }}</ion-label>
-    <ion-radio value="{{language.languageId}}" (ionSelect)="close()"></ion-radio>
+    <ion-radio value="{{language.languageId}}" (ionSelect)="dismissPopover()"></ion-radio>
   </ion-item>
 
 </ion-list>

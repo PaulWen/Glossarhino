@@ -1,8 +1,9 @@
+import { LanguageDataobject } from "../../providers/dataobjects/language.dataobject";
+import { GlobalLanguageConfigDataobject } from "../../providers/dataobjects/global-language-config.dataobject";
+
 /**
  * Interface to define what LanguagePopover needs implemented in order to work
  */
-import { LanguageDataobject } from "../../providers/dataobjects/language.dataobject";
-
 export interface LanguagePopoverPageModelInterface {
 
   /**
@@ -12,7 +13,7 @@ export interface LanguagePopoverPageModelInterface {
    */
   isAuthenticated(): Promise<boolean> | boolean;
 
-  getAllLanguages: () => Promise<Array<LanguageDataobject>>;
-  getCurrentLanguage: () => Promise<LanguageDataobject>;
-  setCurrentLanguage: (languageId: number) => Promise<boolean>;
+  getAllLanguages: () => Promise<GlobalLanguageConfigDataobject>;
+  getCurrentLanguageId: () => Promise<number>;
+  setCurrentLanguageId: (languageId: number) => Promise<string>;
 }

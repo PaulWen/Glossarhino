@@ -25,5 +25,5 @@ export interface HomePageModelInterface {
 
   getSelectedLanguage(): Promise<UserLanguageFilterConfigDataobject>;
   getSelectedHomePageDepartmentDataobjects(currentLanguageId: number): Promise<Array<HomePageDepartmentDataobject>>;
-  getCountOfAllEntries(currentLanguageId: number): Promise<number>;
+  getCountOfAllEntries(selectedLanguage: number): Promise<number>;
 }

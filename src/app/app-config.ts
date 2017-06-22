@@ -10,8 +10,8 @@ export class AppConfig {
   };
 
   public static get WEB_SERVER_DOMAIN(): string {
-    return "http://localhost:3000";
-//    return "http://wwiappdev1.dhbw-stuttgart.de:3000";
+//    return "http://localhost:3000";
+    return "http://wwiappdev1.dhbw-stuttgart.de:3000";
   };
 
   public static get LOREM_IPSUM(): string {

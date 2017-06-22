@@ -4,6 +4,8 @@ import { AppModelService } from "../../providers/app-model-service";
 import { LanguagePopoverPageModelInterface } from "./language-popover.model-interface";
 import { LanguageDataobject } from "../../providers/dataobjects/language.dataobject";
 import { Logger } from "../../app/logger";
+import { GlobalLanguageConfigDataobject } from "../../providers/dataobjects/global-language-config.dataobject";
+import { UserLanguageFilterConfigDataobject } from "../../providers/dataobjects/user-language-filter-config.dataobject";
 
 @IonicPage()
 @Component({
@@ -19,8 +21,8 @@ export class LanguagePopoverPage {
 
   // model objects
   private languagePopoverPageModelInterface: LanguagePopoverPageModelInterface;
-  private allLanguages: Array<LanguageDataobject>;
-  private currentLanguageId: number;
+  private allLanguages: GlobalLanguageConfigDataobject;
+  private selectedLanguage: UserLanguageFilterConfigDataobject;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
   constructor(navCtrl: NavController, navParams: NavParams, viewCtrl: ViewController, appModel: AppModelService) {
@@ -39,19 +41,8 @@ export class LanguagePopoverPage {
    * IONIC LIFECYCLE METHODS
    */
   private ionViewDidLoad() {
-    // get all languages
-    this.languagePopoverPageModelInterface.getAllLanguages().then((data) => {
-      this.allLanguages = data;
-    }, (error) => {
-      Logger.log("Loading all languages failed");
-    });
-
-    // get current language
-    this.languagePopoverPageModelInterface.getCurrentLanguage().then((data) => {
-      this.currentLanguageId = data.languageId;
-    }, (error) => {
-      Logger.log("Loading current language failed");
-    });
+    // load data
+    this.loadData();
   };
 
   private ionViewCanEnter(): Promise<boolean> | boolean {
@@ -61,16 +52,25 @@ export class LanguagePopoverPage {
   /**
    * PAGE METHODS
    */
-   private loadData() {
+  private loadData() {
+    // get current language
+    this.languagePopoverPageModelInterface.getSelectedLanguage().then((data) => {
+      this.selectedLanguage = data;
 
-   };
+      // get all languages
+      this.allLanguages = this.languagePopoverPageModelInterface.getAllLanguages();
+
+    }, (error) => {
+      Logger.log("Loading current language failed (Class: LanguagePopoverPage, Method: loadData()");
+    });
+
+  };
 
   /**
    * NAVIGATION METHODS
    */
   private dismissPopover() {
-    Logger.log(this.currentLanguageId);
-    this.languagePopoverPageModelInterface.setCurrentLanguage(this.currentLanguageId);
+    this.languagePopoverPageModelInterface.setSelectedLanguage(this.selectedLanguage);
     this.viewCtrl.dismiss();
   }
 };

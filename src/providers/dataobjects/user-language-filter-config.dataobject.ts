@@ -1,8 +1,17 @@
-import {LanguageFilterDataobject} from "./language-filter.dataobject";
+import {AppConfig} from "../../app/app-config";
 
 export abstract class UserLanguageFilterConfigDataobject {
 
+  abstract get _id(): string;
+  abstract get selectedLanguage(): number;
 
-  abstract get languageFilters(): Array<LanguageFilterDataobject>;
+
+  public static init(): UserLanguageFilterConfigDataobject {
+    return {
+      "_id": AppConfig.USER_APP_SETTINGS_LANGUAGE_FILTERS,
+      "selectedLanguage": 0
+    }
+  }
+
 
 }

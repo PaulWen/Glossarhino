@@ -14,9 +14,10 @@ import {UserDepartmentFilterConfigDataobject} from "./dataobjects/user-departmen
 import {UserLanguageFilterConfigDataobject} from "./dataobjects/user-language-filter-config.dataobject";
 import {SuperLoginClient} from "./super_login_client/super_login_client";
 import {SuperloginHttpRequester} from "./super_login_client/superlogin_http_requester";
+import {EntryListPageModelInterface} from "../pages/entry-list/entry-list.model-interface";
 
 @Injectable()
-export class AppModelService extends SuperLoginClient implements LoginPageInterface, HomePageModelInterface, LanguagePopoverPageModelInterface {
+export class AppModelService extends SuperLoginClient implements LoginPageInterface, HomePageModelInterface, LanguagePopoverPageModelInterface, EntryListPageModelInterface {
   ////////////////////////////////////////////Properties////////////////////////////////////////////
 
   //////////////Databases////////////
@@ -105,6 +106,8 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   }
 
   public async getSelectedHomePageDepartmentDataobjects(currentLanguageId: number): Promise<Array<HomePageDepartmentDataobject>> {
+    Logger.debug("HALLO");
+
     // initialize data structure which will be returned
     let selectedHomePageDepartmentDataObjects: Array<HomePageDepartmentDataobject> = [];
 
@@ -124,16 +127,24 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
         });
 
         // add result to the list of departments
+        Logger.debug(result.docs.length);
         selectedHomePageDepartmentDataObjects.push(HomePageDepartmentDataobject.init(result.docs.length, GlobalDepartmentConfigDataobject.getDepartmentById(this.globalDepartmentConfig, departmentId)));
 
       } catch (error) {
         Logger.debug(error);
       }
-
-
     }
 
     return selectedHomePageDepartmentDataObjects;
+  }
+
+  //////////////////////////////////////////
+  //  EntryListPageModelInterface Method  //
+  //////////////////////////////////////////
+
+  public async getEntryNameList(searchString: string, selectedLanguage: number, departmentId?: number): Promise<Array<string>> {
+    //TODO
+    return ["Entry1", "Entry2", "Entry3"];
   }
 
   //////////////////////////////////////////
@@ -194,7 +205,6 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     return database;
   }
 
-
   /**
    * This method returns an document with a specific id.
    *
@@ -208,34 +218,6 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     return await pouchDb.get(id);
   }
 
-
-  // /**
-  //  * This function returns all the documents included in the database listed in an array.
-  //  *
-  //  * @return all the documents included in the database listed in an array or null if an error occurred
-  //  */
-  // private async getAllDocuments(): Promise<DocumentType[]> {
-  //   try {
-  //     let documentList: DocumentType[] = [];
-  //
-  //     // load all the documents from the database
-  //     let databaseResponse = await this.database.allDocs({
-  //       include_docs: true,
-  //       attachments: false
-  //     });
-  //
-  //     // put all the documents in a typed array
-  //     for (let i: number = 0; i < databaseResponse.rows.length; i++) {
-  //       documentList[i] = new this.documentCreator(databaseResponse.rows[i].doc, this);
-  //     }
-  //
-  //     // return all the documents in an array
-  //     return documentList;
-  //   } catch (error) {
-  //     Logger.error(error);
-  //     return null;
-  //   }
-  // }
 
   //////////////////////////////////////////
   //            Other Methods             //

@@ -12,6 +12,6 @@ export interface EntryListPageModelInterface {
    */
   isAuthenticated(): Promise<boolean> | boolean;
 
-  getSelectedLanguage: () => Promise<UserLanguageFilterConfigDataobject>;
-  getEntryNameList: (searchString: string, selectedLanguage: number, departmentId?: number) => Promise<Array<string>>;
+  getSelectedLanguage(): Promise<UserLanguageFilterConfigDataobject>;
+  getEntryNameList(searchString: string, selectedLanguage: number, departmentId?: number): Promise<Array<string>>;
 }

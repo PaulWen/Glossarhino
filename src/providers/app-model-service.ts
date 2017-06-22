@@ -1,5 +1,6 @@
 import {Injectable} from "@angular/core";
 import PouchDB from "pouchdb";
+import PouchFind from "pouchdb-find";
 import "rxjs/add/operator/map";
 import {AppConfig} from "../app/app-config";
 import {Logger} from "../app/logger";
@@ -35,6 +36,10 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   constructor(httpRequester: SuperloginHttpRequester) {
     super(httpRequester);
 
+    // load necessary PouchDB Plugins
+    PouchDB.plugin(PouchFind);
+
+    // initialize properties
     this.entryDatabases = new Map<number, any>();
     this.userSettingsDatabase = null;
 
@@ -68,7 +73,18 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
         // once the global app-settings have been loaded...
         // initialize all the entry databases from the different languages
         for (let language of this.globalLanguageConfig.languages) {
-          this.entryDatabases.set(language.languageId, this.initializeDatabase("language_" + language.languageId, user_databases["language_" + language.languageId]));
+          let languageDatabase = this.initializeDatabase("language_" + language.languageId, user_databases["language_" + language.languageId]);
+
+          // add database to list of language databases
+          this.entryDatabases.set(language.languageId, languageDatabase);
+
+          // set indexes of language database for faster search
+          let result = languageDatabase.createIndex({
+            index: {fields: ['departments.departmentId']}
+          });
+
+          Logger.debug("Index!");
+          Logger.debug(result);
         }
       }, (error) => {
         Logger.error(error);

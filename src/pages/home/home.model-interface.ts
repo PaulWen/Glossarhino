@@ -13,7 +13,7 @@ export interface HomePageModelInterface {
    *
    * @returns true or false depending on if the user is already authenticated
    */
-  isAuthenticated(): Promise<boolean> | boolean;
+  isAuthenticated(): Promise<boolean>;
 
   /**
    * The method logs out the user. The current session token gets invalid.

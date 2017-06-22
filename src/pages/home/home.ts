@@ -50,7 +50,7 @@ export class HomePage {
         this.loadData();
     };
 
-    private ionViewCanEnter(): Promise<boolean> | boolean {
+    private ionViewCanEnter(): Promise<boolean> {
         return this.homePageModelInterface.isAuthenticated();
     };
 
@@ -68,6 +68,7 @@ export class HomePage {
                 this.countOfAllEntries = data;
             }, (error) => {
                 Logger.log("Loading all listings failed");
+                Logger.error(error);
             });
 
             // get all departments
@@ -75,10 +76,12 @@ export class HomePage {
                 this.departments = data;
             }, (error) => {
                 Logger.log("Loading selected departments failed");
+                Logger.error(error);
             });
 
         }, (error) => {
             Logger.log("Loading currentLanguage failed");
+            Logger.error(error);
         });
     };
 

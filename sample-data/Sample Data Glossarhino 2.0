@@ -101,11 +101,11 @@ Global App Settings DB
   "_rev": "3-191c871f9cccf88005cd46428f12455a",
   "departments": [
     {
-      "departmentId": "0",
+      "departmentId": 0,
       "departmentName": "Description"
     },
     {
-      "departmentId": "1",
+      "departmentId": 1,
       "departmentName": "Management"
     }
   ]
@@ -118,11 +118,11 @@ Global App Settings DB
   "_rev": "3-360615a3ff649d337a2316de0cab7de1",
   "languages": [
     {
-      "languageId": "0",
+      "languageId": 0,
       "languageName": "German"
     },
     {
-      "languageId": "1",
+      "languageId": 1,
       "languageName": "English"
     }
   ]

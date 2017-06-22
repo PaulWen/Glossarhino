@@ -12,7 +12,7 @@ export interface LanguagePopoverPageModelInterface {
    *
    * @returns true or false depending on if the user is already authenticated
    */
-  isAuthenticated(): Promise<boolean> | boolean;
+  isAuthenticated(): Promise<boolean>;
 
   getAllLanguages: () => GlobalLanguageConfigDataobject;
   getSelectedLanguage(): Promise<UserLanguageFilterConfigDataobject>;

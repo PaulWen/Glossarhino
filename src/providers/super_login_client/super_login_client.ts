@@ -2,10 +2,10 @@ import {Injectable} from "@angular/core";
 import {Observable} from "rxjs/Rx";
 import {AppConfig} from "../../app/app-config";
 import {Logger} from "../../app/logger";
-import {SuperLoginClientDoneResponse} from "./super_login_client_done_reponse";
 import {SuperLoginClientError} from "./super_login_client_error";
-import {SuperLoginClientErrorResponse} from "./super_login_client_error_reponse";
 import {SuperloginHttpRequester} from "./superlogin_http_requester";
+import {SuperLoginClientDoneResponse} from "./super_login_client_done_reponse";
+import {SuperLoginClientErrorResponse} from "./super_login_client_error_reponse";
 
 /**
  * This class is a service which implements TypeScript methods to communicate
@@ -74,7 +74,7 @@ export abstract class SuperLoginClient {
    *
    * @param user_databases array of all user databases and the URL's to those
    */
-  abstract initializeDatabases(user_databases: any): void
+  abstract async initializeDatabases(user_databases: any): Promise<boolean>
 
 
   /**
@@ -82,10 +82,12 @@ export abstract class SuperLoginClient {
    *
    * @returns true or false depending on if the user is already authenticated
    */
-  public isAuthenticated(): Promise<boolean> | boolean {
+  public isAuthenticated(): Promise<boolean> {
     // check if the user is already authenticated
     if (this.authenticated) {
-      return true;
+      return new Promise((resolve, reject)=> {
+        resolve(true);
+      });
 
       // if the user is not yet authenticated try to authenticate him by using the session/local storage data
     } else {
@@ -108,7 +110,9 @@ export abstract class SuperLoginClient {
           );
         }).toPromise();
       } else {
-        return false;
+        return new Promise((resolve, reject)=> {
+          resolve(false);
+        });
       }
     }
   }
@@ -291,8 +295,11 @@ export abstract class SuperLoginClient {
       // if the database names got loaded successfully
       (data: any) => {
         // give the database names to the database initializer
-        this.initializeDatabases(data);
-        done();
+        this.initializeDatabases(data).then((data)=>{
+          done();
+        }, (errorObject)=>{
+          error(errorObject);
+        });
       },
 
       // in case of an error

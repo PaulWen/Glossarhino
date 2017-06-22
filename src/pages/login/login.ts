@@ -34,39 +34,17 @@ export class LoginPage {
     return true;
   }
 
-  private ionViewWillEnter() {
+  private async ionViewWillEnter() {
     console.log("LoginPage check if loged in");
-    let isAuthenticatedResult: Promise<boolean> | boolean = this.model.isAuthenticated();
-
-
-    // test if the returned value is a Promise
-    if (isAuthenticatedResult instanceof Promise) {
-
-      isAuthenticatedResult.then((isAuthenticated: boolean) => {
-        if (isAuthenticated) {
-          // redirect to home page
-          this.navCtrl.setRoot("HomePage").then((canEnterView) => {
-            if (!canEnterView) {
-              // in the case that the view can not be entered redirect the user to the login page
-              this.navCtrl.setRoot("LoginPage");
-            }
-          });
+    if (await this.model.isAuthenticated()) {
+      // redirect to home page
+      this.navCtrl.setRoot("HomePage").then((canEnterView) => {
+        if (!canEnterView) {
+          // in the case that the view can not be entered redirect the user to the login page
+          this.navCtrl.setRoot("LoginPage");
         }
       });
-
-      // otherwise it is a boolean
-    } else {
-      if (isAuthenticatedResult) {
-        // redirect to home page
-        this.navCtrl.setRoot("HomePage").then((canEnterView) => {
-          if (!canEnterView) {
-            // in the case that the view can not be entered redirect the user to the login page
-            this.navCtrl.setRoot("LoginPage");
-          }
-        });
-      }
     }
-
   }
 
 

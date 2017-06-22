@@ -61,35 +61,30 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   //      SuperLoginClient Methods        //
   //////////////////////////////////////////
 
-  public initializeDatabases(user_databases: any): void {
+  public async initializeDatabases(user_databases: any): Promise<boolean> {
     Logger.log(user_databases);
 
     // initialize settings database
     this.userSettingsDatabase = this.initializeDatabase("settings", user_databases.settings);
 
     // load global app settings
-    this.loadGlobalAppSettings(user_databases.application_settings).then(
-      () => {
-        // once the global app-settings have been loaded...
-        // initialize all the entry databases from the different languages
-        for (let language of this.globalLanguageConfig.languages) {
-          let languageDatabase = this.initializeDatabase("language_" + language.languageId, user_databases["language_" + language.languageId]);
+    await this.loadGlobalAppSettings(user_databases.application_settings);
 
-          // add database to list of language databases
-          this.entryDatabases.set(language.languageId, languageDatabase);
+    // once the global app-settings have been loaded...
+    // initialize all the entry databases from the different languages
+    for (let language of this.globalLanguageConfig.languages) {
+      let languageDatabase = this.initializeDatabase("language_" + language.languageId, user_databases["language_" + language.languageId]);
 
-          // set indexes of language database for faster search
-          let result = languageDatabase.createIndex({
-            index: {fields: ['departments.departmentId']}
-          });
+      // add database to list of language databases
+      this.entryDatabases.set(language.languageId, languageDatabase);
 
-          Logger.debug("Index!");
-          Logger.debug(result);
-        }
-      }, (error) => {
-        Logger.error(error);
-      }
-    );
+      // set indexes of language database for faster search
+      languageDatabase.createIndex({
+        index: {fields: ["name"]}
+      });
+    }
+
+    return true;
   }
 
 
@@ -97,14 +92,48 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   //       HomePageInterface Methods      //
   //////////////////////////////////////////
 
-  public getCountOfAllEntries(currentLanguageId: number): Promise<number> {
-    // TODO
-    return null;
+  public async getCountOfAllEntries(currentLanguageId: number): Promise<number> {
+    // load the IDs of all entries that are available in one language
+    let result: any = await this.entryDatabases.get(currentLanguageId).allDocs({
+      include_docs: true,
+      attachments: false,
+      startkey: '_design\uffff'
+    });
+
+    // return the number of entries that are available in the current language
+    return result.rows.length;
   }
 
-  public getSelectedHomePageDepartmentDataobjects(currentLanguageId: number): Promise<Array<HomePageDepartmentDataobject>> {
-    // TODO
-    return null;
+  public async getSelectedHomePageDepartmentDataobjects(currentLanguageId: number): Promise<Array<HomePageDepartmentDataobject>> {
+    // initialize data structure which will be returned
+    let selectedHomePageDepartmentDataObjects: Array<HomePageDepartmentDataobject> = [];
+
+    // load currently selected department
+    let userDepartmentSetting = await this.getUserDepartmentFilterConfigDataobject();
+
+    for (let departmentId of userDepartmentSetting.selectedDepartments) {
+      try {
+        let result: any = await this.entryDatabases.get(currentLanguageId).find({
+          selector: {
+            departments: {
+              $elemMatch: {
+                departmentId: {$eq: departmentId}
+              }
+            }
+          }, fields: ["_id"]
+        });
+
+        // add result to the list of departments
+        selectedHomePageDepartmentDataObjects.push(HomePageDepartmentDataobject.init(result.docs.length, GlobalDepartmentConfigDataobject.getDepartmentById(this.globalDepartmentConfig, departmentId)));
+
+      } catch (error) {
+        Logger.debug(error);
+      }
+
+
+    }
+
+    return selectedHomePageDepartmentDataObjects;
   }
 
   //////////////////////////////////////////
@@ -257,8 +286,16 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
               case 404:
                 // document has not yet been created and has to be created now
                 try {
-                  // return newly created document
-                  resolve(this.userSettingsDatabase.put(UserLanguageFilterConfigDataobject.init()));
+                  // generate initial user department settings
+                  let initialUserLanguageSettings: UserLanguageFilterConfigDataobject = UserLanguageFilterConfigDataobject.init(this.globalLanguageConfig);
+
+                  // create document
+                  this.userSettingsDatabase.put(initialUserLanguageSettings).then((data) => {
+                    // return newly created document as soon as it has been created
+                    resolve(initialUserLanguageSettings);
+                  }, (error) => {
+                    reject(error);
+                  });
                 } catch (error) {
                   reject(error);
                 }
@@ -290,8 +327,16 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
               case 404:
                 // document has not yet been created and has to be created now
                 try {
-                  // return newly created document
-                  resolve(this.userSettingsDatabase.put(UserDepartmentFilterConfigDataobject.init(this.globalDepartmentConfig)));
+                  // generate initial user department settings
+                  let initialUserDepartmentSettings: UserDepartmentFilterConfigDataobject = UserDepartmentFilterConfigDataobject.init(this.globalDepartmentConfig);
+
+                  // create document
+                  this.userSettingsDatabase.put(initialUserDepartmentSettings).then((data) => {
+                    // return newly created document as soon as it has been created
+                    resolve(initialUserDepartmentSettings);
+                  }, (error) => {
+                    reject(error);
+                  });
                 } catch (error) {
                   reject(error);
                 }

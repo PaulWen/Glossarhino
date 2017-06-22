@@ -1,4 +1,3 @@
-import {DepartmentFilterDataobject} from "./department-filter.dataobject";
 import {AppConfig} from "../../app/app-config";
 import {GlobalDepartmentConfigDataobject} from "./global-department-config.dataobject";
 

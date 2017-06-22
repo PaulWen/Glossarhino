@@ -45,7 +45,7 @@ export class LanguagePopoverPage {
     this.loadData();
   };
 
-  private ionViewCanEnter(): Promise<boolean> | boolean {
+  private ionViewCanEnter(): Promise<boolean> {
     return this.languagePopoverPageModelInterface.isAuthenticated();
   }
 

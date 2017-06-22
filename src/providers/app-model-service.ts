@@ -80,9 +80,9 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
       this.entryDatabases.set(language.languageId, languageDatabase);
 
       // set indexes of language database for faster search
-      languageDatabase.createIndex({
-        index: {fields: ["name"]}
-      });
+//      languageDatabase.createIndex({
+//        index: {fields: ["name"]}
+//      });
     }
 
     return true;
@@ -106,8 +106,6 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   }
 
   public async getSelectedHomePageDepartmentDataobjects(currentLanguageId: number): Promise<Array<HomePageDepartmentDataobject>> {
-    Logger.debug("HALLO");
-
     // initialize data structure which will be returned
     let selectedHomePageDepartmentDataObjects: Array<HomePageDepartmentDataobject> = [];
 
@@ -118,20 +116,17 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
       try {
         let result: any = await this.entryDatabases.get(currentLanguageId).find({
           selector: {
-            departments: {
-              $elemMatch: {
-                departmentId: {$eq: departmentId}
-              }
+            relatedDepartments: {
+              $in: [departmentId]
             }
           }, fields: ["_id"]
         });
 
         // add result to the list of departments
-        Logger.debug(result.docs.length);
         selectedHomePageDepartmentDataObjects.push(HomePageDepartmentDataobject.init(result.docs.length, GlobalDepartmentConfigDataobject.getDepartmentById(this.globalDepartmentConfig, departmentId)));
 
       } catch (error) {
-        Logger.debug(error);
+        Logger.error(error);
       }
     }
 
@@ -143,8 +138,36 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   //////////////////////////////////////////
 
   public async getEntryNameList(searchString: string, selectedLanguage: number, departmentId?: number): Promise<Array<string>> {
-    //TODO
-    return ["Entry1", "Entry2", "Entry3"];
+    // initialize data structure which will be returned
+    let entryNames: Array<string> = [];
+
+    // load data from database
+    try {
+      let selector: any = {};
+
+      // search only for entries where the name starts as the search string (based on a regular expression)
+      let regexp = new RegExp("^" + searchString ? searchString : "", 'i');
+      selector.name = {$regex: regexp};
+
+      // if departmentId is defined search only for entries that are relevant for the specific department
+      if (departmentId) {
+        selector.relatedDepartments = {
+          $in: [departmentId]
+        };
+      }
+
+      let result: any = await this.entryDatabases.get(selectedLanguage).find({
+        selector: selector, fields: ["_id", "name"]
+      });
+
+      // return data
+
+      Logger.debug(result.docs);
+      return result.docs;
+    } catch (error) {
+      Logger.error(error);
+      return null;
+    }
   }
 
   //////////////////////////////////////////

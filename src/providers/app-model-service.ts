@@ -5,11 +5,9 @@ import {AppConfig} from "../app/app-config";
 import {Logger} from "../app/logger";
 import {HomePageModelInterface} from "../pages/home/home.model-interface";
 import {LoginPageInterface} from "../pages/login/login-interface";
-import {DepartmentFilterDataobject} from "./dataobjects/department-filter.dataobject";
 import {GlobalDepartmentConfigDataobject} from "./dataobjects/global-department-config.dataobject";
 import {GlobalLanguageConfigDataobject} from "./dataobjects/global-language-config.dataobject";
 import {HomePageDepartmentDataobject} from "./dataobjects/homepage.department.dataobject";
-import {LanguageDataobject} from "./dataobjects/language.dataobject";
 import {UserDepartmentFilterConfigDataobject} from "./dataobjects/user-department-filter-config.dataobject";
 import {UserLanguageFilterConfigDataobject} from "./dataobjects/user-language-filter-config.dataobject";
 import {SuperLoginClient} from "./super_login_client/super_login_client";
@@ -49,9 +47,8 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   //            Shared Methods            //
   //////////////////////////////////////////
 
-  public async getCurrentLanguage(): Promise<LanguageDataobject> {
-    let userLanguageFilters: UserLanguageFilterConfigDataobject = await this.getUserLanguageFilterConfigDataobject();
-    return this.globalLanguageConfig.getLanguageDataObjectById(UserLanguageFilterConfigDataobject.getCurrentLanguageId(userLanguageFilters));
+  public async getCurrentLanguageId(): Promise<UserLanguageFilterConfigDataobject> {
+    return await this.getUserLanguageFilterConfigDataobject();
   }
 
   //////////////////////////////////////////
@@ -120,23 +117,14 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   // LanguagePopoverPageInterface Methods //
   //////////////////////////////////////////
 
- public async getAllLanguages(): Promise<Array<LanguageDataobject>> {
-        let allLanguages: Array<LanguageDataobject> = [
-            {
-                languageId: 0,
-                languageName: "English"
-            }, {
-                languageId: 1,
-                languageName: "German"
-            }
-        ];
-        return allLanguages;
-    }
+  public getAllLanguages(): GlobalLanguageConfigDataobject {
+    return this.globalLanguageConfig;
+  }
 
-    public async setCurrentLanguage(currentLanguageId: number): Promise<boolean> {
-        Logger.log(currentLanguageId);
-        return true;
-    }
+  public async setCurrentLanguage(currentLanguageId: number): Promise<boolean> {
+    Logger.log(currentLanguageId);
+    return true;
+  }
 
   //////////////////////////////////////////
   //      FilterModalInterface Methods    //
@@ -257,7 +245,6 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   }
 
 
-
   /**
    * This function gets the current {@link UserLanguageFilterConfigDataobject} of the user.
    * If it is not yet created in the database this function will create it.
@@ -276,7 +263,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
                 // document has not yet been created and has to be created now
                 try {
                   // return newly created document
-                  resolve(this.userSettingsDatabase.put(UserLanguageFilterConfigDataobject.init(this.globalLanguageConfig)));
+                  resolve(this.userSettingsDatabase.put(UserLanguageFilterConfigDataobject.init()));
                 } catch (error) {
                   reject(error);
                 }

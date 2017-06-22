@@ -4,19 +4,18 @@ import "rxjs/add/operator/map";
 import {AppConfig} from "../app/app-config";
 import {Logger} from "../app/logger";
 import {HomePageModelInterface} from "../pages/home/home.model-interface";
+import {LanguagePopoverPageModelInterface} from "../pages/language-popover/language-popover.model-interface";
 import {LoginPageInterface} from "../pages/login/login-interface";
-import {DepartmentFilterDataobject} from "./dataobjects/department-filter.dataobject";
 import {GlobalDepartmentConfigDataobject} from "./dataobjects/global-department-config.dataobject";
 import {GlobalLanguageConfigDataobject} from "./dataobjects/global-language-config.dataobject";
 import {HomePageDepartmentDataobject} from "./dataobjects/homepage.department.dataobject";
-import {LanguageDataobject} from "./dataobjects/language.dataobject";
 import {UserDepartmentFilterConfigDataobject} from "./dataobjects/user-department-filter-config.dataobject";
 import {UserLanguageFilterConfigDataobject} from "./dataobjects/user-language-filter-config.dataobject";
 import {SuperLoginClient} from "./super_login_client/super_login_client";
 import {SuperloginHttpRequester} from "./super_login_client/superlogin_http_requester";
 
 @Injectable()
-export class AppModelService extends SuperLoginClient implements LoginPageInterface, HomePageModelInterface {
+export class AppModelService extends SuperLoginClient implements LoginPageInterface, HomePageModelInterface, LanguagePopoverPageModelInterface {
   ////////////////////////////////////////////Properties////////////////////////////////////////////
 
   //////////////Databases////////////
@@ -49,9 +48,8 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   //            Shared Methods            //
   //////////////////////////////////////////
 
-  public async getCurrentLanguage(): Promise<LanguageDataobject> {
-    let userLanguageFilters: UserLanguageFilterConfigDataobject = await this.getUserLanguageFilterConfigDataobject();
-    return this.globalLanguageConfig.getLanguageDataObjectById(UserLanguageFilterConfigDataobject.getCurrentLanguageId(userLanguageFilters));
+  public async getSelectedLanguage(): Promise<UserLanguageFilterConfigDataobject> {
+    return await this.getUserLanguageFilterConfigDataobject();
   }
 
   //////////////////////////////////////////
@@ -83,33 +81,14 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   //       HomePageInterface Methods      //
   //////////////////////////////////////////
 
-  public async getAllDepartments(): Promise<Array<HomePageDepartmentDataobject>> {
-    let departments: Array<HomePageDepartmentDataobject>;
-    departments = [
-      {
-        departmentId: 1,
-        departmentName: "Management",
-        filter: false,
-        listings: 42
-      }, {
-        departmentId: 2,
-        departmentName: "Marketing",
-        filter: true,
-        listings: 56
-      }, {
-        departmentId: 3,
-        departmentName: "Production",
-        filter: true,
-        listings: 69
-      }
-    ];
+  public getCountOfAllEntries(currentLanguageId: number): Promise<number> {
+    // TODO
+    return null;
+  }
 
-    return departments;
-  };
-
-  public async getAllListings(currentLanguageId: number): Promise<number> {
-    Logger.log("currentLanguageId: " + currentLanguageId);
-    return 102;
+  public getSelectedHomePageDepartmentDataobjects(currentLanguageId: number): Promise<Array<HomePageDepartmentDataobject>> {
+    // TODO
+    return null;
   }
 
   //////////////////////////////////////////
@@ -120,30 +99,18 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   // LanguagePopoverPageInterface Methods //
   //////////////////////////////////////////
 
- public async getAllLanguages(): Promise<Array<LanguageDataobject>> {
-        let allLanguages: Array<LanguageDataobject> = [
-            {
-                languageId: 0,
-                languageName: "English"
-            }, {
-                languageId: 1,
-                languageName: "German"
-            }
-        ];
-        return allLanguages;
-    }
+  public getAllLanguages(): GlobalLanguageConfigDataobject {
+    return this.globalLanguageConfig;
+  }
 
-    public async setCurrentLanguage(currentLanguageId: number): Promise<boolean> {
-        Logger.log(currentLanguageId);
-        return true;
-    }
+  public setSelectedLanguage(userLanguageSetting: UserLanguageFilterConfigDataobject): Promise<UserLanguageFilterConfigDataobject> {
+    return this.userSettingsDatabase.put(userLanguageSetting);
+  }
 
-  //////////////////////////////////////////
+//////////////////////////////////////////
   //      FilterModalInterface Methods    //
   //////////////////////////////////////////
 
-  public setDepartmentFilter(departmentFilter: Array<DepartmentFilterDataobject>) {
-  };
 
   //////////////////////////////////////////
   //       EditModalInterface Methods     //
@@ -257,7 +224,6 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   }
 
 
-
   /**
    * This function gets the current {@link UserLanguageFilterConfigDataobject} of the user.
    * If it is not yet created in the database this function will create it.
@@ -276,7 +242,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
                 // document has not yet been created and has to be created now
                 try {
                   // return newly created document
-                  resolve(this.userSettingsDatabase.put(UserLanguageFilterConfigDataobject.init(this.globalLanguageConfig)));
+                  resolve(this.userSettingsDatabase.put(UserLanguageFilterConfigDataobject.init()));
                 } catch (error) {
                   reject(error);
                 }

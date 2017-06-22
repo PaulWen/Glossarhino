@@ -135,17 +135,8 @@ User Settings DB
 //////////Departments Filter///////////////
 {
   "_id": "department-filters",
-  "_rev": "1-244da39d6fcd73cf6198ddbd10fa12a6",
-  "departmentFilters": [
-    {
-      "departmentId": 0,
-      "filtered": true
-    },
-    {
-      "departmentId": 1,
-      "filtered": false
-    }
-  ]
+  "_rev": "3-8ed21602060fe60f2680c40c1b02cde9",
+  "selectedDepartments": [0,1]
 }
 
 //////////////Language Filter//////////////////////

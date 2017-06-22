@@ -1,0 +1,29 @@
+<ion-header>
+
+  <ion-navbar>
+
+    <!-- Menu toggle for burger menu -->
+    <button ion-button icon-only menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+
+    <!-- Searchbar, if unhidden Title and Buttons(end) will be hidden -->
+    <ion-searchbar #searchbar placeholder="Search entries" autocorrect="off" type="text"
+                   [(ngModel)]="searchText" showCancelButton="false"
+                   (ionInput)="loadData()">
+    </ion-searchbar>
+
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding>
+
+  <!-- Print list with all entries retreived in department -->
+  <ion-list>
+    <button ion-item *ngFor="let entry of entryList" (click)="pushEntry(entry)">
+      {{ entry }}
+    </button>
+  </ion-list>
+
+</ion-content>

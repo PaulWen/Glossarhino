@@ -57,12 +57,12 @@ export class HomePage {
     /**
      * PAGE METHODS
      */
-    private async loadData() {
-        // get current language
+    private loadData() {
+        // get selected language
         this.homePageModelInterface.getSelectedLanguage().then((data) => {
             this.selectedLanguage = data;
+            
             // load other data as soon as language loaded
-
             // get all listings
             this.homePageModelInterface.getCountOfAllEntries(this.selectedLanguage.selectedLanguage).then((data) => {
                 this.countOfAllEntries = data;
@@ -71,7 +71,7 @@ export class HomePage {
                 Logger.error(error);
             });
 
-            // get all departments
+            // get selected departments
             this.homePageModelInterface.getSelectedHomePageDepartmentDataobjects(this.selectedLanguage.selectedLanguage).then((data) => {
                 this.departments = data;
             }, (error) => {
@@ -106,9 +106,10 @@ export class HomePage {
      * navigate to entry list and hand over department
      * @param departmentId
      */
-    private pushList(departmentId?: number) {
+    private pushList(departmentId: number, departmentName?: string) {
         this.navCtrl.push("EntryListPage", {
-            departmentId: departmentId
+            departmentId: departmentId,
+            departmentName: departmentName
         }).then((canEnterView) => {
             if (!canEnterView) {
                 // in the case that the view can not be entered redirect the user to the login page

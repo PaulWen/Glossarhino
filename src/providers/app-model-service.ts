@@ -4,17 +4,18 @@ import "rxjs/add/operator/map";
 import {AppConfig} from "../app/app-config";
 import {Logger} from "../app/logger";
 import {HomePageModelInterface} from "../pages/home/home.model-interface";
+import {LanguagePopoverPageModelInterface} from "../pages/language-popover/language-popover.model-interface";
 import {LoginPageInterface} from "../pages/login/login-interface";
 import {GlobalDepartmentConfigDataobject} from "./dataobjects/global-department-config.dataobject";
 import {GlobalLanguageConfigDataobject} from "./dataobjects/global-language-config.dataobject";
-import {HomePageDepartmentDataobject} from "./dataobjects/homepage.department.dataobject";
 import {UserDepartmentFilterConfigDataobject} from "./dataobjects/user-department-filter-config.dataobject";
 import {UserLanguageFilterConfigDataobject} from "./dataobjects/user-language-filter-config.dataobject";
 import {SuperLoginClient} from "./super_login_client/super_login_client";
 import {SuperloginHttpRequester} from "./super_login_client/superlogin_http_requester";
+import {HomePageDepartmentDataobject} from "./dataobjects/homepage.department.dataobject";
 
 @Injectable()
-export class AppModelService extends SuperLoginClient implements LoginPageInterface, HomePageModelInterface {
+export class AppModelService extends SuperLoginClient implements LoginPageInterface, HomePageModelInterface, LanguagePopoverPageModelInterface {
   ////////////////////////////////////////////Properties////////////////////////////////////////////
 
   //////////////Databases////////////
@@ -47,9 +48,10 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   //            Shared Methods            //
   //////////////////////////////////////////
 
-  public async getCurrentLanguageId(): Promise<UserLanguageFilterConfigDataobject> {
+  public async getCurrentLanguage(): Promise<UserLanguageFilterConfigDataobject> {
     return await this.getUserLanguageFilterConfigDataobject();
   }
+
 
   //////////////////////////////////////////
   //      SuperLoginClient Methods        //
@@ -80,36 +82,16 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   //       HomePageInterface Methods      //
   //////////////////////////////////////////
 
-  public async getAllDepartments(): Promise<Array<HomePageDepartmentDataobject>> {
-    let departments: Array<HomePageDepartmentDataobject>;
-    departments = [
-      {
-        departmentId: 1,
-        departmentName: "Management",
-        filter: false,
-        listings: 42
-      }, {
-        departmentId: 2,
-        departmentName: "Marketing",
-        filter: true,
-        listings: 56
-      }, {
-        departmentId: 3,
-        departmentName: "Production",
-        filter: true,
-        listings: 69
-      }
-    ];
-
-    return departments;
-  };
-
   public async getAllListings(currentLanguageId: number): Promise<number> {
     Logger.log("currentLanguageId: " + currentLanguageId);
     return 102;
   }
 
-  //////////////////////////////////////////
+  getSelectedHomePageDepartmentDataobjects(currentLanguageId: number): Promise<Array<HomePageDepartmentDataobject>> {
+    return null;
+  }
+
+//////////////////////////////////////////
   //     SingleEntryInterface Methods     //
   //////////////////////////////////////////
 
@@ -121,17 +103,14 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     return this.globalLanguageConfig;
   }
 
-  public async setCurrentLanguage(currentLanguageId: number): Promise<boolean> {
-    Logger.log(currentLanguageId);
-    return true;
+  public setCurrentLanguage(userLanguageSetting: UserLanguageFilterConfigDataobject): Promise<UserLanguageFilterConfigDataobject> {
+    return this.userSettingsDatabase.put(userLanguageSetting);
   }
 
   //////////////////////////////////////////
   //      FilterModalInterface Methods    //
   //////////////////////////////////////////
 
-  public setDepartmentFilter(departmentFilter: Array<DepartmentFilterDataobject>) {
-  };
 
   //////////////////////////////////////////
   //       EditModalInterface Methods     //

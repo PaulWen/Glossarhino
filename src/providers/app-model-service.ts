@@ -161,8 +161,6 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
       });
 
       // return data
-
-      Logger.debug(result.docs);
       return result.docs;
     } catch (error) {
       Logger.error(error);

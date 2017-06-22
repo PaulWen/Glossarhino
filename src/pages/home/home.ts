@@ -58,8 +58,27 @@ export class HomePage {
      */
     private async loadData() {
         // get current language
-        this.currentLanguage = await this.homePageModelInterface.getCurrentLanguage();
+        this.homePageModelInterface.getCurrentLanguage().then((data) => {
+            this.currentLanguage = data;
+            // load other data as soon as language loaded
 
+            // get all listings
+            this.homePageModelInterface.getAllListings(this.currentLanguage.languageId).then((data) => {
+                this.allListings = data;
+            }, (error) => {
+                Logger.log("Loading all listings failed");
+            });
+
+            // get all departments
+            this.homePageModelInterface.getAllDepartments(this.currentLanguage.languageId).then((data) => {
+                this.departments = data;
+            }, (error) => {
+                Logger.log("Loading all departments failed");
+            });
+            
+        }, (error) => {
+            Logger.log("Loading all listings failed");
+        });
 
         // get all listings
         this.homePageModelInterface.getAllListings(this.currentLanguage.languageId).then((data) => {

@@ -1,10 +1,10 @@
-import {DepartmentEntryDescriptionDataobject} from "./department-entry-description.dataobject";
-import { AttachmentDataobject } from "./attachment.dataobject";
+import { DepartmentEntrySpecificsDataobject } from "./department-entry-description.dataobject";
+import { AttachmentDataObject } from "./attachment.dataobject";
 
 /**
  * EntryDataobject class for usage in model and controller. Class defines how entries should be specified
  */
-export abstract class EntryDataobject {
+export abstract class EntryDataObject {
   abstract get _id(): string;
 
   abstract get name(): string;
@@ -13,9 +13,15 @@ export abstract class EntryDataobject {
   abstract get description(): string;
   abstract set description(description: string);
 
+  abstract get contact(): string;
+  abstract set contact(contact: string);
+
+  abstract get email(): string;
+  abstract set email(email: string);
+
   abstract get relatedDepartments(): Array<number>;
 
-  abstract get attachments(): Array<AttachmentDataobject>;
+  abstract get attachments(): Array<AttachmentDataObject>;
 
-  abstract get departmentSpecifics(): Array<DepartmentEntryDescriptionDataobject>;
+  abstract get departmentSpecifics(): Array<DepartmentEntrySpecificsDataobject>;
 }

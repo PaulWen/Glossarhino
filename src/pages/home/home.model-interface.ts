@@ -2,7 +2,7 @@ import { SuperLoginClientDoneResponse } from "../../providers/super_login_client
 import { SuperLoginClientErrorResponse } from "../../providers/super_login_client/super_login_client_error_reponse";
 import { LanguageDataobject } from "../../providers/dataobjects/language.dataobject";
 import { HomePageDepartmentDataobject } from "../../providers/dataobjects/homepage.department.dataobject";
-import { UserLanguageFilterConfigDataobject } from "../../providers/dataobjects/user-language-filter-config.dataobject";
+import { UserLanguageFilterConfigDataObject } from "../../providers/dataobjects/user-language-filter-config.dataobject";
 /**
  * Interface to define what HomePage needs implemented in order to work
  */
@@ -23,7 +23,7 @@ export interface HomePageModelInterface {
    */
   logout(done: SuperLoginClientDoneResponse, error: SuperLoginClientErrorResponse): void;
 
-  getSelectedLanguage(): Promise<UserLanguageFilterConfigDataobject>;
+  getSelectedLanguage(): Promise<UserLanguageFilterConfigDataObject>;
   getSelectedHomePageDepartmentDataobjects(currentLanguageId: number): Promise<Array<HomePageDepartmentDataobject>>;
   getCountOfAllEntries(selectedLanguage: number): Promise<number>;
 }

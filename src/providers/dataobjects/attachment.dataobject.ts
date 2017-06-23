@@ -1,7 +1,7 @@
 /**
  * AttachmentDataobject class for usage in model and controller. Class specifies attachments
  */
-export abstract class AttachmentDataobject {
+export abstract class AttachmentDataObject {
 
   abstract get name(): string;
 

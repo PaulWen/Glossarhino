@@ -5,7 +5,7 @@ import { LanguagePopoverPageModelInterface } from "./language-popover.model-inte
 import { LanguageDataobject } from "../../providers/dataobjects/language.dataobject";
 import { Logger } from "../../app/logger";
 import { GlobalLanguageConfigDataobject } from "../../providers/dataobjects/global-language-config.dataobject";
-import { UserLanguageFilterConfigDataobject } from "../../providers/dataobjects/user-language-filter-config.dataobject";
+import { UserLanguageFilterConfigDataObject } from "../../providers/dataobjects/user-language-filter-config.dataobject";
 
 @IonicPage()
 @Component({
@@ -22,7 +22,7 @@ export class LanguagePopoverPage {
   // model objects
   private languagePopoverPageModelInterface: LanguagePopoverPageModelInterface;
   private allLanguages: GlobalLanguageConfigDataobject;
-  private selectedLanguageDataObject: UserLanguageFilterConfigDataobject;
+  private selectedLanguageDataObject: UserLanguageFilterConfigDataObject;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
   constructor(navCtrl: NavController, navParams: NavParams, viewCtrl: ViewController, appModel: AppModelService) {

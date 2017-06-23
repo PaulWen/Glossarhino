@@ -2,7 +2,7 @@ import { Component, ViewChild } from "@angular/core";
 import { IonicPage, NavController, NavParams, Searchbar } from "ionic-angular";
 import { AppModelService } from "../../providers/app-model-service";
 import { EntryListPageModelInterface } from "./entry-list.model-interface";
-import { UserLanguageFilterConfigDataobject } from "../../providers/dataobjects/user-language-filter-config.dataobject";
+import { UserLanguageFilterConfigDataObject } from "../../providers/dataobjects/user-language-filter-config.dataobject";
 import { Logger } from "../../app/logger";
 import { EntryListPageEntryDataObject } from "../../providers/dataobjects/entrylistpage.entry.dataobject";
 
@@ -25,7 +25,7 @@ export class EntryListPage {
   // model objects
   private entryListPageModelInterface: EntryListPageModelInterface;
   private entryList: Array<EntryListPageEntryDataObject>;
-  private selectedLanguageDataObject: UserLanguageFilterConfigDataobject;
+  private selectedLanguageDataObject: UserLanguageFilterConfigDataObject;
 
   // searchText from searchbar
   private searchText: string;

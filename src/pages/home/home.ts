@@ -5,7 +5,7 @@ import { SuperLoginClientError } from "../../providers/super_login_client/super_
 import { HomePageDepartmentDataobject } from "../../providers/dataobjects/homepage.department.dataobject"
 import { HomePageModelInterface } from "./home.model-interface";
 import { Logger } from "../../app/logger";
-import { UserLanguageFilterConfigDataobject } from "../../providers/dataobjects/user-language-filter-config.dataobject";
+import { UserLanguageFilterConfigDataObject } from "../../providers/dataobjects/user-language-filter-config.dataobject";
 
 @IonicPage()
 @Component({
@@ -24,7 +24,7 @@ export class HomePage {
 
     // dataobjects
     private departments: Array<HomePageDepartmentDataobject>;
-    private selectedLanguageDataObject: UserLanguageFilterConfigDataobject;
+    private selectedLanguageDataObject: UserLanguageFilterConfigDataObject;
     private countOfAllEntries: number;
 
     ////////////////////////////////////////////Constructor////////////////////////////////////////////

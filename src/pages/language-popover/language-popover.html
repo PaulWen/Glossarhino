@@ -1,10 +1,10 @@
-<ion-list radio-group [(ngModel)]="selectedLanguage.selectedLanguage">
+<ion-list radio-group [ngModel]="selectedLanguageDataObject?.selectedLanguage" (ngModelChange)="selectedLanguageDataObject.selectedLanguage = $event">
 
   <ion-list-header>
     Language
   </ion-list-header>
 
-  <ion-item *ngFor="let language of allLanguages">
+  <ion-item *ngFor="let language of allLanguages?.languages">
     <ion-label>{{ language.languageName }}</ion-label>
     <ion-radio value="{{language.languageId}}" (ionSelect)="dismissPopover()"></ion-radio>
   </ion-item>

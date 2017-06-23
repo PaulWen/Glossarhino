@@ -22,7 +22,7 @@ export class LanguagePopoverPage {
   // model objects
   private languagePopoverPageModelInterface: LanguagePopoverPageModelInterface;
   private allLanguages: GlobalLanguageConfigDataobject;
-  private selectedLanguage: UserLanguageFilterConfigDataobject;
+  private selectedLanguageDataObject: UserLanguageFilterConfigDataobject;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
   constructor(navCtrl: NavController, navParams: NavParams, viewCtrl: ViewController, appModel: AppModelService) {
@@ -55,7 +55,7 @@ export class LanguagePopoverPage {
   private loadData() {
     // get current language
     this.languagePopoverPageModelInterface.getSelectedLanguage().then((data) => {
-      this.selectedLanguage = data;
+      this.selectedLanguageDataObject = data;
 
       // get all languages
       this.allLanguages = this.languagePopoverPageModelInterface.getAllLanguages();
@@ -70,7 +70,7 @@ export class LanguagePopoverPage {
    * NAVIGATION METHODS
    */
   private dismissPopover() {
-    this.languagePopoverPageModelInterface.setSelectedLanguage(this.selectedLanguage);
+    this.languagePopoverPageModelInterface.setSelectedLanguage(this.selectedLanguageDataObject);
     this.viewCtrl.dismiss();
   }
 };

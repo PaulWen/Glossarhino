@@ -14,7 +14,7 @@ export interface LanguagePopoverPageModelInterface {
    */
   isAuthenticated(): Promise<boolean>;
 
-  getAllLanguages: () => GlobalLanguageConfigDataobject;
+  getAllLanguages(): GlobalLanguageConfigDataobject;
   getSelectedLanguage(): Promise<UserLanguageFilterConfigDataobject>;
   setSelectedLanguage(userLanguageSetting: UserLanguageFilterConfigDataobject): Promise<UserLanguageFilterConfigDataobject>;
 }

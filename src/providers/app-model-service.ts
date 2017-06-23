@@ -1,24 +1,26 @@
-import {Injectable} from "@angular/core";
+import { Injectable } from "@angular/core";
 import PouchDB from "pouchdb";
 import PouchFind from "pouchdb-find";
 import "rxjs/add/operator/map";
-import {AppConfig} from "../app/app-config";
-import {Logger} from "../app/logger";
-import {HomePageModelInterface} from "../pages/home/home.model-interface";
-import {LanguagePopoverPageModelInterface} from "../pages/language-popover/language-popover.model-interface";
-import {LoginPageInterface} from "../pages/login/login-interface";
-import {GlobalDepartmentConfigDataobject} from "./dataobjects/global-department-config.dataobject";
-import {GlobalLanguageConfigDataobject} from "./dataobjects/global-language-config.dataobject";
-import {HomePageDepartmentDataobject} from "./dataobjects/homepage.department.dataobject";
-import {UserDepartmentFilterConfigDataobject} from "./dataobjects/user-department-filter-config.dataobject";
-import {UserLanguageFilterConfigDataobject} from "./dataobjects/user-language-filter-config.dataobject";
-import {SuperLoginClient} from "./super_login_client/super_login_client";
-import {SuperloginHttpRequester} from "./super_login_client/superlogin_http_requester";
-import {EntryListPageModelInterface} from "../pages/entry-list/entry-list.model-interface";
+import { AppConfig } from "../app/app-config";
+import { Logger } from "../app/logger";
+import { HomePageModelInterface } from "../pages/home/home.model-interface";
+import { LanguagePopoverPageModelInterface } from "../pages/language-popover/language-popover.model-interface";
+import { LoginPageInterface } from "../pages/login/login-interface";
+import { GlobalDepartmentConfigDataobject } from "./dataobjects/global-department-config.dataobject";
+import { GlobalLanguageConfigDataobject } from "./dataobjects/global-language-config.dataobject";
+import { HomePageDepartmentDataobject } from "./dataobjects/homepage.department.dataobject";
+import { UserDepartmentFilterConfigDataobject } from "./dataobjects/user-department-filter-config.dataobject";
+import { UserLanguageFilterConfigDataObject } from "./dataobjects/user-language-filter-config.dataobject";
+import { SuperLoginClient } from "./super_login_client/super_login_client";
+import { SuperloginHttpRequester } from "./super_login_client/superlogin_http_requester";
+import { EntryListPageModelInterface } from "../pages/entry-list/entry-list.model-interface";
 import { EntryListPageEntryDataObject } from "./dataobjects/entrylistpage.entry.dataobject";
+import { SingleEntryPageModelInterface } from "../pages/single-entry/single-entry.model-interface";
+import { EntryDataObject } from "./dataobjects/entry.dataobject";
 
 @Injectable()
-export class AppModelService extends SuperLoginClient implements LoginPageInterface, HomePageModelInterface, LanguagePopoverPageModelInterface, EntryListPageModelInterface {
+export class AppModelService extends SuperLoginClient implements LoginPageInterface, HomePageModelInterface, LanguagePopoverPageModelInterface, EntryListPageModelInterface, SingleEntryPageModelInterface {
   ////////////////////////////////////////////Properties////////////////////////////////////////////
 
   //////////////Databases////////////
@@ -55,7 +57,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   //            Shared Methods            //
   //////////////////////////////////////////
 
-  public async getSelectedLanguage(): Promise<UserLanguageFilterConfigDataobject> {
+  public async getSelectedLanguage(): Promise<UserLanguageFilterConfigDataObject> {
     return await this.getUserLanguageFilterConfigDataobject();
   }
 
@@ -81,9 +83,9 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
       this.entryDatabases.set(language.languageId, languageDatabase);
 
       // set indexes of language database for faster search
-//      languageDatabase.createIndex({
-//        index: {fields: ["name"]}
-//      });
+      //      languageDatabase.createIndex({
+      //        index: {fields: ["name"]}
+      //      });
     }
 
     return true;
@@ -148,7 +150,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
 
       // search only for entries where the name starts as the search string (based on a regular expression)
       let regexp = new RegExp("^" + searchString ? searchString : "", 'i');
-      selector.name = {$regex: regexp};
+      selector.name = { $regex: regexp };
 
       // if departmentId is defined search only for entries that are relevant for the specific department
       if (departmentId) {
@@ -173,6 +175,60 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   //     SingleEntryInterface Methods     //
   //////////////////////////////////////////
 
+  public async getEntryDataobject(_id: string, languageId: number): Promise<EntryDataObject> {
+    let entryDataObject: EntryDataObject = {
+      _id: "6766f814e6011eae9ef28f8c5c00013b",
+      name: "P-Freigabe",
+      description: "Die P-Freigabe (Produktionsfreigabe) wird benutzt als verbindliche Freigabe zum Anfragen, Beauftragen und Erstellen von Serienprodukti- onsmitteln. Die Freigabe des Konstruktionsstandes erfolgt immer bau- teilspezifisch. Es wird hierbei nicht zwischen einer Freigabe zur Anfrage und Beauftragung und einer weiteren Freigabe zur Erstellung (sog. 'Fräsfreigabe') unterschieden. Zeitlich/inhaltlich ist diese Freigabe im Normalfall im Anschluss an eine erfolgreiche C-Muster-Rafferprobung mit genügend Erfahrung aus der Dauerlauf-/Zuverlässigkeitserprobung positioniert.",
+      contact: "Max Mustermann",
+      email: "max.mustermann@lehre.dhbw-stuttgart.de",
+      relatedDepartments: [
+        0,
+        1,
+        2,
+        3,
+        5
+      ],
+      attachments: [
+        {
+          name: "Test Image",
+          url: "https://c1.staticflickr.com/6/5337/8940995208_5da979c52f.jpg"
+        },
+        {
+          name: "DHBW Broschüre",
+          url: "http://www.dhbw.de/fileadmin/user_upload/Dokumente/Hochschulkommunikation/DHBW_Imagebroschuere_web.pdf"
+        }
+      ],
+      departmentSpecifics: [
+        {
+          departmentId: 1,
+          description: "Problematisch an der P-Freigabe ist, dass sie von der Entwicklung einen verbindlichen Zeichnungsstand erfordert, der im Nachhinein nur noch sehr eingeschränkt geändert werden kann.",
+          contact: "Max Mustermann",
+          email: "max.mustermann@dhbw-stuttgart.de"
+        },
+        {
+          departmentId: 2,
+          description: "Für uns ist es wichtig, dass die P-Freigabe möglichst früh im Produktentstehungsprozess von der Entwicklung gegeben wird. Dies ermöglicht uns eine frühzeitige Beschaffung von Maschinen, sodass wir termingerecht mit der Produktion starten können.",
+          contact: "Max Mustermann",
+          email: "max.mustermann@dhbw-stuttgart.de"
+        },
+        {
+          departmentId: 3,
+          description: "Eine möglichst frühzeitige P-Freigabe hilft uns im Einkauf, um rechtzeitig Maschinen zu guten Preisen beschaffen zu können.",
+          contact: "Max Mustermann",
+          email: "max.mustermann@dhbw-stuttgart.de"
+        },
+        {
+          departmentId: 5,
+          description: "Die P-Freigabe ist von uns von keiner besonderen Relevanz.",
+          contact: "Max Mustermann",
+          email: "max.mustermann@dhbw-stuttgart.de"
+        }
+      ]
+    };
+    return entryDataObject;
+  };
+
   //////////////////////////////////////////
   // LanguagePopoverPageInterface Methods //
   //////////////////////////////////////////
@@ -181,11 +237,11 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     return this.globalLanguageConfig;
   }
 
-  public setSelectedLanguage(userLanguageSetting: UserLanguageFilterConfigDataobject): Promise<UserLanguageFilterConfigDataobject> {
+  public setSelectedLanguage(userLanguageSetting: UserLanguageFilterConfigDataObject): Promise<UserLanguageFilterConfigDataObject> {
     return this.userSettingsDatabase.put(userLanguageSetting);
   }
 
-//////////////////////////////////////////
+  //////////////////////////////////////////
   //      FilterModalInterface Methods    //
   //////////////////////////////////////////
 
@@ -258,10 +314,10 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     // load the necessary data
     try {
       // load departments
-      this.globalDepartmentConfig = <GlobalDepartmentConfigDataobject> await this.getDocumentAsJSON(globalAppSettingsDb, AppConfig.GLOBAL_APP_SETTINGS_DEPARTMENTS);
+      this.globalDepartmentConfig = <GlobalDepartmentConfigDataobject>await this.getDocumentAsJSON(globalAppSettingsDb, AppConfig.GLOBAL_APP_SETTINGS_DEPARTMENTS);
 
       // load languages
-      this.globalLanguageConfig = <GlobalLanguageConfigDataobject> await this.getDocumentAsJSON(globalAppSettingsDb, AppConfig.GLOBAL_APP_SETTINGS_LANGUAGES);
+      this.globalLanguageConfig = <GlobalLanguageConfigDataobject>await this.getDocumentAsJSON(globalAppSettingsDb, AppConfig.GLOBAL_APP_SETTINGS_LANGUAGES);
 
       Logger.log("Global App Settings have been loaded successfully.");
     } catch (error) {
@@ -279,37 +335,37 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
    *
    * @return {Promise<UserLanguageFilterConfigDataobject>}
    */
-  private getUserLanguageFilterConfigDataobject(): Promise<UserLanguageFilterConfigDataobject> {
-    return new Promise<UserLanguageFilterConfigDataobject>((resolve, reject) => {
-        this.getDocumentAsJSON(this.userSettingsDatabase, AppConfig.USER_APP_SETTINGS_LANGUAGE_FILTERS).then(
-          (data: UserLanguageFilterConfigDataobject) => {
-            // if document could be loaded return it
-            resolve(data);
-          }, (error: any) => {
-            switch (error.status) {
-              case 404:
-                // document has not yet been created and has to be created now
-                try {
-                  // generate initial user department settings
-                  let initialUserLanguageSettings: UserLanguageFilterConfigDataobject = UserLanguageFilterConfigDataobject.init(this.globalLanguageConfig);
+  private getUserLanguageFilterConfigDataobject(): Promise<UserLanguageFilterConfigDataObject> {
+    return new Promise<UserLanguageFilterConfigDataObject>((resolve, reject) => {
+      this.getDocumentAsJSON(this.userSettingsDatabase, AppConfig.USER_APP_SETTINGS_LANGUAGE_FILTERS).then(
+        (data: UserLanguageFilterConfigDataObject) => {
+          // if document could be loaded return it
+          resolve(data);
+        }, (error: any) => {
+          switch (error.status) {
+            case 404:
+              // document has not yet been created and has to be created now
+              try {
+                // generate initial user department settings
+                let initialUserLanguageSettings: UserLanguageFilterConfigDataObject = UserLanguageFilterConfigDataObject.init(this.globalLanguageConfig);
 
-                  // create document
-                  this.userSettingsDatabase.put(initialUserLanguageSettings).then((data) => {
-                    // return newly created document as soon as it has been created
-                    resolve(initialUserLanguageSettings);
-                  }, (error) => {
-                    reject(error);
-                  });
-                } catch (error) {
+                // create document
+                this.userSettingsDatabase.put(initialUserLanguageSettings).then((data) => {
+                  // return newly created document as soon as it has been created
+                  resolve(initialUserLanguageSettings);
+                }, (error) => {
                   reject(error);
-                }
-                break;
-              default:
+                });
+              } catch (error) {
                 reject(error);
-            }
+              }
+              break;
+            default:
+              reject(error);
           }
-        );
-      }
+        }
+      );
+    }
     );
   }
 
@@ -322,35 +378,35 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
    */
   private getUserDepartmentFilterConfigDataobject(): Promise<UserDepartmentFilterConfigDataobject> {
     return new Promise<UserDepartmentFilterConfigDataobject>((resolve, reject) => {
-        this.getDocumentAsJSON(this.userSettingsDatabase, AppConfig.USER_APP_SETTINGS_DEPARTMENT_FILTERS).then(
-          (data: UserDepartmentFilterConfigDataobject) => {
-            // if document could be loaded return it
-            resolve(data);
-          }, (error: any) => {
-            switch (error.status) {
-              case 404:
-                // document has not yet been created and has to be created now
-                try {
-                  // generate initial user department settings
-                  let initialUserDepartmentSettings: UserDepartmentFilterConfigDataobject = UserDepartmentFilterConfigDataobject.init(this.globalDepartmentConfig);
+      this.getDocumentAsJSON(this.userSettingsDatabase, AppConfig.USER_APP_SETTINGS_DEPARTMENT_FILTERS).then(
+        (data: UserDepartmentFilterConfigDataobject) => {
+          // if document could be loaded return it
+          resolve(data);
+        }, (error: any) => {
+          switch (error.status) {
+            case 404:
+              // document has not yet been created and has to be created now
+              try {
+                // generate initial user department settings
+                let initialUserDepartmentSettings: UserDepartmentFilterConfigDataobject = UserDepartmentFilterConfigDataobject.init(this.globalDepartmentConfig);
 
-                  // create document
-                  this.userSettingsDatabase.put(initialUserDepartmentSettings).then((data) => {
-                    // return newly created document as soon as it has been created
-                    resolve(initialUserDepartmentSettings);
-                  }, (error) => {
-                    reject(error);
-                  });
-                } catch (error) {
+                // create document
+                this.userSettingsDatabase.put(initialUserDepartmentSettings).then((data) => {
+                  // return newly created document as soon as it has been created
+                  resolve(initialUserDepartmentSettings);
+                }, (error) => {
                   reject(error);
-                }
-                break;
-              default:
+                });
+              } catch (error) {
                 reject(error);
-            }
+              }
+              break;
+            default:
+              reject(error);
           }
-        );
-      }
+        }
+      );
+    }
     );
   }
 }

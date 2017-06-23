@@ -4,6 +4,7 @@ import { AppModelService } from "../../providers/app-model-service";
 import { EntryListPageModelInterface } from "./entry-list.model-interface";
 import { UserLanguageFilterConfigDataobject } from "../../providers/dataobjects/user-language-filter-config.dataobject";
 import { Logger } from "../../app/logger";
+import { EntryListPageEntryDataObject } from "../../providers/dataobjects/entrylistpage.entry.dataobject";
 
 @IonicPage()
 @Component({
@@ -23,8 +24,8 @@ export class EntryListPage {
 
   // model objects
   private entryListPageModelInterface: EntryListPageModelInterface;
-  private entryList: Array<string>;
-  private selectedLanguage: UserLanguageFilterConfigDataobject;
+  private entryList: Array<EntryListPageEntryDataObject>;
+  private selectedLanguageDataObject: UserLanguageFilterConfigDataobject;
 
   // searchText from searchbar
   private searchText: string;
@@ -67,18 +68,20 @@ export class EntryListPage {
   private loadData(departmendId?: number) {
     // get selected language
     this.entryListPageModelInterface.getSelectedLanguage().then((data) => {
-      this.selectedLanguage = data;
+      this.selectedLanguageDataObject = data;
 
       // load other data as soon as language loaded
       // get entryname list
-      this.entryListPageModelInterface.getEntryNameList(this.searchText, this.selectedLanguage.selectedLanguage, departmendId).then((data) => {
+      this.entryListPageModelInterface.getEntryNameList(this.searchText, this.selectedLanguageDataObject.selectedLanguage, departmendId).then((data) => {
         this.entryList = data;
       }, (error) => {
         Logger.log("Loading entry list failed (Class: EntryListPage, Method: loadData()");
+        Logger.error(error);
       });
 
     }, (error) => {
       Logger.log("Loading selected language failed (Class: EntryListPage, Method: loadData()");
+      Logger.error(error);
     });
 
   };
@@ -87,9 +90,10 @@ export class EntryListPage {
    * NAVIGATION METHODS
    */
   // Navigation method for single entry
-  private pushEntry(name: String) {
+  private pushEntry(_id: string, languageId: number) {
     this.navCtrl.push("SingleEntryPage", {
-      name: name
+      _id: _id,
+      languageId: languageId
     }).then((canEnterView) => {
       if (!canEnterView) {
         // in the case that the view can not be entered redirect the user to the login page
@@ -104,6 +108,6 @@ export class EntryListPage {
       setTimeout(() => {
         this.searchbar.setFocus();
       }, 50);
-    }
-  }
+    };
+  };
 }

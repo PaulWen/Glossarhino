@@ -21,8 +21,8 @@
 
   <!-- Print list with all entries retreived in department -->
   <ion-list>
-    <button ion-item *ngFor="let entry of entryList" (click)="pushEntry(entry)">
-      {{ entry }}
+    <button ion-item *ngFor="let entry of entryList" (click)="pushEntry(entry._id, selectedLanguageDataObject.selectedLanguage)">
+      {{ entry.name }}
     </button>
   </ion-list>
 

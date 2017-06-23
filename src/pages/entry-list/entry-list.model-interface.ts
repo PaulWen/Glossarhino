@@ -1,4 +1,5 @@
 import { UserLanguageFilterConfigDataobject } from "../../providers/dataobjects/user-language-filter-config.dataobject";
+import { EntryListPageEntryDataObject } from "../../providers/dataobjects/entrylistpage.entry.dataobject";
 
 /**
  * Interface to define what the EntryListPage needs implemented in order to work
@@ -13,5 +14,5 @@ export interface EntryListPageModelInterface {
   isAuthenticated(): Promise<boolean> | boolean;
 
   getSelectedLanguage(): Promise<UserLanguageFilterConfigDataobject>;
-  getEntryNameList(searchString: string, selectedLanguage: number, departmentId?: number): Promise<Array<string>>;
+  getEntryNameList(searchString: string, selectedLanguage: number, departmentId?: number): Promise<Array<EntryListPageEntryDataObject>>;
 }

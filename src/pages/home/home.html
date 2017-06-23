@@ -48,7 +48,7 @@
       <!-- col for "All" departments -->
       <ion-col col-xl-3 col-lg-3 col-md-6 col-sm-6 col-xs-6 col-6>
         <ion-card (click)="pushList()" tappable>
-          <img src="assets/img/homePage/all.jpg" />
+          <img src="assets/img/homePage/all.png" />
           <div class="card-title">All</div>
           <div class="card-subtitle"> {{ countOfAllEntries }} Entries</div>
         </ion-card>
@@ -59,7 +59,7 @@
         <ion-col col-xl-3 col-lg-3 col-md-6 col-sm-6 col-xs-6 col-6>
           <!-- Cards show one category each, currently using dummy implementation -->
           <ion-card (click)="pushList(department.department.departmentId, department.department.departmentName)" tappable>
-            <img src="assets/img/homePage/{{department.department.departmentId}}.jpg" />
+            <img src="assets/img/homePage/{{department.department.departmentId}}.png" />
             <div class="card-title">{{ department.department.departmentName }}</div>
             <div class="card-subtitle"> {{ department.countOfEntries }} Entries
             </div>

@@ -2,7 +2,6 @@ import { Component } from "@angular/core";
 import { IonicPage, NavController, PopoverController } from "ionic-angular";
 import { AppModelService } from "../../providers/app-model-service";
 import { SuperLoginClientError } from "../../providers/super_login_client/super_login_client_error";
-import { LanguageDataobject } from "../../providers/dataobjects/language.dataobject";
 import { HomePageDepartmentDataobject } from "../../providers/dataobjects/homepage.department.dataobject"
 import { HomePageModelInterface } from "./home.model-interface";
 import { Logger } from "../../app/logger";
@@ -25,7 +24,7 @@ export class HomePage {
 
     // dataobjects
     private departments: Array<HomePageDepartmentDataobject>;
-    private selectedLanguage: UserLanguageFilterConfigDataobject;
+    private selectedLanguageDataObject: UserLanguageFilterConfigDataobject;
     private countOfAllEntries: number;
 
     ////////////////////////////////////////////Constructor////////////////////////////////////////////
@@ -60,11 +59,11 @@ export class HomePage {
     private loadData() {
         // get selected language
         this.homePageModelInterface.getSelectedLanguage().then((data) => {
-            this.selectedLanguage = data;
+            this.selectedLanguageDataObject = data;
             
             // load other data as soon as language loaded
             // get all listings
-            this.homePageModelInterface.getCountOfAllEntries(this.selectedLanguage.selectedLanguage).then((data) => {
+            this.homePageModelInterface.getCountOfAllEntries(this.selectedLanguageDataObject.selectedLanguage).then((data) => {
                 this.countOfAllEntries = data;
             }, (error) => {
                 Logger.log("Loading all listings failed");
@@ -72,7 +71,7 @@ export class HomePage {
             });
 
             // get selected departments
-            this.homePageModelInterface.getSelectedHomePageDepartmentDataobjects(this.selectedLanguage.selectedLanguage).then((data) => {
+            this.homePageModelInterface.getSelectedHomePageDepartmentDataobjects(this.selectedLanguageDataObject.selectedLanguage).then((data) => {
                 this.departments = data;
             }, (error) => {
                 Logger.log("Loading selected departments failed");

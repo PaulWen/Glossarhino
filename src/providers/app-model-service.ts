@@ -15,6 +15,7 @@ import {UserLanguageFilterConfigDataobject} from "./dataobjects/user-language-fi
 import {SuperLoginClient} from "./super_login_client/super_login_client";
 import {SuperloginHttpRequester} from "./super_login_client/superlogin_http_requester";
 import {EntryListPageModelInterface} from "../pages/entry-list/entry-list.model-interface";
+import { EntryListPageEntryDataObject } from "./dataobjects/entrylistpage.entry.dataobject";
 
 @Injectable()
 export class AppModelService extends SuperLoginClient implements LoginPageInterface, HomePageModelInterface, LanguagePopoverPageModelInterface, EntryListPageModelInterface {
@@ -137,7 +138,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   //  EntryListPageModelInterface Method  //
   //////////////////////////////////////////
 
-  public async getEntryNameList(searchString: string, selectedLanguage: number, departmentId?: number): Promise<Array<string>> {
+  public async getEntryNameList(searchString: string, selectedLanguage: number, departmentId?: number): Promise<Array<EntryListPageEntryDataObject>> {
     // initialize data structure which will be returned
     let entryNames: Array<string> = [];
 

@@ -99,6 +99,9 @@ export class SingleEntryPage {
   };
 
   /**
+   * NAVIGATION METHODS
+   */
+  /**
    * Method to create and open the AttachmentModal to show list of attachments. AttachmentModalPage is the template for the modal.
    * @param attachments
    */
@@ -159,6 +162,20 @@ export class SingleEntryPage {
       ]
     });
     actionSheet.present();
+  };
+
+  /**
+     * navigate to entry list and open searchbar
+     */
+  private pushSearch() {
+    this.navCtrl.push("EntryListPage", {
+      searchbarFocus: true
+    }).then((canEnterView) => {
+      if (!canEnterView) {
+        // in the case that the view can not be entered redirect the user to the login page
+        this.navCtrl.setRoot("LoginPage");
+      }
+    });
   };
 
   /**

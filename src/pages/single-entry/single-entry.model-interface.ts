@@ -1,5 +1,6 @@
 import {EntryDataObject} from "../../providers/dataobjects/entry.dataobject";
 import { UserLanguageFilterConfigDataObject } from "../../providers/dataobjects/user-language-filter-config.dataobject";
+import { DepartmentDataObject } from "../../providers/dataobjects/department.dataobject";
 
 /**
  * Interface to define what the page Single EntryDataobject needs implemented in order to work
@@ -15,6 +16,7 @@ export interface SingleEntryPageModelInterface {
 
   getSelectedLanguage(): Promise<UserLanguageFilterConfigDataObject>;
   getEntryDataobject(_id: string, languageId: number): Promise<EntryDataObject>;
+  getDepartmentById(departmentId: number): DepartmentDataObject;
 
 
 }

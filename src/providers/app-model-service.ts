@@ -18,6 +18,7 @@ import { EntryListPageModelInterface } from "../pages/entry-list/entry-list.mode
 import { EntryListPageEntryDataObject } from "./dataobjects/entrylistpage.entry.dataobject";
 import { SingleEntryPageModelInterface } from "../pages/single-entry/single-entry.model-interface";
 import { EntryDataObject } from "./dataobjects/entry.dataobject";
+import { DepartmentDataObject } from "./dataobjects/department.dataobject";
 
 @Injectable()
 export class AppModelService extends SuperLoginClient implements LoginPageInterface, HomePageModelInterface, LanguagePopoverPageModelInterface, EntryListPageModelInterface, SingleEntryPageModelInterface {
@@ -227,6 +228,12 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
       ]
     };
     return entryDataObject;
+  };
+
+  public getDepartmentById (departmentId: number): DepartmentDataObject {
+
+    return GlobalDepartmentConfigDataobject.getDepartmentById(this.globalDepartmentConfig, departmentId);
+
   };
 
   //////////////////////////////////////////

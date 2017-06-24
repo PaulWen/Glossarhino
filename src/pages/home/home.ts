@@ -115,7 +115,7 @@ export class HomePage {
                 this.navCtrl.setRoot("LoginPage");
             }
         });
-    }
+    };
 
     /**
      * navigate to entry list and open searchbar
@@ -129,7 +129,7 @@ export class HomePage {
                 this.navCtrl.setRoot("LoginPage");
             }
         });
-    }
+    };
 
     /**
      * create and present LanguagePopover to enable changing languages
@@ -145,6 +145,6 @@ export class HomePage {
                 this.navCtrl.setRoot("LoginPage");
             }
         });
-    }
+    };
 
 }

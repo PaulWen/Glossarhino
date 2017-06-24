@@ -5,6 +5,7 @@ export abstract class UserLanguageFilterConfigDataObject {
 
   abstract get _id(): string;
   abstract get selectedLanguage(): number;
+  abstract set selectedLanguage(selectedLanguage: number);
 
 
   public static init(globalLanguageConfig: GlobalLanguageConfigDataobject): UserLanguageFilterConfigDataObject {

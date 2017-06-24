@@ -1,0 +1,26 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-buttons start>
+      <button ion-button (click)="closeAttachmentModal()">
+        <span ion-text color="primary" showWhen="ios">Close</span>
+        <ion-icon name="md-close" showWhen="android,windows, core"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title>Attachments</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+  <!-- Print list with all attachments retreived for entry and department -->
+  <ion-list>
+    <button ion-item *ngFor="let attachment of attachments"
+            (click)="openAttachment(attachment.url)">
+      {{ attachment.name }}
+    </button>
+  </ion-list>
+
+</ion-content>

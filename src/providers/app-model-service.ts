@@ -100,15 +100,24 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   //////////////////////////////////////////
 
   public async getCountOfAllEntries(currentLanguageId: number): Promise<number> {
-    // load the IDs of all entries that are available in one language
-    let result: any = await this.entryDatabases.get(currentLanguageId).allDocs({
+    // load the IDs of all entries that are available in one language (before the _design docs)
+    let result1: any = (await this.entryDatabases.get(currentLanguageId).allDocs({
+      include_docs: true,
+      attachments: false,
+      endkey: '_design'
+    })).rows;
+
+    // load the IDs of all entries that are available in one language (after the _design docs)
+    let result2: any = (await this.entryDatabases.get(currentLanguageId).allDocs({
       include_docs: true,
       attachments: false,
       startkey: '_design\uffff'
-    });
+    })).rows;
+
+    let result = result1.concat(result2);
 
     // return the number of entries that are available in the current language
-    return result.rows.length;
+    return result.length;
   }
 
   public async getSelectedHomePageDepartmentDataobjects(currentLanguageId: number): Promise<Array<HomePageDepartmentDataobject>> {
@@ -152,7 +161,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
       let selector: any = {};
 
       // search only for entries where the name starts as the search string (based on a regular expression)
-      let regexp = new RegExp("^" + searchString ? searchString : "", 'i');
+      let regexp = new RegExp(searchString ? searchString : "", 'i');
       selector.name = { $regex: regexp };
 
       // if departmentId is defined search only for entries that are relevant for the specific department
@@ -200,8 +209,8 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     return this.globalLanguageConfig;
   }
 
-  public setSelectedLanguage(userLanguageSetting: UserLanguageFilterConfigDataObject): Promise<boolean> {
-    return this.userSettingsDatabase.put(userLanguageSetting).ok;
+  public async setSelectedLanguage(userLanguageSetting: UserLanguageFilterConfigDataObject): Promise<boolean> {
+    return (await this.userSettingsDatabase.put(userLanguageSetting)).ok;
   }
 
   //////////////////////////////////////////
@@ -252,8 +261,8 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     );
   };
 
-  public setUserDepartmentFilterConfigDataObject(userDepartmentFilterConfigDataObject: UserDepartmentFilterConfigDataObject): Promise<boolean> {
-    return this.userSettingsDatabase.put(userDepartmentFilterConfigDataObject).ok;
+  public async setUserDepartmentFilterConfigDataObject(userDepartmentFilterConfigDataObject: UserDepartmentFilterConfigDataObject): Promise<boolean> {
+    return (await this.userSettingsDatabase.put(userDepartmentFilterConfigDataObject)).ok;
   };
 
   //////////////////////////////////////////
@@ -262,7 +271,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
 
   public async setEntryDataObject(entryDataObject: EntryDataObject, languageId: number): Promise<boolean> {
     try {
-      return await this.entryDatabases.get(languageId).put(entryDataObject).ok;
+      return (await this.entryDatabases.get(languageId).put(entryDataObject)).ok;
     } catch (error) {
       Logger.error(error);
     }
@@ -272,7 +281,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
 
   public async newEntryDataObject(entryDataObject: EntryDataObject, languageId: number): Promise<String> {
     try {
-      return await this.entryDatabases.get(languageId).post(entryDataObject).id;
+      return (await this.entryDatabases.get(languageId).post(entryDataObject)).id;
     } catch (error) {
       Logger.error(error);
     }

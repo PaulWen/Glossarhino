@@ -15,7 +15,7 @@ export interface SingleEntryPageModelInterface {
   isAuthenticated(): Promise<boolean> | boolean;
 
   getSelectedLanguage(): Promise<UserLanguageFilterConfigDataObject>;
-  getEntryDataobject(_id: string, languageId: number): Promise<EntryDataObject>;
+  getEntryDataObject(_id: string, languageId: number): Promise<EntryDataObject>;
   getDepartmentById(departmentId: number): DepartmentDataObject;
 
 

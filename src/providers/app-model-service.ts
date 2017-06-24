@@ -20,9 +20,10 @@ import { SingleEntryPageModelInterface } from "../pages/single-entry/single-entr
 import { EntryDataObject } from "./dataobjects/entry.dataobject";
 import { DepartmentDataObject } from "./dataobjects/department.dataobject";
 import { UserSettingsPageModelInterface } from "../pages/user-settings/user-settings.model-interface";
+import { EditModalPageModelInterface } from "../pages/edit-modal/edit-modal.model-interface";
 
 @Injectable()
-export class AppModelService extends SuperLoginClient implements LoginPageInterface, HomePageModelInterface, LanguagePopoverPageModelInterface, EntryListPageModelInterface, SingleEntryPageModelInterface, UserSettingsPageModelInterface {
+export class AppModelService extends SuperLoginClient implements LoginPageInterface, HomePageModelInterface, LanguagePopoverPageModelInterface, EntryListPageModelInterface, SingleEntryPageModelInterface, UserSettingsPageModelInterface, EditModalPageModelInterface {
   ////////////////////////////////////////////Properties////////////////////////////////////////////
 
   //////////////Databases////////////
@@ -177,7 +178,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   //     SingleEntryInterface Methods     //
   //////////////////////////////////////////
 
-  public async getEntryDataobject(_id: string, languageId: number): Promise<EntryDataObject> {
+  public async getEntryDataObject(_id: string, languageId: number): Promise<EntryDataObject> {
     let entryDataObject: EntryDataObject = {
       _id: "6766f814e6011eae9ef28f8c5c00013b",
       name: "P-Freigabe",
@@ -305,6 +306,10 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   //////////////////////////////////////////
   //       EditModalInterface Methods     //
   //////////////////////////////////////////
+
+  public async setEntryDataObject(entryDataObject: EntryDataObject): Promise<EntryDataObject> {
+    return
+  }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
 

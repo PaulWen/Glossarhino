@@ -78,7 +78,7 @@ export class SingleEntryPage {
 
       // load other data as soon as language loaded
       // get EntryDataObject
-      this.singleEntryPageModelInterface.getEntryDataobject(this._id, this.selectedLanguageDataObject.selectedLanguage).then((data) => {
+      this.singleEntryPageModelInterface.getEntryDataObject(this._id, this.selectedLanguageDataObject.selectedLanguage).then((data) => {
         this.entryDataObject = data;
       }, (error) => {
         Logger.log("Loading Entry Data Object failed (Class: SingleEntryPage, Method: loadData()");

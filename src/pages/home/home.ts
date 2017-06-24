@@ -60,7 +60,7 @@ export class HomePage {
         // get selected language
         this.homePageModelInterface.getSelectedLanguage().then((data) => {
             this.selectedLanguageDataObject = data;
-            
+
             // load other data as soon as language loaded
             // get all listings
             this.homePageModelInterface.getCountOfAllEntries(this.selectedLanguageDataObject.selectedLanguage).then((data) => {

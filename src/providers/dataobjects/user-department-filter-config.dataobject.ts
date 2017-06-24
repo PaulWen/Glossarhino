@@ -1,14 +1,16 @@
 import {AppConfig} from "../../app/app-config";
-import {GlobalDepartmentConfigDataobject} from "./global-department-config.dataobject";
+import {GlobalDepartmentConfigDataObject} from "./global-department-config.dataobject";
 
-export abstract class UserDepartmentFilterConfigDataobject {
+export abstract class UserDepartmentFilterConfigDataObject {
 
 
   abstract get _id(): string;
+
   abstract get selectedDepartments(): Array<number>;
+  abstract set selectedDepartments(selectedDepartments: Array<number>);
 
 
-  public static init(allDepartments: GlobalDepartmentConfigDataobject): UserDepartmentFilterConfigDataobject {
+  public static init(allDepartments: GlobalDepartmentConfigDataObject): UserDepartmentFilterConfigDataObject {
     let selectedDepartments: Array<number> = [];
 
     for (let department of allDepartments.departments) {

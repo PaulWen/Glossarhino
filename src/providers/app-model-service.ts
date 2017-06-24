@@ -7,10 +7,10 @@ import { Logger } from "../app/logger";
 import { HomePageModelInterface } from "../pages/home/home.model-interface";
 import { LanguagePopoverPageModelInterface } from "../pages/language-popover/language-popover.model-interface";
 import { LoginPageInterface } from "../pages/login/login-interface";
-import { GlobalDepartmentConfigDataobject } from "./dataobjects/global-department-config.dataobject";
+import { GlobalDepartmentConfigDataObject } from "./dataobjects/global-department-config.dataobject";
 import { GlobalLanguageConfigDataobject } from "./dataobjects/global-language-config.dataobject";
 import { HomePageDepartmentDataobject } from "./dataobjects/homepage.department.dataobject";
-import { UserDepartmentFilterConfigDataobject } from "./dataobjects/user-department-filter-config.dataobject";
+import { UserDepartmentFilterConfigDataObject } from "./dataobjects/user-department-filter-config.dataobject";
 import { UserLanguageFilterConfigDataObject } from "./dataobjects/user-language-filter-config.dataobject";
 import { SuperLoginClient } from "./super_login_client/super_login_client";
 import { SuperloginHttpRequester } from "./super_login_client/superlogin_http_requester";
@@ -19,9 +19,10 @@ import { EntryListPageEntryDataObject } from "./dataobjects/entrylistpage.entry.
 import { SingleEntryPageModelInterface } from "../pages/single-entry/single-entry.model-interface";
 import { EntryDataObject } from "./dataobjects/entry.dataobject";
 import { DepartmentDataObject } from "./dataobjects/department.dataobject";
+import { UserSettingsPageModelInterface } from "../pages/user-settings/user-settings.model-interface";
 
 @Injectable()
-export class AppModelService extends SuperLoginClient implements LoginPageInterface, HomePageModelInterface, LanguagePopoverPageModelInterface, EntryListPageModelInterface, SingleEntryPageModelInterface {
+export class AppModelService extends SuperLoginClient implements LoginPageInterface, HomePageModelInterface, LanguagePopoverPageModelInterface, EntryListPageModelInterface, SingleEntryPageModelInterface, UserSettingsPageModelInterface {
   ////////////////////////////////////////////Properties////////////////////////////////////////////
 
   //////////////Databases////////////
@@ -33,7 +34,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
 
 
   //////////////Global App Settings////////////
-  private globalDepartmentConfig: GlobalDepartmentConfigDataobject;
+  private globalDepartmentConfig: GlobalDepartmentConfigDataObject;
   private globalLanguageConfig: GlobalLanguageConfigDataobject;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
@@ -114,7 +115,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     let selectedHomePageDepartmentDataObjects: Array<HomePageDepartmentDataobject> = [];
 
     // load currently selected department
-    let userDepartmentSetting = await this.getUserDepartmentFilterConfigDataobject();
+    let userDepartmentSetting = await this.getUserDepartmentFilterConfigDataObject();
 
     for (let departmentId of userDepartmentSetting.selectedDepartments) {
       try {
@@ -127,7 +128,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
         });
 
         // add result to the list of departments
-        selectedHomePageDepartmentDataObjects.push(HomePageDepartmentDataobject.init(result.docs.length, GlobalDepartmentConfigDataobject.getDepartmentById(this.globalDepartmentConfig, departmentId)));
+        selectedHomePageDepartmentDataObjects.push(HomePageDepartmentDataobject.init(result.docs.length, GlobalDepartmentConfigDataObject.getDepartmentById(this.globalDepartmentConfig, departmentId)));
 
       } catch (error) {
         Logger.error(error);
@@ -232,7 +233,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
 
   public getDepartmentById (departmentId: number): DepartmentDataObject {
 
-    return GlobalDepartmentConfigDataobject.getDepartmentById(this.globalDepartmentConfig, departmentId);
+    return GlobalDepartmentConfigDataObject.getDepartmentById(this.globalDepartmentConfig, departmentId);
 
   };
 
@@ -249,9 +250,57 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   }
 
   //////////////////////////////////////////
-  //      FilterModalInterface Methods    //
+  //      UserSettingsPageModelInterface Methods    //
   //////////////////////////////////////////
 
+  public getGlobalDepartmentConfigDataObject(): GlobalDepartmentConfigDataObject {
+    return this.globalDepartmentConfig;
+  };
+
+  /**
+   * This function gets the current {@link UserDepartmentFilterConfigDataobject} of the user.
+   * If it is not yet created in the database this function will create it.
+   *
+   * @return {Promise<UserDepartmentFilterConfigDataobject>}
+   */
+  public getUserDepartmentFilterConfigDataObject(): Promise<UserDepartmentFilterConfigDataObject> {
+    return new Promise<UserDepartmentFilterConfigDataObject>((resolve, reject) => {
+      this.getDocumentAsJSON(this.userSettingsDatabase, AppConfig.USER_APP_SETTINGS_DEPARTMENT_FILTERS).then(
+        (data: UserDepartmentFilterConfigDataObject) => {
+          // if document could be loaded return it
+          resolve(data);
+        }, (error: any) => {
+          switch (error.status) {
+            case 404:
+              // document has not yet been created and has to be created now
+              try {
+                // generate initial user department settings
+                let initialUserDepartmentSettings: UserDepartmentFilterConfigDataObject = UserDepartmentFilterConfigDataObject.init(this.globalDepartmentConfig);
+
+                // create document
+                this.userSettingsDatabase.put(initialUserDepartmentSettings).then((data) => {
+                  // return newly created document as soon as it has been created
+                  resolve(initialUserDepartmentSettings);
+                }, (error) => {
+                  reject(error);
+                });
+              } catch (error) {
+                reject(error);
+              }
+              break;
+            default:
+              reject(error);
+          }
+        }
+      );
+    }
+    );
+  };
+
+  public setUserDepartmentFilterConfigDataObject(userDepartmentFilterConfigDataObject: UserDepartmentFilterConfigDataObject): Promise<UserDepartmentFilterConfigDataObject> {
+    // TODO: needs to be implemented
+    return 
+  };
 
   //////////////////////////////////////////
   //       EditModalInterface Methods     //
@@ -321,7 +370,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     // load the necessary data
     try {
       // load departments
-      this.globalDepartmentConfig = <GlobalDepartmentConfigDataobject>await this.getDocumentAsJSON(globalAppSettingsDb, AppConfig.GLOBAL_APP_SETTINGS_DEPARTMENTS);
+      this.globalDepartmentConfig = <GlobalDepartmentConfigDataObject>await this.getDocumentAsJSON(globalAppSettingsDb, AppConfig.GLOBAL_APP_SETTINGS_DEPARTMENTS);
 
       // load languages
       this.globalLanguageConfig = <GlobalLanguageConfigDataobject>await this.getDocumentAsJSON(globalAppSettingsDb, AppConfig.GLOBAL_APP_SETTINGS_LANGUAGES);
@@ -374,46 +423,5 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
       );
     }
     );
-  }
-
-
-  /**
-   * This function gets the current {@link UserDepartmentFilterConfigDataobject} of the user.
-   * If it is not yet created in the database this function will create it.
-   *
-   * @return {Promise<UserDepartmentFilterConfigDataobject>}
-   */
-  private getUserDepartmentFilterConfigDataobject(): Promise<UserDepartmentFilterConfigDataobject> {
-    return new Promise<UserDepartmentFilterConfigDataobject>((resolve, reject) => {
-      this.getDocumentAsJSON(this.userSettingsDatabase, AppConfig.USER_APP_SETTINGS_DEPARTMENT_FILTERS).then(
-        (data: UserDepartmentFilterConfigDataobject) => {
-          // if document could be loaded return it
-          resolve(data);
-        }, (error: any) => {
-          switch (error.status) {
-            case 404:
-              // document has not yet been created and has to be created now
-              try {
-                // generate initial user department settings
-                let initialUserDepartmentSettings: UserDepartmentFilterConfigDataobject = UserDepartmentFilterConfigDataobject.init(this.globalDepartmentConfig);
-
-                // create document
-                this.userSettingsDatabase.put(initialUserDepartmentSettings).then((data) => {
-                  // return newly created document as soon as it has been created
-                  resolve(initialUserDepartmentSettings);
-                }, (error) => {
-                  reject(error);
-                });
-              } catch (error) {
-                reject(error);
-              }
-              break;
-            default:
-              reject(error);
-          }
-        }
-      );
-    }
-    );
-  }
+  };
 }

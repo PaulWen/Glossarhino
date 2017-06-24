@@ -147,10 +147,10 @@ export class SingleEntryPage {
             this.openEditModal(this.entryDataObject);
           }
         }, {
-          text: "Filter",
+          text: "Settings",
           handler: () => {
-            console.log("Filter clicked");
-            this.openFilterModal();
+            console.log("Settings clicked");
+            this.openUserSettingsPageModal();
           }
         }, {
           text: "Cancel",
@@ -165,8 +165,8 @@ export class SingleEntryPage {
   };
 
   /**
-     * navigate to entry list and open searchbar
-     */
+   * navigate to entry list and open searchbar
+   */
   private pushSearch() {
     this.navCtrl.push("EntryListPage", {
       searchbarFocus: true
@@ -181,8 +181,8 @@ export class SingleEntryPage {
   /**
    * create and present the SettingsModal to show settings for the user. SettingsPage is the template for the modal.
    */
-  private openFilterModal() {
-    let filterModal = this.modalCtrl.create("FilterModalPage");
+  private openUserSettingsPageModal() {
+    let filterModal = this.modalCtrl.create("UserSettingsPage");
     filterModal.present().then((canEnterView) => {
       if (!canEnterView) {
         // in the case that the view can not be entered redirect the user to the login page

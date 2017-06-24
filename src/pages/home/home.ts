@@ -66,7 +66,7 @@ export class HomePage {
             this.homePageModelInterface.getCountOfAllEntries(this.selectedLanguageDataObject.selectedLanguage).then((data) => {
                 this.countOfAllEntries = data;
             }, (error) => {
-                Logger.log("Loading all listings failed");
+                Logger.log("Loading all listings failed (Class: HomePage, Method: loadData()");
                 Logger.error(error);
             });
 
@@ -74,12 +74,12 @@ export class HomePage {
             this.homePageModelInterface.getSelectedHomePageDepartmentDataobjects(this.selectedLanguageDataObject.selectedLanguage).then((data) => {
                 this.departments = data;
             }, (error) => {
-                Logger.log("Loading selected departments failed");
+                Logger.log("Loading selected departments failed (Class: HomePage, Method: loadData()");
                 Logger.error(error);
             });
 
         }, (error) => {
-            Logger.log("Loading currentLanguage failed");
+            Logger.log("Loading currentLanguage failed (Class: HomePage, Method: loadData()");
             Logger.error(error);
         });
     };

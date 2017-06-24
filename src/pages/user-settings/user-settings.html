@@ -1,0 +1,37 @@
+<ion-header>
+
+  <ion-navbar>
+    <!-- Menu toggle for burger menu -->
+    <button ion-button icon-only menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+
+    <!-- Title, hided if searchbar unhided -->
+    <ion-title>{{ entryDataObject?.name }}</ion-title>
+
+    <!-- Hide buttons if Searchbar unhided -->
+    <ion-buttons end>
+      <button ion-button icon-only (click)="pushSearch()">
+        <ion-icon name="search"></ion-icon>
+      </button>
+
+      <button ion-button icon-only (click)="presentLanguagePopover($event)">
+        <ion-icon name="chatbubbles"></ion-icon>
+      </button>
+
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+  <ion-list class="form-group">
+    <ion-item *ngFor="let department of globalDepartmentConfigDataObject?.departments">
+      <ion-label>{{ department.departmentName }}</ion-label>
+      <ion-checkbox [(ngModel)]="department.checked" (ionChange)="updateModel(selectedDepartmentIds)"></ion-checkbox>
+    </ion-item>
+  </ion-list>
+
+</ion-content>

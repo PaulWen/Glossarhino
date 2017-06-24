@@ -3,6 +3,7 @@ import { SuperLoginClientErrorResponse } from "../../providers/super_login_clien
 import { LanguageDataobject } from "../../providers/dataobjects/language.dataobject";
 import { HomePageDepartmentDataobject } from "../../providers/dataobjects/homepage.department.dataobject";
 import { UserLanguageFilterConfigDataObject } from "../../providers/dataobjects/user-language-filter-config.dataobject";
+
 /**
  * Interface to define what HomePage needs implemented in order to work
  */

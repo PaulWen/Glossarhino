@@ -179,64 +179,18 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   //////////////////////////////////////////
 
   public async getEntryDataObject(_id: string, languageId: number): Promise<EntryDataObject> {
-    let entryDataObject: EntryDataObject = {
-      _id: "6766f814e6011eae9ef28f8c5c00013b",
-      name: "P-Freigabe",
-      description: "Die P-Freigabe (Produktionsfreigabe) wird benutzt als verbindliche Freigabe zum Anfragen, Beauftragen und Erstellen von Serienprodukti- onsmitteln. Die Freigabe des Konstruktionsstandes erfolgt immer bau- teilspezifisch. Es wird hierbei nicht zwischen einer Freigabe zur Anfrage und Beauftragung und einer weiteren Freigabe zur Erstellung (sog. 'Fräsfreigabe') unterschieden. Zeitlich/inhaltlich ist diese Freigabe im Normalfall im Anschluss an eine erfolgreiche C-Muster-Rafferprobung mit genügend Erfahrung aus der Dauerlauf-/Zuverlässigkeitserprobung positioniert.",
-      contact: "Max Mustermann",
-      email: "max.mustermann@lehre.dhbw-stuttgart.de",
-      relatedDepartments: [
-        0,
-        1,
-        2,
-        3,
-        5
-      ],
-      attachments: [
-        {
-          name: "Test Image",
-          url: "https://c1.staticflickr.com/6/5337/8940995208_5da979c52f.jpg"
-        },
-        {
-          name: "DHBW Broschüre",
-          url: "http://www.dhbw.de/fileadmin/user_upload/Dokumente/Hochschulkommunikation/DHBW_Imagebroschuere_web.pdf"
-        }
-      ],
-      departmentSpecifics: [
-        {
-          departmentId: 1,
-          description: "Problematisch an der P-Freigabe ist, dass sie von der Entwicklung einen verbindlichen Zeichnungsstand erfordert, der im Nachhinein nur noch sehr eingeschränkt geändert werden kann.",
-          contact: "Max Mustermann",
-          email: "max.mustermann@dhbw-stuttgart.de"
-        },
-        {
-          departmentId: 2,
-          description: "Für uns ist es wichtig, dass die P-Freigabe möglichst früh im Produktentstehungsprozess von der Entwicklung gegeben wird. Dies ermöglicht uns eine frühzeitige Beschaffung von Maschinen, sodass wir termingerecht mit der Produktion starten können.",
-          contact: "Max Mustermann",
-          email: "max.mustermann@dhbw-stuttgart.de"
-        },
-        {
-          departmentId: 3,
-          description: "Eine möglichst frühzeitige P-Freigabe hilft uns im Einkauf, um rechtzeitig Maschinen zu guten Preisen beschaffen zu können.",
-          contact: "Max Mustermann",
-          email: "max.mustermann@dhbw-stuttgart.de"
-        },
-        {
-          departmentId: 5,
-          description: "Die P-Freigabe ist von uns von keiner besonderen Relevanz.",
-          contact: "Max Mustermann",
-          email: "max.mustermann@dhbw-stuttgart.de"
-        }
-      ]
-    };
-    return entryDataObject;
+    try {
+      return await this.getDocumentAsJSON(this.entryDatabases.get(languageId),_id);
+    } catch (error) {
+      Logger.error(error);
+    }
+
+    return null;
   };
 
   public getDepartmentById (departmentId: number): DepartmentDataObject {
-
     return GlobalDepartmentConfigDataObject.getDepartmentById(this.globalDepartmentConfig, departmentId);
-
-  };
+  }
 
   //////////////////////////////////////////
   // LanguagePopoverPageInterface Methods //
@@ -246,12 +200,12 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     return this.globalLanguageConfig;
   }
 
-  public setSelectedLanguage(userLanguageSetting: UserLanguageFilterConfigDataObject): Promise<UserLanguageFilterConfigDataObject> {
-    return this.userSettingsDatabase.put(userLanguageSetting);
+  public setSelectedLanguage(userLanguageSetting: UserLanguageFilterConfigDataObject): Promise<boolean> {
+    return this.userSettingsDatabase.put(userLanguageSetting).ok;
   }
 
   //////////////////////////////////////////
-  //      UserSettingsPageModelInterface Methods    //
+  //UserSettingsPageModelInterface Methods//
   //////////////////////////////////////////
 
   public getGlobalDepartmentConfigDataObject(): GlobalDepartmentConfigDataObject {
@@ -298,17 +252,32 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     );
   };
 
-  public setUserDepartmentFilterConfigDataObject(userDepartmentFilterConfigDataObject: UserDepartmentFilterConfigDataObject): Promise<UserDepartmentFilterConfigDataObject> {
-    // TODO: needs to be implemented
-    return 
+  public setUserDepartmentFilterConfigDataObject(userDepartmentFilterConfigDataObject: UserDepartmentFilterConfigDataObject): Promise<boolean> {
+    return this.userSettingsDatabase.put(userDepartmentFilterConfigDataObject).ok;
   };
 
   //////////////////////////////////////////
   //       EditModalInterface Methods     //
   //////////////////////////////////////////
 
-  public async setEntryDataObject(entryDataObject: EntryDataObject): Promise<EntryDataObject> {
-    return
+  public async setEntryDataObject(entryDataObject: EntryDataObject, languageId: number): Promise<boolean> {
+    try {
+      return await this.entryDatabases.get(languageId).put(entryDataObject).ok;
+    } catch (error) {
+      Logger.error(error);
+    }
+
+    return false;
+  }
+
+  public async newEntryDataObject(entryDataObject: EntryDataObject, languageId: number): Promise<String> {
+    try {
+      return await this.entryDatabases.get(languageId).post(entryDataObject).id;
+    } catch (error) {
+      Logger.error(error);
+    }
+
+    return null;
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
@@ -354,7 +323,9 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
    */
   private async getDocumentAsJSON(pouchDb: any, id: string): Promise<any> {
     // load the wanted document from the database and save it in the right DocumentType
-    return await pouchDb.get(id);
+    return await pouchDb.get(id, {
+      attachments: false
+    });
   }
 
 

@@ -15,5 +15,5 @@ export interface UserSettingsPageModelInterface {
 
     getGlobalDepartmentConfigDataObject(): GlobalDepartmentConfigDataObject;
     getUserDepartmentFilterConfigDataObject(): Promise<UserDepartmentFilterConfigDataObject>;
-    setUserDepartmentFilterConfigDataObject(userDepartmentFilterConfigDataObject: UserDepartmentFilterConfigDataObject): Promise<UserDepartmentFilterConfigDataObject>;
+    setUserDepartmentFilterConfigDataObject(userDepartmentFilterConfigDataObject: UserDepartmentFilterConfigDataObject): Promise<boolean>;
 }

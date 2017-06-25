@@ -13,6 +13,7 @@ export interface EditModalPageModelInterface {
 
     getSelectedLanguage(): Promise<UserLanguageFilterConfigDataObject>;
     getEntryDataObject(_id: string, languageId: number): Promise<EntryDataObject>;
-    setEntryDataObject(entryDataObject: EntryDataObject): Promise<EntryDataObject>;
+    setEntryDataObject(entryDataObject: EntryDataObject, languageId: number): Promise<boolean>;
+    newEntryDataObject(entryDataObject: EntryDataObject, languageId: number): Promise<String>;
     getDepartmentById(departmentId: number): DepartmentDataObject;
 }

@@ -69,6 +69,8 @@ export class LanguagePopoverPage {
    * NAVIGATION METHODS
    */
   private dismissPopover() {
+    // convert input into number
+    this.selectedLanguageDataObject.selectedLanguage = +this.selectedLanguageDataObject.selectedLanguage;
     this.languagePopoverPageModelInterface.setSelectedLanguage(this.selectedLanguageDataObject);
     this.viewCtrl.dismiss();
   };

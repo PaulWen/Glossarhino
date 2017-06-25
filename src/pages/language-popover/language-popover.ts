@@ -63,7 +63,6 @@ export class LanguagePopoverPage {
     }, (error) => {
       Logger.log("Loading current language failed (Class: LanguagePopoverPage, Method: loadData()");
     });
-
   };
 
   /**
@@ -72,5 +71,5 @@ export class LanguagePopoverPage {
   private dismissPopover() {
     this.languagePopoverPageModelInterface.setSelectedLanguage(this.selectedLanguageDataObject);
     this.viewCtrl.dismiss();
-  }
+  };
 };

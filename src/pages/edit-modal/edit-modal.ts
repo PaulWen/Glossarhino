@@ -3,12 +3,6 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { EditModalPageModelInterface } from "./edit-modal.model-interface";
 import { EntryDataObject } from "../../providers/dataobjects/entry.dataobject";
 
-/**
- * Generated class for the EditModalPage page.
- *
- * See http://ionicframework.com/docs/components/#navigation for more info
- * on Ionic pages and navigation.
- */
 @IonicPage()
 @Component({
   selector: 'page-edit-modal',
@@ -26,7 +20,7 @@ export class EditModalPage {
 
   // dataobjects
   private entryDataObject: EntryDataObject;
-  
+
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
   constructor(navCtrl: NavController, navParams: NavParams) {
@@ -37,7 +31,6 @@ export class EditModalPage {
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
   ionViewDidLoad() {
-    console.log('ionViewDidLoad EditModalPage');
   }
 
 }

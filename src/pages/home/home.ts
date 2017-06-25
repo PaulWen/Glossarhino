@@ -47,11 +47,16 @@ export class HomePage {
     private ionViewDidLoad() {
         // load data
         this.loadData();
-    };
+    }
 
     private ionViewCanEnter(): Promise<boolean> {
         return this.homePageModelInterface.isAuthenticated();
-    };
+    }
+
+    private doRefresh(refresher) {
+        this.loadData();
+        refresher.complete();
+    }
 
     /**
      * PAGE METHODS
@@ -82,7 +87,7 @@ export class HomePage {
             Logger.log("Loading currentLanguage failed (Class: HomePage, Method: loadData()");
             Logger.error(error);
         });
-    };
+    }
 
     /**
      * NAVIGATION METHODS
@@ -115,7 +120,7 @@ export class HomePage {
                 this.navCtrl.setRoot("LoginPage");
             }
         });
-    };
+    }
 
     /**
      * navigate to entry list and open searchbar
@@ -129,7 +134,7 @@ export class HomePage {
                 this.navCtrl.setRoot("LoginPage");
             }
         });
-    };
+    }
 
     /**
      * create and present LanguagePopover to enable changing languages
@@ -145,6 +150,6 @@ export class HomePage {
                 this.navCtrl.setRoot("LoginPage");
             }
         });
-    };
+    }
 
 }

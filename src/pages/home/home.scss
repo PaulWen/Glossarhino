@@ -25,6 +25,10 @@
 
 }
 
+.dark {
+  background-color: color($colors, dark, base);
+}
+
 @media (min-width: 1200px) {
   .card-background-page {
 

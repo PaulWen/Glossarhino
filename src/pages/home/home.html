@@ -5,9 +5,9 @@
     </ion-toolbar>
   </ion-header>
 
-  <ion-content>
+  <ion-content class="dark">
     <ion-list>
-      <button ion-item (click)="logout()">
+      <button ion-item (click)="logout()" class="dark">
         Logout
       </button>
     </ion-list>
@@ -23,10 +23,8 @@
       <ion-icon name="menu"></ion-icon>
     </button>
 
-    <!-- Title, hided if searchbar unhided -->
     <ion-title>Glossarhino</ion-title>
 
-    <!-- Hide buttons if Searchbar unhided -->
     <ion-buttons end>
       <button ion-button icon-only (click)="pushSearch()">
         <ion-icon name="search"></ion-icon>
@@ -41,6 +39,10 @@
 </ion-header>
 
 <ion-content #content class="card-background-page">
+
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
 
   <!-- ion-grid for responsive design -->
   <ion-grid>

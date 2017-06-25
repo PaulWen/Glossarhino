@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, PopoverController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, PopoverController, ViewController } from 'ionic-angular';
 import { UserSettingsPageModelInterface } from "./user-settings.model-interface";
 import { AppModelService } from "../../providers/app-model-service";
 import { GlobalDepartmentConfigDataObject } from "../../providers/dataobjects/global-department-config.dataobject";
@@ -18,6 +18,7 @@ export class UserSettingsPage {
   private navCtrl: NavController;
   private navParams: NavParams;
   private popoverCtrl: PopoverController;
+  private viewCtrl: ViewController;
 
   // model object
   private userSettingsPageModelInterface: UserSettingsPageModelInterface;
@@ -30,11 +31,12 @@ export class UserSettingsPage {
   private userDepartmentFilterCheckboxObject: Array<{ department: DepartmentDataObject, checked: boolean }>;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
-  constructor(navCtrl: NavController, navParams: NavParams, popoverCtrl: PopoverController, appModel: AppModelService) {
+  constructor(navCtrl: NavController, navParams: NavParams, popoverCtrl: PopoverController, viewCtrl: ViewController, appModel: AppModelService) {
     // instantiate ionic injected components
     this.navCtrl = navCtrl;
     this.navParams = navParams;
     this.popoverCtrl = popoverCtrl;
+    this.viewCtrl = viewCtrl;    
 
     // instantiate model object
     this.userSettingsPageModelInterface = appModel;
@@ -122,32 +124,9 @@ export class UserSettingsPage {
    */
 
   /**
-   * create and present LanguagePopover to enable changing languages
-   * @param event
+   * Method to close the FilterModal when pressing the assigned button
    */
-  private presentLanguagePopover(event: any) {
-    let popover = this.popoverCtrl.create("LanguagePopoverPage");
-    popover.present({
-      ev: event
-    }).then((canEnterView) => {
-      if (!canEnterView) {
-        // in the case that the view can not be entered redirect the user to the login page
-        this.navCtrl.setRoot("LoginPage");
-      }
-    });
-  };
-
-  /**
-   * navigate to entry list and open searchbar
-   */
-  private pushSearch() {
-    this.navCtrl.push("EntryListPage", {
-      searchbarFocus: true
-    }).then((canEnterView) => {
-      if (!canEnterView) {
-        // in the case that the view can not be entered redirect the user to the login page
-        this.navCtrl.setRoot("LoginPage");
-      }
-    });
-  };
+  private closeUserSettingsModal() {
+    this.viewCtrl.dismiss();
+  }
 }

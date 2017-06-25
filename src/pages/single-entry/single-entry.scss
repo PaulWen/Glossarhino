@@ -1,2 +1,14 @@
-page-single-entry {    
+page-single-entry {
+    .col {
+        display: flex;
+    }
+
+    .card {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .card-content {
+        flex: 1;
+    }
 }

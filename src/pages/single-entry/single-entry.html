@@ -41,7 +41,7 @@
           <ion-card-content>
             {{ entryDataObject?.description }}
           </ion-card-content>
-          <ion-row>
+          <ion-row class="footer-row">
             <ion-col>
               <button ion-button icon-left clear small (click)="sendMail(entryDataObject?.email)">
                   <ion-icon name="contact"></ion-icon>
@@ -67,7 +67,7 @@
             <ion-card-content>
               {{ department.description }}
             </ion-card-content>
-            <ion-row>
+            <ion-row ion-footer>
               <ion-col>
                 <button ion-button icon-left clear small (click)="sendMail(department.email)">
                   <ion-icon name="contact"></ion-icon>

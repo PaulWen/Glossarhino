@@ -19,7 +19,6 @@ export class EntryListPage {
 
   // navParams
   private departmentId: number;
-  private departmentName: string;
   private searchbarFocus: boolean;
 
   // model objects
@@ -41,7 +40,6 @@ export class EntryListPage {
 
     // get navParams
     this.departmentId = this.navParams.get("departmentId");
-    this.departmentName = this.navParams.get("departmentName");
     this.searchbarFocus = this.navParams.get("searchbarFocus");
 
     // instantiate model

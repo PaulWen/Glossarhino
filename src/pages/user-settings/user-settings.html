@@ -2,7 +2,7 @@
 
   <ion-navbar>
     
-    <ion-buttons start>
+    <ion-buttons start *ngIf="isModal">
       <button ion-button (click)="closeUserSettingsModal()">
         <span ion-text color="primary" showWhen="ios">Close</span>
         <ion-icon name="md-close" showWhen="android,windows, core"></ion-icon>
@@ -10,6 +10,16 @@
     </ion-buttons>
 
     <ion-title> Settings </ion-title>
+
+    <ion-buttons end *ngIf="!isModal">
+      <button ion-button icon-only (click)="pushSearch()">
+        <ion-icon name="search"></ion-icon>
+      </button>
+
+      <button ion-button icon-only (click)="presentLanguagePopover($event)">
+        <ion-icon name="chatbubbles"></ion-icon>
+      </button>
+    </ion-buttons>
 
   </ion-navbar>
 

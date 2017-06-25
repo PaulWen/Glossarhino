@@ -54,14 +54,13 @@ export class HomePage {
     }
 
     private doRefresh(refresher) {
-        this.loadData();
-        refresher.complete();
+        this.loadData(refresher);
     }
 
     /**
      * PAGE METHODS
      */
-    private loadData() {
+    private loadData(refresher?) {
         // get selected language
         this.homePageModelInterface.getSelectedLanguage().then((data) => {
             this.selectedLanguageDataObject = data;
@@ -78,6 +77,11 @@ export class HomePage {
             // get selected departments
             this.homePageModelInterface.getSelectedHomePageDepartmentDataobjects(this.selectedLanguageDataObject.selectedLanguage).then((data) => {
                 this.departments = data;
+
+                // reset refresher if handed over in method
+                if (refresher) {
+                    refresher.complete();
+                }
             }, (error) => {
                 Logger.log("Loading selected departments failed (Class: HomePage, Method: loadData()");
                 Logger.error(error);
@@ -110,10 +114,22 @@ export class HomePage {
      * navigate to entry list and hand over department
      * @param departmentId
      */
-    private pushList(departmentId: number, departmentName?: string) {
+    private pushList(departmentId?: number) {
         this.navCtrl.push("EntryListPage", {
-            departmentId: departmentId,
-            departmentName: departmentName
+            departmentId: departmentId
+        }).then((canEnterView) => {
+            if (!canEnterView) {
+                // in the case that the view can not be entered redirect the user to the login page
+                this.navCtrl.setRoot("LoginPage");
+            }
+        });
+    }
+
+    /**
+     * navigate to settings
+     */
+    private pushSettings() {
+        this.navCtrl.push("UserSettingsPage", {
         }).then((canEnterView) => {
             if (!canEnterView) {
                 // in the case that the view can not be entered redirect the user to the login page

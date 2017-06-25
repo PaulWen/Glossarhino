@@ -30,16 +30,22 @@ export class UserSettingsPage {
   // temp object for checkbox model
   private userDepartmentFilterCheckboxObject: Array<{ department: DepartmentDataObject, checked: boolean }>;
 
+  // know whether or not it is a modal, important for showing specific buttons
+  private isModal: boolean;
+
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
   constructor(navCtrl: NavController, navParams: NavParams, popoverCtrl: PopoverController, viewCtrl: ViewController, appModel: AppModelService) {
     // instantiate ionic injected components
     this.navCtrl = navCtrl;
     this.navParams = navParams;
     this.popoverCtrl = popoverCtrl;
-    this.viewCtrl = viewCtrl;    
+    this.viewCtrl = viewCtrl;
 
     // instantiate model object
     this.userSettingsPageModelInterface = appModel;
+
+    // get to know whether it is a modal
+    this.isModal = this.navParams.get("isModal");
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
@@ -128,5 +134,35 @@ export class UserSettingsPage {
    */
   private closeUserSettingsModal() {
     this.viewCtrl.dismiss();
+  }
+
+  /**
+   * navigate to entry list and open searchbar
+   */
+  private pushSearch() {
+    this.navCtrl.push("EntryListPage", {
+      searchbarFocus: true
+    }).then((canEnterView) => {
+      if (!canEnterView) {
+        // in the case that the view can not be entered redirect the user to the login page
+        this.navCtrl.setRoot("LoginPage");
+      }
+    });
+  }
+
+  /**
+   * create and present LanguagePopover to enable changing languages
+   * @param event
+   */
+  private presentLanguagePopover(event: any) {
+    let popover = this.popoverCtrl.create("LanguagePopoverPage");
+    popover.present({
+      ev: event
+    }).then((canEnterView) => {
+      if (!canEnterView) {
+        // in the case that the view can not be entered redirect the user to the login page
+        this.navCtrl.setRoot("LoginPage");
+      }
+    });
   }
 }

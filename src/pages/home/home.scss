@@ -3,7 +3,7 @@
   ion-card {
     position: relative;
     text-align: center;
-    background-color: #80746E;
+    background-color: color($colors, dark, base);
   }
 
   .card-title {

@@ -5,6 +5,7 @@ import { AppModelService } from "../../providers/app-model-service";
 import { GlobalDepartmentConfigDataObject } from "../../providers/dataobjects/global-department-config.dataobject";
 import { UserDepartmentFilterConfigDataObject } from "../../providers/dataobjects/user-department-filter-config.dataobject";
 import { Logger } from "../../app/logger";
+import { DepartmentDataObject } from "../../providers/dataobjects/department.dataobject";
 
 @IonicPage()
 @Component({
@@ -22,8 +23,11 @@ export class UserSettingsPage {
   private userSettingsPageModelInterface: UserSettingsPageModelInterface;
 
   // data objects
-  private globalDepartmentConfigDataObject: GlobalDepartmentConfigDataObject | any;
+  private globalDepartmentConfigDataObject: GlobalDepartmentConfigDataObject;
   private userDepartmentFilterConfigDataObject: UserDepartmentFilterConfigDataObject;
+
+  // temp object for checkbox model
+  private userDepartmentFilterCheckboxObject: Array<{ department: DepartmentDataObject, checked: boolean }>;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
   constructor(navCtrl: NavController, navParams: NavParams, popoverCtrl: PopoverController, appModel: AppModelService) {
@@ -41,14 +45,17 @@ export class UserSettingsPage {
    * IONIC LIFECYCLE METHODS
    */
   private ionViewCanEnter(): Promise<boolean> | boolean {
-    this.userDepartmentFilterConfigDataObject.selectedDepartments = this.selectedDepartmentIds
     return this.userSettingsPageModelInterface.isAuthenticated();
   };
 
-  ionViewDidLoad() {
+  private ionViewDidLoad() {
     // load data
     this.loadData();
   };
+
+  private ionViewWillLeave() {
+    this.updateModel();
+  }
 
   /**
    * PAGE METHODS
@@ -62,7 +69,20 @@ export class UserSettingsPage {
       this.userDepartmentFilterConfigDataObject = data;
 
       // put global config and user config together to fit to form
-      
+      this.userDepartmentFilterCheckboxObject = []; // instantiate object
+      this.globalDepartmentConfigDataObject.departments.forEach(department => {
+        if (this.userDepartmentFilterConfigDataObject.selectedDepartments.find(selectedDepartment => selectedDepartment == department.departmentId) == undefined) {
+          this.userDepartmentFilterCheckboxObject.push({
+            department: department,
+            checked: false
+          });
+        } else {
+          this.userDepartmentFilterCheckboxObject.push({
+            department: department,
+            checked: true
+          });
+        }
+      });
 
     }, (error) => {
       Logger.log("Loading user department preferences failed (Class: UserSettingsPage, Method: loadData()");
@@ -74,8 +94,8 @@ export class UserSettingsPage {
    * transform globalDepartmentConfigDataObject to array of numbers to set it in model afterwards
    */
   get selectedDepartmentIds() {
-    if (this.globalDepartmentConfigDataObject) {
-      return this.globalDepartmentConfigDataObject.departments.filter(department => department.checked).map(department => department.departmentId);
+    if (this.userDepartmentFilterCheckboxObject) {
+      return this.userDepartmentFilterCheckboxObject.filter(department => department.checked).map(department => department.department.departmentId);
     };
   };
 
@@ -83,10 +103,10 @@ export class UserSettingsPage {
    * Update model to reflect new UserDepartmentFilterConfigDataObject
    * @param selectedDepartmentIds 
    */
-  private updateModel(selectedDepartmentIds: Array<number>) {
+  private updateModel() {
     // update array to reflect new settings
     this.userDepartmentFilterConfigDataObject.selectedDepartments = this.selectedDepartmentIds;
-    
+
     // update model
     this.userSettingsPageModelInterface.setUserDepartmentFilterConfigDataObject(this.userDepartmentFilterConfigDataObject).then((data) => {
       Logger.log("Successfully set UserDepartmentFilterConfigDataObject (Class: UserSettingsPage, Method: updateModel()");

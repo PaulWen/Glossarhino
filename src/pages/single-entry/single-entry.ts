@@ -183,8 +183,8 @@ export class SingleEntryPage {
    * create and present the SettingsModal to show settings for the user. SettingsPage is the template for the modal.
    */
   private openUserSettingsPageModal() {
-    let filterModal = this.modalCtrl.create("UserSettingsPage");
-    filterModal.present().then((canEnterView) => {
+    let userSettingsPage = this.modalCtrl.create("UserSettingsPage");
+    userSettingsPage.present().then((canEnterView) => {
       if (!canEnterView) {
         // in the case that the view can not be entered redirect the user to the login page
         this.navCtrl.setRoot("LoginPage");

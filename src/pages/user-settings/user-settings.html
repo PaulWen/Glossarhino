@@ -28,9 +28,9 @@
 <ion-content padding>
 
   <ion-list class="form-group">
-    <ion-item *ngFor="let department of globalDepartmentConfigDataObject?.departments">
-      <ion-label>{{ department.departmentName }}</ion-label>
-      <ion-checkbox [(ngModel)]="department.checked" (ionChange)="updateModel(selectedDepartmentIds)"></ion-checkbox>
+    <ion-item *ngFor="let department of userDepartmentFilterCheckboxObject">
+      <ion-label>{{ department.department.departmentName }}</ion-label>
+      <ion-checkbox [(ngModel)]="department.checked"></ion-checkbox>
     </ion-item>
   </ion-list>
 

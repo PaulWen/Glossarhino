@@ -1,10 +1,13 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController, AlertController } from 'ionic-angular';
 import { EditModalPageModelInterface } from "./edit-modal.model-interface";
 import { EntryDataObject } from "../../providers/dataobjects/entry.dataobject";
 import { AppModelService } from "../../providers/app-model-service";
 import { UserLanguageFilterConfigDataObject } from "../../providers/dataobjects/user-language-filter-config.dataobject";
 import { Logger } from "../../app/logger";
+import { GlobalDepartmentConfigDataObject } from "../../providers/dataobjects/global-department-config.dataobject";
+import { DepartmentEntrySpecificsDataObject } from "../../providers/dataobjects/department-entry-description.dataobject";
+import { DepartmentDataObject } from "../../providers/dataobjects/department.dataobject";
 
 @IonicPage()
 @Component({
@@ -18,6 +21,7 @@ export class EditModalPage {
   private navCtrl: NavController;
   private navParams: NavParams;
   private viewCtrl: ViewController;
+  private alertCtrl: AlertController;
 
   // navParams
   private _id: string;
@@ -26,15 +30,17 @@ export class EditModalPage {
   private editModalPageModelInterface: EditModalPageModelInterface;
 
   // data objects
+  private globalDepartmentConfigDataObject: GlobalDepartmentConfigDataObject;
   private entryDataObject: EntryDataObject;
   private selectedLanguageDataObject: UserLanguageFilterConfigDataObject;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
-  constructor(navCtrl: NavController, navParams: NavParams, viewCtrl: ViewController, appModel: AppModelService) {
+  constructor(navCtrl: NavController, navParams: NavParams, viewCtrl: ViewController, alertCtrl: AlertController, appModel: AppModelService) {
     // instantiate ionic injected components
     this.navCtrl = navCtrl;
     this.navParams = navParams;
     this.viewCtrl = viewCtrl;
+    this.alertCtrl = alertCtrl;
 
     // get navParams
     this._id = this.navParams.get("_id");
@@ -67,6 +73,9 @@ export class EditModalPage {
    * @param refresher hand over to complete refresher once data is loaded
    */
   private loadData(refresher?) {
+    // load global department config
+    this.globalDepartmentConfigDataObject = this.editModalPageModelInterface.getGlobalDepartmentConfigDataObject();
+
     // get selected language
     this.editModalPageModelInterface.getSelectedLanguage().then((data) => {
       this.selectedLanguageDataObject = data;
@@ -99,13 +108,26 @@ export class EditModalPage {
     this.loadData(refresher);
   }
 
+  private addDepartmentSpecification(departmentId: number) {
+    this.entryDataObject.departmentSpecifics.push(DepartmentEntrySpecificsDataObject.init(departmentId));
+  }
+
+  private removeDepartmentSpecification(departmentId: number) {
+    let index: number = this.entryDataObject.departmentSpecifics.findIndex(departmentSpecifics => departmentSpecifics.departmentId == departmentId);
+    if (index > -1) {
+      this.entryDataObject.departmentSpecifics.splice(index, 1);
+    }
+  }
+
   //////////////////////////////////////////
   //         Navigation Functions         //
   //////////////////////////////////////////
 
   private closeEditModal(save: boolean) {
-    console.log(this.entryDataObject);
     if (save) {
+      this.entryDataObject.departmentSpecifics.sort((a, b) => {
+        return a.departmentId - b.departmentId
+      });
       this.editModalPageModelInterface.setEntryDataObject(this.entryDataObject, this.selectedLanguageDataObject.selectedLanguage).then((data) => {
         this.viewCtrl.dismiss();
       }, (error) => {
@@ -115,5 +137,35 @@ export class EditModalPage {
     } else {
       this.viewCtrl.dismiss();
     }
+  }
+
+  private showAddDepartmentRadioAlert() {
+    let departmentRadioAlert = this.alertCtrl.create();
+    departmentRadioAlert.setTitle('Select department');
+
+    //check array of departments and remove the ones already included in the entryDataObject
+    let temporaryArray: Array<DepartmentDataObject> = [];
+    this.globalDepartmentConfigDataObject.departments.forEach(department => {
+      if (this.entryDataObject.departmentSpecifics.find(departmentSpecifics => departmentSpecifics.departmentId == department.departmentId) == undefined) {
+        temporaryArray.push(department);
+      }
+    });
+
+    temporaryArray.forEach(department => {
+      departmentRadioAlert.addInput({
+        type: 'radio',
+        label: department.departmentName,
+        value: department.departmentId.toString()
+      });
+    });
+
+    departmentRadioAlert.addButton('Cancel');
+    departmentRadioAlert.addButton({
+      text: 'OK',
+      handler: data => {
+        this.addDepartmentSpecification(+data);
+      }
+    });
+    departmentRadioAlert.present();
   }
 }

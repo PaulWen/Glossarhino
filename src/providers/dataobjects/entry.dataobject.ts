@@ -1,4 +1,4 @@
-import { DepartmentEntrySpecificsDataobject } from "./department-entry-description.dataobject";
+import { DepartmentEntrySpecificsDataObject } from "./department-entry-description.dataobject";
 import { AttachmentDataObject } from "./attachment.dataobject";
 
 /**
@@ -23,6 +23,6 @@ export abstract class EntryDataObject {
 
   abstract get attachments(): Array<AttachmentDataObject>;
 
-  abstract get departmentSpecifics(): Array<DepartmentEntrySpecificsDataobject>;
-  abstract set departmentSpecifics(departmentSpecifics: Array<DepartmentEntrySpecificsDataobject>);
+  abstract get departmentSpecifics(): Array<DepartmentEntrySpecificsDataObject>;
+  abstract set departmentSpecifics(departmentSpecifics: Array<DepartmentEntrySpecificsDataObject>);
 }

@@ -27,10 +27,8 @@ export class UserSettingsPage {
   private globalDepartmentConfigDataObject: GlobalDepartmentConfigDataObject;
   private userDepartmentFilterConfigDataObject: UserDepartmentFilterConfigDataObject;
 
-  // temp object for checkbox model
+  // other objects
   private userDepartmentFilterCheckboxObject: Array<{ department: DepartmentDataObject, checked: boolean }>;
-
-  // know whether or not it is a modal, important for showing specific buttons
   private isModal: boolean;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////

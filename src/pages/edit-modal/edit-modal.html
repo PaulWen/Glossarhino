@@ -91,7 +91,7 @@
           </ion-card-content>
           <ion-row align-items-center justify-content-center class="footer-row">
 
-            <ion-col col-lg-2 col-12>
+            <ion-col col-lg-1 col-12>
               <button ion-button clear large>
                   <ion-icon name="contact" large></ion-icon>
               </button>
@@ -100,23 +100,30 @@
             <ion-col col-lg-5 col-12>
               <ion-item>
                 <ion-label floating>Name</ion-label>
-                <ion-input type="text" [ngModel]="entryDataObject.departmentSpecifics[i].contact"
-              (ngModelChange)="entryDataObject.departmentSpecifics[i].contact = $event"></ion-input>
+                <ion-input type="text" [ngModel]="entryDataObject.departmentSpecifics[i].contact" (ngModelChange)="entryDataObject.departmentSpecifics[i].contact = $event"></ion-input>
               </ion-item>
             </ion-col>
 
             <ion-col col-lg-5 col-12>
               <ion-item>
                 <ion-label floating>E-Mail</ion-label>
-                <ion-input type="text" [ngModel]="entryDataObject.departmentSpecifics[i].email"
-              (ngModelChange)="entryDataObject.departmentSpecifics[i].email = $event"></ion-input>
+                <ion-input type="text" [ngModel]="entryDataObject.departmentSpecifics[i].email" (ngModelChange)="entryDataObject.departmentSpecifics[i].email = $event"></ion-input>
               </ion-item>
+            </ion-col>
+
+            <ion-col col-lg-1 col-12>
+              <button ion-button clear large>
+                  <ion-icon name="trash" large (click)="removeDepartmentSpecification(department.departmentId)"></ion-icon>
+              </button>
             </ion-col>
 
           </ion-row>
         </ion-card>
       </ion-col>
     </ion-row>
+
+    <button ion-button (click)="showAddDepartmentRadioAlert()">Add department specification</button>
+
   </ion-grid>
 
 </ion-content>

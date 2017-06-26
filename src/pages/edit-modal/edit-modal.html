@@ -30,6 +30,7 @@
 
     <!-- general description of entry -->
     <ion-row align-items-center justify-content-center>
+
       <ion-col col-12>
         <ion-card>
           <ion-item>
@@ -38,6 +39,7 @@
           </ion-item>
         </ion-card>
       </ion-col>
+
       <ion-col col-12>
         <ion-card>
           <ion-card-header>
@@ -46,38 +48,71 @@
           <ion-card-content>
             <ion-textarea type="text" placeholder="Description" rows="15" [ngModel]="entryDataObject?.description" (ngModelChange)="entryDataObject.description = $event"></ion-textarea>
           </ion-card-content>
-          <ion-row class="footer-row">
-            <ion-col>
-              <button ion-button icon-left clear small (click)="sendMail(entryDataObject?.email)">
-                  <ion-icon name="contact"></ion-icon>
-                  <div>{{ entryDataObject?.contact }}</div>
-                </button>
-              <button ion-button icon-left clear small (click)="openAttachmentModal(entryDataObject?.attachments)">
-                  <ion-icon name="attach"></ion-icon>
-                </button>
+
+          <ion-row align-items-center justify-content-center class="footer-row">
+
+            <ion-col col-lg-2 col-12>
+              <button ion-button clear large>
+                  <ion-icon name="contact" large></ion-icon>
+              </button>
             </ion-col>
+
+            <ion-col col-lg-5 col-12>
+              <ion-item>
+                <ion-label floating>Name</ion-label>
+                <ion-input type="text" [ngModel]="entryDataObject?.contact" (ngModelChange)="entryDataObject.contact = $event"></ion-input>
+              </ion-item>
+            </ion-col>
+
+            <ion-col col-lg-5 col-12>
+              <ion-item>
+                <ion-label floating>E-Mail</ion-label>
+                <ion-input type="text" [ngModel]="entryDataObject?.email" (ngModelChange)="entryDataObject.email = $event"></ion-input>
+              </ion-item>
+            </ion-col>
+
           </ion-row>
+
         </ion-card>
       </ion-col>
+
     </ion-row>
 
     <!-- specifics for the departments generated as one card each -->
     <ion-row align-items-stretch justify-content-center>
-      <ion-col col-xl-3 col-lg-3 col-md-6 col-sm-6 col-xs-6 col-12 *ngFor="let department of entryDataObject?.departmentSpecifics; let i = index">
+      <ion-col col-12 *ngFor="let department of entryDataObject?.departmentSpecifics; let i = index">
         <ion-card>
           <ion-card-header>
             {{ editModalPageModelInterface.getDepartmentById(department.departmentId).departmentName }}
           </ion-card-header>
           <ion-card-content>
-            <ion-textarea type="text" placeholder="Description" rows="10" [ngModel]="entryDataObject.departmentSpecifics[i].description"></ion-textarea>
+            <ion-textarea type="text" placeholder="Description" rows="10" [ngModel]="entryDataObject.departmentSpecifics[i].description"
+              (ngModelChange)="entryDataObject.departmentSpecifics[i].description = $event"></ion-textarea>
           </ion-card-content>
-          <ion-row ion-footer>
-            <ion-col>
-              <button ion-button icon-left clear small (click)="sendMail(department.email)">
-                  <ion-icon name="contact"></ion-icon>
-                  <div>{{ department.contact }}</div>
-                </button>
+          <ion-row align-items-center justify-content-center class="footer-row">
+
+            <ion-col col-lg-2 col-12>
+              <button ion-button clear large>
+                  <ion-icon name="contact" large></ion-icon>
+              </button>
             </ion-col>
+
+            <ion-col col-lg-5 col-12>
+              <ion-item>
+                <ion-label floating>Name</ion-label>
+                <ion-input type="text" [ngModel]="entryDataObject.departmentSpecifics[i].contact"
+              (ngModelChange)="entryDataObject.departmentSpecifics[i].contact = $event"></ion-input>
+              </ion-item>
+            </ion-col>
+
+            <ion-col col-lg-5 col-12>
+              <ion-item>
+                <ion-label floating>E-Mail</ion-label>
+                <ion-input type="text" [ngModel]="entryDataObject.departmentSpecifics[i].email"
+              (ngModelChange)="entryDataObject.departmentSpecifics[i].email = $event"></ion-input>
+              </ion-item>
+            </ion-col>
+
           </ion-row>
         </ion-card>
       </ion-col>

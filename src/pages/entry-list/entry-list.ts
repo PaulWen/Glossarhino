@@ -51,9 +51,10 @@ export class EntryListPage {
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
 
-  /**
-   * IONIC LIFECYCLE METHODS
-   */
+  //////////////////////////////////////////
+  //      Ionic Lifecycle Functions       //
+  //////////////////////////////////////////
+  
   private ionViewCanEnter(): Promise<boolean> | boolean {
     return this.entryListPageModelInterface.isAuthenticated();
   }

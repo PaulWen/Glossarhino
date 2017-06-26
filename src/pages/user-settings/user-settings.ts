@@ -49,9 +49,11 @@ export class UserSettingsPage {
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
-  /**
-   * IONIC LIFECYCLE METHODS
-   */
+ 
+  //////////////////////////////////////////
+  //      Ionic Lifecycle Functions       //
+  //////////////////////////////////////////
+  
   private ionViewCanEnter(): Promise<boolean> | boolean {
     return this.userSettingsPageModelInterface.isAuthenticated();
   };

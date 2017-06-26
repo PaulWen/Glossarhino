@@ -44,11 +44,12 @@ export class EditModalPage {
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
-  /**
-   * IONIC LIFECYCLE METHODS
-   */
 
-  ionViewDidLoad() {
+  //////////////////////////////////////////
+  //      Ionic Lifecycle Functions       //
+  //////////////////////////////////////////
+
+  private ionViewDidLoad() {
     // load data
     this.loadData();
   }
@@ -57,10 +58,14 @@ export class EditModalPage {
     return this.editModalPageModelInterface.isAuthenticated();
   }
 
-  /**
-   * PAGE METHODS
-   */
+  //////////////////////////////////////////
+  //           Page Functions             //
+  //////////////////////////////////////////
 
+  /**
+   * load data for the page
+   * @param refresher hand over to complete refresher once data is loaded
+   */
   private loadData(refresher?) {
     // get selected language
     this.editModalPageModelInterface.getSelectedLanguage().then((data) => {
@@ -86,17 +91,18 @@ export class EditModalPage {
     });
   }
 
+  /**
+   * refresh page when on pulling content down
+   * @param refresher 
+   */
   private doRefresh(refresher) {
     this.loadData(refresher);
   }
 
-  /**
-   * NAVIGATION METHODS
-   */
+  //////////////////////////////////////////
+  //         Navigation Functions         //
+  //////////////////////////////////////////
 
-  /**
-  * Method to close the FilterModal when pressing the assigned button
-  */
   private closeEditModal(save: boolean) {
     console.log(this.entryDataObject);
     if (save) {

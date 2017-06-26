@@ -7,15 +7,8 @@
       <ion-icon name="menu"></ion-icon>
     </button>
 
-    <ion-searchbar
-      #searchbar
-      placeholder="Search entries"
-      autocorrect="off"
-      type="text"
-      [(ngModel)]="searchText"
-      [hidden]="searchbarIsHidden"
-      showCancelButton="false"
-      (ionInput)="loadData()">
+    <ion-searchbar #searchbar placeholder="Search entries" autocorrect="off" type="text" [(ngModel)]="searchText" [hidden]="searchbarIsHidden"
+      showCancelButton="false" (ionInput)="loadData()">
     </ion-searchbar>
 
   </ion-navbar>
@@ -23,6 +16,10 @@
 </ion-header>
 
 <ion-content padding>
+
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
 
   <!-- Print list with all entries retreived in department -->
   <ion-list>

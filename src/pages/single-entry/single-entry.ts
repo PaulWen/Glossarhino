@@ -71,7 +71,7 @@ export class SingleEntryPage {
   /**
    * PAGE METHODS
    */
-  private loadData() {
+  private loadData(refresher?) {
     //get selected language
     this.singleEntryPageModelInterface.getSelectedLanguage().then((data) => {
       this.selectedLanguageDataObject = data;
@@ -85,12 +85,21 @@ export class SingleEntryPage {
         Logger.error(error);
       });
 
+      // reset refresher if handed over in method
+      if (refresher) {
+        refresher.complete();
+      }
+
     }, (error) => {
       Logger.log("Loading selected language failed (Class: SingleEntryPage, Method: loadData()");
       Logger.error(error);
     });
-  };
-  
+  }
+
+  private doRefresh(refresher) {
+    this.loadData(refresher);
+  }
+
   /**
    * Method to send an email to the contact specified for the entry and department
    * @param emailAddress

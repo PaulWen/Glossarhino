@@ -53,10 +53,6 @@ export class HomePage {
         return this.homePageModelInterface.isAuthenticated();
     }
 
-    private doRefresh(refresher) {
-        this.loadData(refresher);
-    }
-
     /**
      * PAGE METHODS
      */
@@ -77,20 +73,24 @@ export class HomePage {
             // get selected departments
             this.homePageModelInterface.getSelectedHomePageDepartmentDataobjects(this.selectedLanguageDataObject.selectedLanguage).then((data) => {
                 this.departments = data;
-
-                // reset refresher if handed over in method
-                if (refresher) {
-                    refresher.complete();
-                }
             }, (error) => {
                 Logger.log("Loading selected departments failed (Class: HomePage, Method: loadData()");
                 Logger.error(error);
             });
 
+            // reset refresher if handed over in method
+            if (refresher) {
+                refresher.complete();
+            }
+
         }, (error) => {
             Logger.log("Loading currentLanguage failed (Class: HomePage, Method: loadData()");
             Logger.error(error);
         });
+    }
+
+    private doRefresh(refresher) {
+        this.loadData(refresher);
     }
 
     /**

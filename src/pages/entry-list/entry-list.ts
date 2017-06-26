@@ -85,7 +85,7 @@ export class EntryListPage {
   /**
    * PAGE METHODS
    */
-  private loadData(departmendId?: number) {
+  private loadData(departmendId?: number, refresher?) {
     // get selected language
     this.entryListPageModelInterface.getSelectedLanguage().then((data) => {
       this.selectedLanguageDataObject = data;
@@ -99,12 +99,20 @@ export class EntryListPage {
         Logger.error(error);
       });
 
+      // reset refresher if handed over in method
+      if (refresher) {
+        refresher.complete();
+      }
+
     }, (error) => {
       Logger.log("Loading selected language failed (Class: EntryListPage, Method: loadData()");
       Logger.error(error);
     });
+  }
 
-  };
+  private doRefresh(refresher) {
+    this.loadData(undefined, refresher);
+  }
 
   /**
    * NAVIGATION METHODS

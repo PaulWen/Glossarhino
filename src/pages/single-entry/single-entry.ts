@@ -143,6 +143,9 @@ export class SingleEntryPage {
         this.navCtrl.setRoot("LoginPage");
       }
     });
+    popover.onWillDismiss(() => {
+            this.loadData();
+        })
   };
 
   /**

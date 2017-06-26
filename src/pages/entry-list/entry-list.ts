@@ -110,7 +110,7 @@ export class EntryListPage {
   }
 
   private doRefresh(refresher) {
-    this.loadData(undefined, refresher);
+    this.loadData(this.departmentId, refresher);
   }
 
   /**

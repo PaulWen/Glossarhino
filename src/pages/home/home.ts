@@ -154,6 +154,17 @@ export class HomePage {
         });
     }
 
+    private pushNewEntry() {
+        this.navCtrl.push("EditModalPage", {
+            addNewEntry: true
+        }).then((canEnterView) => {
+            if (!canEnterView) {
+                // in the case that the view can not be entered redirect the user to the login page
+                this.navCtrl.setRoot("LoginPage");
+            }
+        });
+    }
+
     /**
      * create and present LanguagePopover to enable changing languages
      * @param event
@@ -168,6 +179,9 @@ export class HomePage {
                 this.navCtrl.setRoot("LoginPage");
             }
         });
+        popover.onWillDismiss(() => {
+            this.loadData();
+        })
     }
 
 }

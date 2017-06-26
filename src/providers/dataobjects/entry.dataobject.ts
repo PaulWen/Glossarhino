@@ -20,9 +20,24 @@ export abstract class EntryDataObject {
   abstract set email(email: string);
 
   abstract get relatedDepartments(): Array<number>;
+  abstract set relatedDepartments(relatedDepartments: Array<number>);
 
   abstract get attachments(): Array<AttachmentDataObject>;
 
   abstract get departmentSpecifics(): Array<DepartmentEntrySpecificsDataObject>;
   abstract set departmentSpecifics(departmentSpecifics: Array<DepartmentEntrySpecificsDataObject>);
+
+  public static init(): EntryDataObject {
+    return {
+      "_id": undefined,
+      "name": "",
+      "description": "",
+      "contact": "",
+      "email": "",
+      "relatedDepartments": [],
+      "attachments": [],
+      "departmentSpecifics": []
+    }
+  }
+  
 }

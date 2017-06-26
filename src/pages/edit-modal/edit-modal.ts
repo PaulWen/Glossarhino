@@ -25,6 +25,7 @@ export class EditModalPage {
 
   // navParams
   private _id: string;
+  private addNewEntry: boolean;
 
   // model object
   private editModalPageModelInterface: EditModalPageModelInterface;
@@ -44,6 +45,7 @@ export class EditModalPage {
 
     // get navParams
     this._id = this.navParams.get("_id");
+    this.addNewEntry = this.navParams.get("addNewEntry");
 
     // instantiate model object
     this.editModalPageModelInterface = appModel;
@@ -82,12 +84,17 @@ export class EditModalPage {
 
       //load other data as soon as language loaded
       // get EntryDataObject
-      this.editModalPageModelInterface.getEntryDataObject(this._id, this.selectedLanguageDataObject.selectedLanguage).then((data) => {
-        this.entryDataObject = data;
-      }, (error) => {
-        Logger.log("Loading Entry Data Object failed (Class: EditModalPage, Method: loadData()");
-        Logger.error(error);
-      });
+      if (this.addNewEntry) {
+        this.entryDataObject = EntryDataObject.init();
+      } else {
+        this.editModalPageModelInterface.getEntryDataObject(this._id, this.selectedLanguageDataObject.selectedLanguage).then((data) => {
+          this.entryDataObject = data;
+        }, (error) => {
+          Logger.log("Loading Entry Data Object failed (Class: EditModalPage, Method: loadData()");
+          Logger.error(error);
+        });
+      }
+
 
       // reset refresher if handed over in method
       if (refresher) {
@@ -128,12 +135,20 @@ export class EditModalPage {
       this.entryDataObject.departmentSpecifics.sort((a, b) => {
         return a.departmentId - b.departmentId
       });
-      this.editModalPageModelInterface.setEntryDataObject(this.entryDataObject, this.selectedLanguageDataObject.selectedLanguage).then((data) => {
-        this.viewCtrl.dismiss();
-      }, (error) => {
-        Logger.log("Setting Entry Data Object failed (Class: EditModalPage, Method: closeEditModal()");
-        Logger.error(error);
-      });
+      if (this.addNewEntry) {
+        this.editModalPageModelInterface.newEntryDataObject(this.entryDataObject, this.selectedLanguageDataObject.selectedLanguage).then((data) => {
+          this.viewCtrl.dismiss();
+
+        })
+      } else {
+        this.editModalPageModelInterface.setEntryDataObject(this.entryDataObject, this.selectedLanguageDataObject.selectedLanguage).then((data) => {
+          this.viewCtrl.dismiss();
+        }, (error) => {
+          Logger.log("Setting Entry Data Object failed (Class: EditModalPage, Method: closeEditModal()");
+          Logger.error(error);
+        });
+      }
+
     } else {
       this.viewCtrl.dismiss();
     }
@@ -141,7 +156,7 @@ export class EditModalPage {
 
   private showAddDepartmentRadioAlert() {
     let departmentRadioAlert = this.alertCtrl.create();
-    departmentRadioAlert.setTitle('Select department');
+    departmentRadioAlert.setTitle("Select department");
 
     //check array of departments and remove the ones already included in the entryDataObject
     let temporaryArray: Array<DepartmentDataObject> = [];
@@ -153,19 +168,53 @@ export class EditModalPage {
 
     temporaryArray.forEach(department => {
       departmentRadioAlert.addInput({
-        type: 'radio',
+        type: "radio",
         label: department.departmentName,
         value: department.departmentId.toString()
       });
     });
 
-    departmentRadioAlert.addButton('Cancel');
+    departmentRadioAlert.addButton("Cancel");
     departmentRadioAlert.addButton({
-      text: 'OK',
+      text: "OK",
       handler: data => {
         this.addDepartmentSpecification(+data);
       }
     });
     departmentRadioAlert.present();
+  }
+
+  private showRelatedDepartmentsCheckboxAlert() {
+    let relatedDepartmentCheckboxAlert = this.alertCtrl.create();
+    relatedDepartmentCheckboxAlert.setTitle("Select related departments");
+
+    this.globalDepartmentConfigDataObject.departments.forEach(department => {
+      let checked: boolean = false;
+
+      if (this.entryDataObject.relatedDepartments.find(departmentId => departmentId == department.departmentId) != undefined) {
+        checked = true;
+      }
+
+      relatedDepartmentCheckboxAlert.addInput({
+        type: "checkbox",
+        label: department.departmentName,
+        value: department.departmentId.toString(),
+        checked: checked
+      });
+
+    });
+
+    relatedDepartmentCheckboxAlert.addButton("Cancel");
+    relatedDepartmentCheckboxAlert.addButton({
+      text: "OK",
+      handler: data => {
+        this.entryDataObject.relatedDepartments = data;
+        this.entryDataObject.relatedDepartments = this.entryDataObject.relatedDepartments.map((string) => {
+          return +string;
+        });
+        console.log(this.entryDataObject);
+      }
+    });
+    relatedDepartmentCheckboxAlert.present();
   }
 }

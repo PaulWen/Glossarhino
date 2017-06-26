@@ -51,20 +51,20 @@
 
           <ion-row align-items-center justify-content-center class="footer-row">
 
-            <ion-col col-lg-2 col-12>
-              <button ion-button clear large>
-                  <ion-icon name="contact" large></ion-icon>
+            <ion-col col-xl-2 col-12>
+              <button ion-button small (click)="showRelatedDepartmentsCheckboxAlert()">
+                Related departments
               </button>
             </ion-col>
 
-            <ion-col col-lg-5 col-12>
+            <ion-col col-xl-5 col-12>
               <ion-item>
                 <ion-label floating>Name</ion-label>
                 <ion-input type="text" [ngModel]="entryDataObject?.contact" (ngModelChange)="entryDataObject.contact = $event"></ion-input>
               </ion-item>
             </ion-col>
 
-            <ion-col col-lg-5 col-12>
+            <ion-col col-xl-5 col-12>
               <ion-item>
                 <ion-label floating>E-Mail</ion-label>
                 <ion-input type="text" [ngModel]="entryDataObject?.email" (ngModelChange)="entryDataObject.email = $event"></ion-input>
@@ -90,12 +90,6 @@
               (ngModelChange)="entryDataObject.departmentSpecifics[i].description = $event"></ion-textarea>
           </ion-card-content>
           <ion-row align-items-center justify-content-center class="footer-row">
-
-            <ion-col col-lg-1 col-12>
-              <button ion-button clear large>
-                  <ion-icon name="contact" large></ion-icon>
-              </button>
-            </ion-col>
 
             <ion-col col-lg-5 col-12>
               <ion-item>

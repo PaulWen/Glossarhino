@@ -31,6 +31,7 @@ export class EntryListPage {
 
   // get access to seachbar itself
   @ViewChild("searchbar") searchbar: Searchbar;
+  private searchbarIsHidden: boolean;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
   constructor(navCtrl: NavController, navParams: NavParams, appModel: AppModelService) {
@@ -44,6 +45,8 @@ export class EntryListPage {
 
     // instantiate model
     this.entryListPageModelInterface = appModel;
+
+    this.searchbarIsHidden = true;
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
@@ -54,11 +57,30 @@ export class EntryListPage {
   private ionViewDidLoad() {
     // load data
     this.loadData(this.departmentId);
-  };
+  }
 
   private ionViewCanEnter(): Promise<boolean> | boolean {
     return this.entryListPageModelInterface.isAuthenticated();
-  };
+  }
+
+  private ionViewWillEnter() {
+    // show searchbar
+    this.searchbarIsHidden = false;
+  }
+
+  private ionViewDidEnter() {
+    // set focus on searchbar
+    if (this.searchbarFocus) {
+      setTimeout(() => {
+        this.searchbar.setFocus();
+      }, 50);
+    }
+  }
+
+  private ionViewWillLeave() {
+    // hide searchbar
+    this.searchbarIsHidden = true;
+  }
 
   /**
    * PAGE METHODS
@@ -98,14 +120,5 @@ export class EntryListPage {
         this.navCtrl.setRoot("LoginPage");
       }
     });
-  };
-
-  // setFocus on searchbar
-  private ionViewDidEnter() {
-    if (this.searchbarFocus) {
-      setTimeout(() => {
-        this.searchbar.setFocus();
-      }, 50);
-    };
   };
 }

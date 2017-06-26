@@ -44,6 +44,7 @@ export class HomePage {
     /**
      * IONIC LIFECYCLE METHODS
      */
+
     private ionViewDidLoad() {
         // load data
         this.loadData();
@@ -56,6 +57,7 @@ export class HomePage {
     /**
      * PAGE METHODS
      */
+    
     private loadData(refresher?) {
         // get selected language
         this.homePageModelInterface.getSelectedLanguage().then((data) => {

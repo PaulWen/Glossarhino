@@ -31,10 +31,11 @@ export class SingleEntryPage {
 
   // navParams
   private _id: string;
-  private languageId: number;
 
-  // model objects
+  // model object
   private singleEntryPageModelInterface: SingleEntryPageModelInterface;
+  
+  // data objects
   private entryDataObject: EntryDataObject;
   private selectedLanguageDataObject: UserLanguageFilterConfigDataObject;
 
@@ -49,7 +50,6 @@ export class SingleEntryPage {
 
     // get navParams
     this._id = this.navParams.get("_id");
-    this.languageId = this.navParams.get("languageId");
 
     // instantiate model
     this.singleEntryPageModelInterface = appModel;
@@ -154,7 +154,7 @@ export class SingleEntryPage {
           text: "Edit",
           handler: () => {
             console.log("Edit clicked");
-            this.openEditModal(this.entryDataObject);
+            this.openEditModal(this.entryDataObject._id);
           }
         }, {
           text: "Settings",
@@ -206,9 +206,9 @@ export class SingleEntryPage {
   /**
    * create and present the EditModal to show settings for the user. EditPage is the template for the modal.
    */
-  private openEditModal(entry: EntryDataObject) {
+  private openEditModal(_id: string) {
     let editModal = this.modalCtrl.create("EditModalPage", {
-      entry: entry
+      _id: _id
     });
     editModal.present().then((canEnterView) => {
       if (!canEnterView) {

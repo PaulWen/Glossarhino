@@ -1,22 +1,17 @@
 <ion-header>
 
   <ion-navbar>
-    <!-- Menu toggle for burger menu -->
-    <button ion-button icon-only menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
-
-    <!-- Title, hided if searchbar unhided -->
-    <ion-title>Edit: </ion-title>
-
-    <!-- Hide buttons if Searchbar unhided -->
-    <ion-buttons end>
-      <button ion-button icon-only (click)="pushSearch()">
-        <ion-icon name="search"></ion-icon>
+    <ion-buttons start>
+      <button ion-button (click)="closeEditModal(false)">
+        <span ion-text color="primary" showWhen="ios">Cancel</span>
+        <ion-icon name="md-close" showWhen="android,windows, core"></ion-icon>
       </button>
-
-      <button ion-button icon-only (click)="presentLanguagePopover($event)">
-        <ion-icon name="chatbubbles"></ion-icon>
+    </ion-buttons>
+    <ion-title>Edit: {{ entryDataObject?.name }}</ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="closeEditModal(true)">
+        <span ion-text color="primary" showWhen="ios">Done</span>
+        <ion-icon name="md-checkmark" showWhen="android,windows, core"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
@@ -24,6 +19,69 @@
 </ion-header>
 
 
-<ion-content padding>
+<ion-content>
+
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <!-- ion-grid for responsive design -->
+  <ion-grid>
+
+    <!-- general description of entry -->
+    <ion-row align-items-center justify-content-center>
+      <ion-col col-12>
+        <ion-card>
+          <ion-item>
+            <ion-label floating>Title</ion-label>
+            <ion-input type="text" [ngModel]="entryDataObject?.name" (ngModelChange)="entryDataObject.name = $event"></ion-input>
+          </ion-item>
+        </ion-card>
+      </ion-col>
+      <ion-col col-12>
+        <ion-card>
+          <ion-card-header>
+            Description
+          </ion-card-header>
+          <ion-card-content>
+            <ion-textarea type="text" placeholder="Description" rows="15" [ngModel]="entryDataObject?.description" (ngModelChange)="entryDataObject.description = $event"></ion-textarea>
+          </ion-card-content>
+          <ion-row class="footer-row">
+            <ion-col>
+              <button ion-button icon-left clear small (click)="sendMail(entryDataObject?.email)">
+                  <ion-icon name="contact"></ion-icon>
+                  <div>{{ entryDataObject?.contact }}</div>
+                </button>
+              <button ion-button icon-left clear small (click)="openAttachmentModal(entryDataObject?.attachments)">
+                  <ion-icon name="attach"></ion-icon>
+                </button>
+            </ion-col>
+          </ion-row>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <!-- specifics for the departments generated as one card each -->
+    <ion-row align-items-stretch justify-content-center>
+      <ion-col col-xl-3 col-lg-3 col-md-6 col-sm-6 col-xs-6 col-12 *ngFor="let department of entryDataObject?.departmentSpecifics; let i = index">
+        <ion-card>
+          <ion-card-header>
+            {{ editModalPageModelInterface.getDepartmentById(department.departmentId).departmentName }}
+          </ion-card-header>
+          <ion-card-content>
+            <ion-textarea type="text" placeholder="Description" rows="10" [ngModel]="entryDataObject.departmentSpecifics[i].description"></ion-textarea>
+          </ion-card-content>
+          <ion-row ion-footer>
+            <ion-col>
+              <button ion-button icon-left clear small (click)="sendMail(department.email)">
+                  <ion-icon name="contact"></ion-icon>
+                  <div>{{ department.contact }}</div>
+                </button>
+            </ion-col>
+          </ion-row>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
 </ion-content>

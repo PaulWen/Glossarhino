@@ -118,15 +118,14 @@ export class EntryListPage {
    * NAVIGATION METHODS
    */
   // Navigation method for single entry
-  private pushEntry(_id: string, languageId: number) {
+  private pushEntry(_id: string) {
     this.navCtrl.push("SingleEntryPage", {
-      _id: _id,
-      languageId: languageId
+      _id: _id
     }).then((canEnterView) => {
       if (!canEnterView) {
         // in the case that the view can not be entered redirect the user to the login page
         this.navCtrl.setRoot("LoginPage");
       }
     });
-  };
+  }
 }

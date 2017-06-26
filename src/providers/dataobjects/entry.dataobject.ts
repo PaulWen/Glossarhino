@@ -24,4 +24,5 @@ export abstract class EntryDataObject {
   abstract get attachments(): Array<AttachmentDataObject>;
 
   abstract get departmentSpecifics(): Array<DepartmentEntrySpecificsDataobject>;
+  abstract set departmentSpecifics(departmentSpecifics: Array<DepartmentEntrySpecificsDataobject>);
 }

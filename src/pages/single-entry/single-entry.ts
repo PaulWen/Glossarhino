@@ -59,7 +59,7 @@ export class SingleEntryPage {
   /**
    * IONIC LIFECYCLE METHODS
    */
-  private ionViewDidLoad() {
+  private ionViewWillEnter() {
     // load data
     this.loadData();
   };
@@ -192,10 +192,13 @@ export class SingleEntryPage {
    * create and present the SettingsModal to show settings for the user. SettingsPage is the template for the modal.
    */
   private openUserSettingsPageModal() {
-    let userSettingsPage = this.modalCtrl.create("UserSettingsPage", {
+    let userSettingsPageModal = this.modalCtrl.create("UserSettingsPage", {
       isModal: true
     });
-    userSettingsPage.present().then((canEnterView) => {
+    userSettingsPageModal.onWillDismiss(() => {
+      this.loadData();
+    });
+    userSettingsPageModal.present().then((canEnterView) => {
       if (!canEnterView) {
         // in the case that the view can not be entered redirect the user to the login page
         this.navCtrl.setRoot("LoginPage");
@@ -209,6 +212,9 @@ export class SingleEntryPage {
   private openEditModal(_id: string) {
     let editModal = this.modalCtrl.create("EditModalPage", {
       _id: _id
+    });
+    editModal.onWillDismiss(() => {
+      this.loadData();
     });
     editModal.present().then((canEnterView) => {
       if (!canEnterView) {

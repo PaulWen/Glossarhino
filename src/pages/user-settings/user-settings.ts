@@ -56,7 +56,7 @@ export class UserSettingsPage {
     return this.userSettingsPageModelInterface.isAuthenticated();
   };
 
-  private ionViewDidLoad() {
+  private ionViewWillEnter() {
     // load data
     this.loadData();
   };

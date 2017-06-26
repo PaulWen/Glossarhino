@@ -54,11 +54,6 @@ export class EntryListPage {
   /**
    * IONIC LIFECYCLE METHODS
    */
-  private ionViewDidLoad() {
-    // load data
-    this.loadData(this.departmentId);
-  }
-
   private ionViewCanEnter(): Promise<boolean> | boolean {
     return this.entryListPageModelInterface.isAuthenticated();
   }
@@ -66,6 +61,9 @@ export class EntryListPage {
   private ionViewWillEnter() {
     // show searchbar
     this.searchbarIsHidden = false;
+
+    // load data
+    this.loadData(this.departmentId);
   }
 
   private ionViewDidEnter() {

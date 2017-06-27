@@ -165,7 +165,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
       selector.name = { $regex: regexp };
 
       // if departmentId is defined search only for entries that are relevant for the specific department
-      if (departmentId == undefined) {
+      if (departmentId != undefined) {
         selector.relatedDepartments = {
           $in: [departmentId]
         };

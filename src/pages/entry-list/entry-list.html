@@ -11,6 +11,12 @@
       showCancelButton="false" (ionInput)="loadData()">
     </ion-searchbar>
 
+    <ion-buttons end>
+      <button ion-button icon-only (click)="presentLanguagePopover($event)">
+        <ion-icon name="chatbubbles"></ion-icon>
+      </button>
+    </ion-buttons>
+
   </ion-navbar>
 
 </ion-header>

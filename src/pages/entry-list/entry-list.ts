@@ -1,5 +1,5 @@
 import { Component, ViewChild } from "@angular/core";
-import { IonicPage, NavController, NavParams, Searchbar } from "ionic-angular";
+import { IonicPage, NavController, NavParams, Searchbar, PopoverController } from "ionic-angular";
 import { AppModelService } from "../../providers/app-model-service";
 import { EntryListPageModelInterface } from "./entry-list.model-interface";
 import { UserLanguageFilterConfigDataObject } from "../../providers/dataobjects/user-language-filter-config.dataobject";
@@ -16,6 +16,7 @@ export class EntryListPage {
   // ionic injected components
   private navCtrl: NavController;
   private navParams: NavParams;
+  private popoverCtrl: PopoverController;
 
   // navParams
   private departmentId: number;
@@ -34,10 +35,11 @@ export class EntryListPage {
   private searchbarIsHidden: boolean;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
-  constructor(navCtrl: NavController, navParams: NavParams, appModel: AppModelService) {
+  constructor(navCtrl: NavController, navParams: NavParams, popoverCtrl: PopoverController, appModel: AppModelService) {
     // instantiate ionic injected components
     this.navCtrl = navCtrl;
     this.navParams = navParams;
+    this.popoverCtrl = popoverCtrl;
 
     // get navParams
     this.departmentId = this.navParams.get("departmentId");
@@ -127,4 +129,23 @@ export class EntryListPage {
       }
     });
   }
+
+  /**
+     * create and present LanguagePopover to enable changing languages
+     * @param event
+     */
+    private presentLanguagePopover(event: any) {
+        let popover = this.popoverCtrl.create("LanguagePopoverPage");
+        popover.present({
+            ev: event
+        }).then((canEnterView) => {
+            if (!canEnterView) {
+                // in the case that the view can not be entered redirect the user to the login page
+                this.navCtrl.setRoot("LoginPage");
+            }
+        });
+        popover.onWillDismiss(() => {
+            this.loadData();
+        })
+    }
 }

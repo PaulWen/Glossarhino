@@ -3,10 +3,9 @@ import { SuperLoginClientErrorResponse } from "../../providers/super_login_clien
 import { LanguageDataobject } from "../../providers/dataobjects/language.dataobject";
 import { HomePageDepartmentDataobject } from "../../providers/dataobjects/homepage.department.dataobject";
 import { UserLanguageFilterConfigDataObject } from "../../providers/dataobjects/user-language-filter-config.dataobject";
+import { GlobalDepartmentConfigDataObject } from "../../providers/dataobjects/global-department-config.dataobject";
+import { UserDepartmentFilterConfigDataObject } from "../../providers/dataobjects/user-department-filter-config.dataobject";
 
-/**
- * Interface to define what HomePage needs implemented in order to work
- */
 export interface HomePageModelInterface {
 
   /**
@@ -24,7 +23,16 @@ export interface HomePageModelInterface {
    */
   logout(done: SuperLoginClientDoneResponse, error: SuperLoginClientErrorResponse): void;
 
+  //////////////////////////////////////////
+  //        Functions to get data         //
+  //////////////////////////////////////////
+
   getSelectedLanguage(): Promise<UserLanguageFilterConfigDataObject>;
   getSelectedHomePageDepartmentDataobjects(currentLanguageId: number): Promise<Array<HomePageDepartmentDataobject>>;
   getCountOfAllEntries(selectedLanguage: number): Promise<number>;
+
+  // data for user filter settings
+  getGlobalDepartmentConfigDataObject(): GlobalDepartmentConfigDataObject;
+  getUserDepartmentFilterConfigDataObject(): Promise<UserDepartmentFilterConfigDataObject>;
+  setUserDepartmentFilterConfigDataObject(userDepartmentFilterConfigDataObject: UserDepartmentFilterConfigDataObject): Promise<boolean>;
 }

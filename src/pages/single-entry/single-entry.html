@@ -41,8 +41,8 @@
           <ion-card-header>
             Description
           </ion-card-header>
-          <ion-card-content>
-            {{ entryDataObject?.description }}
+          <!-- use innerHtml versus {{}}, because links are not rendered otherwise -->
+          <ion-card-content [innerHtml]="entryDataObject?.description">
           </ion-card-content>
 
           <div class="card-footer">

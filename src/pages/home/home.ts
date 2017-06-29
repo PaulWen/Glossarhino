@@ -9,6 +9,7 @@ import { UserLanguageFilterConfigDataObject } from "../../providers/dataobjects/
 import { GlobalDepartmentConfigDataObject } from "../../providers/dataobjects/global-department-config.dataobject";
 import { UserDepartmentFilterConfigDataObject } from "../../providers/dataobjects/user-department-filter-config.dataobject";
 import { DepartmentDataObject } from "../../providers/dataobjects/department.dataobject";
+import { Alerts } from "../../app/alerts";
 
 @IonicPage()
 @Component({
@@ -33,9 +34,7 @@ export class HomePage {
     private numberOfAllEntries: number;
 
     // selectFilterAlert objects
-    private globalDepartmentConfig: GlobalDepartmentConfigDataObject;
-    private userDepartmentFilterConfig: UserDepartmentFilterConfigDataObject;
-    private userDepartmentFilterCheckboxParsed: Array<{ details: DepartmentDataObject, checked: boolean }>;
+    private showDepartmentFilterAlertAppModel;
 
     ////////////////////////////////////////////Constructor////////////////////////////////////////////
 
@@ -48,6 +47,7 @@ export class HomePage {
 
         // instantiate model service object
         this.appModelService = appModelService;
+        this.showDepartmentFilterAlertAppModel = appModelService;
     }
 
     /////////////////////////////////////////////Methods///////////////////////////////////////////////
@@ -101,51 +101,6 @@ export class HomePage {
         });
     }
 
-    private loadFilterData() {
-
-        // load global departmentconfig
-        this.globalDepartmentConfig = this.appModelService.getGlobalDepartmentConfigDataObject();
-
-        // load user department filters
-        this.appModelService.getUserDepartmentFilterConfigDataObject().then((data) => {
-            this.userDepartmentFilterConfig = data;
-
-            // put global config and user config together to fit form for UI
-            this.userDepartmentFilterCheckboxParsed = [];
-
-            this.globalDepartmentConfig.departments.forEach(department => {
-                // check whether the department is already selected by the user, if not set false, if so set true
-                if (this.userDepartmentFilterConfig.selectedDepartments.find(selectedDepartment => selectedDepartment == department.departmentId) == undefined) {
-                    this.userDepartmentFilterCheckboxParsed.push({
-                        details: department,
-                        checked: false
-                    });
-                } else {
-                    this.userDepartmentFilterCheckboxParsed.push({
-                        details: department,
-                        checked: true
-                    });
-                }
-            });
-
-            // show checkbox alert after loaded data
-            this.showSelectFilterAlert();
-
-        }, (error) => {
-            Logger.log("Loading user department preferences failed (Class: UserSettingsPage, Method: loadData()");
-            Logger.error(error);
-        });
-    }
-
-    /**
-     * transform globalDepartmentConfigDataObject to array of numbers to set it in model afterwards
-     */
-    get selectedDepartmentIds() {
-        if (this.userDepartmentFilterCheckboxParsed) {
-            return this.userDepartmentFilterCheckboxParsed.filter(department => department.checked).map(department => department.details.departmentId);
-        };
-    };
-
     private doRefresh(refresher) {
         this.loadData(refresher);
     }
@@ -153,6 +108,16 @@ export class HomePage {
     //////////////////////////////////////////
     //         Navigation Functions         //
     //////////////////////////////////////////
+
+    private showDepartmentFilterAlert(alertCtrl: AlertController, appModelService: AppModelService) {
+        Logger.log("testFilter");
+        Alerts.showDepartmentFilterAlert(alertCtrl, appModelService).then(() => {
+            this.loadData();
+        }, (error) => {
+            Logger.error(error);
+        });
+        Logger.log("testFilter ende");
+    }
 
     private presentActionSheet() {
         let actionSheet = this.actionSheetCtrl.create({
@@ -166,7 +131,8 @@ export class HomePage {
                 }, {
                     text: "Filter",
                     handler: () => {
-                        this.loadFilterData();
+                        //this.loadFilterData();
+                        this.showDepartmentFilterAlert(this.alertCtrl, this.showDepartmentFilterAlertAppModel);
                     }
                 }, {
                     text: "Logout",
@@ -228,39 +194,6 @@ export class HomePage {
                 this.navCtrl.setRoot("LoginPage");
             }
         });
-    }
-
-    private showSelectFilterAlert() {
-        let selectFilterAlert = this.alertCtrl.create();
-        selectFilterAlert.setTitle("Select departments");
-
-        this.userDepartmentFilterCheckboxParsed.forEach(department => {
-            selectFilterAlert.addInput({
-                type: "checkbox",
-                label: department.details.departmentName,
-                value: department.details.departmentId.toString(),
-                checked: department.checked
-            });
-        });
-
-        selectFilterAlert.addButton("Cancel");
-        selectFilterAlert.addButton({
-            text: "OK",
-            handler: data => {
-                this.userDepartmentFilterConfig.selectedDepartments = data.map(Number);
-
-                this.appModelService.setUserDepartmentFilterConfigDataObject(this.userDepartmentFilterConfig).then((data) => {
-                    Logger.log("Successfully set UserDepartmentFilterConfigDataObject (Class: UserSettingsPage, Method: updateModel()");
-                    Logger.log(data);
-                }, (error) => {
-                    Logger.log("Setting UserDepartmentFilterConfigDataObject not successfull (Class: UserSettingsPage, Method: updateModel()");
-                    Logger.error(error);
-                });
-
-                this.loadData();
-            }
-        });
-        selectFilterAlert.present();
     }
 
     private logout() {

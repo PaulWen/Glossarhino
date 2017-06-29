@@ -23,6 +23,12 @@ export abstract class EntryDataObject {
   abstract get relatedDepartments(): Array<number>;
   abstract set relatedDepartments(relatedDepartments: Array<number>);
 
+  abstract get relatedEntries(): Array<string>;
+
+  abstract get synonyms(): Array<string>;
+
+  abstract get acronyms(): Array<string>;
+
   abstract get attachments(): Array<AttachmentDataObject>;
 
   abstract get comments(): Array<CommentDataObject>;
@@ -39,6 +45,9 @@ export abstract class EntryDataObject {
       "contact": "",
       "email": "",
       "relatedDepartments": [],
+      "relatedEntries": [],
+      "synonyms": [],
+      "acronyms": [],
       "attachments": [],
       "comments": [],
       "departmentSpecifics": []

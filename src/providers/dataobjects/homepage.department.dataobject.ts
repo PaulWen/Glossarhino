@@ -2,12 +2,12 @@ import {DepartmentDataObject} from "./department.dataobject";
 
 export abstract class HomePageDepartmentDataobject {
 
-    abstract get department(): DepartmentDataObject;
+    abstract get details(): DepartmentDataObject;
     abstract get countOfEntries(): number;
 
-  public static init(countOfEntries: number, department: DepartmentDataObject): HomePageDepartmentDataobject {
+  public static init(countOfEntries: number, details: DepartmentDataObject): HomePageDepartmentDataobject {
     return {
-      "department": department,
+      "details": details,
       "countOfEntries": countOfEntries,
     }
   }

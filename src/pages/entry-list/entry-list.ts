@@ -6,7 +6,10 @@ import { UserLanguageFilterConfigDataObject } from "../../providers/dataobjects/
 import { Logger } from "../../app/logger";
 import { EntryListPageEntryDataObject } from "../../providers/dataobjects/entrylistpage.entry.dataobject";
 
-@IonicPage()
+@IonicPage({
+  segment: "entrylist/:departmentId",
+  defaultHistory: ["HomePage"]
+})
 @Component({
   selector: "page-entry-list",
   templateUrl: "entry-list.html"

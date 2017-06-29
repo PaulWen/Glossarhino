@@ -21,6 +21,7 @@ import { EntryDataObject } from "./dataobjects/entry.dataobject";
 import { DepartmentDataObject } from "./dataobjects/department.dataobject";
 import { UserSettingsPageModelInterface } from "../pages/user-settings/user-settings.model-interface";
 import { EditModalPageModelInterface } from "../pages/edit-modal/edit-modal.model-interface";
+import { UserDataObject } from "./dataobjects/user.dataobject";
 
 @Injectable()
 export class AppModelService extends SuperLoginClient implements LoginPageInterface, HomePageModelInterface, LanguagePopoverPageModelInterface, EntryListPageModelInterface, SingleEntryPageModelInterface, UserSettingsPageModelInterface, EditModalPageModelInterface {
@@ -287,6 +288,17 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     }
 
     return null;
+  }
+
+  //////////////////////////////////////////
+  //    CommentModalInterface Methods     //
+  //////////////////////////////////////////
+
+  public getCurrentUser(): UserDataObject {
+    return {
+      "name": "Simon Weber",
+      "email": "simon@dhbw-stuttgart.de"
+    }
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////

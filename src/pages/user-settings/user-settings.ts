@@ -12,7 +12,7 @@ import { DepartmentDataObject } from "../../providers/dataobjects/department.dat
   selector: 'page-user-settings',
   templateUrl: 'user-settings.html',
 })
-export class UserSettingsPage {
+export class UserFilterPage {
   ////////////////////////////////////////////Properties/////////////////////////////////////////////
   // ionic injected components
   private navCtrl: NavController;

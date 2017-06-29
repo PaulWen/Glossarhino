@@ -131,7 +131,7 @@ export class HomePage {
      * navigate to settings
      */
     private pushSettings() {
-        this.navCtrl.push("UserSettingsPage", {
+        this.navCtrl.push("UserFilterPage", {
         }).then((canEnterView) => {
             if (!canEnterView) {
                 // in the case that the view can not be entered redirect the user to the login page

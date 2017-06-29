@@ -1,5 +1,5 @@
-import {Component} from "@angular/core";
-import {IonicPage, NavController, NavParams, ViewController} from "ionic-angular";
+import { Component } from "@angular/core";
+import { IonicPage, NavController, NavParams, ViewController } from "ionic-angular";
 import { AttachmentDataObject } from "../../providers/dataobjects/attachment.dataobject";
 
 @IonicPage()
@@ -29,12 +29,10 @@ export class AttachmentModalPage {
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
-  /**
-   * Method to close the AttachmentModal when pressing the assigned button
-   */
-  private closeAttachmentModal() {
-    this.viewCtrl.dismiss();
-  }
+
+  //////////////////////////////////////////
+  //           Page Functions             //
+  //////////////////////////////////////////
 
   /**
    * Method to open an attachment when selected by the user. Will open in the systems browser.
@@ -44,5 +42,18 @@ export class AttachmentModalPage {
     //window.location.href = url.href;
     window.open(url, "_system");
   }
+
+  //////////////////////////////////////////
+  //         Navigation Functions         //
+  //////////////////////////////////////////
+
+  /**
+   * Method to close the AttachmentModal when pressing the assigned button
+   */
+  private closeAttachmentModal() {
+    this.viewCtrl.dismiss();
+  }
+
+
 
 }

@@ -10,6 +10,7 @@ export abstract class CommentDataObject {
     abstract set email(email: string);
 
     abstract get timeStamp(): Date;
+    abstract set timeStamp(timeStamp: Date);
 
     public static init(contact: string, email: string): CommentDataObject {
         return {

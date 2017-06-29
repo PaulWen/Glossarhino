@@ -19,12 +19,11 @@ import { EntryListPageEntryDataObject } from "./dataobjects/entrylistpage.entry.
 import { SingleEntryPageModelInterface } from "../pages/single-entry/single-entry.model-interface";
 import { EntryDataObject } from "./dataobjects/entry.dataobject";
 import { DepartmentDataObject } from "./dataobjects/department.dataobject";
-import { UserSettingsPageModelInterface } from "../pages/user-settings/user-settings.model-interface";
 import { EditModalPageModelInterface } from "../pages/edit-modal/edit-modal.model-interface";
 import { UserDataObject } from "./dataobjects/user.dataobject";
 
 @Injectable()
-export class AppModelService extends SuperLoginClient implements LoginPageInterface, HomePageModelInterface, LanguagePopoverPageModelInterface, EntryListPageModelInterface, SingleEntryPageModelInterface, UserSettingsPageModelInterface, EditModalPageModelInterface {
+export class AppModelService extends SuperLoginClient implements LoginPageInterface, HomePageModelInterface, LanguagePopoverPageModelInterface, EntryListPageModelInterface, SingleEntryPageModelInterface, EditModalPageModelInterface {
   ////////////////////////////////////////////Properties////////////////////////////////////////////
 
   //////////////Databases////////////

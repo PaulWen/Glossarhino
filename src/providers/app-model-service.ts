@@ -152,7 +152,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   //  EntryListPageModelInterface Method  //
   //////////////////////////////////////////
 
-  public async getEntryNameList(searchString: string, selectedLanguage: number, departmentId?: number): Promise<Array<EntryListPageEntryDataObject>> {
+  public async getEntryListPageEntryDataObjects(searchString: string, selectedLanguage: number, departmentId?: number): Promise<Array<EntryListPageEntryDataObject>> {
     // initialize data structure which will be returned
     let entryNames: Array<string> = [];
 
@@ -172,7 +172,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
       }
 
       let result: any = await this.entryDatabases.get(selectedLanguage).find({
-        selector: selector, fields: ["_id", "name"]
+        selector: selector, fields: ["_id", "name", "synonyms", "acronyms"]
       });
 
       // return data

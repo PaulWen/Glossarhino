@@ -30,7 +30,9 @@
   <!-- Print list with all entries retreived in department -->
   <ion-list>
     <button ion-item *ngFor="let entry of entryList" (click)="pushEntry(entry._id)">
-      {{ entry.name }}
+      <h2> {{ entry.name }} </h2>
+      <h3> {{ entry.acronyms }} </h3>
+      <p> {{ entry.synonyms }} </p>
     </button>
   </ion-list>
 

@@ -4,4 +4,8 @@ export abstract class EntryListPageEntryDataObject {
 
     abstract get name(): string;
 
+    abstract get synonyms(): Array<string>;
+
+    abstract get acronyms(): Array<string>;
+
 }

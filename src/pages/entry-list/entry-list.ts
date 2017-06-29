@@ -96,7 +96,7 @@ export class EntryListPage {
 
       // load other data as soon as language loaded
       // get entryname list
-      this.entryListPageModelInterface.getEntryNameList(this.searchText, this.selectedLanguageDataObject.selectedLanguage, departmendId).then((data) => {
+      this.entryListPageModelInterface.getEntryListPageEntryDataObjects(this.searchText, this.selectedLanguageDataObject.selectedLanguage, departmendId).then((data) => {
         this.entryList = data;
       }, (error) => {
         Logger.log("Loading entry list failed (Class: EntryListPage, Method: loadData()");

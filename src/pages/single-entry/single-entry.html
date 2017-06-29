@@ -44,17 +44,38 @@
           <ion-card-content>
             {{ entryDataObject?.description }}
           </ion-card-content>
-          <ion-row class="footer-row">
-            <ion-col>
-              <button ion-button icon-left clear small (click)="sendMail(entryDataObject?.email)">
+
+          <div class="card-footer">
+
+            <button ion-button icon-left clear small (click)="sendMail(entryDataObject?.email)">
                   <ion-icon name="contact"></ion-icon>
                   <div>{{ entryDataObject?.contact }}</div>
                 </button>
-              <button ion-button icon-left clear small (click)="openAttachmentModal(entryDataObject?.attachments)">
-                  <ion-icon name="attach"></ion-icon>
+
+            <div class="buttons">
+
+              <button ion-button clear small (click)="openAttachmentModal(entryDataObject?.attachments)" id="badge-button">
+                  <ion-icon name="quote">
+                  <ion-badge id="badge"> {{ getArrayLength(entryDataObject?.comments) }} </ion-badge>
+                  </ion-icon>
                 </button>
-            </ion-col>
-          </ion-row>
+
+              <button ion-button clear small (click)="openAttachmentModal(entryDataObject?.attachments)" id="badge-button">
+                  <ion-icon name="attach">
+                  <ion-badge id="badge"> {{ getArrayLength(entryDataObject?.attachments) }} </ion-badge>
+                  </ion-icon>
+                </button>
+
+              <button ion-button clear small (click)="openAttachmentModal(entryDataObject?.attachments)" id="badge-button">
+                  <ion-icon name="link">
+                  <ion-badge id="badge"> {{ getArrayLength(entryDataObject?.relatedDepartments) }} </ion-badge>
+                  </ion-icon>
+                </button>
+
+            </div>
+
+          </div>
+
         </ion-card>
       </ion-col>
     </ion-row>

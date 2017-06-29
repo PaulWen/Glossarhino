@@ -11,4 +11,25 @@ page-single-entry {
     .card-content {
         flex: 1;
     }
+
+    #badge-button {            
+        overflow: visible!important;
+    }
+
+   #badge {
+        position: absolute;
+        font-size: 1rem;
+        font-weight: normal;
+        top: -1rem;
+        right: -1rem;
+   }
+
+   .card-footer {
+       display: flex;
+       justify-content: space-between;
+   }
+
+   .buttons {
+       padding-right: 2rem;
+   }
 }

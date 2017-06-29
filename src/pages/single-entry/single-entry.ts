@@ -14,6 +14,7 @@ import { EntryDataObject } from "../../providers/dataobjects/entry.dataobject";
 import { SingleEntryPageModelInterface } from "./single-entry.model-interface";
 import { UserLanguageFilterConfigDataObject } from "../../providers/dataobjects/user-language-filter-config.dataobject";
 import { Logger } from "../../app/logger";
+import { CommentDataObject } from "../../providers/dataobjects/comment.dataobject";
 
 @IonicPage()
 @Component({
@@ -30,11 +31,11 @@ export class SingleEntryPage {
   private popoverCtrl: PopoverController;
 
   // navParams
-  private _id: string;
+  private entryDocumentId: string;
 
   // model object
   private singleEntryPageModelInterface: SingleEntryPageModelInterface;
-  
+
   // data objects
   private entryDataObject: EntryDataObject;
   private selectedLanguageDataObject: UserLanguageFilterConfigDataObject;
@@ -49,14 +50,14 @@ export class SingleEntryPage {
     this.popoverCtrl = popoverCtrl;
 
     // get navParams
-    this._id = this.navParams.get("_id");
+    this.entryDocumentId = this.navParams.get("_id");
 
     // instantiate model
     this.singleEntryPageModelInterface = appModel;
-  };
+  }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
-  
+
   //////////////////////////////////////////
   //      Ionic Lifecycle Functions       //
   //////////////////////////////////////////
@@ -64,15 +65,16 @@ export class SingleEntryPage {
   private ionViewWillEnter() {
     // load data
     this.loadData();
-  };
+  }
 
   private ionViewCanEnter(): Promise<boolean> | boolean {
     return this.singleEntryPageModelInterface.isAuthenticated();
-  };
+  }
 
-  /**
-   * PAGE METHODS
-   */
+  //////////////////////////////////////////
+  //           Page Functions             //
+  //////////////////////////////////////////
+
   private loadData(refresher?) {
     //get selected language
     this.singleEntryPageModelInterface.getSelectedLanguage().then((data) => {
@@ -80,7 +82,7 @@ export class SingleEntryPage {
 
       // load other data as soon as language loaded
       // get EntryDataObject
-      this.singleEntryPageModelInterface.getEntryDataObject(this._id, this.selectedLanguageDataObject.selectedLanguage).then((data) => {
+      this.singleEntryPageModelInterface.getEntryDataObject(this.entryDocumentId, this.selectedLanguageDataObject.selectedLanguage).then((data) => {
         this.entryDataObject = data;
       }, (error) => {
         Logger.log("Loading Entry Data Object failed (Class: SingleEntryPage, Method: loadData()");
@@ -108,15 +110,20 @@ export class SingleEntryPage {
    */
   private sendMail(emailAddress: string) {
     window.open("mailto:" + emailAddress, "_system");
-  };
+  }
 
-  /**
-   * NAVIGATION METHODS
-   */
-  /**
-   * Method to create and open the AttachmentModal to show list of attachments. AttachmentModalPage is the template for the modal.
-   * @param attachments
-   */
+  private getArrayLength(array: Array<any>): number {
+    if (array == undefined) {
+      return 0;
+    } else {
+      return array.length;
+    }
+  }
+
+  //////////////////////////////////////////
+  //         Navigation Functions         //
+  //////////////////////////////////////////
+
   private openAttachmentModal(attachments: Array<AttachmentDataObject>) {
     let attachmentModal = this.modalCtrl.create("AttachmentModalPage", {
       attachments: attachments
@@ -127,7 +134,19 @@ export class SingleEntryPage {
         this.navCtrl.setRoot("LoginPage");
       }
     });
-  };
+  }
+
+  private openCommentModal(comments: Array<CommentDataObject>) {
+    let commentModal = this.modalCtrl.create("CommentModalPage", {
+      comments: comments
+    });
+    commentModal.present().then((canEnterView) => {
+      if (!canEnterView) {
+        // in the case that the view can not be entered redirect the user to the login page
+        this.navCtrl.setRoot("LoginPage");
+      }
+    });
+  }
 
   /**
    * create and present LanguagePopover to enable changing languages
@@ -144,9 +163,9 @@ export class SingleEntryPage {
       }
     });
     popover.onWillDismiss(() => {
-            this.loadData();
-        })
-  };
+      this.loadData();
+    })
+  }
 
   /**
    * create and present ActionSheet to show more actions for the user
@@ -158,26 +177,26 @@ export class SingleEntryPage {
         {
           text: "Edit",
           handler: () => {
-            console.log("Edit clicked");
+            Logger.log("Edit clicked");
             this.openEditModal(this.entryDataObject._id);
           }
         }, {
-          text: "Settings",
+          text: "Filter",
           handler: () => {
-            console.log("Settings clicked");
-            this.openUserSettingsPageModal();
+            Logger.log("Filter clicked");
+            this.openUserFilterPageModal();
           }
         }, {
           text: "Cancel",
           role: "cancel",
           handler: () => {
-            console.log("Cancel clicked");
+            Logger.log("Cancel clicked");
           }
         }
       ]
     });
     actionSheet.present();
-  };
+  }
 
   /**
    * navigate to entry list and open searchbar
@@ -191,25 +210,22 @@ export class SingleEntryPage {
         this.navCtrl.setRoot("LoginPage");
       }
     });
-  };
+  }
 
-  /**
-   * create and present the SettingsModal to show settings for the user. SettingsPage is the template for the modal.
-   */
-  private openUserSettingsPageModal() {
-    let userSettingsPageModal = this.modalCtrl.create("UserSettingsPage", {
+  private openUserFilterPageModal() {
+    let userFilterPageModal = this.modalCtrl.create("UserFilterPage", {
       isModal: true
     });
-    userSettingsPageModal.onWillDismiss(() => {
+    userFilterPageModal.onWillDismiss(() => {
       this.loadData();
     });
-    userSettingsPageModal.present().then((canEnterView) => {
+    userFilterPageModal.present().then((canEnterView) => {
       if (!canEnterView) {
         // in the case that the view can not be entered redirect the user to the login page
         this.navCtrl.setRoot("LoginPage");
       }
     });
-  };
+  }
 
   /**
    * create and present the EditModal to show settings for the user. EditPage is the template for the modal.
@@ -227,5 +243,5 @@ export class SingleEntryPage {
         this.navCtrl.setRoot("LoginPage");
       }
     });
-  };
+  }
 }

@@ -6,6 +6,8 @@ import { AppModelService } from "../../providers/app-model-service";
 import { UserDataObject } from "../../providers/dataobjects/user.dataobject";
 import { Logger } from "../../app/logger";
 import { SingleEntryPage } from "../single-entry/single-entry";
+import { EntryDataObject } from "../../providers/dataobjects/entry.dataobject";
+import { UserLanguageFilterConfigDataObject } from "../../providers/dataobjects/user-language-filter-config.dataobject";
 
 @IonicPage()
 @Component({
@@ -20,14 +22,15 @@ export class CommentModalPage {
   private viewCtrl: ViewController;
 
   // navParams
-  private comments: Array<CommentDataObject>;
+  private entry: EntryDataObject;
 
   // model object
-  private commentModalModelInterface: CommentModalModelInterface;
+  private appModelService: CommentModalModelInterface;
 
   // data objects
   private commentContent: string;
   private currentUser: UserDataObject;
+  private selectedLanguage: UserLanguageFilterConfigDataObject;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
   constructor(navCtrl: NavController, navParams: NavParams, viewCtrl: ViewController, appModel: AppModelService) {
@@ -37,10 +40,10 @@ export class CommentModalPage {
     this.viewCtrl = viewCtrl;
 
     // get navParams
-    this.comments = this.navParams.get("comments");
+    this.entry = this.navParams.get("entry");
 
     // instantiate model object
-    this.commentModalModelInterface = appModel;
+    this.appModelService = appModel;
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
@@ -48,6 +51,10 @@ export class CommentModalPage {
   //////////////////////////////////////////
   //      Ionic Lifecycle Functions       //
   //////////////////////////////////////////
+
+  private ionViewCanEnter(): Promise<boolean> | boolean {
+    return this.appModelService.isAuthenticated();
+  }
 
   private ionViewWillEnter() {
     this.loadData();
@@ -58,7 +65,16 @@ export class CommentModalPage {
   //////////////////////////////////////////
 
   private loadData() {
-    this.currentUser = this.commentModalModelInterface.getCurrentUser();
+    this.currentUser = this.appModelService.getCurrentUser();
+
+    // get selected language
+    this.appModelService.getSelectedLanguage().then((data) => {
+      this.selectedLanguage = data;
+
+    }, (error) => {
+      Logger.log("Loading selected language failed (Class: CommentModalPage, Method: loadData()");
+      Logger.error(error);
+    });
   }
 
   private addComment() {
@@ -66,15 +82,16 @@ export class CommentModalPage {
     newComment.content = this.commentContent;
     newComment.timeStamp = new Date();
 
-    if (this.comments == undefined) {
-      this.comments = []
+    if (this.entry.comments == undefined) {
+      this.entry.comments = []
     }
 
-    Logger.log(newComment);
-    this.comments.push(newComment);
+    this.entry.comments.push(newComment);
     this.commentContent = null;
 
-    Logger.log(this.comments);
+    this.appModelService.setEntryDataObject(this.entry, this.selectedLanguage.selectedLanguage).then((data) => {
+
+    })
   }
 
   //////////////////////////////////////////

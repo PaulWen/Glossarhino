@@ -3,7 +3,7 @@ import {HttpModule} from "@angular/http";
 import {BrowserModule} from "@angular/platform-browser";
 import {SplashScreen} from "@ionic-native/splash-screen";
 import {StatusBar} from "@ionic-native/status-bar";
-import {IonicApp, IonicErrorHandler, IonicModule} from "ionic-angular";
+import { IonicApp, IonicErrorHandler, IonicModule, Keyboard } from "ionic-angular";
 import {AppModelService} from "../providers/app-model-service";
 import {SuperloginHttpRequester} from "../providers/super_login_client/superlogin_http_requester";
 import {MyApp} from "./app.component";
@@ -15,7 +15,14 @@ import {MyApp} from "./app.component";
   imports: [
     BrowserModule,
     HttpModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp, {
+      platforms: {
+        ios: {
+          scrollAssist: false,
+          autoFocusAssist: false
+        }
+      }
+    })
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -26,7 +33,8 @@ import {MyApp} from "./app.component";
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    AppModelService
+    AppModelService,
+    Keyboard
   ]
 })
 export class AppModule {

@@ -1,7 +1,7 @@
 import {Component, ViewChild} from "@angular/core";
 import {SplashScreen} from "@ionic-native/splash-screen";
 import {StatusBar} from "@ionic-native/status-bar";
-import {Nav, Platform} from "ionic-angular";
+import { Nav, Platform } from "ionic-angular";
 
 @Component({
   templateUrl: "app.html"

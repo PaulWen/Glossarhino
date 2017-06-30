@@ -20,7 +20,7 @@ import { Alerts } from "../../app/alerts";
 
 @IonicPage({
   segment: "singleentry/:entryDocumentId",
-  defaultHistory: ["EntryListPage", "HomePage"]
+  defaultHistory: ["HomePage", "EntryListPage"]
 })
 @Component({
   selector: "page-single-entry",

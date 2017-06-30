@@ -130,7 +130,7 @@ export class EditModalPage {
   private closeEditModal(save: boolean) {
     if (save) {
       this.entry.departmentSpecifics.sort((a, b) => {
-        return a.departmentId - b.departmentId
+        return a.departmentId - b.departmentId;
       });
       if (this.addNewEntry) {
         this.editModalPageModelInterface.newEntryDataObject(this.entry, this.selectedLanguageDataObject.selectedLanguage).then((data) => {

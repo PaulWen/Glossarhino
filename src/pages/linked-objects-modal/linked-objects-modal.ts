@@ -20,7 +20,7 @@ export class LinkedObjectsModalPage {
 
   // navparams
   private relatedDepartments: Array<number>;
-  private relatedEntries: Array <string>;
+  private relatedEntries: Array<string>;
   private synonyms: Array<string>;
   private acronyms: Array<string>;
   private isEditMode: boolean;
@@ -58,7 +58,7 @@ export class LinkedObjectsModalPage {
   private ionViewDidLoad() {
     this.loadData();
   }
-  
+
   private ionViewCanEnter(): Promise<boolean> | boolean {
     return this.appModelService.isAuthenticated();
   }
@@ -69,6 +69,20 @@ export class LinkedObjectsModalPage {
 
   private loadData() {
     this.globalDepartmentConfigDataObject = this.appModelService.getGlobalDepartmentConfigDataObject();
+  }
+
+  private addRelatedDepartment(relatedDepartmentId: number) {
+    this.relatedDepartments.push(relatedDepartmentId);
+    this.relatedDepartments.sort((a, b) => {
+      return a - b;
+    });
+  }
+
+  private removeRelatedDepartment(departmentId: number) {
+    let index: number = this.relatedDepartments.findIndex(relatedDepartmentId => relatedDepartmentId == departmentId);
+    if (index > -1) {
+      this.relatedDepartments.splice(index, 1);
+    }
   }
 
   //////////////////////////////////////////
@@ -86,18 +100,16 @@ export class LinkedObjectsModalPage {
     relatedDepartmentCheckboxAlert.setTitle("Select related departments");
 
     this.globalDepartmentConfigDataObject.departments.forEach(department => {
-      let checked: boolean = false;
 
-      if (this.relatedDepartments.find(departmentId => departmentId == department.departmentId) != undefined) {
-        checked = true;
+      if (this.relatedDepartments.find(departmentId => departmentId == department.departmentId) == undefined) {
+
+        relatedDepartmentCheckboxAlert.addInput({
+          type: "radio",
+          label: department.departmentName,
+          value: department.departmentId.toString()
+        });
+
       }
-
-      relatedDepartmentCheckboxAlert.addInput({
-        type: "checkbox",
-        label: department.departmentName,
-        value: department.departmentId.toString(),
-        checked: checked
-      });
 
     });
 
@@ -105,10 +117,7 @@ export class LinkedObjectsModalPage {
     relatedDepartmentCheckboxAlert.addButton({
       text: "OK",
       handler: data => {
-        this.relatedDepartments = data;
-        this.relatedDepartments = this.relatedDepartments.map((departmentId) => {
-          return +departmentId;
-        });
+        this.addRelatedDepartment(data);
       }
     });
     relatedDepartmentCheckboxAlert.present();

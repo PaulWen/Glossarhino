@@ -21,9 +21,11 @@ import { EntryDataObject } from "./dataobjects/entry.dataobject";
 import { DepartmentDataObject } from "./dataobjects/department.dataobject";
 import { EditModalPageModelInterface } from "../pages/edit-modal/edit-modal.model-interface";
 import { UserDataObject } from "./dataobjects/user.dataobject";
+import { CommentModalModelInterface } from "../pages/comment-modal/comment-modal.model-interface";
+import { LinkedObjectsModalModelInterface } from "../pages/linked-objects-modal/linked-objects-modal.model-interface";
 
 @Injectable()
-export class AppModelService extends SuperLoginClient implements LoginPageInterface, HomePageModelInterface, LanguagePopoverPageModelInterface, EntryListPageModelInterface, SingleEntryPageModelInterface, EditModalPageModelInterface {
+export class AppModelService extends SuperLoginClient implements LoginPageInterface, HomePageModelInterface, LanguagePopoverPageModelInterface, EntryListPageModelInterface, SingleEntryPageModelInterface, EditModalPageModelInterface, CommentModalModelInterface, LinkedObjectsModalModelInterface {
   ////////////////////////////////////////////Properties////////////////////////////////////////////
 
   //////////////Databases////////////

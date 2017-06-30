@@ -6,7 +6,8 @@ import {
   ModalController,
   NavController,
   NavParams,
-  PopoverController
+  PopoverController,
+  AlertController
 } from "ionic-angular";
 import { AppModelService } from "../../providers/app-model-service";
 import { AttachmentDataObject } from "../../providers/dataobjects/attachment.dataobject";
@@ -15,8 +16,12 @@ import { SingleEntryPageModelInterface } from "./single-entry.model-interface";
 import { UserLanguageFilterConfigDataObject } from "../../providers/dataobjects/user-language-filter-config.dataobject";
 import { Logger } from "../../app/logger";
 import { CommentDataObject } from "../../providers/dataobjects/comment.dataobject";
+import { Alerts } from "../../app/alerts";
 
-@IonicPage()
+@IonicPage({
+  segment: "singleentry/:entryDocumentId",
+  defaultHistory: ["EntryListPage", "HomePage"]
+})
 @Component({
   selector: "page-single-entry",
   templateUrl: "single-entry.html"
@@ -29,31 +34,39 @@ export class SingleEntryPage {
   private modalCtrl: ModalController;
   private actionSheetCtrl: ActionSheetController;
   private popoverCtrl: PopoverController;
+  private alertCtrl: AlertController;
 
   // navParams
   private entryDocumentId: string;
 
   // model object
-  private singleEntryPageModelInterface: SingleEntryPageModelInterface;
+  private appModelService: SingleEntryPageModelInterface;
 
   // data objects
-  private entryDataObject: EntryDataObject;
-  private selectedLanguageDataObject: UserLanguageFilterConfigDataObject;
+  private entry: EntryDataObject;
+  private selectedLanguage: UserLanguageFilterConfigDataObject;
+
+  // selectFilterAlert objects
+  private showDepartmentFilterAlertAppModel;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
-  constructor(navCtrl: NavController, navParams: NavParams, modalCtrl: ModalController, actionSheetCtrl: ActionSheetController, popoverCtrl: PopoverController, appModel: AppModelService) {
+  constructor(navCtrl: NavController, navParams: NavParams, modalCtrl: ModalController, actionSheetCtrl: ActionSheetController, popoverCtrl: PopoverController, alertCtrl: AlertController, appModelService: AppModelService) {
+
     // instantiate ionic injected components
     this.navCtrl = navCtrl;
     this.navParams = navParams;
     this.modalCtrl = modalCtrl;
     this.actionSheetCtrl = actionSheetCtrl;
     this.popoverCtrl = popoverCtrl;
+    this.alertCtrl = alertCtrl;
 
     // get navParams
-    this.entryDocumentId = this.navParams.get("_id");
+    this.entryDocumentId = this.navParams.get("entryDocumentId");
 
     // instantiate model
-    this.singleEntryPageModelInterface = appModel;
+    this.appModelService = appModelService;
+    this.showDepartmentFilterAlertAppModel = appModelService;
+
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
@@ -62,13 +75,12 @@ export class SingleEntryPage {
   //      Ionic Lifecycle Functions       //
   //////////////////////////////////////////
 
-  private ionViewWillEnter() {
-    // load data
-    this.loadData();
+  private ionViewCanEnter(): Promise<boolean> | boolean {
+    return this.appModelService.isAuthenticated();
   }
 
-  private ionViewCanEnter(): Promise<boolean> | boolean {
-    return this.singleEntryPageModelInterface.isAuthenticated();
+  private ionViewWillEnter() {
+    this.loadData();
   }
 
   //////////////////////////////////////////
@@ -77,13 +89,14 @@ export class SingleEntryPage {
 
   private loadData(refresher?) {
     //get selected language
-    this.singleEntryPageModelInterface.getSelectedLanguage().then((data) => {
-      this.selectedLanguageDataObject = data;
+    this.appModelService.getSelectedLanguage().then((data) => {
+      this.selectedLanguage = data;
 
       // load other data as soon as language loaded
       // get EntryDataObject
-      this.singleEntryPageModelInterface.getEntryDataObject(this.entryDocumentId, this.selectedLanguageDataObject.selectedLanguage).then((data) => {
-        this.entryDataObject = data;
+      this.appModelService.getEntryDataObject(this.entryDocumentId, this.selectedLanguage.selectedLanguage).then((data) => {
+        this.entry = data;
+        Logger.log(data);
       }, (error) => {
         Logger.log("Loading Entry Data Object failed (Class: SingleEntryPage, Method: loadData()");
         Logger.error(error);
@@ -104,10 +117,6 @@ export class SingleEntryPage {
     this.loadData(refresher);
   }
 
-  /**
-   * Method to send an email to the contact specified for the entry and department
-   * @param emailAddress
-   */
   private sendMail(emailAddress: string) {
     window.open("mailto:" + emailAddress, "_system");
   }
@@ -124,34 +133,33 @@ export class SingleEntryPage {
   //         Navigation Functions         //
   //////////////////////////////////////////
 
-  private openAttachmentModal(attachments: Array<AttachmentDataObject>) {
-    let attachmentModal = this.modalCtrl.create("AttachmentModalPage", {
-      attachments: attachments
+  private presentActionSheet() {
+    let actionSheet = this.actionSheetCtrl.create({
+      title: "More Actions",
+      buttons: [
+        {
+          text: "Edit",
+          handler: () => {
+            Logger.log("Edit clicked");
+            this.openEditModal(this.entry._id);
+          }
+        }, {
+          text: "Filter",
+          handler: () => {
+            this.showDepartmentFilterAlert(this.alertCtrl, this.showDepartmentFilterAlertAppModel);
+          }
+        }, {
+          text: "Cancel",
+          role: "cancel",
+          handler: () => {
+            Logger.log("Cancel clicked");
+          }
+        }
+      ]
     });
-    attachmentModal.present().then((canEnterView) => {
-      if (!canEnterView) {
-        // in the case that the view can not be entered redirect the user to the login page
-        this.navCtrl.setRoot("LoginPage");
-      }
-    });
+    actionSheet.present();
   }
 
-  private openCommentModal(comments: Array<CommentDataObject>) {
-    let commentModal = this.modalCtrl.create("CommentModalPage", {
-      comments: comments
-    });
-    commentModal.present().then((canEnterView) => {
-      if (!canEnterView) {
-        // in the case that the view can not be entered redirect the user to the login page
-        this.navCtrl.setRoot("LoginPage");
-      }
-    });
-  }
-
-  /**
-   * create and present LanguagePopover to enable changing languages
-   * @param event
-   */
   private presentLanguagePopover(event: any) {
     let popover = this.popoverCtrl.create("LanguagePopoverPage");
     popover.present({
@@ -167,40 +175,6 @@ export class SingleEntryPage {
     })
   }
 
-  /**
-   * create and present ActionSheet to show more actions for the user
-   */
-  presentActionSheet() {
-    let actionSheet = this.actionSheetCtrl.create({
-      title: "More Actions",
-      buttons: [
-        {
-          text: "Edit",
-          handler: () => {
-            Logger.log("Edit clicked");
-            this.openEditModal(this.entryDataObject._id);
-          }
-        }, {
-          text: "Filter",
-          handler: () => {
-            Logger.log("Filter clicked");
-            this.openUserFilterPageModal();
-          }
-        }, {
-          text: "Cancel",
-          role: "cancel",
-          handler: () => {
-            Logger.log("Cancel clicked");
-          }
-        }
-      ]
-    });
-    actionSheet.present();
-  }
-
-  /**
-   * navigate to entry list and open searchbar
-   */
   private pushSearch() {
     this.navCtrl.push("EntryListPage", {
       searchbarFocus: true
@@ -212,24 +186,6 @@ export class SingleEntryPage {
     });
   }
 
-  private openUserFilterPageModal() {
-    let userFilterPageModal = this.modalCtrl.create("UserFilterPage", {
-      isModal: true
-    });
-    userFilterPageModal.onWillDismiss(() => {
-      this.loadData();
-    });
-    userFilterPageModal.present().then((canEnterView) => {
-      if (!canEnterView) {
-        // in the case that the view can not be entered redirect the user to the login page
-        this.navCtrl.setRoot("LoginPage");
-      }
-    });
-  }
-
-  /**
-   * create and present the EditModal to show settings for the user. EditPage is the template for the modal.
-   */
   private openEditModal(_id: string) {
     let editModal = this.modalCtrl.create("EditModalPage", {
       _id: _id
@@ -244,4 +200,57 @@ export class SingleEntryPage {
       }
     });
   }
+
+  private showDepartmentFilterAlert(alertCtrl: AlertController, appModelService: AppModelService) {
+    Alerts.showDepartmentFilterAlert(alertCtrl, appModelService).then(() => {
+      this.loadData();
+    }, (error) => {
+      Logger.error(error);
+    });
+  }
+
+  private openCommentModal(entry: EntryDataObject) {
+    let commentModal = this.modalCtrl.create("CommentModalPage", {
+      entry: entry
+    });
+    commentModal.present().then((canEnterView) => {
+      if (!canEnterView) {
+        // in the case that the view can not be entered redirect the user to the login page
+        this.navCtrl.setRoot("LoginPage");
+      }
+    });
+  }
+
+  private openAttachmentModal(attachments: Array<AttachmentDataObject>) {
+    let attachmentModal = this.modalCtrl.create("AttachmentModalPage", {
+      attachments: attachments
+    });
+    attachmentModal.present().then((canEnterView) => {
+      if (!canEnterView) {
+        // in the case that the view can not be entered redirect the user to the login page
+        this.navCtrl.setRoot("LoginPage");
+      }
+    });
+  }
+
+  private openLinkedObjectsModal(relatedDepartments: Array<number>, relatedEntries: Array <string>, synonyms: Array<string>, acronyms: Array<string>) {
+    let linkedObjectsModal = this.modalCtrl.create("LinkedObjectsModalPage", {
+      relatedDepartments: relatedDepartments,
+      relatedEntries: relatedEntries,
+      synonyms: synonyms,
+      acronyms: acronyms
+    });
+    linkedObjectsModal.present().then((canEnterView) => {
+      if (!canEnterView) {
+        // in the case that the view can not be entered redirect the user to the login page
+        this.navCtrl.setRoot("LoginPage");
+      }
+    });
+  }
+
+  private openAttachment(url: string) {
+    //window.location.href = url.href;
+    window.open(url, "_system");
+  }
+
 }

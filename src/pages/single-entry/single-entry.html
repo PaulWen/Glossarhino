@@ -6,7 +6,7 @@
       <ion-icon name="menu"></ion-icon>
     </button>
 
-    <ion-title>{{ entryDataObject?.name }}</ion-title>
+    <ion-title>{{ entry?.name }}</ion-title>
 
     <ion-buttons end>
       <button ion-button icon-only (click)="pushSearch()">
@@ -42,33 +42,34 @@
             Description
           </ion-card-header>
           <!-- use innerHtml versus {{}}, because links are not rendered otherwise -->
-          <ion-card-content [innerHtml]="entryDataObject?.description">
+          <ion-card-content [innerHtml]="entry?.description">
           </ion-card-content>
 
           <div class="card-footer">
 
-            <button ion-button icon-left clear small (click)="sendMail(entryDataObject?.email)">
+            <button ion-button icon-left clear small (click)="sendMail(entry?.email)">
                   <ion-icon name="contact"></ion-icon>
-                  <div>{{ entryDataObject?.contact }}</div>
+                  <div>{{ entry?.contact }}</div>
                 </button>
 
             <div class="buttons">
 
-              <button ion-button clear small (click)="openCommentModal(entryDataObject?.comments)" id="badge-button">
+              <button ion-button clear small (click)="openCommentModal(entry)" id="badge-button">
                   <ion-icon name="quote">
-                  <ion-badge id="badge"> {{ getArrayLength(entryDataObject?.comments) }} </ion-badge>
+                  <ion-badge id="badge"> {{ getArrayLength(entry?.comments) }} </ion-badge>
                   </ion-icon>
                 </button>
 
-              <button ion-button clear small (click)="openAttachmentModal(entryDataObject?.attachments)" id="badge-button">
+              <button ion-button clear small (click)="openAttachmentModal(entry?.attachments)" id="badge-button">
                   <ion-icon name="attach">
-                  <ion-badge id="badge"> {{ getArrayLength(entryDataObject?.attachments) }} </ion-badge>
+                  <ion-badge id="badge"> {{ getArrayLength(entry?.attachments) }} </ion-badge>
                   </ion-icon>
                 </button>
 
-              <button ion-button clear small (click)="openAttachmentModal(entryDataObject?.attachments)" id="badge-button">
+              <button ion-button clear small (click)="openLinkedObjectsModal(entry?.relatedDepartments, entry?.relatedEntries, entry?.synonyms, entry?.acronyms)"
+                id="badge-button">
                   <ion-icon name="link">
-                  <ion-badge id="badge"> {{ getArrayLength(entryDataObject?.relatedDepartments) }} </ion-badge>
+                  <ion-badge id="badge"> {{ getArrayLength(entry?.relatedDepartments) }} </ion-badge>
                   </ion-icon>
                 </button>
 
@@ -82,14 +83,13 @@
 
     <!-- specifics for the departments generated as one card each -->
     <ion-row align-items-stretch justify-content-center>
-      <ng-container *ngFor="let department of entryDataObject?.departmentSpecifics">
+      <ng-container *ngFor="let department of entry?.departmentSpecifics">
         <ion-col col-xl-3 col-lg-3 col-md-6 col-sm-6 col-xs-6 col-12>
           <ion-card>
             <ion-card-header>
-              {{ singleEntryPageModelInterface.getDepartmentById(department.departmentId).departmentName }}
+              {{ appModelService.getDepartmentById(department.departmentId).departmentName }}
             </ion-card-header>
-            <ion-card-content>
-              {{ department.description }}
+            <ion-card-content [innerHtml]="department.description">
             </ion-card-content>
             <ion-row ion-footer>
               <ion-col>
@@ -103,6 +103,88 @@
         </ion-col>
       </ng-container>
     </ion-row>
+
+    <!-- Related objects in another row -->
+    <ion-row align-items-center justify-content-center [hidden]="true">
+
+      <ion-col col-xl-3 col-lg-3 col-md-6 col-sm-6 col-xs-6 col-12 *ngIf="entry?.attachments">
+        <ion-card>
+          <ion-card-header>
+            Attachments
+          </ion-card-header>
+          <ion-card-content>
+
+            <!-- Print list with all attachments retreived for entry and department -->
+            <ion-list>
+              <button ion-item *ngFor="let attachment of entry?.attachments" (click)="openAttachment(attachment.url)">
+                {{ attachment.name }}
+              </button>
+            </ion-list>
+
+          </ion-card-content>
+
+        </ion-card>
+      </ion-col>
+
+      <ion-col col-xl-3 col-lg-3 col-md-6 col-sm-6 col-xs-6 col-12 *ngIf="entry?.relatedDepartments">
+        <ion-card>
+          <ion-card-header>
+            Departments
+          </ion-card-header>
+          <ion-card-content>
+
+            <!-- Print list with all attachments retreived for entry and department -->
+            <ion-list>
+              <button ion-item *ngFor="let department of entry?.relatedDepartments">
+                {{ department }}
+              </button>
+            </ion-list>
+
+          </ion-card-content>
+
+        </ion-card>
+      </ion-col>
+
+      <ion-col col-xl-3 col-lg-3 col-md-6 col-sm-6 col-xs-6 col-12 *ngIf="entry?.relatedEntries">
+        <ion-card>
+          <ion-card-header>
+            Entries
+          </ion-card-header>
+          <ion-card-content>
+
+            <!-- Print list with all attachments retreived for entry and department -->
+            <ion-list>
+              <button ion-item *ngFor="let entry of entry?.relatedEntries">
+                {{ entry }}
+              </button>
+            </ion-list>
+
+          </ion-card-content>
+
+        </ion-card>
+      </ion-col>
+
+      <ion-col col-xl-3 col-lg-3 col-md-6 col-sm-6 col-xs-6 col-12 *ngIf="entry?.synonyms">
+        <ion-card>
+          <ion-card-header>
+            Synonyms
+          </ion-card-header>
+          <ion-card-content>
+
+            <!-- Print list with all attachments retreived for entry and department -->
+            <ion-list>
+              <button ion-item *ngFor="let synonym of entry?.synonyms">
+                {{ synonym }}
+              </button>
+            </ion-list>
+
+          </ion-card-content>
+
+        </ion-card>
+      </ion-col>
+
+    </ion-row>
+
   </ion-grid>
 
 </ion-content>

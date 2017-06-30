@@ -1,0 +1,34 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-buttons start>
+      <button ion-button (click)="closeLinkedObjectsModal()">
+        <span ion-text color="primary" showWhen="ios">Close</span>
+        <ion-icon name="md-close" showWhen="android,windows, core"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title>Related</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+  <ion-item-group>
+    
+    <ion-item-divider color="light" *ngIf="relatedDepartments">Departments</ion-item-divider>
+    <ion-item *ngFor="let department of relatedDepartments"> {{ appModelService.getDepartmentById(department).departmentName }} </ion-item>
+
+    <ion-item-divider color="light" *ngIf="relatedEntries">Entries</ion-item-divider>
+    <ion-item *ngFor="let entry of relatedEntries"> {{ entry }} </ion-item>
+
+    <ion-item-divider color="light" *ngIf="synonyms">Synonyms</ion-item-divider>
+    <ion-item *ngFor="let synonym of synonyms"> {{ synonym }} </ion-item>
+
+    <ion-item-divider color="light" *ngIf="acronyms">Acronyms</ion-item-divider>
+    <ion-item *ngFor="let acronym of acronyms"> {{ acronym }} </ion-item>
+
+  </ion-item-group>
+
+</ion-content>

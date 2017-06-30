@@ -1,5 +1,5 @@
 import { Component, ViewChild } from "@angular/core";
-import { IonicPage, NavController, NavParams, Searchbar, PopoverController } from "ionic-angular";
+import { IonicPage, NavController, NavParams, Searchbar, PopoverController, ViewController } from "ionic-angular";
 import { AppModelService } from "../../providers/app-model-service";
 import { EntryListPageModelInterface } from "./entry-list.model-interface";
 import { UserLanguageFilterConfigDataObject } from "../../providers/dataobjects/user-language-filter-config.dataobject";
@@ -20,6 +20,7 @@ export class EntryListPage {
   private navCtrl: NavController;
   private navParams: NavParams;
   private popoverCtrl: PopoverController;
+  private viewCtrl: ViewController;
 
   // navParams
   private departmentId: number;
@@ -30,22 +31,21 @@ export class EntryListPage {
   
   // data objects
   private entryList: Array<EntryListPageEntryDataObject>;
-  private selectedLanguage: UserLanguageFilterConfigDataObject;
-
-  // searchText from searchbar
-  private searchText: string;
+  private selectedLanguage: UserLanguageFilterConfigDataObject; 
 
   // get access to seachbar itself
   @ViewChild("searchbar") searchbar: Searchbar;
   private searchbarIsHidden: boolean;
+  private searchText: string;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
-  constructor(navCtrl: NavController, navParams: NavParams, popoverCtrl: PopoverController, appModelService: AppModelService) {
+  constructor(navCtrl: NavController, navParams: NavParams, popoverCtrl: PopoverController, viewCtrl: ViewController, appModelService: AppModelService) {
     
     // instantiate ionic injected components
     this.navCtrl = navCtrl;
     this.navParams = navParams;
     this.popoverCtrl = popoverCtrl;
+    this.viewCtrl = viewCtrl;
 
     // get navParams
     this.departmentId = this.navParams.get("departmentId");
@@ -153,5 +153,9 @@ export class EntryListPage {
     popover.onWillDismiss(() => {
       this.loadData();
     })
+  }
+
+  private closeEntryListModal() {
+    this.viewCtrl.dismiss()
   }
 }

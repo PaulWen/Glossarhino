@@ -96,7 +96,6 @@ export class SingleEntryPage {
       // get EntryDataObject
       this.appModelService.getEntryDataObject(this.entryDocumentId, this.selectedLanguage.selectedLanguage).then((data) => {
         this.entry = data;
-        Logger.log(data);
       }, (error) => {
         Logger.log("Loading Entry Data Object failed (Class: SingleEntryPage, Method: loadData()");
         Logger.error(error);

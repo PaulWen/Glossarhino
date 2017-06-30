@@ -1,4 +1,5 @@
 import { DepartmentDataObject } from "../../providers/dataobjects/department.dataobject";
+import { GlobalDepartmentConfigDataObject } from "../../providers/dataobjects/global-department-config.dataobject";
 
 export interface LinkedObjectsModalModelInterface {
 
@@ -10,4 +11,5 @@ export interface LinkedObjectsModalModelInterface {
     isAuthenticated(): Promise<boolean> | boolean;
 
     getDepartmentById(departmentId: number): DepartmentDataObject;
+    getGlobalDepartmentConfigDataObject(): GlobalDepartmentConfigDataObject;
 }

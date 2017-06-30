@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController, AlertController, ModalController } from 'ionic-angular';
 import { EditModalPageModelInterface } from "./edit-modal.model-interface";
 import { EntryDataObject } from "../../providers/dataobjects/entry.dataobject";
 import { AppModelService } from "../../providers/app-model-service";
@@ -22,6 +22,7 @@ export class EditModalPage {
   private navParams: NavParams;
   private viewCtrl: ViewController;
   private alertCtrl: AlertController;
+  private modalCtrl: ModalController;
 
   // navParams
   private _id: string;
@@ -32,16 +33,17 @@ export class EditModalPage {
 
   // data objects
   private globalDepartmentConfigDataObject: GlobalDepartmentConfigDataObject;
-  private entryDataObject: EntryDataObject;
+  private entry: EntryDataObject;
   private selectedLanguageDataObject: UserLanguageFilterConfigDataObject;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
-  constructor(navCtrl: NavController, navParams: NavParams, viewCtrl: ViewController, alertCtrl: AlertController, appModel: AppModelService) {
+  constructor(navCtrl: NavController, navParams: NavParams, viewCtrl: ViewController, modalCtrl: ModalController, alertCtrl: AlertController, appModel: AppModelService) {
     // instantiate ionic injected components
     this.navCtrl = navCtrl;
     this.navParams = navParams;
     this.viewCtrl = viewCtrl;
     this.alertCtrl = alertCtrl;
+    this.modalCtrl = modalCtrl;
 
     // get navParams
     this._id = this.navParams.get("_id");
@@ -58,7 +60,6 @@ export class EditModalPage {
   //////////////////////////////////////////
 
   private ionViewDidLoad() {
-    // load data
     this.loadData();
   }
 
@@ -70,10 +71,6 @@ export class EditModalPage {
   //           Page Functions             //
   //////////////////////////////////////////
 
-  /**
-   * load data for the page
-   * @param refresher hand over to complete refresher once data is loaded
-   */
   private loadData(refresher?) {
     // load global department config
     this.globalDepartmentConfigDataObject = this.editModalPageModelInterface.getGlobalDepartmentConfigDataObject();
@@ -85,10 +82,10 @@ export class EditModalPage {
       //load other data as soon as language loaded
       // get EntryDataObject
       if (this.addNewEntry) {
-        this.entryDataObject = EntryDataObject.init();
+        this.entry = EntryDataObject.init();
       } else {
         this.editModalPageModelInterface.getEntryDataObject(this._id, this.selectedLanguageDataObject.selectedLanguage).then((data) => {
-          this.entryDataObject = data;
+          this.entry = data;
         }, (error) => {
           Logger.log("Loading Entry Data Object failed (Class: EditModalPage, Method: loadData()");
           Logger.error(error);
@@ -116,13 +113,13 @@ export class EditModalPage {
   }
 
   private addDepartmentSpecification(departmentId: number) {
-    this.entryDataObject.departmentSpecifics.push(DepartmentEntrySpecificsDataObject.init(departmentId));
+    this.entry.departmentSpecifics.push(DepartmentEntrySpecificsDataObject.init(departmentId));
   }
 
   private removeDepartmentSpecification(departmentId: number) {
-    let index: number = this.entryDataObject.departmentSpecifics.findIndex(departmentSpecifics => departmentSpecifics.departmentId == departmentId);
+    let index: number = this.entry.departmentSpecifics.findIndex(departmentSpecifics => departmentSpecifics.departmentId == departmentId);
     if (index > -1) {
-      this.entryDataObject.departmentSpecifics.splice(index, 1);
+      this.entry.departmentSpecifics.splice(index, 1);
     }
   }
 
@@ -132,16 +129,16 @@ export class EditModalPage {
 
   private closeEditModal(save: boolean) {
     if (save) {
-      this.entryDataObject.departmentSpecifics.sort((a, b) => {
+      this.entry.departmentSpecifics.sort((a, b) => {
         return a.departmentId - b.departmentId
       });
       if (this.addNewEntry) {
-        this.editModalPageModelInterface.newEntryDataObject(this.entryDataObject, this.selectedLanguageDataObject.selectedLanguage).then((data) => {
+        this.editModalPageModelInterface.newEntryDataObject(this.entry, this.selectedLanguageDataObject.selectedLanguage).then((data) => {
           this.viewCtrl.dismiss();
 
         })
       } else {
-        this.editModalPageModelInterface.setEntryDataObject(this.entryDataObject, this.selectedLanguageDataObject.selectedLanguage).then((data) => {
+        this.editModalPageModelInterface.setEntryDataObject(this.entry, this.selectedLanguageDataObject.selectedLanguage).then(() => {
           this.viewCtrl.dismiss();
         }, (error) => {
           Logger.log("Setting Entry Data Object failed (Class: EditModalPage, Method: closeEditModal()");
@@ -161,7 +158,7 @@ export class EditModalPage {
     //check array of departments and remove the ones already included in the entryDataObject
     let temporaryArray: Array<DepartmentDataObject> = [];
     this.globalDepartmentConfigDataObject.departments.forEach(department => {
-      if (this.entryDataObject.departmentSpecifics.find(departmentSpecifics => departmentSpecifics.departmentId == department.departmentId) == undefined) {
+      if (this.entry.departmentSpecifics.find(departmentSpecifics => departmentSpecifics.departmentId == department.departmentId) == undefined) {
         temporaryArray.push(department);
       }
     });
@@ -184,37 +181,30 @@ export class EditModalPage {
     departmentRadioAlert.present();
   }
 
-  private showRelatedDepartmentsCheckboxAlert() {
-    let relatedDepartmentCheckboxAlert = this.alertCtrl.create();
-    relatedDepartmentCheckboxAlert.setTitle("Select related departments");
-
-    this.globalDepartmentConfigDataObject.departments.forEach(department => {
-      let checked: boolean = false;
-
-      if (this.entryDataObject.relatedDepartments.find(departmentId => departmentId == department.departmentId) != undefined) {
-        checked = true;
-      }
-
-      relatedDepartmentCheckboxAlert.addInput({
-        type: "checkbox",
-        label: department.departmentName,
-        value: department.departmentId.toString(),
-        checked: checked
-      });
-
+  private openLinkedObjectsModal(relatedDepartments: Array<number>, relatedEntries: Array<string>, synonyms: Array<string>, acronyms: Array<string>) {
+    let linkedObjectsModal = this.modalCtrl.create("LinkedObjectsModalPage", {
+      relatedDepartments: relatedDepartments,
+      relatedEntries: relatedEntries,
+      synonyms: synonyms,
+      acronyms: acronyms,
+      isEditMode: true
     });
-
-    relatedDepartmentCheckboxAlert.addButton("Cancel");
-    relatedDepartmentCheckboxAlert.addButton({
-      text: "OK",
-      handler: data => {
-        this.entryDataObject.relatedDepartments = data;
-        this.entryDataObject.relatedDepartments = this.entryDataObject.relatedDepartments.map((string) => {
-          return +string;
-        });
-        console.log(this.entryDataObject);
+    linkedObjectsModal.present().then((canEnterView) => {
+      if (!canEnterView) {
+        // in the case that the view can not be entered redirect the user to the login page
+        this.navCtrl.setRoot("LoginPage");
       }
     });
-    relatedDepartmentCheckboxAlert.present();
+    linkedObjectsModal.onDidDismiss((data) => {
+      // get relatedDepartments from model
+      this.entry.relatedDepartments = data.relatedDepartments;
+    });
+  }
+
+  private showSynonymsEditModal() {
+    let synonymsEditModel = this.modalCtrl.create("EntryListPage", {
+      isAddSynonymModal: true
+    });
+    synonymsEditModel.present();
   }
 }

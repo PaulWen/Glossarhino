@@ -40,7 +40,7 @@ export class EntryListPage {
   private searchbarIsHidden: boolean;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
-  constructor(navCtrl: NavController, navParams: NavParams, popoverCtrl: PopoverController, appModel: AppModelService) {
+  constructor(navCtrl: NavController, navParams: NavParams, popoverCtrl: PopoverController, appModelService: AppModelService) {
     
     // instantiate ionic injected components
     this.navCtrl = navCtrl;
@@ -52,11 +52,11 @@ export class EntryListPage {
     this.searchbarFocus = this.navParams.get("searchbarFocus");
 
     // instantiate model
-    this.appModelService = appModel;
+    this.appModelService = appModelService;
 
     // set default value
     this.searchbarIsHidden = true;
-    
+
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////

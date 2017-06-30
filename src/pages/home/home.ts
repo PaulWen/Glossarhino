@@ -30,7 +30,7 @@ export class HomePage {
 
     // dataobjects
     private selectedDepartments: Array<HomePageDepartmentDataobject>;
-    private selectedLanguage: UserLanguageFilterConfigDataObject;
+    private selectedLanguageDataObject: UserLanguageFilterConfigDataObject;
     private numberOfAllEntries: number;
 
     // selectFilterAlert objects
@@ -72,10 +72,10 @@ export class HomePage {
     private loadData(refresher?) {
         // get selected language
         this.appModelService.getSelectedLanguage().then((data) => {
-            this.selectedLanguage = data;
+            this.selectedLanguageDataObject = data;
 
             // load other data as soon as language loaded
-            this.appModelService.getCountOfAllEntries(this.selectedLanguage.selectedLanguage).then((data) => {
+            this.appModelService.getCountOfAllEntries(this.selectedLanguageDataObject.selectedLanguage).then((data) => {
                 this.numberOfAllEntries = data;
             }, (error) => {
                 Logger.log("Loading all listings failed (Class: HomePage, Method: loadData()");
@@ -83,7 +83,7 @@ export class HomePage {
             });
 
             // load selected departments
-            this.appModelService.getSelectedHomePageDepartmentDataobjects(this.selectedLanguage.selectedLanguage).then((data) => {
+            this.appModelService.getSelectedHomePageDepartmentDataobjects(this.selectedLanguageDataObject.selectedLanguage).then((data) => {
                 this.selectedDepartments = data;
             }, (error) => {
                 Logger.log("Loading selected departments failed (Class: HomePage, Method: loadData()");
@@ -109,16 +109,6 @@ export class HomePage {
     //         Navigation Functions         //
     //////////////////////////////////////////
 
-    private showDepartmentFilterAlert(alertCtrl: AlertController, appModelService: AppModelService) {
-        Logger.log("testFilter");
-        Alerts.showDepartmentFilterAlert(alertCtrl, appModelService).then(() => {
-            this.loadData();
-        }, (error) => {
-            Logger.error(error);
-        });
-        Logger.log("testFilter ende");
-    }
-
     private presentActionSheet() {
         let actionSheet = this.actionSheetCtrl.create({
             title: "More Actions",
@@ -131,7 +121,6 @@ export class HomePage {
                 }, {
                     text: "Filter",
                     handler: () => {
-                        //this.loadFilterData();
                         this.showDepartmentFilterAlert(this.alertCtrl, this.showDepartmentFilterAlertAppModel);
                     }
                 }, {
@@ -186,13 +175,11 @@ export class HomePage {
         });
     }
 
-    private pushFilter() {
-        this.navCtrl.push("UserFilterPage", {
-        }).then((canEnterView) => {
-            if (!canEnterView) {
-                // in the case that the view can not be entered redirect the user to the login page
-                this.navCtrl.setRoot("LoginPage");
-            }
+    private showDepartmentFilterAlert(alertCtrl: AlertController, appModelService: AppModelService) {
+        Alerts.showDepartmentFilterAlert(alertCtrl, appModelService).then(() => {
+            this.loadData();
+        }, (error) => {
+            Logger.error(error);
         });
     }
 

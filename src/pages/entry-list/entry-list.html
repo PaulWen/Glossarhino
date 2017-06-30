@@ -2,11 +2,6 @@
 
   <ion-navbar>
 
-    <!-- Menu toggle for burger menu -->
-    <button ion-button icon-only menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
-
     <ion-searchbar #searchbar placeholder="Search entries" autocorrect="off" type="text" [(ngModel)]="searchText" [hidden]="searchbarIsHidden"
       showCancelButton="false" (ionInput)="loadData()">
     </ion-searchbar>
@@ -27,7 +22,6 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <!-- Print list with all entries retreived in department -->
   <ion-list>
     <button ion-item *ngFor="let entry of entryList" (click)="pushEntry(entry._id)">
       <h2> {{ entry.name }} </h2>

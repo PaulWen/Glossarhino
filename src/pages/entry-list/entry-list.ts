@@ -25,10 +25,12 @@ export class EntryListPage {
   private departmentId: number;
   private searchbarFocus: boolean;
 
-  // model objects
-  private entryListPageModelInterface: EntryListPageModelInterface;
+  // model object
+  private appModelService: EntryListPageModelInterface;
+  
+  // data objects
   private entryList: Array<EntryListPageEntryDataObject>;
-  private selectedLanguageDataObject: UserLanguageFilterConfigDataObject;
+  private selectedLanguage: UserLanguageFilterConfigDataObject;
 
   // searchText from searchbar
   private searchText: string;
@@ -39,6 +41,7 @@ export class EntryListPage {
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
   constructor(navCtrl: NavController, navParams: NavParams, popoverCtrl: PopoverController, appModel: AppModelService) {
+    
     // instantiate ionic injected components
     this.navCtrl = navCtrl;
     this.navParams = navParams;
@@ -49,9 +52,11 @@ export class EntryListPage {
     this.searchbarFocus = this.navParams.get("searchbarFocus");
 
     // instantiate model
-    this.entryListPageModelInterface = appModel;
+    this.appModelService = appModel;
 
+    // set default value
     this.searchbarIsHidden = true;
+    
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
@@ -61,11 +66,11 @@ export class EntryListPage {
   //////////////////////////////////////////
 
   private ionViewCanEnter(): Promise<boolean> | boolean {
-    return this.entryListPageModelInterface.isAuthenticated();
+    return this.appModelService.isAuthenticated();
   }
 
   private ionViewWillEnter() {
-    // show searchbar
+    // show searchbar after animation
     this.searchbarIsHidden = false;
 
     // load data
@@ -82,21 +87,22 @@ export class EntryListPage {
   }
 
   private ionViewWillLeave() {
-    // hide searchbar
+    // hide searchbar before animation
     this.searchbarIsHidden = true;
   }
 
-  /**
-   * PAGE METHODS
-   */
+  //////////////////////////////////////////
+  //            Page Functions            //
+  //////////////////////////////////////////
+
   private loadData(departmendId?: number, refresher?) {
     // get selected language
-    this.entryListPageModelInterface.getSelectedLanguage().then((data) => {
-      this.selectedLanguageDataObject = data;
+    this.appModelService.getSelectedLanguage().then((data) => {
+      this.selectedLanguage = data;
 
       // load other data as soon as language loaded
       // get entryname list
-      this.entryListPageModelInterface.getEntryListPageEntryDataObjects(this.searchText, this.selectedLanguageDataObject.selectedLanguage, departmendId).then((data) => {
+      this.appModelService.getEntryListPageEntryDataObjects(this.searchText, this.selectedLanguage.selectedLanguage, departmendId).then((data) => {
         this.entryList = data;
       }, (error) => {
         Logger.log("Loading entry list failed (Class: EntryListPage, Method: loadData()");
@@ -118,13 +124,14 @@ export class EntryListPage {
     this.loadData(this.departmentId, refresher);
   }
 
-  /**
-   * NAVIGATION METHODS
-   */
+  //////////////////////////////////////////
+  //         Navigation Functions         //
+  //////////////////////////////////////////
+
   // Navigation method for single entry
-  private pushEntry(_id: string) {
+  private pushEntry(entryDocumentId: string) {
     this.navCtrl.push("SingleEntryPage", {
-      _id: _id
+      entryDocumentId: entryDocumentId
     }).then((canEnterView) => {
       if (!canEnterView) {
         // in the case that the view can not be entered redirect the user to the login page
@@ -133,22 +140,18 @@ export class EntryListPage {
     });
   }
 
-  /**
-     * create and present LanguagePopover to enable changing languages
-     * @param event
-     */
-    private presentLanguagePopover(event: any) {
-        let popover = this.popoverCtrl.create("LanguagePopoverPage");
-        popover.present({
-            ev: event
-        }).then((canEnterView) => {
-            if (!canEnterView) {
-                // in the case that the view can not be entered redirect the user to the login page
-                this.navCtrl.setRoot("LoginPage");
-            }
-        });
-        popover.onWillDismiss(() => {
-            this.loadData();
-        })
-    }
+  private presentLanguagePopover(event: any) {
+    let popover = this.popoverCtrl.create("LanguagePopoverPage");
+    popover.present({
+      ev: event
+    }).then((canEnterView) => {
+      if (!canEnterView) {
+        // in the case that the view can not be entered redirect the user to the login page
+        this.navCtrl.setRoot("LoginPage");
+      }
+    });
+    popover.onWillDismiss(() => {
+      this.loadData();
+    })
+  }
 }

@@ -89,13 +89,52 @@ export class LinkedObjectsModalPage {
     }
   }
 
+  private addRelatedEntry(newRelatedEntryDocumentId: string) {
+    this.relatedEntries.push(newRelatedEntryDocumentId);
+    this.relatedEntries.sort();
+  }
+
+  private removeRelatedEntry(relatedEntryToRemoveDocumentId: string) {
+    let index: number = this.relatedEntries.findIndex(relatedDepartmentDocumentId => relatedDepartmentDocumentId == relatedEntryToRemoveDocumentId);
+    if (index > -1) {
+      this.relatedEntries.splice(index, 1);
+    }
+  }
+
+  private addSynonym(newSynonym: string) {
+    this.synonyms.push(newSynonym);
+    this.synonyms.sort();
+  }
+
+  private removeSynonym(synonymToRemove: string) {
+    let index: number = this.synonyms.findIndex(synonym => synonym == synonymToRemove);
+    if (index > -1) {
+      this.synonyms.splice(index, 1)
+    }
+  }
+
+  private addAcronym(newAcronym: string) {
+    this.acronyms.push(newAcronym);
+    this.acronyms.sort();
+  }
+
+  private removeAcronym(acronymToRemove: string) {
+    let index: number = this.acronyms.findIndex(acronym => acronym == acronymToRemove);
+    if (index > -1) {
+      this.acronyms.splice(index, 1)
+    }
+  }
+
   //////////////////////////////////////////
   //         Navigation Functions         //
   //////////////////////////////////////////
 
   private closeLinkedObjectsModal() {
     this.viewCtrl.dismiss({
-      relatedDepartments: this.relatedDepartments
+      relatedDepartments: this.relatedDepartments,
+      relatedEntries: this.relatedEntries,
+      synonyms: this.synonyms,
+      acronyms: this.acronyms
     });
   }
 
@@ -125,6 +164,56 @@ export class LinkedObjectsModalPage {
       }
     });
     relatedDepartmentCheckboxAlert.present();
+  }
+
+  private showAddSynonymAlert() {
+    let showAddSynonymAlert = this.alertCtrl.create({
+      title: "Add synonym",
+      message: "Enter a synonym to add it",
+      inputs: [
+        {
+          name: "synonym",
+          placeholder: "Synonym"
+        }
+      ],
+      buttons: [
+        {
+          text: "Cancel"
+        },
+        {
+          text: "Add",
+          handler: data => {
+            this.addSynonym(data.synonym);
+          }
+        }
+      ]
+    });
+    showAddSynonymAlert.present();
+  }
+
+  private showAddAcronymAlert() {
+    let showAddAcronymAlert = this.alertCtrl.create({
+      title: "Add acronym",
+      message: "Enter a acronym to add it",
+      inputs: [
+        {
+          name: "acronym",
+          placeholder: "Acronym"
+        }
+      ],
+      buttons: [
+        {
+          text: "Cancel"
+        },
+        {
+          text: "Add",
+          handler: data => {
+            this.addAcronym(data.acronym);
+          }
+        }
+      ]
+    });
+    showAddAcronymAlert.present();
   }
 
 }

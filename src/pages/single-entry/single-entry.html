@@ -69,7 +69,7 @@
               <button ion-button clear small (click)="openLinkedObjectsModal(entry?.relatedDepartments, entry?.relatedEntries, entry?.synonyms, entry?.acronyms)"
                 id="badge-button">
                   <ion-icon name="link">
-                  <ion-badge id="badge"> {{ getArrayLength(entry?.relatedDepartments) }} </ion-badge>
+                  <ion-badge id="badge"> {{ getArrayLength(entry?.relatedDepartments) + getArrayLength(entry?.relatedEntries) + getArrayLength(entry?.synonyms) + getArrayLength(entry?.acronyms) }} </ion-badge>
                   </ion-icon>
                 </button>
 

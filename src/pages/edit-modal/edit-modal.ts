@@ -194,8 +194,11 @@ export class EditModalPage {
       }
     });
     linkedObjectsModal.onDidDismiss((data) => {
-      // get relatedDepartments from model
+      // set linkedObjects in object
       this.entry.relatedDepartments = data.relatedDepartments;
+      this.entry.relatedEntries = data.relatedEntries;
+      this.entry.synonyms = data.synonyms;
+      this.entry.acronyms = data.acronyms
     });
   }
 

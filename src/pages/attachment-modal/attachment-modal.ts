@@ -99,5 +99,4 @@ export class AttachmentModalPage {
       showAddAttachmentAlert.present();
   }
 
-
 }

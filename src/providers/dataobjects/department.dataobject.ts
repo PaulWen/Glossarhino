@@ -1,6 +1,7 @@
 export abstract class DepartmentDataObject {
 
   abstract get departmentId(): string;
+
   abstract get departmentName(): string;
 
 
@@ -8,6 +9,6 @@ export abstract class DepartmentDataObject {
     return {
       "departmentId": departmentId,
       "departmentName": departmentName
-    }
+    };
   }
 }

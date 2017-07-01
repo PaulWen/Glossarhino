@@ -1,10 +1,17 @@
-import { Component, ViewChild } from "@angular/core";
-import { IonicPage, NavController, NavParams, Searchbar, PopoverController, ViewController } from "ionic-angular";
-import { AppModelService } from "../../providers/app-model-service";
-import { EntryListPageModelInterface } from "./entry-list.model-interface";
-import { UserLanguageFilterConfigDataObject } from "../../providers/dataobjects/user-language-filter-config.dataobject";
-import { Logger } from "../../app/logger";
-import { EntryListPageEntryDataObject } from "../../providers/dataobjects/entrylistpage.entry.dataobject";
+import {Component, ViewChild} from "@angular/core";
+import {
+  IonicPage,
+  NavController,
+  NavParams,
+  PopoverController,
+  Searchbar,
+  ViewController
+} from "ionic-angular";
+import {Logger} from "../../app/logger";
+import {AppModelService} from "../../providers/app-model-service";
+import {EntryListPageEntryDataObject} from "../../providers/dataobjects/entrylistpage.entry.dataobject";
+import {UserLanguageFilterConfigDataObject} from "../../providers/dataobjects/user-language-filter-config.dataobject";
+import {EntryListPageModelInterface} from "./entry-list.model-interface";
 
 @IonicPage({
   segment: "entrylist/:departmentId",
@@ -152,10 +159,10 @@ export class EntryListPage {
     });
     popover.onWillDismiss(() => {
       this.loadData();
-    })
+    });
   }
 
   private closeEntryListModal() {
-    this.viewCtrl.dismiss()
+    this.viewCtrl.dismiss();
   }
 }

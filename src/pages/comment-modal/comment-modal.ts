@@ -1,18 +1,17 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
-import { CommentDataObject } from "../../providers/dataobjects/comment.dataobject";
-import { CommentModalModelInterface } from "./comment-modal.model-interface";
-import { AppModelService } from "../../providers/app-model-service";
-import { UserDataObject } from "../../providers/dataobjects/user.dataobject";
-import { Logger } from "../../app/logger";
-import { SingleEntryPage } from "../single-entry/single-entry";
-import { EntryDataObject } from "../../providers/dataobjects/entry.dataobject";
-import { UserLanguageFilterConfigDataObject } from "../../providers/dataobjects/user-language-filter-config.dataobject";
+import {Component} from "@angular/core";
+import {IonicPage, NavController, NavParams, ViewController} from "ionic-angular";
+import {Logger} from "../../app/logger";
+import {AppModelService} from "../../providers/app-model-service";
+import {CommentDataObject} from "../../providers/dataobjects/comment.dataobject";
+import {EntryDataObject} from "../../providers/dataobjects/entry.dataobject";
+import {UserLanguageFilterConfigDataObject} from "../../providers/dataobjects/user-language-filter-config.dataobject";
+import {UserDataObject} from "../../providers/dataobjects/user.dataobject";
+import {CommentModalModelInterface} from "./comment-modal.model-interface";
 
 @IonicPage()
 @Component({
-  selector: 'page-comment-modal',
-  templateUrl: 'comment-modal.html',
+  selector: "page-comment-modal",
+  templateUrl: "comment-modal.html"
 })
 export class CommentModalPage {
   ////////////////////////////////////////////Properties/////////////////////////////////////////////
@@ -89,7 +88,7 @@ export class CommentModalPage {
     newComment.timeStamp = new Date();
 
     if (this.entry.comments == undefined) {
-      this.entry.comments = []
+      this.entry.comments = [];
     }
 
     this.entry.comments.push(newComment);
@@ -97,7 +96,7 @@ export class CommentModalPage {
 
     this.appModelService.setEntryDataObject(this.entry, this.selectedLanguage.selectedLanguage).then((data) => {
 
-    })
+    });
   }
 
   //////////////////////////////////////////

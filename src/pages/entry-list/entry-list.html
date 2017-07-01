@@ -2,8 +2,9 @@
 
   <ion-navbar>
 
-    <ion-searchbar #searchbar placeholder="Search entries" autocorrect="off" type="text" [(ngModel)]="searchText" [hidden]="searchbarIsHidden"
-      showCancelButton="false" (ionInput)="loadData()">
+    <ion-searchbar #searchbar placeholder="Search entries" autocorrect="off" type="text"
+                   [(ngModel)]="searchText" [hidden]="searchbarIsHidden"
+                   showCancelButton="false" (ionInput)="loadData()">
     </ion-searchbar>
 
     <ion-buttons end>

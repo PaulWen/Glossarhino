@@ -12,8 +12,8 @@ import { AttachmentDataObject } from "../../providers/dataobjects/attachment.dat
 
 @IonicPage()
 @Component({
-  selector: 'page-edit-modal',
-  templateUrl: 'edit-modal.html',
+  selector: "page-edit-modal",
+  templateUrl: "edit-modal.html"
 })
 export class EditModalPage {
 
@@ -85,7 +85,7 @@ export class EditModalPage {
       if (this.addNewEntry) {
         this.entry = EntryDataObject.init();
       } else {
-        this.editModalPageModelInterface.getEntryDataObject(this._id, this.selectedLanguageDataObject.selectedLanguage).then((data) => {
+        this.editModalPageModelInterface.getCompleteEntryDataObject(this._id, this.selectedLanguageDataObject.selectedLanguage).then((data) => {
           this.entry = data;
         }, (error) => {
           Logger.log("Loading Entry Data Object failed (Class: EditModalPage, Method: loadData()");
@@ -135,7 +135,7 @@ export class EditModalPage {
         this.editModalPageModelInterface.newEntryDataObject(this.entry, this.selectedLanguageDataObject.selectedLanguage).then((data) => {
           this.viewCtrl.dismiss();
 
-        })
+        });
       } else {
         this.editModalPageModelInterface.setEntryDataObject(this.entry, this.selectedLanguageDataObject.selectedLanguage).then(() => {
           this.viewCtrl.dismiss();
@@ -215,7 +215,7 @@ export class EditModalPage {
       this.entry.relatedDepartments = data.relatedDepartments;
       this.entry.relatedEntries = data.relatedEntries;
       this.entry.synonyms = data.synonyms;
-      this.entry.acronyms = data.acronyms
+      this.entry.acronyms = data.acronyms;
     });
   }
 }

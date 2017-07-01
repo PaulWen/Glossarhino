@@ -2,7 +2,6 @@ import {Injectable} from "@angular/core";
 import {Headers, Http, Response} from "@angular/http";
 import postParam from "jquery-param";
 import "rxjs/add/operator/map";
-import {Logger} from "../../app/logger";
 
 /**
  * The class is a service which provides basic methods for making HTTP requests.

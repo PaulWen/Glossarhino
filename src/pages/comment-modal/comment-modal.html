@@ -17,13 +17,13 @@
 
   <div class="comment" *ngFor="let comment of entry.comments">
 
-    <div> {{ comment.content }} </div>
+    <div> {{ comment.content }}</div>
 
     <div class="comment-metadata">
 
-      <div> {{ comment.contact }} </div>
-      <div> {{ comment.timeStamp | date: shortDate }} </div>
-      
+      <div> {{ comment.contact }}</div>
+      <div> {{ comment.timeStamp | date: shortDate }}</div>
+
     </div>
 
   </div>

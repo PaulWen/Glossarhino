@@ -37,13 +37,15 @@
     <ion-row>
       <ion-item>
         <ion-label floating>Password</ion-label>
-        <ion-input #password type="password" (keyup.enter)="login(email.value, password.value, true)"></ion-input>
+        <ion-input #password type="password"
+                   (keyup.enter)="login(email.value, password.value, true)"></ion-input>
       </ion-item>
     </ion-row>
     <ion-row>
       <ion-item [style.display]="loginOpened ? 'none' : 'block'">
         <ion-label floating>Repeat Password</ion-label>
-        <ion-input #repeat_password type="password" (keyup.enter)="register(name.value, email.value, password.value, repeat_password.value, true)"></ion-input>
+        <ion-input #repeat_password type="password"
+                   (keyup.enter)="register(name.value, email.value, password.value, repeat_password.value, true)"></ion-input>
       </ion-item>
     </ion-row>
     <ion-row style="justify-content: flex-end">

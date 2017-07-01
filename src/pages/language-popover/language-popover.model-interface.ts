@@ -1,6 +1,5 @@
-import { LanguageDataobject } from "../../providers/dataobjects/language.dataobject";
-import { GlobalLanguageConfigDataobject } from "../../providers/dataobjects/global-language-config.dataobject";
-import { UserLanguageFilterConfigDataObject } from "../../providers/dataobjects/user-language-filter-config.dataobject";
+import {GlobalLanguageConfigDataobject} from "../../providers/dataobjects/global-language-config.dataobject";
+import {UserLanguageFilterConfigDataObject} from "../../providers/dataobjects/user-language-filter-config.dataobject";
 
 /**
  * Interface to define what LanguagePopover needs implemented in order to work

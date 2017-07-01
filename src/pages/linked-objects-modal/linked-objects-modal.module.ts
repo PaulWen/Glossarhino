@@ -1,16 +1,17 @@
-import { NgModule } from '@angular/core';
-import { IonicPageModule } from 'ionic-angular';
-import { LinkedObjectsModalPage } from './linked-objects-modal';
+import {NgModule} from "@angular/core";
+import {IonicPageModule} from "ionic-angular";
+import {LinkedObjectsModalPage} from "./linked-objects-modal";
 
 @NgModule({
   declarations: [
-    LinkedObjectsModalPage,
+    LinkedObjectsModalPage
   ],
   imports: [
-    IonicPageModule.forChild(LinkedObjectsModalPage),
+    IonicPageModule.forChild(LinkedObjectsModalPage)
   ],
   exports: [
     LinkedObjectsModalPage
   ]
 })
-export class LinkedObjectsModalPageModule {}
+export class LinkedObjectsModalPageModule {
+}

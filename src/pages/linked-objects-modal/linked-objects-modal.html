@@ -48,7 +48,7 @@
 
     <ion-item *ngFor="let entry of relatedEntries"> {{ entry }}
 
-      <ion-icon name="trash" item-end *ngIf="isEditMode || isEditMode"></ion-icon>
+      <ion-icon name="trash" item-end *ngIf="isEditMode || isEditMode" (click)="removeRelatedEntry(entry)"></ion-icon>
 
     </ion-item>
 
@@ -67,12 +67,12 @@
 
     <ion-item *ngFor="let synonym of synonyms"> {{ synonym }}
 
-      <ion-icon name="trash" item-end *ngIf="isEditMode"></ion-icon>
+      <ion-icon name="trash" item-end *ngIf="isEditMode" (click)="removeSynonym(synonym)"></ion-icon>
 
     </ion-item>
 
     <ion-item>
-      <button ion-button *ngIf="isEditMode">
+      <button ion-button *ngIf="isEditMode" (click)="showAddSynonymAlert()">
         Add synonym
       </button>
     </ion-item>
@@ -86,12 +86,12 @@
 
     <ion-item *ngFor="let acronym of acronyms"> {{ acronym }}
 
-      <ion-icon name="trash" item-end *ngIf="isEditMode"></ion-icon>
+      <ion-icon name="trash" item-end *ngIf="isEditMode" (click)="removeAcronym(acronym)"></ion-icon>
 
     </ion-item>
 
     <ion-item>
-      <button ion-button *ngIf="isEditMode">
+      <button ion-button *ngIf="isEditMode" (click)="showAddAcronymAlert()">
         Add acronym
       </button>
     </ion-item>

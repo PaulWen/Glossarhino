@@ -24,10 +24,13 @@ export abstract class EntryDataObject {
   abstract set relatedDepartments(relatedDepartments: Array<number>);
 
   abstract get relatedEntries(): Array<string>;
+  abstract set relatedEntries(relatedEntries: Array<string>);
 
   abstract get synonyms(): Array<string>;
+  abstract set synonyms(synonyms: Array<string>);
 
   abstract get acronyms(): Array<string>;
+  abstract set acronyms(acronyms: Array<string>);
 
   abstract get attachments(): Array<AttachmentDataObject>;
 

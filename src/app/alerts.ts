@@ -11,17 +11,21 @@ import { Logger } from "./logger";
 export class Alerts {
 
     ////////////////////////////////////////////Properties////////////////////////////////////////////
-    private static userDepartmentFilterConfig: UserDepartmentFilterConfigDataObject;
 
     /////////////////////////////////////////////Methods///////////////////////////////////////////////
+
+    //////////////////////////////////////////
+    //       Department Filter Alert        //
+    //////////////////////////////////////////
+
     private static async loadMergedDepartmentConfig(appModelService: AppModelService): Promise<Array<{ details: DepartmentDataObject, checked: boolean }>> {
         let globalDepartmentConfig: GlobalDepartmentConfigDataObject = appModelService.getGlobalDepartmentConfigDataObject();
 
         //load user department filter preferences
-        this.userDepartmentFilterConfig = await appModelService.getUserDepartmentFilterConfigDataObject()
+        let userDepartmentFilterConfig: UserDepartmentFilterConfigDataObject = await appModelService.getUserDepartmentFilterConfigDataObject()
 
         // merge global with user config
-        let mergedDepartmentConfig: Array<{ details: DepartmentDataObject, checked: boolean }> = this.mergeGlobalDepartmentConfigWithUserPreferences(globalDepartmentConfig, this.userDepartmentFilterConfig);
+        let mergedDepartmentConfig: Array<{ details: DepartmentDataObject, checked: boolean }> = this.mergeGlobalDepartmentConfigWithUserPreferences(globalDepartmentConfig, userDepartmentFilterConfig);
 
         return mergedDepartmentConfig;
 
@@ -73,9 +77,7 @@ export class Alerts {
                 departmentFilterAlert.addButton({
                     text: "OK",
                     handler: data => {
-                        this.userDepartmentFilterConfig.selectedDepartments = data;
-
-                        resolve(appModelService.setUserDepartmentFilterConfigDataObject(this.userDepartmentFilterConfig));
+                        resolve(appModelService.setUserDepartmentFilterConfigDataObject(data));
                     }
                 });
 
@@ -91,10 +93,5 @@ export class Alerts {
         });
 
     }
-
-    private static setConfig(appModelService: AppModelService): Promise<boolean> {
-        return appModelService.setUserDepartmentFilterConfigDataObject(this.userDepartmentFilterConfig);
-    }
-
 
 }

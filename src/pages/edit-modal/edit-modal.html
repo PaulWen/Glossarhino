@@ -58,8 +58,17 @@
 
             <ion-col col-xl-2 col-12>
               <ion-item>
-                <button ion-button icon-left clear small
-                        (click)="openLinkedObjectsModal(entry?.relatedDepartments, entry?.relatedEntries, entry?.synonyms, entry?.acronyms)">
+                <button ion-button icon-left clear small (click)="openAttachmentModal(entry?.attachments)">
+                  <ion-icon name="attach">
+                  </ion-icon>
+                  Edit attachments
+                </button>
+              </ion-item>
+            </ion-col>
+            
+            <ion-col col-xl-2 col-12>
+              <ion-item>
+                <button ion-button icon-left clear small (click)="openLinkedObjectsModal(entry?.relatedDepartments, entry?.relatedEntries, entry?.synonyms, entry?.acronyms)">
                   <ion-icon name="link">
                   </ion-icon>
                   Edit links

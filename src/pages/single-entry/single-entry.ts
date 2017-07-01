@@ -221,7 +221,8 @@ export class SingleEntryPage {
 
   private openAttachmentModal(attachments: Array<AttachmentDataObject>) {
     let attachmentModal = this.modalCtrl.create("AttachmentModalPage", {
-      attachments: attachments
+      attachments: attachments,
+      isEditMode: false
     });
     attachmentModal.present().then((canEnterView) => {
       if (!canEnterView) {

@@ -71,8 +71,8 @@ export class LinkedObjectsModalPage {
     this.globalDepartmentConfigDataObject = this.appModelService.getGlobalDepartmentConfigDataObject();
   }
 
-  private addRelatedDepartment(relatedDepartmentId: string) {
-    this.relatedDepartments.push(relatedDepartmentId);
+  private addRelatedDepartment(newRelatedDepartmentId: string) {
+    this.relatedDepartments.push(newRelatedDepartmentId);
     this.relatedDepartments.sort((a, b) => {
       if (a < b)
         return -1;
@@ -82,8 +82,8 @@ export class LinkedObjectsModalPage {
     });
   }
 
-  private removeRelatedDepartment(departmentId: string) {
-    let index: number = this.relatedDepartments.findIndex(relatedDepartmentId => relatedDepartmentId == departmentId);
+  private removeRelatedDepartment(relatedDepartmentIdToRemove: string) {
+    let index: number = this.relatedDepartments.findIndex(relatedDepartmentId => relatedDepartmentId == relatedDepartmentIdToRemove);
     if (index > -1) {
       this.relatedDepartments.splice(index, 1);
     }

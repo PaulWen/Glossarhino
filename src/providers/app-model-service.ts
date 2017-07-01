@@ -169,7 +169,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
       ];
 
       // if departmentId is defined search only for entries that are relevant for the specific department
-      if (departmentId != undefined) {
+      if (departmentId != undefined && departmentId != "undefined") {
         selector.relatedDepartments = {
           $in: [departmentId]
         };

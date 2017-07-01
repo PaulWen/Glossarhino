@@ -19,7 +19,7 @@ export class LinkedObjectsModalPage {
   private alertCtrl: AlertController;
 
   // navparams
-  private relatedDepartments: Array<number>;
+  private relatedDepartments: Array<string>;
   private relatedEntries: Array<string>;
   private synonyms: Array<string>;
   private acronyms: Array<string>;
@@ -71,14 +71,18 @@ export class LinkedObjectsModalPage {
     this.globalDepartmentConfigDataObject = this.appModelService.getGlobalDepartmentConfigDataObject();
   }
 
-  private addRelatedDepartment(relatedDepartmentId: number) {
+  private addRelatedDepartment(relatedDepartmentId: string) {
     this.relatedDepartments.push(relatedDepartmentId);
     this.relatedDepartments.sort((a, b) => {
-      return a - b;
+      if (a < b)
+        return -1;
+      if (a > b)
+        return 1;
+      return 0;
     });
   }
 
-  private removeRelatedDepartment(departmentId: number) {
+  private removeRelatedDepartment(departmentId: string) {
     let index: number = this.relatedDepartments.findIndex(relatedDepartmentId => relatedDepartmentId == departmentId);
     if (index > -1) {
       this.relatedDepartments.splice(index, 1);

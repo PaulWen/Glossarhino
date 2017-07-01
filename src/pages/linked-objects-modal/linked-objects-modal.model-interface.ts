@@ -8,8 +8,8 @@ export interface LinkedObjectsModalModelInterface {
      *
      * @returns true or false depending on if the user is already authenticated
      */
-    isAuthenticated(): Promise<boolean> | boolean;
+    isAuthenticated(): Promise<boolean>;
 
-    getDepartmentById(departmentId: number): DepartmentDataObject;
+    getDepartmentById(departmentId: string): DepartmentDataObject;
     getGlobalDepartmentConfigDataObject(): GlobalDepartmentConfigDataObject;
 }

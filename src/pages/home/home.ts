@@ -193,7 +193,7 @@ export class HomePage {
         });
     }
 
-    private pushEntryListPage(departmentId?: number) {
+    private pushEntryListPage(departmentId?: string) {
         this.navCtrl.push("EntryListPage", {
             departmentId: departmentId
         }).then((canEnterView) => {

@@ -23,15 +23,15 @@ export class EntryListPage {
   private viewCtrl: ViewController;
 
   // navParams
-  private departmentId: number;
+  private departmentId: string;
   private searchbarFocus: boolean;
 
   // model object
   private appModelService: EntryListPageModelInterface;
-  
+
   // data objects
   private entryList: Array<EntryListPageEntryDataObject>;
-  private selectedLanguage: UserLanguageFilterConfigDataObject; 
+  private selectedLanguage: UserLanguageFilterConfigDataObject;
 
   // get access to seachbar itself
   @ViewChild("searchbar") searchbar: Searchbar;
@@ -40,7 +40,7 @@ export class EntryListPage {
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
   constructor(navCtrl: NavController, navParams: NavParams, popoverCtrl: PopoverController, viewCtrl: ViewController, appModelService: AppModelService) {
-    
+
     // instantiate ionic injected components
     this.navCtrl = navCtrl;
     this.navParams = navParams;
@@ -95,7 +95,7 @@ export class EntryListPage {
   //            Page Functions            //
   //////////////////////////////////////////
 
-  private loadData(departmendId?: number, refresher?) {
+  private loadData(departmendId?: string, refresher?) {
     // get selected language
     this.appModelService.getSelectedLanguage().then((data) => {
       this.selectedLanguage = data;

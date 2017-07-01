@@ -14,8 +14,8 @@ export interface EditModalPageModelInterface {
 
     getSelectedLanguage(): Promise<UserLanguageFilterConfigDataObject>;
     getGlobalDepartmentConfigDataObject(): GlobalDepartmentConfigDataObject;
-    getEntryDataObject(_id: string, languageId: number): Promise<EntryDataObject>;
-    setEntryDataObject(entryDataObject: EntryDataObject, languageId: number): Promise<boolean>;
-    newEntryDataObject(entryDataObject: EntryDataObject, languageId: number): Promise<String>;
-    getDepartmentById(departmentId: number): DepartmentDataObject;
+    getEntryDataObject(_id: string, languageId: string): Promise<EntryDataObject>;
+    setEntryDataObject(entryDataObject: EntryDataObject, languageId: string): Promise<boolean>;
+    newEntryDataObject(entryDataObject: EntryDataObject, languageId: string): Promise<string>;
+    getDepartmentById(departmentId: string): DepartmentDataObject;
 }

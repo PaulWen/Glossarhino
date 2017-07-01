@@ -30,7 +30,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
 
   //////////////Databases////////////
   /** all the databases for the different languages <Key: Language, Value: PouchDB database object>  */
-  private entryDatabases: Map<number, any>;
+  private entryDatabases: Map<string, any>;
 
   /** database that stores all the settings of the currently logged-in user*/
   private userSettingsDatabase: any;
@@ -49,7 +49,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     PouchDB.plugin(PouchFind);
 
     // initialize properties
-    this.entryDatabases = new Map<number, any>();
+    this.entryDatabases = new Map<string, any>();
     this.userSettingsDatabase = null;
 
     this.globalDepartmentConfig = null;
@@ -96,7 +96,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   //       HomePageInterface Methods      //
   //////////////////////////////////////////
 
-  public async getCountOfAllEntries(currentLanguageId: number): Promise<number> {
+  public async getCountOfAllEntries(currentLanguageId: string): Promise<number> {
     // load the IDs of all entries that are available in one language (before the _design docs)
     let result1: any = (await this.entryDatabases.get(currentLanguageId).allDocs({
       include_docs: true,
@@ -117,7 +117,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     return result.length;
   }
 
-  public async getSelectedHomePageDepartmentDataobjects(currentLanguageId: number): Promise<Array<HomePageDepartmentDataobject>> {
+  public async getSelectedHomePageDepartmentDataobjects(currentLanguageId: string): Promise<Array<HomePageDepartmentDataobject>> {
     // initialize data structure which will be returned
     let selectedHomePageDepartmentDataObjects: Array<HomePageDepartmentDataobject> = [];
 
@@ -149,7 +149,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   //  EntryListPageModelInterface Method  //
   //////////////////////////////////////////
 
-  public async getEntryListPageEntryDataObjects(searchString: string, selectedLanguage: number, departmentId?: number): Promise<Array<EntryListPageEntryDataObject>> {
+  public async getEntryListPageEntryDataObjects(searchString: string, selectedLanguage: string, departmentId?: string): Promise<Array<EntryListPageEntryDataObject>> {
     // initialize data structure which will be returned
     let entryNames: Array<string> = [];
 
@@ -172,7 +172,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
         };
       }
 
-      let result: any = (await this.entryDatabases.get(selectedLanguage).find({
+      let result: Array<EntryListPageEntryDataObject> = (await this.entryDatabases.get(selectedLanguage).find({
         selector: selector, fields: ["_id", "name", "synonyms", "acronyms"]
       })).docs;
 
@@ -191,17 +191,28 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   //     SingleEntryInterface Methods     //
   //////////////////////////////////////////
 
-  public async getEntryDataObject(_id: string, languageId: number): Promise<EntryDataObject> {
-    try {
-      return await this.getDocumentAsJSON(this.entryDatabases.get(languageId), _id);
-    } catch (error) {
-      Logger.error(error);
+  public async getEntryDataObject(_id: string, languageId: string): Promise<EntryDataObject> {
+    let result: EntryDataObject = await this.getDocumentAsJSON(this.entryDatabases.get(languageId), _id);
+    let selectedDepartments: UserDepartmentFilterConfigDataObject = await this.getUserDepartmentFilterConfigDataObject();
+
+    Logger.debug(selectedDepartments);
+    Logger.debug(result.departmentSpecifics);
+
+    // remove all departments specificas that the user is not intrested in to see
+    for (let i = 0; i < result.departmentSpecifics.length; i++) {
+      // check if the department is currently selected by the user
+      if (!UserDepartmentFilterConfigDataObject.isDepartmentSelected(selectedDepartments, result.departmentSpecifics[i].departmentId)) {
+        // if not the department has to be removed so that the user will not see it
+        result.departmentSpecifics.splice(i, 1);
+      }
     }
 
-    return null;
+    Logger.debug(result.departmentSpecifics);
+
+    return result;
   };
 
-  public getDepartmentById(departmentId: number): DepartmentDataObject {
+  public getDepartmentById(departmentId: string): DepartmentDataObject {
     return GlobalDepartmentConfigDataObject.getDepartmentById(this.globalDepartmentConfig, departmentId);
   }
 
@@ -275,7 +286,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   //       EditModalInterface Methods     //
   //////////////////////////////////////////
 
-  public async setEntryDataObject(entryDataObject: EntryDataObject, languageId: number): Promise<boolean> {
+  public async setEntryDataObject(entryDataObject: EntryDataObject, languageId: string): Promise<boolean> {
     try {
       return (await this.entryDatabases.get(languageId).put(entryDataObject)
       ).ok;
@@ -286,7 +297,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     return false;
   }
 
-  public async newEntryDataObject(entryDataObject: EntryDataObject, languageId: number): Promise<String> {
+  public async newEntryDataObject(entryDataObject: EntryDataObject, languageId: string): Promise<String> {
     try {
       return (await this.entryDatabases.get(languageId).post(entryDataObject)
       ).id;

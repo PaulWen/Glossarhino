@@ -20,8 +20,8 @@ export abstract class EntryDataObject {
   abstract get email(): string;
   abstract set email(email: string);
 
-  abstract get relatedDepartments(): Array<number>;
-  abstract set relatedDepartments(relatedDepartments: Array<number>);
+  abstract get relatedDepartments(): Array<string>;
+  abstract set relatedDepartments(relatedDepartments: Array<string>);
 
   abstract get relatedEntries(): Array<string>;
 
@@ -53,5 +53,5 @@ export abstract class EntryDataObject {
       "departmentSpecifics": undefined
     }
   }
-  
+
 }

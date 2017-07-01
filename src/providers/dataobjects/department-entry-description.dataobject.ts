@@ -3,7 +3,7 @@
  */
 export abstract class DepartmentEntrySpecificsDataObject {
 
-  abstract get departmentId(): number;
+  abstract get departmentId(): string;
 
   abstract get description(): string;
   abstract set description(description: string);
@@ -14,7 +14,16 @@ export abstract class DepartmentEntrySpecificsDataObject {
   abstract get email(): string;
   abstract set email(email: string);
 
-  public static init(departmentId: number): DepartmentEntrySpecificsDataObject {
+
+  public static compare(departmentEntrySpecificsDataObject1: DepartmentEntrySpecificsDataObject, departmentEntrySpecificsDataObject2: DepartmentEntrySpecificsDataObject): number {
+    if (departmentEntrySpecificsDataObject1.departmentId < departmentEntrySpecificsDataObject2.departmentId)
+      return -1;
+    if (departmentEntrySpecificsDataObject1.departmentId > departmentEntrySpecificsDataObject2.departmentId)
+      return 1;
+    return 0;
+  }
+
+  public static init(departmentId: string): DepartmentEntrySpecificsDataObject {
     return {
       "departmentId": departmentId,
       "description": "",

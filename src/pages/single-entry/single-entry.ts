@@ -232,7 +232,7 @@ export class SingleEntryPage {
     });
   }
 
-  private openLinkedObjectsModal(relatedDepartments: Array<number>, relatedEntries: Array <string>, synonyms: Array<string>, acronyms: Array<string>) {
+  private openLinkedObjectsModal(relatedDepartments: Array<string>, relatedEntries: Array <string>, synonyms: Array<string>, acronyms: Array<string>) {
     let linkedObjectsModal = this.modalCtrl.create("LinkedObjectsModalPage", {
       relatedDepartments: relatedDepartments,
       relatedEntries: relatedEntries,

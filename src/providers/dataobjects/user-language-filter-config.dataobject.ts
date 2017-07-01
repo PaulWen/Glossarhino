@@ -4,8 +4,8 @@ import {GlobalLanguageConfigDataobject} from "./global-language-config.dataobjec
 export abstract class UserLanguageFilterConfigDataObject {
 
   abstract get _id(): string;
-  abstract get selectedLanguage(): number;
-  abstract set selectedLanguage(selectedLanguage: number);
+  abstract get selectedLanguage(): string;
+  abstract set selectedLanguage(selectedLanguage: string);
 
 
   public static init(globalLanguageConfig: GlobalLanguageConfigDataobject): UserLanguageFilterConfigDataObject {

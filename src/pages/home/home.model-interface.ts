@@ -28,8 +28,8 @@ export interface HomePageModelInterface {
   //////////////////////////////////////////
 
   getSelectedLanguage(): Promise<UserLanguageFilterConfigDataObject>;
-  getSelectedHomePageDepartmentDataobjects(currentLanguageId: number): Promise<Array<HomePageDepartmentDataobject>>;
-  getCountOfAllEntries(selectedLanguage: number): Promise<number>;
+  getSelectedHomePageDepartmentDataobjects(currentLanguageId: string): Promise<Array<HomePageDepartmentDataobject>>;
+  getCountOfAllEntries(selectedLanguage: string): Promise<number>;
 
   // data for user filter settings
   getGlobalDepartmentConfigDataObject(): GlobalDepartmentConfigDataObject;

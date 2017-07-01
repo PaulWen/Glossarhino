@@ -70,7 +70,7 @@ export class LanguagePopoverPage {
    */
   private dismissPopover() {
     // convert input into number
-    this.selectedLanguageDataObject.selectedLanguage = +this.selectedLanguageDataObject.selectedLanguage;
+    this.selectedLanguageDataObject.selectedLanguage = this.selectedLanguageDataObject.selectedLanguage;
     this.languagePopoverPageModelInterface.setSelectedLanguage(this.selectedLanguageDataObject);
     this.viewCtrl.dismiss();
   };

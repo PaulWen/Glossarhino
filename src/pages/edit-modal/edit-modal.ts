@@ -106,17 +106,17 @@ export class EditModalPage {
 
   /**
    * refresh page when on pulling content down
-   * @param refresher 
+   * @param refresher
    */
   private doRefresh(refresher) {
     this.loadData(refresher);
   }
 
-  private addDepartmentSpecification(departmentId: number) {
+  private addDepartmentSpecification(departmentId: string) {
     this.entry.departmentSpecifics.push(DepartmentEntrySpecificsDataObject.init(departmentId));
   }
 
-  private removeDepartmentSpecification(departmentId: number) {
+  private removeDepartmentSpecification(departmentId: string) {
     let index: number = this.entry.departmentSpecifics.findIndex(departmentSpecifics => departmentSpecifics.departmentId == departmentId);
     if (index > -1) {
       this.entry.departmentSpecifics.splice(index, 1);
@@ -129,9 +129,7 @@ export class EditModalPage {
 
   private closeEditModal(save: boolean) {
     if (save) {
-      this.entry.departmentSpecifics.sort((a, b) => {
-        return a.departmentId - b.departmentId;
-      });
+      this.entry.departmentSpecifics.sort(DepartmentEntrySpecificsDataObject.compare);
       if (this.addNewEntry) {
         this.editModalPageModelInterface.newEntryDataObject(this.entry, this.selectedLanguageDataObject.selectedLanguage).then((data) => {
           this.viewCtrl.dismiss();
@@ -175,13 +173,13 @@ export class EditModalPage {
     departmentRadioAlert.addButton({
       text: "OK",
       handler: data => {
-        this.addDepartmentSpecification(+data);
+        this.addDepartmentSpecification(data);
       }
     });
     departmentRadioAlert.present();
   }
 
-  private openLinkedObjectsModal(relatedDepartments: Array<number>, relatedEntries: Array<string>, synonyms: Array<string>, acronyms: Array<string>) {
+  private openLinkedObjectsModal(relatedDepartments: Array<string>, relatedEntries: Array<string>, synonyms: Array<string>, acronyms: Array<string>) {
     let linkedObjectsModal = this.modalCtrl.create("LinkedObjectsModalPage", {
       relatedDepartments: relatedDepartments,
       relatedEntries: relatedEntries,

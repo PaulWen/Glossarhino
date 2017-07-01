@@ -73,6 +73,10 @@ export class Alerts {
                 departmentFilterAlert.addButton({
                     text: "OK",
                     handler: data => {
+
+                        Logger.debug("DATA OF ALERT");
+                        Logger.debug(data);
+
                         this.userDepartmentFilterConfig.selectedDepartments = data;
 
                         resolve(appModelService.setUserDepartmentFilterConfigDataObject(this.userDepartmentFilterConfig));

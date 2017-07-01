@@ -1,28 +1,28 @@
-import { Injectable } from "@angular/core";
+import {Injectable} from "@angular/core";
 import PouchDB from "pouchdb";
 import PouchFind from "pouchdb-find";
 import "rxjs/add/operator/map";
-import { AppConfig } from "../app/app-config";
-import { Logger } from "../app/logger";
-import { HomePageModelInterface } from "../pages/home/home.model-interface";
-import { LanguagePopoverPageModelInterface } from "../pages/language-popover/language-popover.model-interface";
-import { LoginPageInterface } from "../pages/login/login-interface";
-import { GlobalDepartmentConfigDataObject } from "./dataobjects/global-department-config.dataobject";
-import { GlobalLanguageConfigDataobject } from "./dataobjects/global-language-config.dataobject";
-import { HomePageDepartmentDataobject } from "./dataobjects/homepage.department.dataobject";
-import { UserDepartmentFilterConfigDataObject } from "./dataobjects/user-department-filter-config.dataobject";
-import { UserLanguageFilterConfigDataObject } from "./dataobjects/user-language-filter-config.dataobject";
-import { SuperLoginClient } from "./super_login_client/super_login_client";
-import { SuperloginHttpRequester } from "./super_login_client/superlogin_http_requester";
-import { EntryListPageModelInterface } from "../pages/entry-list/entry-list.model-interface";
-import { EntryListPageEntryDataObject } from "./dataobjects/entrylistpage.entry.dataobject";
-import { SingleEntryPageModelInterface } from "../pages/single-entry/single-entry.model-interface";
-import { EntryDataObject } from "./dataobjects/entry.dataobject";
-import { DepartmentDataObject } from "./dataobjects/department.dataobject";
-import { EditModalPageModelInterface } from "../pages/edit-modal/edit-modal.model-interface";
-import { UserDataObject } from "./dataobjects/user.dataobject";
-import { CommentModalModelInterface } from "../pages/comment-modal/comment-modal.model-interface";
-import { LinkedObjectsModalModelInterface } from "../pages/linked-objects-modal/linked-objects-modal.model-interface";
+import {AppConfig} from "../app/app-config";
+import {Logger} from "../app/logger";
+import {CommentModalModelInterface} from "../pages/comment-modal/comment-modal.model-interface";
+import {EditModalPageModelInterface} from "../pages/edit-modal/edit-modal.model-interface";
+import {EntryListPageModelInterface} from "../pages/entry-list/entry-list.model-interface";
+import {HomePageModelInterface} from "../pages/home/home.model-interface";
+import {LanguagePopoverPageModelInterface} from "../pages/language-popover/language-popover.model-interface";
+import {LinkedObjectsModalModelInterface} from "../pages/linked-objects-modal/linked-objects-modal.model-interface";
+import {LoginPageInterface} from "../pages/login/login-interface";
+import {SingleEntryPageModelInterface} from "../pages/single-entry/single-entry.model-interface";
+import {DepartmentDataObject} from "./dataobjects/department.dataobject";
+import {EntryDataObject} from "./dataobjects/entry.dataobject";
+import {EntryListPageEntryDataObject} from "./dataobjects/entrylistpage.entry.dataobject";
+import {GlobalDepartmentConfigDataObject} from "./dataobjects/global-department-config.dataobject";
+import {GlobalLanguageConfigDataobject} from "./dataobjects/global-language-config.dataobject";
+import {HomePageDepartmentDataobject} from "./dataobjects/homepage.department.dataobject";
+import {UserDepartmentFilterConfigDataObject} from "./dataobjects/user-department-filter-config.dataobject";
+import {UserLanguageFilterConfigDataObject} from "./dataobjects/user-language-filter-config.dataobject";
+import {UserDataObject} from "./dataobjects/user.dataobject";
+import {SuperLoginClient} from "./super_login_client/super_login_client";
+import {SuperloginHttpRequester} from "./super_login_client/superlogin_http_requester";
 
 @Injectable()
 export class AppModelService extends SuperLoginClient implements LoginPageInterface, HomePageModelInterface, LanguagePopoverPageModelInterface, EntryListPageModelInterface, SingleEntryPageModelInterface, EditModalPageModelInterface, CommentModalModelInterface, LinkedObjectsModalModelInterface {
@@ -86,11 +86,6 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
 
       // add database to list of language databases
       this.entryDatabases.set(language.languageId, languageDatabase);
-
-      // set indexes of language database for faster search
-      //      languageDatabase.createIndex({
-      //        index: {fields: ["name"]}
-      //      });
     }
 
     return true;
@@ -162,9 +157,13 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     try {
       let selector: any = {};
 
-      // search only for entries where the name starts as the search string (based on a regular expression)
-      let regexp = new RegExp(searchString ? searchString : "", 'i');
-      selector.name = { $regex: regexp };
+      // search only for entries where the name, acronyms or synonyms include the search string (based on a regular expression in order to make it case insensitive)
+      let regexp = new RegExp(searchString ? searchString : "", "i");
+      selector["$or"] = [
+        {name: {$regex: regexp}},
+        {synonyms: {$regex: regexp}},
+        {acronyms: {$regex: regexp}}
+      ];
 
       // if departmentId is defined search only for entries that are relevant for the specific department
       if (departmentId != undefined) {
@@ -173,12 +172,15 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
         };
       }
 
-      let result: any = await this.entryDatabases.get(selectedLanguage).find({
+      let result: any = (await this.entryDatabases.get(selectedLanguage).find({
         selector: selector, fields: ["_id", "name", "synonyms", "acronyms"]
-      });
+      })).docs;
+
+      // order data
+      result.sort(EntryListPageEntryDataObject.compare);
 
       // return data
-      return result.docs;
+      return result;
     } catch (error) {
       Logger.error(error);
       return null;
@@ -191,7 +193,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
 
   public async getEntryDataObject(_id: string, languageId: number): Promise<EntryDataObject> {
     try {
-      return await this.getDocumentAsJSON(this.entryDatabases.get(languageId),_id);
+      return await this.getDocumentAsJSON(this.entryDatabases.get(languageId), _id);
     } catch (error) {
       Logger.error(error);
     }
@@ -199,7 +201,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     return null;
   };
 
-  public getDepartmentById (departmentId: number): DepartmentDataObject {
+  public getDepartmentById(departmentId: number): DepartmentDataObject {
     return GlobalDepartmentConfigDataObject.getDepartmentById(this.globalDepartmentConfig, departmentId);
   }
 
@@ -212,7 +214,8 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   }
 
   public async setSelectedLanguage(userLanguageSetting: UserLanguageFilterConfigDataObject): Promise<boolean> {
-    return (await this.userSettingsDatabase.put(userLanguageSetting)).ok;
+    return (await this.userSettingsDatabase.put(userLanguageSetting)
+    ).ok;
   }
 
   //////////////////////////////////////////
@@ -231,40 +234,41 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
    */
   public getUserDepartmentFilterConfigDataObject(): Promise<UserDepartmentFilterConfigDataObject> {
     return new Promise<UserDepartmentFilterConfigDataObject>((resolve, reject) => {
-      this.getDocumentAsJSON(this.userSettingsDatabase, AppConfig.USER_APP_SETTINGS_DEPARTMENT_FILTERS).then(
-        (data: UserDepartmentFilterConfigDataObject) => {
-          // if document could be loaded return it
-          resolve(data);
-        }, (error: any) => {
-          switch (error.status) {
-            case 404:
-              // document has not yet been created and has to be created now
-              try {
-                // generate initial user department settings
-                let initialUserDepartmentSettings: UserDepartmentFilterConfigDataObject = UserDepartmentFilterConfigDataObject.init(this.globalDepartmentConfig);
+        this.getDocumentAsJSON(this.userSettingsDatabase, AppConfig.USER_APP_SETTINGS_DEPARTMENT_FILTERS).then(
+          (data: UserDepartmentFilterConfigDataObject) => {
+            // if document could be loaded return it
+            resolve(data);
+          }, (error: any) => {
+            switch (error.status) {
+              case 404:
+                // document has not yet been created and has to be created now
+                try {
+                  // generate initial user department settings
+                  let initialUserDepartmentSettings: UserDepartmentFilterConfigDataObject = UserDepartmentFilterConfigDataObject.init(this.globalDepartmentConfig);
 
-                // create document
-                this.userSettingsDatabase.put(initialUserDepartmentSettings).then((data) => {
-                  // return newly created document as soon as it has been created
-                  resolve(initialUserDepartmentSettings);
-                }, (error) => {
+                  // create document
+                  this.userSettingsDatabase.put(initialUserDepartmentSettings).then((data) => {
+                    // return newly created document as soon as it has been created
+                    resolve(initialUserDepartmentSettings);
+                  }, (error) => {
+                    reject(error);
+                  });
+                } catch (error) {
                   reject(error);
-                });
-              } catch (error) {
+                }
+                break;
+              default:
                 reject(error);
-              }
-              break;
-            default:
-              reject(error);
+            }
           }
-        }
-      );
-    }
+        );
+      }
     );
   };
 
   public async setUserDepartmentFilterConfigDataObject(userDepartmentFilterConfigDataObject: UserDepartmentFilterConfigDataObject): Promise<boolean> {
-    return (await this.userSettingsDatabase.put(userDepartmentFilterConfigDataObject)).ok;
+    return (await this.userSettingsDatabase.put(userDepartmentFilterConfigDataObject)
+    ).ok;
   };
 
   //////////////////////////////////////////
@@ -273,7 +277,8 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
 
   public async setEntryDataObject(entryDataObject: EntryDataObject, languageId: number): Promise<boolean> {
     try {
-      return (await this.entryDatabases.get(languageId).put(entryDataObject)).ok;
+      return (await this.entryDatabases.get(languageId).put(entryDataObject)
+      ).ok;
     } catch (error) {
       Logger.error(error);
     }
@@ -283,7 +288,8 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
 
   public async newEntryDataObject(entryDataObject: EntryDataObject, languageId: number): Promise<String> {
     try {
-      return (await this.entryDatabases.get(languageId).post(entryDataObject)).id;
+      return (await this.entryDatabases.get(languageId).post(entryDataObject)
+      ).id;
     } catch (error) {
       Logger.error(error);
     }
@@ -299,7 +305,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     return {
       "name": "Simon Weber",
       "email": "simon@dhbw-stuttgart.de"
-    }
+    };
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
@@ -391,35 +397,35 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
    */
   private getUserLanguageFilterConfigDataobject(): Promise<UserLanguageFilterConfigDataObject> {
     return new Promise<UserLanguageFilterConfigDataObject>((resolve, reject) => {
-      this.getDocumentAsJSON(this.userSettingsDatabase, AppConfig.USER_APP_SETTINGS_LANGUAGE_FILTERS).then(
-        (data: UserLanguageFilterConfigDataObject) => {
-          // if document could be loaded return it
-          resolve(data);
-        }, (error: any) => {
-          switch (error.status) {
-            case 404:
-              // document has not yet been created and has to be created now
-              try {
-                // generate initial user department settings
-                let initialUserLanguageSettings: UserLanguageFilterConfigDataObject = UserLanguageFilterConfigDataObject.init(this.globalLanguageConfig);
+        this.getDocumentAsJSON(this.userSettingsDatabase, AppConfig.USER_APP_SETTINGS_LANGUAGE_FILTERS).then(
+          (data: UserLanguageFilterConfigDataObject) => {
+            // if document could be loaded return it
+            resolve(data);
+          }, (error: any) => {
+            switch (error.status) {
+              case 404:
+                // document has not yet been created and has to be created now
+                try {
+                  // generate initial user department settings
+                  let initialUserLanguageSettings: UserLanguageFilterConfigDataObject = UserLanguageFilterConfigDataObject.init(this.globalLanguageConfig);
 
-                // create document
-                this.userSettingsDatabase.put(initialUserLanguageSettings).then((data) => {
-                  // return newly created document as soon as it has been created
-                  resolve(initialUserLanguageSettings);
-                }, (error) => {
+                  // create document
+                  this.userSettingsDatabase.put(initialUserLanguageSettings).then((data) => {
+                    // return newly created document as soon as it has been created
+                    resolve(initialUserLanguageSettings);
+                  }, (error) => {
+                    reject(error);
+                  });
+                } catch (error) {
                   reject(error);
-                });
-              } catch (error) {
+                }
+                break;
+              default:
                 reject(error);
-              }
-              break;
-            default:
-              reject(error);
+            }
           }
-        }
-      );
-    }
+        );
+      }
     );
-  };
+  }
 }

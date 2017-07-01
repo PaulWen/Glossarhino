@@ -36,4 +36,9 @@ export class AppConfig {
   public static get USER_APP_SETTINGS_LANGUAGE_FILTERS(): string {
     return "language-filters";
   };
+
+
+  public static get NAME_LIST_INDEX_PREFIX(): string {
+    return "name_list_index_";
+  };
 }

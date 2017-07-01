@@ -4,28 +4,70 @@ Language Database
 
 ///////////Entry//////////
 {
-  "_id": "b77b523985dbac007c8c3340b0002892",
-  "_rev": "6-0a9e774b9912f472a4289c4dd8909910",
-  "name": "Lorem Ipsum Entry",
+  "_id": "6766f814e6011eae9ef28f8c5c00013b",
+  "_rev": "64-d0e411a78c3c457d4c7410e70b57d306",
+  "name": "P-Freigabe",
+  "description": "Die P-Freigabe (Produktionsfreigabe) wird benutzt als verbindliche Freigabe zum Anfragen, Beauftragen und Erstellen von Serienproduktionsmitteln. Die Freigabe des Konstruktionsstandes erfolgt immer bau- teilspezifisch. Es wird hierbei nicht zwischen einer Freigabe zur Anfrage und Beauftragung und einer weiteren Freigabe zur Erstellung (sog. 'Fräsfreigabe') unterschieden. Zeitlich/inhaltlich ist diese Freigabe im Normalfall im Anschluss an eine erfolgreiche C-Muster- <a href='#/singleentry/6766f814e6011eae9ef28f8c5c008552'>Rafferprobung</a> mit genügend Erfahrung aus der Dauerlauf-/Zuverlässigkeitserprobung positioniert.",
+  "contact": "Simon Weber",
+  "email": "simon.weber@lehre.dhbw-stuttgart.de",
   "relatedDepartments": [
-    0
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
   ],
-  "departments": [
+  "synonyms": [
+    "Test1",
+    "Test2"
+  ],
+  "acronyms": [
+    "T1",
+    "T2"
+  ],
+  "attachments": [
     {
-      "departmentId": 0,
-      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
-      "attachments": [
-        {
-          "name": "Test Image",
-          "url": "https://c1.staticflickr.com/6/5337/8940995208_5da979c52f.jpg"
-        },
-        {
-          "name": "DHBW Broschüre",
-          "url": "http://www.dhbw.de/fileadmin/user_upload/Dokumente/Hochschulkommunikation/DHBW_Imagebroschuere_web.pdf"
-        }
-      ],
-      "name": "Max Mustermann",
-      "email": "max.mustermann@dhbw-stuttgart.de"
+      "name": "Test Image",
+      "url": "https://c1.staticflickr.com/6/5337/8940995208_5da979c52f.jpg"
+    },
+    {
+      "name": "DHBW Broschüre",
+      "url": "http://www.dhbw.de/fileadmin/user_upload/Dokumente/Hochschulkommunikation/DHBW_Imagebroschuere_web.pdf"
+    }
+  ],
+  "departmentSpecifics": [
+    {
+      "departmentId": 1,
+      "description": "Problematisch an der P-Freigabe ist, dass sie von der Entwicklung einen verbindlichen Zeichnungsstand erfordert, der im Nachhinein nur noch sehr eingeschränkt geändert werden kann.",
+      "contact": "Simon Weber",
+      "email": "simon.weber@dhbw-stuttgart.de"
+    },
+    {
+      "departmentId": 2,
+      "description": "Für uns ist es wichtig, dass die P-Freigabe möglichst früh im Produktentstehungsprozess von der Entwicklung gegeben wird. Dies ermöglicht uns eine frühzeitige Beschaffung von Maschinen, sodass wir termingerecht mit der Produktion starten können.",
+      "contact": "Simon Weber",
+      "email": "simon.weber@dhbw-stuttgart.de"
+    },
+    {
+      "departmentId": 3,
+      "description": "Eine möglichst frühzeitige P-Freigabe hilft uns im Einkauf, um rechtzeitig Maschinen zu guten Preisen beschaffen zu können.",
+      "contact": "Simon Weber",
+      "email": "simon.weber@dhbw-stuttgart.de"
+    },
+    {
+      "departmentId": 5,
+      "description": "Die P-Freigabe ist von uns von keiner besonderen Relevanz.",
+      "contact": "Simon Weber",
+      "email": "simon.weber@dhbw-stuttgart.de"
+    }
+  ],
+  "comments": [
+    {
+      "content": "Dies ist ein Test-Kommentar.",
+      "contact": "Simon Weber",
+      "email": "simon@dhbw-stuttgart.de",
+      "timeStamp": "2017-06-30T08:28:31.059Z"
     }
   ]
 }

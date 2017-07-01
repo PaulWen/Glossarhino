@@ -1,28 +1,28 @@
-import { Injectable } from "@angular/core";
+import {Injectable} from "@angular/core";
 import PouchDB from "pouchdb";
 import PouchFind from "pouchdb-find";
 import "rxjs/add/operator/map";
-import { AppConfig } from "../app/app-config";
-import { Logger } from "../app/logger";
-import { HomePageModelInterface } from "../pages/home/home.model-interface";
-import { LanguagePopoverPageModelInterface } from "../pages/language-popover/language-popover.model-interface";
-import { LoginPageInterface } from "../pages/login/login-interface";
-import { GlobalDepartmentConfigDataObject } from "./dataobjects/global-department-config.dataobject";
-import { GlobalLanguageConfigDataobject } from "./dataobjects/global-language-config.dataobject";
-import { HomePageDepartmentDataobject } from "./dataobjects/homepage.department.dataobject";
-import { UserDepartmentFilterConfigDataObject } from "./dataobjects/user-department-filter-config.dataobject";
-import { UserLanguageFilterConfigDataObject } from "./dataobjects/user-language-filter-config.dataobject";
-import { SuperLoginClient } from "./super_login_client/super_login_client";
-import { SuperloginHttpRequester } from "./super_login_client/superlogin_http_requester";
-import { EntryListPageModelInterface } from "../pages/entry-list/entry-list.model-interface";
-import { EntryListPageEntryDataObject } from "./dataobjects/entrylistpage.entry.dataobject";
-import { SingleEntryPageModelInterface } from "../pages/single-entry/single-entry.model-interface";
-import { EntryDataObject } from "./dataobjects/entry.dataobject";
-import { DepartmentDataObject } from "./dataobjects/department.dataobject";
-import { EditModalPageModelInterface } from "../pages/edit-modal/edit-modal.model-interface";
-import { UserDataObject } from "./dataobjects/user.dataobject";
-import { CommentModalModelInterface } from "../pages/comment-modal/comment-modal.model-interface";
-import { LinkedObjectsModalModelInterface } from "../pages/linked-objects-modal/linked-objects-modal.model-interface";
+import {AppConfig} from "../app/app-config";
+import {Logger} from "../app/logger";
+import {CommentModalModelInterface} from "../pages/comment-modal/comment-modal.model-interface";
+import {EditModalPageModelInterface} from "../pages/edit-modal/edit-modal.model-interface";
+import {EntryListPageModelInterface} from "../pages/entry-list/entry-list.model-interface";
+import {HomePageModelInterface} from "../pages/home/home.model-interface";
+import {LanguagePopoverPageModelInterface} from "../pages/language-popover/language-popover.model-interface";
+import {LinkedObjectsModalModelInterface} from "../pages/linked-objects-modal/linked-objects-modal.model-interface";
+import {LoginPageInterface} from "../pages/login/login-interface";
+import {SingleEntryPageModelInterface} from "../pages/single-entry/single-entry.model-interface";
+import {DepartmentDataObject} from "./dataobjects/department.dataobject";
+import {EntryDataObject} from "./dataobjects/entry.dataobject";
+import {EntryListPageEntryDataObject} from "./dataobjects/entrylistpage.entry.dataobject";
+import {GlobalDepartmentConfigDataObject} from "./dataobjects/global-department-config.dataobject";
+import {GlobalLanguageConfigDataobject} from "./dataobjects/global-language-config.dataobject";
+import {HomePageDepartmentDataobject} from "./dataobjects/homepage.department.dataobject";
+import {UserDepartmentFilterConfigDataObject} from "./dataobjects/user-department-filter-config.dataobject";
+import {UserLanguageFilterConfigDataObject} from "./dataobjects/user-language-filter-config.dataobject";
+import {UserDataObject} from "./dataobjects/user.dataobject";
+import {SuperLoginClient} from "./super_login_client/super_login_client";
+import {SuperloginHttpRequester} from "./super_login_client/superlogin_http_requester";
 
 @Injectable()
 export class AppModelService extends SuperLoginClient implements LoginPageInterface, HomePageModelInterface, LanguagePopoverPageModelInterface, EntryListPageModelInterface, SingleEntryPageModelInterface, EditModalPageModelInterface, CommentModalModelInterface, LinkedObjectsModalModelInterface {
@@ -88,9 +88,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
       this.entryDatabases.set(language.languageId, languageDatabase);
 
       // set indexes of language database for faster search
-      //      languageDatabase.createIndex({
-      //        index: {fields: ["name"]}
-      //      });
+      this.addNameListIndices(languageDatabase);
     }
 
     return true;
@@ -102,24 +100,12 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   //////////////////////////////////////////
 
   public async getCountOfAllEntries(currentLanguageId: number): Promise<number> {
-    // load the IDs of all entries that are available in one language (before the _design docs)
-    let result1: any = (await this.entryDatabases.get(currentLanguageId).allDocs({
-      include_docs: true,
-      attachments: false,
-      endkey: '_design'
-    })).rows;
-
-    // load the IDs of all entries that are available in one language (after the _design docs)
-    let result2: any = (await this.entryDatabases.get(currentLanguageId).allDocs({
-      include_docs: true,
-      attachments: false,
-      startkey: '_design\uffff'
-    })).rows;
-
-    let result = result1.concat(result2);
+    let result: any = (await this.entryDatabases.get(currentLanguageId).query(AppConfig.NAME_LIST_INDEX_PREFIX + "all", {
+      reduce: true
+    })).rows[0].value;
 
     // return the number of entries that are available in the current language
-    return result.length;
+    return result;
   }
 
   public async getSelectedHomePageDepartmentDataobjects(currentLanguageId: number): Promise<Array<HomePageDepartmentDataobject>> {
@@ -162,9 +148,9 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     try {
       let selector: any = {};
 
-      // search only for entries where the name starts as the search string (based on a regular expression)
-      let regexp = new RegExp(searchString ? searchString : "", 'i');
-      selector.name = { $regex: regexp };
+      // search only for entries where the name includes the search string (based on a regular expression in order to make it case insensitive)
+      let regexp = new RegExp(searchString ? searchString : "", "i");
+      selector.name = {$regex: regexp};
 
       // if departmentId is defined search only for entries that are relevant for the specific department
       if (departmentId != undefined) {
@@ -191,7 +177,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
 
   public async getEntryDataObject(_id: string, languageId: number): Promise<EntryDataObject> {
     try {
-      return await this.getDocumentAsJSON(this.entryDatabases.get(languageId),_id);
+      return await this.getDocumentAsJSON(this.entryDatabases.get(languageId), _id);
     } catch (error) {
       Logger.error(error);
     }
@@ -199,7 +185,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     return null;
   };
 
-  public getDepartmentById (departmentId: number): DepartmentDataObject {
+  public getDepartmentById(departmentId: number): DepartmentDataObject {
     return GlobalDepartmentConfigDataObject.getDepartmentById(this.globalDepartmentConfig, departmentId);
   }
 
@@ -212,7 +198,8 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   }
 
   public async setSelectedLanguage(userLanguageSetting: UserLanguageFilterConfigDataObject): Promise<boolean> {
-    return (await this.userSettingsDatabase.put(userLanguageSetting)).ok;
+    return (await this.userSettingsDatabase.put(userLanguageSetting)
+    ).ok;
   }
 
   //////////////////////////////////////////
@@ -231,40 +218,41 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
    */
   public getUserDepartmentFilterConfigDataObject(): Promise<UserDepartmentFilterConfigDataObject> {
     return new Promise<UserDepartmentFilterConfigDataObject>((resolve, reject) => {
-      this.getDocumentAsJSON(this.userSettingsDatabase, AppConfig.USER_APP_SETTINGS_DEPARTMENT_FILTERS).then(
-        (data: UserDepartmentFilterConfigDataObject) => {
-          // if document could be loaded return it
-          resolve(data);
-        }, (error: any) => {
-          switch (error.status) {
-            case 404:
-              // document has not yet been created and has to be created now
-              try {
-                // generate initial user department settings
-                let initialUserDepartmentSettings: UserDepartmentFilterConfigDataObject = UserDepartmentFilterConfigDataObject.init(this.globalDepartmentConfig);
+        this.getDocumentAsJSON(this.userSettingsDatabase, AppConfig.USER_APP_SETTINGS_DEPARTMENT_FILTERS).then(
+          (data: UserDepartmentFilterConfigDataObject) => {
+            // if document could be loaded return it
+            resolve(data);
+          }, (error: any) => {
+            switch (error.status) {
+              case 404:
+                // document has not yet been created and has to be created now
+                try {
+                  // generate initial user department settings
+                  let initialUserDepartmentSettings: UserDepartmentFilterConfigDataObject = UserDepartmentFilterConfigDataObject.init(this.globalDepartmentConfig);
 
-                // create document
-                this.userSettingsDatabase.put(initialUserDepartmentSettings).then((data) => {
-                  // return newly created document as soon as it has been created
-                  resolve(initialUserDepartmentSettings);
-                }, (error) => {
+                  // create document
+                  this.userSettingsDatabase.put(initialUserDepartmentSettings).then((data) => {
+                    // return newly created document as soon as it has been created
+                    resolve(initialUserDepartmentSettings);
+                  }, (error) => {
+                    reject(error);
+                  });
+                } catch (error) {
                   reject(error);
-                });
-              } catch (error) {
+                }
+                break;
+              default:
                 reject(error);
-              }
-              break;
-            default:
-              reject(error);
+            }
           }
-        }
-      );
-    }
+        );
+      }
     );
   };
 
   public async setUserDepartmentFilterConfigDataObject(userDepartmentFilterConfigDataObject: UserDepartmentFilterConfigDataObject): Promise<boolean> {
-    return (await this.userSettingsDatabase.put(userDepartmentFilterConfigDataObject)).ok;
+    return (await this.userSettingsDatabase.put(userDepartmentFilterConfigDataObject)
+    ).ok;
   };
 
   //////////////////////////////////////////
@@ -273,7 +261,8 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
 
   public async setEntryDataObject(entryDataObject: EntryDataObject, languageId: number): Promise<boolean> {
     try {
-      return (await this.entryDatabases.get(languageId).put(entryDataObject)).ok;
+      return (await this.entryDatabases.get(languageId).put(entryDataObject)
+      ).ok;
     } catch (error) {
       Logger.error(error);
     }
@@ -283,7 +272,8 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
 
   public async newEntryDataObject(entryDataObject: EntryDataObject, languageId: number): Promise<String> {
     try {
-      return (await this.entryDatabases.get(languageId).post(entryDataObject)).id;
+      return (await this.entryDatabases.get(languageId).post(entryDataObject)
+      ).id;
     } catch (error) {
       Logger.error(error);
     }
@@ -299,7 +289,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     return {
       "name": "Simon Weber",
       "email": "simon@dhbw-stuttgart.de"
-    }
+    };
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
@@ -391,35 +381,129 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
    */
   private getUserLanguageFilterConfigDataobject(): Promise<UserLanguageFilterConfigDataObject> {
     return new Promise<UserLanguageFilterConfigDataObject>((resolve, reject) => {
-      this.getDocumentAsJSON(this.userSettingsDatabase, AppConfig.USER_APP_SETTINGS_LANGUAGE_FILTERS).then(
-        (data: UserLanguageFilterConfigDataObject) => {
-          // if document could be loaded return it
-          resolve(data);
+        this.getDocumentAsJSON(this.userSettingsDatabase, AppConfig.USER_APP_SETTINGS_LANGUAGE_FILTERS).then(
+          (data: UserLanguageFilterConfigDataObject) => {
+            // if document could be loaded return it
+            resolve(data);
+          }, (error: any) => {
+            switch (error.status) {
+              case 404:
+                // document has not yet been created and has to be created now
+                try {
+                  // generate initial user department settings
+                  let initialUserLanguageSettings: UserLanguageFilterConfigDataObject = UserLanguageFilterConfigDataObject.init(this.globalLanguageConfig);
+
+                  // create document
+                  this.userSettingsDatabase.put(initialUserLanguageSettings).then((data) => {
+                    // return newly created document as soon as it has been created
+                    resolve(initialUserLanguageSettings);
+                  }, (error) => {
+                    reject(error);
+                  });
+                } catch (error) {
+                  reject(error);
+                }
+                break;
+              default:
+                reject(error);
+            }
+          }
+        );
+      }
+    );
+  }
+
+  /**
+   * This function adds the indices for searching an database of entries by name, acronyms and synonyms.
+   * In order to allow a search only for entries that are related to a specific department many indices get created:
+   *  1) one index for searching all entries by name, acronyms and synonyms
+   *  2) one index for each department to search for all entries that are related to a specific department by name, acronyms and synonyms
+   *
+   * Before the function adds any index it checks if the database already has the specific index.
+   *
+   * The name under which the indices can be referenced for querying is:
+   *  index for searching all entries: "name_list_index_all"
+   *  index for searching entries related to a specific department: "name_list_index_XX" (XX = ID of department)
+   */
+  private addNameListIndices(database: any) {
+    ///////////////////////////////////////////////////////////////////////////
+    // 1) add index for searching all entries by name, acronyms and synonyms //
+    ///////////////////////////////////////////////////////////////////////////
+    let indexName = AppConfig.NAME_LIST_INDEX_PREFIX + "all";
+
+    // check if the database already has the index set up
+    database.get("_design/" + indexName).then(
+      (data: any) => {
+        // if the index could be loaded it exists and does not have to created
+        Logger.debug("Index does not have to be crated! It already exists!");
+        return;
+      }, (error: any) => {
+        switch (error.status) {
+          case 404:
+            Logger.debug("Index has to be crated! It does not yet exist!");
+
+            // if the index does not yet exists it has to be created
+            let indexViewObject = {};
+            indexViewObject[indexName] = {
+              "map": "function (doc) {\r\n  if (doc.name && doc._id && doc.acronyms && doc.synonyms) {\r\n    // value\r\n    var value = {\r\n      \"_id\": doc._id,\r\n      \"name\": doc.name,\r\n      \"synonyms\": doc.synonyms,\r\n      \"acronyms\": doc.acronyms\r\n    };\r\n\r\n    // emit the document for the name, every acronym and every synonym as keys  \r\n    emit(doc.name.toLowerCase(), value);\r\n\r\n    var arrayLengthAcronyms = doc.acronyms.length;\r\n    for (var i = 0; i < arrayLengthAcronyms; i++) {\r\n      emit(doc.acronyms[i].toLowerCase(), value);\r\n    }\r\n\r\n    var arrayLengthSynonyms = doc.synonyms.length;\r\n    for (var i = 0; i < arrayLengthSynonyms; i++) {\r\n      emit(doc.synonyms[i].toLowerCase(), value);\r\n    }\r\n  }\r\n}",
+              "reduce": "_count"
+            };
+
+            database.put(
+              {
+                "_id": "_design/" + indexName,
+                "views": indexViewObject,
+                "language": "javascript"
+              }
+            );
+
+            break;
+          default:
+            throw error;
+        }
+      }
+    );
+
+    /////////////////////////////////////////////////////////////////////////
+    // 2) add index for each department to search for all entries that are //
+    //    related to a specific department by name, acronyms and synonyms  //
+    /////////////////////////////////////////////////////////////////////////
+
+    for (let department of this.globalDepartmentConfig.departments) {
+      let indexName = AppConfig.NAME_LIST_INDEX_PREFIX + department.departmentId;
+
+      // check if the database already has the index set up
+      database.get("_design/" + indexName).then(
+        (data: any) => {
+          // if the index could be loaded it exists and does not have to created
+          Logger.debug("Index does not have to be crated! It already exists!");
+          return;
         }, (error: any) => {
           switch (error.status) {
             case 404:
-              // document has not yet been created and has to be created now
-              try {
-                // generate initial user department settings
-                let initialUserLanguageSettings: UserLanguageFilterConfigDataObject = UserLanguageFilterConfigDataObject.init(this.globalLanguageConfig);
+              Logger.debug("Index has to be crated! It does not yet exist!");
 
-                // create document
-                this.userSettingsDatabase.put(initialUserLanguageSettings).then((data) => {
-                  // return newly created document as soon as it has been created
-                  resolve(initialUserLanguageSettings);
-                }, (error) => {
-                  reject(error);
-                });
-              } catch (error) {
-                reject(error);
-              }
+              // if the index does not yet exists it has to be created
+              let indexViewObject = {};
+              indexViewObject[indexName] = {
+                "map": "function (doc) {\r\n  if (doc.name && doc._id && doc.acronyms && doc.synonyms && doc.relatedDepartments) {\r\n    // check if the document is realted to the specific department for which entries should be find\r\n    var isRelatedToDepartment = false;\r\n    var arrayLengthRelatedDepartments = doc.relatedDepartments.length;\r\n    for (var i = 0; i < arrayLengthRelatedDepartments; i++) {\r\n      if (doc.relatedDepartments[i] == " + department.departmentId + ") {\r\n        isRelatedToDepartment = true;\r\n        break;\r\n      }\r\n    }\r\n\r\n    // only if the entry is realted to the specific department for which entries should be find emit it\r\n    if (isRelatedToDepartment) {\r\n      // value\r\n      var value = {\r\n        \"_id\": doc._id,\r\n        \"name\": doc.name,\r\n        \"synonyms\": doc.synonyms,\r\n        \"acronyms\": doc.acronyms\r\n      };\r\n\r\n      // emit the document for the name, every acronym and every synonym as keys  \r\n      emit(doc.name.toLowerCase(), value);\r\n\r\n      var arrayLengthAcronyms = doc.acronyms.length;\r\n      for (var i = 0; i < arrayLengthAcronyms; i++) {\r\n        emit(doc.acronyms[i].toLowerCase(), value);\r\n      }\r\n\r\n      var arrayLengthSynonyms = doc.synonyms.length;\r\n      for (var i = 0; i < arrayLengthSynonyms; i++) {\r\n        emit(doc.synonyms[i].toLowerCase(), value);\r\n      }\r\n    }\r\n  }\r\n}",
+                "reduce": "_count"
+              };
+
+              database.put(
+                {
+                  "_id": "_design/" + indexName,
+                  "views": indexViewObject,
+                  "language": "javascript"
+                }
+              );
+
               break;
             default:
-              reject(error);
+              throw error;
           }
         }
       );
     }
-    );
-  };
+  }
 }

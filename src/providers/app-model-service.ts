@@ -172,17 +172,15 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
         };
       }
 
-      Logger.debug("selector");
-      Logger.debug(selector);
-
-      let result: any = await this.entryDatabases.get(selectedLanguage).find({
+      let result: any = (await this.entryDatabases.get(selectedLanguage).find({
         selector: selector, fields: ["_id", "name", "synonyms", "acronyms"]
-      });
+      })).docs;
 
-      Logger.debug(result.docs);
+      // order data
+      result.sort(EntryListPageEntryDataObject.compare);
 
       // return data
-      return result.docs;
+      return result;
     } catch (error) {
       Logger.error(error);
       return null;

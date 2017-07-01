@@ -1,22 +1,21 @@
-import { Component } from "@angular/core";
-import { Promise } from "es6-promise";
+import {Component} from "@angular/core";
+import {Promise} from "es6-promise";
 import {
   ActionSheetController,
+  AlertController,
   IonicPage,
   ModalController,
   NavController,
   NavParams,
-  PopoverController,
-  AlertController
+  PopoverController
 } from "ionic-angular";
-import { AppModelService } from "../../providers/app-model-service";
-import { AttachmentDataObject } from "../../providers/dataobjects/attachment.dataobject";
-import { EntryDataObject } from "../../providers/dataobjects/entry.dataobject";
-import { SingleEntryPageModelInterface } from "./single-entry.model-interface";
-import { UserLanguageFilterConfigDataObject } from "../../providers/dataobjects/user-language-filter-config.dataobject";
-import { Logger } from "../../app/logger";
-import { CommentDataObject } from "../../providers/dataobjects/comment.dataobject";
-import { Alerts } from "../../app/alerts";
+import {Alerts} from "../../app/alerts";
+import {Logger} from "../../app/logger";
+import {AppModelService} from "../../providers/app-model-service";
+import {AttachmentDataObject} from "../../providers/dataobjects/attachment.dataobject";
+import {EntryDataObject} from "../../providers/dataobjects/entry.dataobject";
+import {UserLanguageFilterConfigDataObject} from "../../providers/dataobjects/user-language-filter-config.dataobject";
+import {SingleEntryPageModelInterface} from "./single-entry.model-interface";
 
 @IonicPage({
   segment: "singleentry/:entryDocumentId",
@@ -94,7 +93,7 @@ export class SingleEntryPage {
 
       // load other data as soon as language loaded
       // get EntryDataObject
-      this.appModelService.getEntryDataObject(this.entryDocumentId, this.selectedLanguage.selectedLanguage).then((data) => {
+      this.appModelService.getEntryDataObjectToShow(this.entryDocumentId, this.selectedLanguage.selectedLanguage).then((data) => {
         this.entry = data;
       }, (error) => {
         Logger.log("Loading Entry Data Object failed (Class: SingleEntryPage, Method: loadData()");
@@ -171,7 +170,7 @@ export class SingleEntryPage {
     });
     popover.onWillDismiss(() => {
       this.loadData();
-    })
+    });
   }
 
   private pushSearch() {
@@ -232,7 +231,7 @@ export class SingleEntryPage {
     });
   }
 
-  private openLinkedObjectsModal(relatedDepartments: Array<string>, relatedEntries: Array <string>, synonyms: Array<string>, acronyms: Array<string>) {
+  private openLinkedObjectsModal(relatedDepartments: Array<string>, relatedEntries: Array<string>, synonyms: Array<string>, acronyms: Array<string>) {
     let linkedObjectsModal = this.modalCtrl.create("LinkedObjectsModalPage", {
       relatedDepartments: relatedDepartments,
       relatedEntries: relatedEntries,

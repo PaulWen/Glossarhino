@@ -1,6 +1,6 @@
-import { DepartmentEntrySpecificsDataObject } from "./department-entry-description.dataobject";
-import { AttachmentDataObject } from "./attachment.dataobject";
-import { CommentDataObject } from "./comment.dataobject";
+import {AttachmentDataObject} from "./attachment.dataobject";
+import {CommentDataObject} from "./comment.dataobject";
+import {DepartmentEntrySpecificsDataObject} from "./department-entry-description.dataobject";
 
 /**
  * EntryDataobject class for usage in model and controller. Class defines how entries should be specified
@@ -54,7 +54,7 @@ export abstract class EntryDataObject {
       "attachments": undefined,
       "comments": undefined,
       "departmentSpecifics": undefined
-    }
+    };
   }
 
 }

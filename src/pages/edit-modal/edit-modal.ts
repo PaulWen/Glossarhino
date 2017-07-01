@@ -1,18 +1,25 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController, AlertController, ModalController } from 'ionic-angular';
-import { EditModalPageModelInterface } from "./edit-modal.model-interface";
-import { EntryDataObject } from "../../providers/dataobjects/entry.dataobject";
-import { AppModelService } from "../../providers/app-model-service";
-import { UserLanguageFilterConfigDataObject } from "../../providers/dataobjects/user-language-filter-config.dataobject";
-import { Logger } from "../../app/logger";
-import { GlobalDepartmentConfigDataObject } from "../../providers/dataobjects/global-department-config.dataobject";
-import { DepartmentEntrySpecificsDataObject } from "../../providers/dataobjects/department-entry-description.dataobject";
-import { DepartmentDataObject } from "../../providers/dataobjects/department.dataobject";
+import {Component} from "@angular/core";
+import {
+  AlertController,
+  IonicPage,
+  ModalController,
+  NavController,
+  NavParams,
+  ViewController
+} from "ionic-angular";
+import {Logger} from "../../app/logger";
+import {AppModelService} from "../../providers/app-model-service";
+import {DepartmentEntrySpecificsDataObject} from "../../providers/dataobjects/department-entry-description.dataobject";
+import {DepartmentDataObject} from "../../providers/dataobjects/department.dataobject";
+import {EntryDataObject} from "../../providers/dataobjects/entry.dataobject";
+import {GlobalDepartmentConfigDataObject} from "../../providers/dataobjects/global-department-config.dataobject";
+import {UserLanguageFilterConfigDataObject} from "../../providers/dataobjects/user-language-filter-config.dataobject";
+import {EditModalPageModelInterface} from "./edit-modal.model-interface";
 
 @IonicPage()
 @Component({
-  selector: 'page-edit-modal',
-  templateUrl: 'edit-modal.html',
+  selector: "page-edit-modal",
+  templateUrl: "edit-modal.html"
 })
 export class EditModalPage {
 
@@ -84,7 +91,7 @@ export class EditModalPage {
       if (this.addNewEntry) {
         this.entry = EntryDataObject.init();
       } else {
-        this.editModalPageModelInterface.getEntryDataObject(this._id, this.selectedLanguageDataObject.selectedLanguage).then((data) => {
+        this.editModalPageModelInterface.getCompleteEntryDataObject(this._id, this.selectedLanguageDataObject.selectedLanguage).then((data) => {
           this.entry = data;
         }, (error) => {
           Logger.log("Loading Entry Data Object failed (Class: EditModalPage, Method: loadData()");
@@ -134,7 +141,7 @@ export class EditModalPage {
         this.editModalPageModelInterface.newEntryDataObject(this.entry, this.selectedLanguageDataObject.selectedLanguage).then((data) => {
           this.viewCtrl.dismiss();
 
-        })
+        });
       } else {
         this.editModalPageModelInterface.setEntryDataObject(this.entry, this.selectedLanguageDataObject.selectedLanguage).then(() => {
           this.viewCtrl.dismiss();
@@ -198,7 +205,7 @@ export class EditModalPage {
       this.entry.relatedDepartments = data.relatedDepartments;
       this.entry.relatedEntries = data.relatedEntries;
       this.entry.synonyms = data.synonyms;
-      this.entry.acronyms = data.acronyms
+      this.entry.acronyms = data.acronyms;
     });
   }
 

@@ -1,14 +1,13 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController, AlertController } from 'ionic-angular';
-import { LinkedObjectsModalModelInterface } from "./linked-objects-modal.model-interface";
-import { AppModelService } from "../../providers/app-model-service";
-import { GlobalDepartmentConfigDataObject } from "../../providers/dataobjects/global-department-config.dataobject";
-import { EntryDataObject } from "../../providers/dataobjects/entry.dataobject";
+import {Component} from "@angular/core";
+import {AlertController, IonicPage, NavController, NavParams, ViewController} from "ionic-angular";
+import {AppModelService} from "../../providers/app-model-service";
+import {GlobalDepartmentConfigDataObject} from "../../providers/dataobjects/global-department-config.dataobject";
+import {LinkedObjectsModalModelInterface} from "./linked-objects-modal.model-interface";
 
 @IonicPage()
 @Component({
-  selector: 'page-linked-objects-modal',
-  templateUrl: 'linked-objects-modal.html',
+  selector: "page-linked-objects-modal",
+  templateUrl: "linked-objects-modal.html"
 })
 export class LinkedObjectsModalPage {
   ////////////////////////////////////////////Properties/////////////////////////////////////////////
@@ -46,7 +45,7 @@ export class LinkedObjectsModalPage {
     this.isEditMode = this.navParams.get("isEditMode") ? this.navParams.get("isEditMode") : false;
 
     // instantiate model
-    this.appModelService = appModelService
+    this.appModelService = appModelService;
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
@@ -109,7 +108,7 @@ export class LinkedObjectsModalPage {
   private removeSynonym(synonymToRemove: string) {
     let index: number = this.synonyms.findIndex(synonym => synonym == synonymToRemove);
     if (index > -1) {
-      this.synonyms.splice(index, 1)
+      this.synonyms.splice(index, 1);
     }
   }
 
@@ -121,7 +120,7 @@ export class LinkedObjectsModalPage {
   private removeAcronym(acronymToRemove: string) {
     let index: number = this.acronyms.findIndex(acronym => acronym == acronymToRemove);
     if (index > -1) {
-      this.acronyms.splice(index, 1)
+      this.acronyms.splice(index, 1);
     }
   }
 

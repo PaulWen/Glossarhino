@@ -1,35 +1,35 @@
 page-single-entry {
-    .col {
-        display: flex;
-    }
+  .col {
+    display: flex;
+  }
 
-    .card {
-        display: flex;
-        flex-direction: column;
-    }
+  .card {
+    display: flex;
+    flex-direction: column;
+  }
 
-    .card-content {
-        flex: 1;
-    }
+  .card-content {
+    flex: 1;
+  }
 
-    #badge-button {            
-        overflow: visible!important;
-    }
+  #badge-button {
+    overflow: visible !important;
+  }
 
-   #badge {
-        position: absolute;
-        font-size: 1rem;
-        font-weight: normal;
-        top: -1rem;
-        right: -1rem;
-   }
+  #badge {
+    position: absolute;
+    font-size: 1rem;
+    font-weight: normal;
+    top: -1rem;
+    right: -1rem;
+  }
 
-   .card-footer {
-       display: flex;
-       justify-content: space-between;
-   }
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+  }
 
-   .buttons {
-       padding-right: 2rem;
-   }
+  .buttons {
+    padding-right: 2rem;
+  }
 }

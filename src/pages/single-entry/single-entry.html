@@ -48,30 +48,35 @@
           <div class="card-footer">
 
             <button ion-button icon-left clear small (click)="sendMail(entry?.email)">
-                  <ion-icon name="contact"></ion-icon>
-                  <div>{{ entry?.contact }}</div>
-                </button>
+              <ion-icon name="contact"></ion-icon>
+              <div>{{ entry?.contact }}</div>
+            </button>
 
             <div class="buttons">
 
               <button ion-button clear small (click)="openCommentModal(entry)" id="badge-button">
-                  <ion-icon name="quote">
-                  <ion-badge id="badge"> {{ getArrayLength(entry?.comments) }} </ion-badge>
-                  </ion-icon>
-                </button>
+                <ion-icon name="quote">
+                  <ion-badge id="badge"> {{ getArrayLength(entry?.comments) }}</ion-badge>
+                </ion-icon>
+              </button>
 
-              <button ion-button clear small (click)="openAttachmentModal(entry?.attachments)" id="badge-button">
-                  <ion-icon name="attach">
-                  <ion-badge id="badge"> {{ getArrayLength(entry?.attachments) }} </ion-badge>
-                  </ion-icon>
-                </button>
+              <button ion-button clear small (click)="openAttachmentModal(entry?.attachments)"
+                      id="badge-button">
+                <ion-icon name="attach">
+                  <ion-badge id="badge"> {{ getArrayLength(entry?.attachments) }}</ion-badge>
+                </ion-icon>
+              </button>
 
-              <button ion-button clear small (click)="openLinkedObjectsModal(entry?.relatedDepartments, entry?.relatedEntries, entry?.synonyms, entry?.acronyms)"
-                id="badge-button">
-                  <ion-icon name="link">
-                  <ion-badge id="badge"> {{ getArrayLength(entry?.relatedDepartments) + getArrayLength(entry?.relatedEntries) + getArrayLength(entry?.synonyms) + getArrayLength(entry?.acronyms) }} </ion-badge>
-                  </ion-icon>
-                </button>
+              <button ion-button clear small
+                      (click)="openLinkedObjectsModal(entry?.relatedDepartments, entry?.relatedEntries, entry?.synonyms, entry?.acronyms)"
+                      id="badge-button">
+                <ion-icon name="link">
+                  <ion-badge id="badge"> {{ getArrayLength(entry?.relatedDepartments) +
+                    getArrayLength(entry?.relatedEntries) + getArrayLength(entry?.synonyms) +
+                    getArrayLength(entry?.acronyms) }}
+                  </ion-badge>
+                </ion-icon>
+              </button>
 
             </div>
 
@@ -116,7 +121,8 @@
 
             <!-- Print list with all attachments retreived for entry and department -->
             <ion-list>
-              <button ion-item *ngFor="let attachment of entry?.attachments" (click)="openAttachment(attachment.url)">
+              <button ion-item *ngFor="let attachment of entry?.attachments"
+                      (click)="openAttachment(attachment.url)">
                 {{ attachment.name }}
               </button>
             </ion-list>
@@ -126,7 +132,8 @@
         </ion-card>
       </ion-col>
 
-      <ion-col col-xl-3 col-lg-3 col-md-6 col-sm-6 col-xs-6 col-12 *ngIf="entry?.relatedDepartments">
+      <ion-col col-xl-3 col-lg-3 col-md-6 col-sm-6 col-xs-6 col-12
+               *ngIf="entry?.relatedDepartments">
         <ion-card>
           <ion-card-header>
             Departments

@@ -1,10 +1,9 @@
-import { SuperLoginClientDoneResponse } from "../../providers/super_login_client/super_login_client_done_reponse";
-import { SuperLoginClientErrorResponse } from "../../providers/super_login_client/super_login_client_error_reponse";
-import { LanguageDataobject } from "../../providers/dataobjects/language.dataobject";
-import { HomePageDepartmentDataobject } from "../../providers/dataobjects/homepage.department.dataobject";
-import { UserLanguageFilterConfigDataObject } from "../../providers/dataobjects/user-language-filter-config.dataobject";
-import { GlobalDepartmentConfigDataObject } from "../../providers/dataobjects/global-department-config.dataobject";
-import { UserDepartmentFilterConfigDataObject } from "../../providers/dataobjects/user-department-filter-config.dataobject";
+import {GlobalDepartmentConfigDataObject} from "../../providers/dataobjects/global-department-config.dataobject";
+import {HomePageDepartmentDataobject} from "../../providers/dataobjects/homepage.department.dataobject";
+import {UserDepartmentFilterConfigDataObject} from "../../providers/dataobjects/user-department-filter-config.dataobject";
+import {UserLanguageFilterConfigDataObject} from "../../providers/dataobjects/user-language-filter-config.dataobject";
+import {SuperLoginClientDoneResponse} from "../../providers/super_login_client/super_login_client_done_reponse";
+import {SuperLoginClientErrorResponse} from "../../providers/super_login_client/super_login_client_error_reponse";
 
 export interface HomePageModelInterface {
 

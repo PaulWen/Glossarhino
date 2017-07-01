@@ -1,16 +1,17 @@
-import { NgModule } from '@angular/core';
-import { IonicPageModule } from 'ionic-angular';
-import { CommentModalPage } from './comment-modal';
+import {NgModule} from "@angular/core";
+import {IonicPageModule} from "ionic-angular";
+import {CommentModalPage} from "./comment-modal";
 
 @NgModule({
   declarations: [
-    CommentModalPage,
+    CommentModalPage
   ],
   imports: [
-    IonicPageModule.forChild(CommentModalPage),
+    IonicPageModule.forChild(CommentModalPage)
   ],
   exports: [
     CommentModalPage
   ]
 })
-export class CommentModalPageModule {}
+export class CommentModalPageModule {
+}

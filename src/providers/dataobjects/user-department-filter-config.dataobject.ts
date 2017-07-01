@@ -18,13 +18,13 @@ export abstract class UserDepartmentFilterConfigDataObject {
     let selectedDepartments: Array<string> = [];
 
     for (let department of allDepartments.departments) {
-      selectedDepartments.push(department.departmentId)
+      selectedDepartments.push(department.departmentId);
     }
 
     return {
       "_id": AppConfig.USER_APP_SETTINGS_DEPARTMENT_FILTERS,
       "selectedDepartments": selectedDepartments
-    }
+    };
   }
 
 }

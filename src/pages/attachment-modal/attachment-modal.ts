@@ -1,6 +1,6 @@
-import { Component } from "@angular/core";
-import { IonicPage, NavController, NavParams, ViewController } from "ionic-angular";
-import { AttachmentDataObject } from "../../providers/dataobjects/attachment.dataobject";
+import {Component} from "@angular/core";
+import {IonicPage, NavController, NavParams, ViewController} from "ionic-angular";
+import {AttachmentDataObject} from "../../providers/dataobjects/attachment.dataobject";
 
 @IonicPage()
 @Component({
@@ -53,7 +53,6 @@ export class AttachmentModalPage {
   private closeAttachmentModal() {
     this.viewCtrl.dismiss();
   }
-
 
 
 }

@@ -12,6 +12,7 @@ import {LanguagePopoverPageModelInterface} from "../pages/language-popover/langu
 import {LinkedObjectsModalModelInterface} from "../pages/linked-objects-modal/linked-objects-modal.model-interface";
 import {LoginPageInterface} from "../pages/login/login-interface";
 import {SingleEntryPageModelInterface} from "../pages/single-entry/single-entry.model-interface";
+import {DepartmentEntrySpecificsDataObject} from "./dataobjects/department-entry-description.dataobject";
 import {DepartmentDataObject} from "./dataobjects/department.dataobject";
 import {EntryDataObject} from "./dataobjects/entry.dataobject";
 import {EntryListPageEntryDataObject} from "./dataobjects/entrylistpage.entry.dataobject";
@@ -23,7 +24,6 @@ import {UserLanguageFilterConfigDataObject} from "./dataobjects/user-language-fi
 import {UserDataObject} from "./dataobjects/user.dataobject";
 import {SuperLoginClient} from "./super_login_client/super_login_client";
 import {SuperloginHttpRequester} from "./super_login_client/superlogin_http_requester";
-import {DepartmentEntrySpecificsDataObject} from "./dataobjects/department-entry-description.dataobject";
 
 @Injectable()
 export class AppModelService extends SuperLoginClient implements LoginPageInterface, HomePageModelInterface, LanguagePopoverPageModelInterface, EntryListPageModelInterface, SingleEntryPageModelInterface, EditModalPageModelInterface, CommentModalModelInterface, LinkedObjectsModalModelInterface {
@@ -103,17 +103,19 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   public async getCountOfAllEntries(currentLanguageId: string): Promise<number> {
     // load the IDs of all entries that are available in one language (before the _design docs)
     let result1: any = (await this.entryDatabases.get(currentLanguageId).allDocs({
-      include_docs: true,
-      attachments: false,
-      endkey: "_design"
-    })).rows;
+        include_docs: true,
+        attachments: false,
+        endkey: "_design"
+      })
+    ).rows;
 
     // load the IDs of all entries that are available in one language (after the _design docs)
     let result2: any = (await this.entryDatabases.get(currentLanguageId).allDocs({
-      include_docs: true,
-      attachments: false,
-      startkey: "_design\uffff"
-    })).rows;
+        include_docs: true,
+        attachments: false,
+        startkey: "_design\uffff"
+      })
+    ).rows;
 
     let result = result1.concat(result2);
 
@@ -177,8 +179,9 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
       }
 
       let result: Array<EntryListPageEntryDataObject> = (await this.entryDatabases.get(selectedLanguage).find({
-        selector: selector, fields: ["_id", "name", "synonyms", "acronyms"]
-      })).docs;
+          selector: selector, fields: ["_id", "name", "synonyms", "acronyms"]
+        })
+      ).docs;
 
       // order data
       result.sort(EntryListPageEntryDataObject.compare);
@@ -195,7 +198,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   //     SingleEntryInterface Methods     //
   //////////////////////////////////////////
 
-  public async getEntryDataObject(_id: string, languageId: string): Promise<EntryDataObject> {
+  public async getEntryDataObjectToShow(_id: string, languageId: string): Promise<EntryDataObject> {
     // loead data
     let result: EntryDataObject = await this.getDocumentAsJSON(this.entryDatabases.get(languageId), _id);
     let selectedDepartments: UserDepartmentFilterConfigDataObject = await this.getUserDepartmentFilterConfigDataObject();
@@ -288,6 +291,12 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   //////////////////////////////////////////
   //       EditModalInterface Methods     //
   //////////////////////////////////////////
+
+  public async getCompleteEntryDataObject(_id: string, languageId: string): Promise<EntryDataObject> {
+    // load data
+    return await this.getDocumentAsJSON(this.entryDatabases.get(languageId), _id);
+  };
+
 
   public async setEntryDataObject(entryDataObject: EntryDataObject, languageId: string): Promise<boolean> {
     try {

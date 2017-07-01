@@ -1,11 +1,10 @@
-import { Component } from "@angular/core";
-import { IonicPage, NavController, NavParams, ViewController } from "ionic-angular";
-import { AppModelService } from "../../providers/app-model-service";
-import { LanguagePopoverPageModelInterface } from "./language-popover.model-interface";
-import { LanguageDataobject } from "../../providers/dataobjects/language.dataobject";
-import { Logger } from "../../app/logger";
-import { GlobalLanguageConfigDataobject } from "../../providers/dataobjects/global-language-config.dataobject";
-import { UserLanguageFilterConfigDataObject } from "../../providers/dataobjects/user-language-filter-config.dataobject";
+import {Component} from "@angular/core";
+import {IonicPage, NavController, NavParams, ViewController} from "ionic-angular";
+import {Logger} from "../../app/logger";
+import {AppModelService} from "../../providers/app-model-service";
+import {GlobalLanguageConfigDataobject} from "../../providers/dataobjects/global-language-config.dataobject";
+import {UserLanguageFilterConfigDataObject} from "../../providers/dataobjects/user-language-filter-config.dataobject";
+import {LanguagePopoverPageModelInterface} from "./language-popover.model-interface";
 
 @IonicPage()
 @Component({
@@ -74,4 +73,5 @@ export class LanguagePopoverPage {
     this.languagePopoverPageModelInterface.setSelectedLanguage(this.selectedLanguageDataObject);
     this.viewCtrl.dismiss();
   };
-};
+}
+;

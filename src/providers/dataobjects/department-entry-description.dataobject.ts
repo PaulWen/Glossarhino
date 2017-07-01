@@ -29,7 +29,7 @@ export abstract class DepartmentEntrySpecificsDataObject {
       "description": "",
       "contact": "",
       "email": ""
-    }
+    };
   }
 
 }

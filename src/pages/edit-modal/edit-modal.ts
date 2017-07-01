@@ -30,7 +30,7 @@ export class EditModalPage {
   private addNewEntry: boolean;
 
   // model object
-  private editModalPageModelInterface: EditModalPageModelInterface;
+  private appModelService: EditModalPageModelInterface;
 
   // data objects
   private globalDepartmentConfigDataObject: GlobalDepartmentConfigDataObject;
@@ -38,7 +38,7 @@ export class EditModalPage {
   private selectedLanguageDataObject: UserLanguageFilterConfigDataObject;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
-  constructor(navCtrl: NavController, navParams: NavParams, viewCtrl: ViewController, modalCtrl: ModalController, alertCtrl: AlertController, appModel: AppModelService) {
+  constructor(navCtrl: NavController, navParams: NavParams, viewCtrl: ViewController, modalCtrl: ModalController, alertCtrl: AlertController, appModelService: AppModelService) {
     // instantiate ionic injected components
     this.navCtrl = navCtrl;
     this.navParams = navParams;
@@ -51,7 +51,7 @@ export class EditModalPage {
     this.addNewEntry = this.navParams.get("addNewEntry");
 
     // instantiate model object
-    this.editModalPageModelInterface = appModel;
+    this.appModelService = appModelService;
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
@@ -65,7 +65,7 @@ export class EditModalPage {
   }
 
   private ionViewCanEnter(): Promise<boolean> | boolean {
-    return this.editModalPageModelInterface.isAuthenticated();
+    return this.appModelService.isAuthenticated();
   }
 
   //////////////////////////////////////////
@@ -74,10 +74,10 @@ export class EditModalPage {
 
   private loadData(refresher?) {
     // load global department config
-    this.globalDepartmentConfigDataObject = this.editModalPageModelInterface.getGlobalDepartmentConfigDataObject();
+    this.globalDepartmentConfigDataObject = this.appModelService.getGlobalDepartmentConfigDataObject();
 
     // get selected language
-    this.editModalPageModelInterface.getSelectedLanguage().then((data) => {
+    this.appModelService.getSelectedLanguage().then((data) => {
       this.selectedLanguageDataObject = data;
 
       //load other data as soon as language loaded
@@ -85,7 +85,7 @@ export class EditModalPage {
       if (this.addNewEntry) {
         this.entry = EntryDataObject.init();
       } else {
-        this.editModalPageModelInterface.getCompleteEntryDataObject(this._id, this.selectedLanguageDataObject.selectedLanguage).then((data) => {
+        this.appModelService.getCompleteEntryDataObject(this._id, this.selectedLanguageDataObject.selectedLanguage).then((data) => {
           this.entry = data;
         }, (error) => {
           Logger.log("Loading Entry Data Object failed (Class: EditModalPage, Method: loadData()");
@@ -105,10 +105,6 @@ export class EditModalPage {
     });
   }
 
-  /**
-   * refresh page when on pulling content down
-   * @param refresher
-   */
   private doRefresh(refresher) {
     this.loadData(refresher);
   }
@@ -124,6 +120,15 @@ export class EditModalPage {
     }
   }
 
+  private removeEntryDataObject(entryDataObject: EntryDataObject, languageId: string) {
+    this.appModelService.removeEntryDataObject(entryDataObject, languageId).then((data) => {
+      Logger.log(data);
+    }, (error) => {
+      Logger.error(error);
+    });
+    this.navCtrl.setRoot("HomePage");
+  }
+
   //////////////////////////////////////////
   //         Navigation Functions         //
   //////////////////////////////////////////
@@ -132,12 +137,12 @@ export class EditModalPage {
     if (save) {
       this.entry.departmentSpecifics.sort(DepartmentEntrySpecificsDataObject.compare);
       if (this.addNewEntry) {
-        this.editModalPageModelInterface.newEntryDataObject(this.entry, this.selectedLanguageDataObject.selectedLanguage).then((data) => {
+        this.appModelService.newEntryDataObject(this.entry, this.selectedLanguageDataObject.selectedLanguage).then((data) => {
           this.viewCtrl.dismiss();
 
         });
       } else {
-        this.editModalPageModelInterface.setEntryDataObject(this.entry, this.selectedLanguageDataObject.selectedLanguage).then(() => {
+        this.appModelService.setEntryDataObject(this.entry, this.selectedLanguageDataObject.selectedLanguage).then(() => {
           this.viewCtrl.dismiss();
         }, (error) => {
           Logger.log("Setting Entry Data Object failed (Class: EditModalPage, Method: closeEditModal()");

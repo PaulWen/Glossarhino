@@ -104,7 +104,7 @@
       <ion-col col-12 *ngFor="let department of entry?.departmentSpecifics; let i = index">
         <ion-card>
           <ion-card-header>
-            {{ editModalPageModelInterface.getDepartmentById(department.departmentId).departmentName
+            {{ appModelService.getDepartmentById(department.departmentId).departmentName
             }}
           </ion-card-header>
           <ion-card-content>
@@ -143,6 +143,8 @@
     </ion-row>
 
     <button ion-button (click)="showAddDepartmentRadioAlert()">Add department specification</button>
+
+    <button ion-button (click)="removeEntryDataObject(entry, selectedLanguageDataObject.selectedLanguage)" color="danger">Delete Entry</button>
 
   </ion-grid>
 

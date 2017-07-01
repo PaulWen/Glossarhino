@@ -86,9 +86,6 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
 
       // add database to list of language databases
       this.entryDatabases.set(language.languageId, languageDatabase);
-
-      // set indexes of language database for faster search
-      this.addNameListIndices(languageDatabase);
     }
 
     return true;
@@ -100,12 +97,24 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   //////////////////////////////////////////
 
   public async getCountOfAllEntries(currentLanguageId: number): Promise<number> {
-    let result: any = (await this.entryDatabases.get(currentLanguageId).query(AppConfig.NAME_LIST_INDEX_PREFIX + "all", {
-      reduce: true
-    })).rows[0].value;
+    // load the IDs of all entries that are available in one language (before the _design docs)
+    let result1: any = (await this.entryDatabases.get(currentLanguageId).allDocs({
+      include_docs: true,
+      attachments: false,
+      endkey: '_design'
+    })).rows;
+
+    // load the IDs of all entries that are available in one language (after the _design docs)
+    let result2: any = (await this.entryDatabases.get(currentLanguageId).allDocs({
+      include_docs: true,
+      attachments: false,
+      startkey: '_design\uffff'
+    })).rows;
+
+    let result = result1.concat(result2);
 
     // return the number of entries that are available in the current language
-    return result;
+    return result.length;
   }
 
   public async getSelectedHomePageDepartmentDataobjects(currentLanguageId: number): Promise<Array<HomePageDepartmentDataobject>> {
@@ -148,9 +157,13 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     try {
       let selector: any = {};
 
-      // search only for entries where the name includes the search string (based on a regular expression in order to make it case insensitive)
+      // search only for entries where the name, acronyms or synonyms include the search string (based on a regular expression in order to make it case insensitive)
       let regexp = new RegExp(searchString ? searchString : "", "i");
-      selector.name = {$regex: regexp};
+      selector["$or"] = [
+        {name: {$regex: regexp}},
+        {synonyms: {$regex: regexp}},
+        {acronyms: {$regex: regexp}}
+      ];
 
       // if departmentId is defined search only for entries that are relevant for the specific department
       if (departmentId != undefined) {
@@ -159,9 +172,14 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
         };
       }
 
+      Logger.debug("selector");
+      Logger.debug(selector);
+
       let result: any = await this.entryDatabases.get(selectedLanguage).find({
         selector: selector, fields: ["_id", "name", "synonyms", "acronyms"]
       });
+
+      Logger.debug(result.docs);
 
       // return data
       return result.docs;
@@ -411,99 +429,5 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
         );
       }
     );
-  }
-
-  /**
-   * This function adds the indices for searching an database of entries by name, acronyms and synonyms.
-   * In order to allow a search only for entries that are related to a specific department many indices get created:
-   *  1) one index for searching all entries by name, acronyms and synonyms
-   *  2) one index for each department to search for all entries that are related to a specific department by name, acronyms and synonyms
-   *
-   * Before the function adds any index it checks if the database already has the specific index.
-   *
-   * The name under which the indices can be referenced for querying is:
-   *  index for searching all entries: "name_list_index_all"
-   *  index for searching entries related to a specific department: "name_list_index_XX" (XX = ID of department)
-   */
-  private addNameListIndices(database: any) {
-    ///////////////////////////////////////////////////////////////////////////
-    // 1) add index for searching all entries by name, acronyms and synonyms //
-    ///////////////////////////////////////////////////////////////////////////
-    let indexName = AppConfig.NAME_LIST_INDEX_PREFIX + "all";
-
-    // check if the database already has the index set up
-    database.get("_design/" + indexName).then(
-      (data: any) => {
-        // if the index could be loaded it exists and does not have to created
-        Logger.debug("Index does not have to be crated! It already exists!");
-        return;
-      }, (error: any) => {
-        switch (error.status) {
-          case 404:
-            Logger.debug("Index has to be crated! It does not yet exist!");
-
-            // if the index does not yet exists it has to be created
-            let indexViewObject = {};
-            indexViewObject[indexName] = {
-              "map": "function (doc) {\r\n  if (doc.name && doc._id && doc.acronyms && doc.synonyms) {\r\n    // value\r\n    var value = {\r\n      \"_id\": doc._id,\r\n      \"name\": doc.name,\r\n      \"synonyms\": doc.synonyms,\r\n      \"acronyms\": doc.acronyms\r\n    };\r\n\r\n    // emit the document for the name, every acronym and every synonym as keys  \r\n    emit(doc.name.toLowerCase(), value);\r\n\r\n    var arrayLengthAcronyms = doc.acronyms.length;\r\n    for (var i = 0; i < arrayLengthAcronyms; i++) {\r\n      emit(doc.acronyms[i].toLowerCase(), value);\r\n    }\r\n\r\n    var arrayLengthSynonyms = doc.synonyms.length;\r\n    for (var i = 0; i < arrayLengthSynonyms; i++) {\r\n      emit(doc.synonyms[i].toLowerCase(), value);\r\n    }\r\n  }\r\n}",
-              "reduce": "_count"
-            };
-
-            database.put(
-              {
-                "_id": "_design/" + indexName,
-                "views": indexViewObject,
-                "language": "javascript"
-              }
-            );
-
-            break;
-          default:
-            throw error;
-        }
-      }
-    );
-
-    /////////////////////////////////////////////////////////////////////////
-    // 2) add index for each department to search for all entries that are //
-    //    related to a specific department by name, acronyms and synonyms  //
-    /////////////////////////////////////////////////////////////////////////
-
-    for (let department of this.globalDepartmentConfig.departments) {
-      let indexName = AppConfig.NAME_LIST_INDEX_PREFIX + department.departmentId;
-
-      // check if the database already has the index set up
-      database.get("_design/" + indexName).then(
-        (data: any) => {
-          // if the index could be loaded it exists and does not have to created
-          Logger.debug("Index does not have to be crated! It already exists!");
-          return;
-        }, (error: any) => {
-          switch (error.status) {
-            case 404:
-              Logger.debug("Index has to be crated! It does not yet exist!");
-
-              // if the index does not yet exists it has to be created
-              let indexViewObject = {};
-              indexViewObject[indexName] = {
-                "map": "function (doc) {\r\n  if (doc.name && doc._id && doc.acronyms && doc.synonyms && doc.relatedDepartments) {\r\n    // check if the document is realted to the specific department for which entries should be find\r\n    var isRelatedToDepartment = false;\r\n    var arrayLengthRelatedDepartments = doc.relatedDepartments.length;\r\n    for (var i = 0; i < arrayLengthRelatedDepartments; i++) {\r\n      if (doc.relatedDepartments[i] == " + department.departmentId + ") {\r\n        isRelatedToDepartment = true;\r\n        break;\r\n      }\r\n    }\r\n\r\n    // only if the entry is realted to the specific department for which entries should be find emit it\r\n    if (isRelatedToDepartment) {\r\n      // value\r\n      var value = {\r\n        \"_id\": doc._id,\r\n        \"name\": doc.name,\r\n        \"synonyms\": doc.synonyms,\r\n        \"acronyms\": doc.acronyms\r\n      };\r\n\r\n      // emit the document for the name, every acronym and every synonym as keys  \r\n      emit(doc.name.toLowerCase(), value);\r\n\r\n      var arrayLengthAcronyms = doc.acronyms.length;\r\n      for (var i = 0; i < arrayLengthAcronyms; i++) {\r\n        emit(doc.acronyms[i].toLowerCase(), value);\r\n      }\r\n\r\n      var arrayLengthSynonyms = doc.synonyms.length;\r\n      for (var i = 0; i < arrayLengthSynonyms; i++) {\r\n        emit(doc.synonyms[i].toLowerCase(), value);\r\n      }\r\n    }\r\n  }\r\n}",
-                "reduce": "_count"
-              };
-
-              database.put(
-                {
-                  "_id": "_design/" + indexName,
-                  "views": indexViewObject,
-                  "language": "javascript"
-                }
-              );
-
-              break;
-            default:
-              throw error;
-          }
-        }
-      );
-    }
   }
 }

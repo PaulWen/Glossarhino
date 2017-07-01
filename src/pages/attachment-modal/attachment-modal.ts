@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { IonicPage, NavController, NavParams, ViewController } from "ionic-angular";
+import { IonicPage, NavController, NavParams, ViewController, AlertController } from "ionic-angular";
 import { AttachmentDataObject } from "../../providers/dataobjects/attachment.dataobject";
 
 @IonicPage()
@@ -13,19 +13,23 @@ export class AttachmentModalPage {
   private navCtrl: NavController;
   private navParams: NavParams;
   private viewCtrl: ViewController;
+  private alertCtrl: AlertController;
 
-  // navParam
+  // navParams
   private attachments: Array<AttachmentDataObject>;
+  private isEditMode: boolean;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
-  constructor(navCtrl: NavController, navParams: NavParams, viewCtrl: ViewController) {
+  constructor(navCtrl: NavController, navParams: NavParams, viewCtrl: ViewController, alertCtrl: AlertController) {
     // instantiate ionic injected components
     this.navCtrl = navCtrl;
     this.navParams = navParams;
     this.viewCtrl = viewCtrl;
+    this.alertCtrl = alertCtrl;
 
     //get navParams
     this.attachments = this.navParams.get("attachments");
+    this.isEditMode = this.navParams.get("isEditMode");
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
@@ -43,6 +47,18 @@ export class AttachmentModalPage {
     window.open(url, "_system");
   }
 
+  private addAttachment(newAttachment: AttachmentDataObject) {
+    this.attachments.push(newAttachment);
+  }
+
+  private removeAttachment(attachmentToRemove: AttachmentDataObject) {
+    let index: number = this.attachments.findIndex(attachment => attachment == attachmentToRemove);
+    if (index > -1) {
+      this.attachments.splice(index, 1);
+    }
+
+  }
+
   //////////////////////////////////////////
   //         Navigation Functions         //
   //////////////////////////////////////////
@@ -51,9 +67,37 @@ export class AttachmentModalPage {
    * Method to close the AttachmentModal when pressing the assigned button
    */
   private closeAttachmentModal() {
-    this.viewCtrl.dismiss();
+    this.viewCtrl.dismiss({
+      attachments: this.attachments
+    });
   }
 
+  private showAddAttachmentAlert() {
+    let showAddAttachmentAlert = this.alertCtrl.create({
+        title: "Add attachment",
+        message: "Enter a name and an URL for the attachment:",
+        inputs: [
+          {
+            name: "name",
+            placeholder: "Name"
+          }, {
+            name: "url",
+            placeholder: "URL"
+          }
+        ],
+        buttons: [
+          {
+            text: "Cancel"
+          }, {
+            text: "Add",
+            handler: data => {
+              this.addAttachment(data);
+            }
+          }
+        ]
+      });
+      showAddAttachmentAlert.present();
+  }
 
 
 }

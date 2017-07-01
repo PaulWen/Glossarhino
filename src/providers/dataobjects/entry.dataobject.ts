@@ -33,6 +33,7 @@ export abstract class EntryDataObject {
   abstract set acronyms(acronyms: Array<string>);
 
   abstract get attachments(): Array<AttachmentDataObject>;
+  abstract set attachments(attachments: Array<AttachmentDataObject>);
 
   abstract get comments(): Array<CommentDataObject>;
   abstract set comments(comments: Array<CommentDataObject>);

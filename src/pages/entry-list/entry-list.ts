@@ -121,7 +121,7 @@ export class EntryListPage {
   }
 
   private doRefresh(refresher) {
-    this.loadData(this.departmentId, refresher);
+    this.loadData(this.departmentId ? this.departmentId : undefined, refresher);
   }
 
   //////////////////////////////////////////

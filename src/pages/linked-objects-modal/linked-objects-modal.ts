@@ -18,7 +18,7 @@ export class LinkedObjectsModalPage {
   private viewCtrl: ViewController;
   private alertCtrl: AlertController;
 
-  // navparams
+  // navParams
   private relatedDepartments: Array<string>;
   private relatedEntries: Array<string>;
   private synonyms: Array<string>;

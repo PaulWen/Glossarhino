@@ -8,6 +8,7 @@ import { Logger } from "../../app/logger";
 import { GlobalDepartmentConfigDataObject } from "../../providers/dataobjects/global-department-config.dataobject";
 import { DepartmentEntrySpecificsDataObject } from "../../providers/dataobjects/department-entry-description.dataobject";
 import { DepartmentDataObject } from "../../providers/dataobjects/department.dataobject";
+import { AttachmentDataObject } from "../../providers/dataobjects/attachment.dataobject";
 
 @IonicPage()
 @Component({
@@ -179,6 +180,22 @@ export class EditModalPage {
     departmentRadioAlert.present();
   }
 
+  private openAttachmentModal(attachments: Array<AttachmentDataObject>) {
+    let attachmentModal = this.modalCtrl.create("AttachmentModalPage", {
+      attachments: attachments,
+      isEditMode: true
+    });
+    attachmentModal.present().then((canEnterView) => {
+      if (!canEnterView) {
+        // in the case that the view can not be entered redirect the user to the login page
+        this.navCtrl.setRoot("LoginPage");
+      }
+    });
+    attachmentModal.onDidDismiss((data) => {
+      this.entry.attachments = data.attachments;
+    });
+  }
+
   private openLinkedObjectsModal(relatedDepartments: Array<string>, relatedEntries: Array<string>, synonyms: Array<string>, acronyms: Array<string>) {
     let linkedObjectsModal = this.modalCtrl.create("LinkedObjectsModalPage", {
       relatedDepartments: relatedDepartments,
@@ -200,12 +217,5 @@ export class EditModalPage {
       this.entry.synonyms = data.synonyms;
       this.entry.acronyms = data.acronyms
     });
-  }
-
-  private showSynonymsEditModal() {
-    let synonymsEditModel = this.modalCtrl.create("EntryListPage", {
-      isAddSynonymModal: true
-    });
-    synonymsEditModel.present();
   }
 }

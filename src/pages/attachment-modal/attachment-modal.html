@@ -2,10 +2,17 @@
 
   <ion-navbar>
     <ion-buttons start>
-      <button ion-button (click)="closeAttachmentModal()">
+
+      <button ion-button (click)="closeAttachmentModal()" *ngIf="!isEditMode">
         <span ion-text color="primary" showWhen="ios">Close</span>
         <ion-icon name="md-close" showWhen="android,windows, core"></ion-icon>
       </button>
+
+      <button ion-button (click)="closeAttachmentModal(true)" *ngIf="isEditMode">
+        <span ion-text color="primary" showWhen="ios">Done</span>
+        <ion-icon name="md-checkmark" showWhen="android,windows, core"></ion-icon>
+      </button>
+      
     </ion-buttons>
     <ion-title>Attachments</ion-title>
   </ion-navbar>
@@ -17,10 +24,18 @@
 
   <!-- Print list with all attachments retreived for entry and department -->
   <ion-list>
-    <button ion-item *ngFor="let attachment of attachments"
-            (click)="openAttachment(attachment.url)">
+    <button ion-item *ngFor="let attachment of attachments" (click)="openAttachment(attachment.url)">
+
       {{ attachment.name }}
+
+      <ion-icon name="trash" item-end *ngIf="isEditMode" (click)="removeAttachment(attachment)"></ion-icon>
+
     </button>
+
+    <button ion-button *ngIf="isEditMode" (click)="showAddAttachmentAlert()">
+        Add attachment
+      </button>
+
   </ion-list>
 
 </ion-content>

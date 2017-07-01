@@ -89,9 +89,6 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
       this.entryDatabases.set(language.languageId, languageDatabase);
     }
 
-    let test = await this.getCurrentUser();
-    Logger.debug(test);
-
     return true;
   }
 

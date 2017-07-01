@@ -128,21 +128,16 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     let userDepartmentSetting = await this.getUserDepartmentFilterConfigDataObject();
 
     for (let departmentId of userDepartmentSetting.selectedDepartments) {
-      try {
-        let result: any = await this.entryDatabases.get(currentLanguageId).find({
-          selector: {
-            relatedDepartments: {
-              $in: [departmentId]
-            }
-          }, fields: ["_id"]
-        });
+      let result: any = await this.entryDatabases.get(currentLanguageId).find({
+        selector: {
+          relatedDepartments: {
+            $in: [departmentId]
+          }
+        }, fields: ["_id"]
+      });
 
-        // add result to the list of departments
-        selectedHomePageDepartmentDataObjects.push(HomePageDepartmentDataobject.init(result.docs.length, GlobalDepartmentConfigDataObject.getDepartmentById(this.globalDepartmentConfig, departmentId)));
-
-      } catch (error) {
-        Logger.error(error);
-      }
+      // add result to the list of departments
+      selectedHomePageDepartmentDataObjects.push(HomePageDepartmentDataobject.init(result.docs.length, GlobalDepartmentConfigDataObject.getDepartmentById(this.globalDepartmentConfig, departmentId)));
     }
 
     return selectedHomePageDepartmentDataObjects;
@@ -157,38 +152,33 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     let entryNames: Array<string> = [];
 
     // load data from database
-    try {
-      let selector: any = {};
+    let selector: any = {};
 
-      // search only for entries where the name, acronyms or synonyms include the search string (based on a regular expression in order to make it case insensitive)
-      let regexp = new RegExp(searchString ? searchString : "", "i");
-      selector["$or"] = [
-        {name: {$regex: regexp}},
-        {synonyms: {$regex: regexp}},
-        {acronyms: {$regex: regexp}}
-      ];
+    // search only for entries where the name, acronyms or synonyms include the search string (based on a regular expression in order to make it case insensitive)
+    let regexp = new RegExp(searchString ? searchString : "", "i");
+    selector["$or"] = [
+      {name: {$regex: regexp}},
+      {synonyms: {$regex: regexp}},
+      {acronyms: {$regex: regexp}}
+    ];
 
-      // if departmentId is defined search only for entries that are relevant for the specific department
-      if (departmentId != undefined && departmentId != "undefined") {
-        selector.relatedDepartments = {
-          $in: [departmentId]
-        };
-      }
-
-      let result: Array<EntryListPageEntryDataObject> = (await this.entryDatabases.get(selectedLanguage).find({
-          selector: selector, fields: ["_id", "name", "synonyms", "acronyms"]
-        })
-      ).docs;
-
-      // order data
-      result.sort(EntryListPageEntryDataObject.compare);
-
-      // return data
-      return result;
-    } catch (error) {
-      Logger.error(error);
-      return null;
+    // if departmentId is defined search only for entries that are relevant for the specific department
+    if (departmentId != undefined && departmentId != "undefined") {
+      selector.relatedDepartments = {
+        $in: [departmentId]
+      };
     }
+
+    let result: Array<EntryListPageEntryDataObject> = (await this.entryDatabases.get(selectedLanguage).find({
+        selector: selector, fields: ["_id", "name", "synonyms", "acronyms"]
+      })
+    ).docs;
+
+    // order data
+    result.sort(EntryListPageEntryDataObject.compare);
+
+    // return data
+    return result;
   }
 
   //////////////////////////////////////////
@@ -296,28 +286,18 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
 
 
   public async setEntryDataObject(entryDataObject: EntryDataObject, languageId: string): Promise<boolean> {
-    try {
-      return (await this.entryDatabases.get(languageId).put(entryDataObject)
-      ).ok;
-    } catch (error) {
-      Logger.error(error);
-    }
-
-    return false;
+    return (await this.entryDatabases.get(languageId).put(entryDataObject)
+    ).ok;
   }
 
   public async newEntryDataObject(entryDataObject: EntryDataObject, languageId: string): Promise<String> {
-    try {
-      return (await this.entryDatabases.get(languageId).post(entryDataObject)).id;
-    } catch (error) {
-      Logger.error(error);
-    }
-
-    return null;
+    return (await this.entryDatabases.get(languageId).post(entryDataObject)
+    ).id;
   }
 
   public async removeEntryDataObject(entryDataObject: EntryDataObject, languageId: string): Promise<boolean> {
-    return (await this.entryDatabases.get(languageId).remove(entryDataObject)).ok;
+    return (await this.entryDatabases.get(languageId).remove(entryDataObject)
+    ).ok;
   }
 
   //////////////////////////////////////////
@@ -355,7 +335,6 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
       retry: true
     }).on("error", function (error) {
       Logger.error(error);
-      return null;
     });
 
     return database;
@@ -385,14 +364,13 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
    * This method loads all the global app settings from the database and stores them locally in this class.
    *
    * @param globalAppSettingsDbUrl is the URL to the remote global app settings DB
-   * @return {Promise<boolean>} true if the operation was successfully or false in the case of an error
+   * @return {Promise<boolean>} true if the operation was successfully or throws an error in the case of an error
    */
   private async loadGlobalAppSettings(globalAppSettingsDbUrl: string): Promise<boolean> {
     // get a global app setting database reference
     let globalAppSettingsDb = new PouchDB(globalAppSettingsDbUrl);
 
     // load the necessary data
-    try {
       // load departments
       this.globalDepartmentConfig = <GlobalDepartmentConfigDataObject>await this.getDocumentAsJSON(globalAppSettingsDb, AppConfig.GLOBAL_APP_SETTINGS_DEPARTMENTS);
 
@@ -400,10 +378,6 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
       this.globalLanguageConfig = <GlobalLanguageConfigDataobject>await this.getDocumentAsJSON(globalAppSettingsDb, AppConfig.GLOBAL_APP_SETTINGS_LANGUAGES);
 
       Logger.log("Global App Settings have been loaded successfully.");
-    } catch (error) {
-      console.log(error);
-      return false;
-    }
 
     return true;
   }

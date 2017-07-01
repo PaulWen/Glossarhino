@@ -20,7 +20,7 @@ import { Alerts } from "../../app/alerts";
 
 @IonicPage({
   segment: "singleentry/:entryDocumentId",
-  defaultHistory: ["EntryListPage", "HomePage"]
+  defaultHistory: ["HomePage", "EntryListPage"]
 })
 @Component({
   selector: "page-single-entry",
@@ -96,7 +96,6 @@ export class SingleEntryPage {
       // get EntryDataObject
       this.appModelService.getEntryDataObject(this.entryDocumentId, this.selectedLanguage.selectedLanguage).then((data) => {
         this.entry = data;
-        Logger.log(data);
       }, (error) => {
         Logger.log("Loading Entry Data Object failed (Class: SingleEntryPage, Method: loadData()");
         Logger.error(error);

@@ -44,13 +44,13 @@ export abstract class EntryDataObject {
       "description": "",
       "contact": "",
       "email": "",
-      "relatedDepartments": [],
-      "relatedEntries": [],
-      "synonyms": [],
-      "acronyms": [],
-      "attachments": [],
-      "comments": [],
-      "departmentSpecifics": []
+      "relatedDepartments": undefined,
+      "relatedEntries": undefined,
+      "synonyms": undefined,
+      "acronyms": undefined,
+      "attachments": undefined,
+      "comments": undefined,
+      "departmentSpecifics": undefined
     }
   }
   

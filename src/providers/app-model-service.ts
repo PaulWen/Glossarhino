@@ -23,6 +23,7 @@ import {UserLanguageFilterConfigDataObject} from "./dataobjects/user-language-fi
 import {UserDataObject} from "./dataobjects/user.dataobject";
 import {SuperLoginClient} from "./super_login_client/super_login_client";
 import {SuperloginHttpRequester} from "./super_login_client/superlogin_http_requester";
+import {DepartmentEntrySpecificsDataObject} from "./dataobjects/department-entry-description.dataobject";
 
 @Injectable()
 export class AppModelService extends SuperLoginClient implements LoginPageInterface, HomePageModelInterface, LanguagePopoverPageModelInterface, EntryListPageModelInterface, SingleEntryPageModelInterface, EditModalPageModelInterface, CommentModalModelInterface, LinkedObjectsModalModelInterface {
@@ -101,14 +102,14 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     let result1: any = (await this.entryDatabases.get(currentLanguageId).allDocs({
       include_docs: true,
       attachments: false,
-      endkey: '_design'
+      endkey: "_design"
     })).rows;
 
     // load the IDs of all entries that are available in one language (after the _design docs)
     let result2: any = (await this.entryDatabases.get(currentLanguageId).allDocs({
       include_docs: true,
       attachments: false,
-      startkey: '_design\uffff'
+      startkey: "_design\uffff"
     })).rows;
 
     let result = result1.concat(result2);
@@ -192,22 +193,21 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   //////////////////////////////////////////
 
   public async getEntryDataObject(_id: string, languageId: string): Promise<EntryDataObject> {
+    // loead data
     let result: EntryDataObject = await this.getDocumentAsJSON(this.entryDatabases.get(languageId), _id);
     let selectedDepartments: UserDepartmentFilterConfigDataObject = await this.getUserDepartmentFilterConfigDataObject();
 
-    Logger.debug(selectedDepartments);
-    Logger.debug(result.departmentSpecifics);
-
-    // remove all departments specificas that the user is not intrested in to see
-    for (let i = 0; i < result.departmentSpecifics.length; i++) {
+    // create a new array of department specifics which does only include the department specifics which the user wants to see
+    let newDepartmentSpecifics: Array<DepartmentEntrySpecificsDataObject> = [];
+    for (let departmentSpecifics of result.departmentSpecifics) {
       // check if the department is currently selected by the user
-      if (!UserDepartmentFilterConfigDataObject.isDepartmentSelected(selectedDepartments, result.departmentSpecifics[i].departmentId)) {
-        // if not the department has to be removed so that the user will not see it
-        result.departmentSpecifics.splice(i, 1);
+      if (UserDepartmentFilterConfigDataObject.isDepartmentSelected(selectedDepartments, departmentSpecifics.departmentId)) {
+        // if the department is selected by the user the department has to be added to the new array
+        newDepartmentSpecifics.push(departmentSpecifics);
       }
     }
-
-    Logger.debug(result.departmentSpecifics);
+    // update the result
+    result.departmentSpecifics = newDepartmentSpecifics;
 
     return result;
   };

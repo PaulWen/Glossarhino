@@ -2,10 +2,11 @@ import {Injectable} from "@angular/core";
 import {Observable} from "rxjs/Rx";
 import {AppConfig} from "../../app/app-config";
 import {Logger} from "../../app/logger";
-import {SuperLoginClientError} from "./super_login_client_error";
-import {SuperloginHttpRequester} from "./superlogin_http_requester";
+import {UserDataObject} from "../dataobjects/user.dataobject";
 import {SuperLoginClientDoneResponse} from "./super_login_client_done_reponse";
+import {SuperLoginClientError} from "./super_login_client_error";
 import {SuperLoginClientErrorResponse} from "./super_login_client_error_reponse";
+import {SuperloginHttpRequester} from "./superlogin_http_requester";
 
 /**
  * This class is a service which implements TypeScript methods to communicate
@@ -85,7 +86,7 @@ export abstract class SuperLoginClient {
   public isAuthenticated(): Promise<boolean> {
     // check if the user is already authenticated
     if (this.authenticated) {
-      return new Promise((resolve, reject)=> {
+      return new Promise((resolve, reject) => {
         resolve(true);
       });
 
@@ -110,7 +111,7 @@ export abstract class SuperLoginClient {
           );
         }).toPromise();
       } else {
-        return new Promise((resolve, reject)=> {
+        return new Promise((resolve, reject) => {
           resolve(false);
         });
       }
@@ -295,9 +296,9 @@ export abstract class SuperLoginClient {
       // if the database names got loaded successfully
       (data: any) => {
         // give the database names to the database initializer
-        this.initializeDatabases(data).then((data)=>{
+        this.initializeDatabases(data).then((data) => {
           done();
-        }, (errorObject)=>{
+        }, (errorObject) => {
           error(errorObject);
         });
       },
@@ -395,4 +396,15 @@ export abstract class SuperLoginClient {
       }
     );
   }
+
+  /**
+   * This method loads the user data of the currently authenticated user from the database and returns it.
+   *
+   * @return {@link UserDataObject}
+   */
+  public async getUserData(): Promise<UserDataObject> {
+    // load the database names
+    return this.httpRequestor.getJsonData(AppConfig.WEB_SERVER_DOMAIN + "/auth/user-data/", this.getSessionToken()).toPromise();
+  }
+
 }

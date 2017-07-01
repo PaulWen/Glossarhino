@@ -11,7 +11,7 @@ export interface CommentModalModelInterface {
      */
     isAuthenticated(): Promise<boolean> | boolean;
 
-    getCurrentUser(): UserDataObject;
+    getCurrentUser(): Promise<UserDataObject>;
     getSelectedLanguage(): Promise<UserLanguageFilterConfigDataObject>;
     setEntryDataObject(entryDataObject: EntryDataObject, languageId: string): Promise<boolean>;
 }

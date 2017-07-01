@@ -65,7 +65,13 @@ export class CommentModalPage {
   //////////////////////////////////////////
 
   private loadData() {
-    this.currentUser = this.appModelService.getCurrentUser();
+    // load user data
+    this.appModelService.getCurrentUser().then((data) => {
+      this.currentUser = data;
+    }, (error) => {
+      Logger.log("Loading user data failed (Class: CommentModalPage, Method: loadData()");
+      Logger.error(error);
+    });
 
     // get selected language
     this.appModelService.getSelectedLanguage().then((data) => {

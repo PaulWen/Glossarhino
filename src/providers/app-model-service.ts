@@ -89,6 +89,9 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
       this.entryDatabases.set(language.languageId, languageDatabase);
     }
 
+    let test = await this.getCurrentUser();
+    Logger.debug(test);
+
     return true;
   }
 
@@ -312,11 +315,8 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   //    CommentModalInterface Methods     //
   //////////////////////////////////////////
 
-  public getCurrentUser(): UserDataObject {
-    return {
-      "name": "Simon Weber",
-      "email": "simon@dhbw-stuttgart.de"
-    };
+  public async getCurrentUser(): Promise<UserDataObject> {
+    return this.getUserData();
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////

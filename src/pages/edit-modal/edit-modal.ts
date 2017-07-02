@@ -110,6 +110,9 @@ export class EditModalPage {
   }
 
   private addDepartmentSpecification(departmentId: string) {
+    if (this.entry.departmentSpecifics == undefined) {
+      this.entry.departmentSpecifics = [];
+    }
     this.entry.departmentSpecifics.push(DepartmentEntrySpecificsDataObject.init(departmentId));
     this.entry.departmentSpecifics.sort(DepartmentEntrySpecificsDataObject.compare);
   }
@@ -162,7 +165,8 @@ export class EditModalPage {
     //check array of departments and remove the ones already included in the entryDataObject
     let temporaryArray: Array<DepartmentDataObject> = [];
     this.globalDepartmentConfigDataObject.departments.forEach(department => {
-      if (this.entry.departmentSpecifics.find(departmentSpecifics => departmentSpecifics.departmentId == department.departmentId) == undefined) {
+      if (this.entry.departmentSpecifics && this.entry.departmentSpecifics.find(departmentSpecifics => departmentSpecifics.departmentId == department.departmentId) != undefined) {
+      } else {
         temporaryArray.push(department);
       }
     });

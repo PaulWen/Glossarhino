@@ -14,4 +14,5 @@ export interface CommentModalModelInterface {
   getCurrentUser(): Promise<UserDataObject>;
   getSelectedLanguage(): Promise<UserLanguageFilterConfigDataObject>;
   setEntryDataObject(entryDataObject: EntryDataObject, languageId: string): Promise<boolean>;
+  isOnline(): boolean;
 }

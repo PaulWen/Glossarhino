@@ -30,7 +30,7 @@
 
 </ion-content>
 
-<ion-footer>
+<ion-footer *ngIf="appModelService.isOnline()">
   <ion-toolbar>
     <ion-item>
       <ion-input [(ngModel)]="commentContent" placeholder="Add Comment ..." clearInput></ion-input>

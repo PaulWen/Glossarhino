@@ -24,6 +24,7 @@ import {UserLanguageFilterConfigDataObject} from "./dataobjects/user-language-fi
 import {UserDataObject} from "./dataobjects/user.dataobject";
 import {SuperLoginClient} from "./super_login_client/super_login_client";
 import {SuperloginHttpRequester} from "./super_login_client/superlogin_http_requester";
+import {Network} from "@ionic-native/network";
 
 @Injectable()
 export class AppModelService extends SuperLoginClient implements LoginPageInterface, HomePageModelInterface, LanguagePopoverPageModelInterface, EntryListPageModelInterface, SingleEntryPageModelInterface, EditModalPageModelInterface, CommentModalModelInterface, LinkedObjectsModalModelInterface {
@@ -81,6 +82,14 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
 
   public getDepartmentById(departmentId: string): DepartmentDataObject {
     return GlobalDepartmentConfigDataObject.getDepartmentById(this.globalDepartmentConfig, departmentId);
+  }
+
+  public isOnline(): boolean {
+    if (this.platform.is("cordova")) {
+      return  (<any>navigator).connection.type != "none";
+    } else {
+      return true;
+    }
   }
 
   //////////////////////////////////////////

@@ -17,5 +17,6 @@ export interface EditModalPageModelInterface {
   getCompleteEntryDataObject(_id: string, languageId: string): Promise<EntryDataObject>;
   setEntryDataObject(entryDataObject: EntryDataObject, languageId: string): Promise<boolean>;
   newEntryDataObject(entryDataObject: EntryDataObject, languageId: string): Promise<string>;
+  removeEntryDataObject(entryDataObject: EntryDataObject, languageId: string): Promise<boolean>;
   getDepartmentById(departmentId: string): DepartmentDataObject;
 }

@@ -111,6 +111,7 @@ export class EditModalPage {
 
   private addDepartmentSpecification(departmentId: string) {
     this.entry.departmentSpecifics.push(DepartmentEntrySpecificsDataObject.init(departmentId));
+    this.entry.departmentSpecifics.sort(DepartmentEntrySpecificsDataObject.compare);
   }
 
   private removeDepartmentSpecification(departmentId: string) {
@@ -135,7 +136,6 @@ export class EditModalPage {
 
   private closeEditModal(save: boolean) {
     if (save) {
-      this.entry.departmentSpecifics.sort(DepartmentEntrySpecificsDataObject.compare);
       if (this.addNewEntry) {
         this.appModelService.newEntryDataObject(this.entry, this.selectedLanguageDataObject.selectedLanguage).then((data) => {
           this.viewCtrl.dismiss();

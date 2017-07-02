@@ -24,6 +24,7 @@ import {UserLanguageFilterConfigDataObject} from "./dataobjects/user-language-fi
 import {UserDataObject} from "./dataobjects/user.dataobject";
 import {SuperLoginClient} from "./super_login_client/super_login_client";
 import {SuperloginHttpRequester} from "./super_login_client/superlogin_http_requester";
+import {Network} from "@ionic-native/network";
 
 @Injectable()
 export class AppModelService extends SuperLoginClient implements LoginPageInterface, HomePageModelInterface, LanguagePopoverPageModelInterface, EntryListPageModelInterface, SingleEntryPageModelInterface, EditModalPageModelInterface, CommentModalModelInterface, LinkedObjectsModalModelInterface {
@@ -83,6 +84,14 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     return GlobalDepartmentConfigDataObject.getDepartmentById(this.globalDepartmentConfig, departmentId);
   }
 
+  public isOnline(): boolean {
+    if (this.platform.is("cordova")) {
+      return  (<any>navigator).connection.type != "none";
+    } else {
+      return true;
+    }
+  }
+
   //////////////////////////////////////////
   //      SuperLoginClient Methods        //
   //////////////////////////////////////////
@@ -91,8 +100,8 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     Logger.log(user_databases);
 
     // initialize settings databases
-    this.globalSettingsDatabase = this.initializeDatabase("global-settings", user_databases.application_settings);
-    this.userSettingsDatabase = this.initializeDatabase("settings", user_databases.settings);
+    this.globalSettingsDatabase = await this.initializeDatabase("global-settings", user_databases.application_settings);
+    this.userSettingsDatabase = await this.initializeDatabase("settings", user_databases.settings);
 
     // load global app settings
     await this.loadGlobalAppSettings();
@@ -100,7 +109,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     // once the global app-settings have been loaded...
     // initialize all the entry databases from the different languages
     for (let language of this.globalLanguageConfig.languages) {
-      let languageDatabase = this.initializeDatabase("language_" + language.languageId, user_databases["language_" + language.languageId]);
+      let languageDatabase = await this.initializeDatabase("language_" + language.languageId, user_databases["language_" + language.languageId]);
 
       // add database to list of language databases
       this.entryDatabases.set(language.languageId, languageDatabase);
@@ -336,50 +345,58 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
    * connection to the CouchDB database. The local and the remote database get synced
    * in real-time.
    *
-   * This function can also be used to change the URL of the database if necessary.
-   *
    * @param databaseName name of the database
    * @param url to the CouchDB database
+   *
+   * @return PouchDB database object as soon as the initial load has been completed and the object is ready to get used
    */
-  private initializeDatabase(databaseName: string, url: string): any {
-    // if the app runs in the context of an cordova application
-    // all databases should be created and stored using SQLlite
-    // in order to have the data stored persistently
-    if (this.platform.is("cordova")) {
-      // create PouchDB database objects
+  private initializeDatabase(databaseName: string, url: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      // create an object of the remote db
       let remoteDatabase: any = new PouchDB(url);
-      let database: any = new PouchDB(databaseName, {adapter: "cordova-sqlite"});
+      // create an empty local database reference
+      let database: any = null;
 
-      // sync the local and the remote database
+      // if the app runs in the context of an cordova application
+      // all databases should be created and stored using SQLite
+      // in order to have the data stored persistently
+      if (this.platform.is("cordova")) {
+        // create local PouchDB database object
+        database = new PouchDB(databaseName, {adapter: "cordova-sqlite"});
+
+        // if the app runs in a browser as a web app the default method
+        // chosen by PouchDB should be used
+      } else {
+        // create local PouchDB database object
+        database = new PouchDB(databaseName);
+      }
+
+      // build up the first sync connection for the initial sync
       database.sync(remoteDatabase, {
-        live: true, // sync in real-time
-        retry: true
+        live: false, // sync only current state
+        retry: false
       }).on("error", function (error) {
-        Logger.error(error);
-      }).on("paused", function (err) {
-        Logger.log("Paused-Event-" + databaseName);
+        reject(error);
+      }).on('complete', function (info) {
+        // Once the "complete" event gets triggered the initial
+        // sync between the remote and local database has been completed!
+        // (Since the setup connection has been automatically closed it
+        // does not has to be closed manually.)
+
+        // A new permanent sync connection without listeners gets invoked.
+        database.sync(remoteDatabase, {
+          live: true, // sync in real-time
+          retry: true
+        }).on("error", function (error) {
+          Logger.error(error);
+        });
+
+        // now the database instance has been loaded with the current values of the
+        // remote database and the local database with the new sync connection (without listeners)
+        // gets returned to the caller of this function
+        resolve(database);
       });
-
-      return database;
-
-      // if the app runs in a browser as a web app...
-    } else {
-      // create PouchDB database objects using the default method
-      let remoteDatabase: any = new PouchDB(url);
-      let database: any = new PouchDB(databaseName);
-
-      // sync the local and the remote database
-      database.sync(remoteDatabase, {
-        live: true, // sync in real-time
-        retry: true
-      }).on("error", function (error) {
-        Logger.error(error);
-      }).on("paused", function (err) {
-        Logger.log("Paused-Event-" + databaseName);
-      });
-
-      return database;
-    }
+    });
   }
 
   /**
@@ -396,7 +413,6 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
       attachments: false
     });
   }
-
 
   //////////////////////////////////////////
   //            Other Methods             //
@@ -442,7 +458,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
       since: 'now',
       live: true,
       include_docs: false
-    }).on('change', function(change) {
+    }).on('change', function (change) {
       // load global app setting again
       this.loadGlobalAppSettings();
     }).on('error', function (error) {

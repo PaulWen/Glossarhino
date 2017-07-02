@@ -65,24 +65,28 @@ export class LoginPage {
       // log user in
       this.login(email, password, rememberLogin);
     }, (error: SuperLoginClientError) => {
-      // error
-      if (error.checkForError(SuperLoginClientError.AUTH_ERR_1)) {
-        alert(SuperLoginClientError.AUTH_ERR_1);
-      }
-      if (error.checkForError(SuperLoginClientError.AUTH_ERR_2)) {
-        alert(SuperLoginClientError.AUTH_ERR_2);
-      }
-      if (error.checkForError(SuperLoginClientError.AUTH_ERR_3)) {
-        alert(SuperLoginClientError.AUTH_ERR_3);
-      }
-      if (error.checkForError(SuperLoginClientError.AUTH_ERR_4)) {
-        alert(SuperLoginClientError.AUTH_ERR_4);
-      }
-      if (error.checkForError(SuperLoginClientError.AUTH_ERR_5)) {
-        alert(SuperLoginClientError.AUTH_ERR_5);
-      }
-      if (error.checkForError(SuperLoginClientError.AUTH_ERR_6)) {
-        alert(SuperLoginClientError.AUTH_ERR_6);
+      if (error.hasOwnProperty('checkForError')) {
+        // error
+        if (error.checkForError(SuperLoginClientError.AUTH_ERR_1)) {
+          alert(SuperLoginClientError.AUTH_ERR_1);
+        }
+        if (error.checkForError(SuperLoginClientError.AUTH_ERR_2)) {
+          alert(SuperLoginClientError.AUTH_ERR_2);
+        }
+        if (error.checkForError(SuperLoginClientError.AUTH_ERR_3)) {
+          alert(SuperLoginClientError.AUTH_ERR_3);
+        }
+        if (error.checkForError(SuperLoginClientError.AUTH_ERR_4)) {
+          alert(SuperLoginClientError.AUTH_ERR_4);
+        }
+        if (error.checkForError(SuperLoginClientError.AUTH_ERR_5)) {
+          alert(SuperLoginClientError.AUTH_ERR_5);
+        }
+        if (error.checkForError(SuperLoginClientError.AUTH_ERR_6)) {
+          alert(SuperLoginClientError.AUTH_ERR_6);
+        }
+      } else {
+        throw error;
       }
     });
   }
@@ -101,13 +105,19 @@ export class LoginPage {
       });
 
     }, (error: SuperLoginClientError) => {
-      // error
-      if (error.checkForError(SuperLoginClientError.LOGIN_ERR_1)) {
-        alert(SuperLoginClientError.LOGIN_ERR_1);
+      if (error.hasOwnProperty('checkForError')) {
+        // error
+        if (error.checkForError(SuperLoginClientError.LOGIN_ERR_1)) {
+          alert(SuperLoginClientError.LOGIN_ERR_1);
+        }
+
+        if (error.checkForError(SuperLoginClientError.LOGIN_ERR_2)) {
+          alert(SuperLoginClientError.LOGIN_ERR_2);
+        }
+      } else {
+        throw error;
       }
-      if (error.checkForError(SuperLoginClientError.LOGIN_ERR_2)) {
-        alert(SuperLoginClientError.LOGIN_ERR_2);
-      }
+
     });
   }
 }

@@ -29,7 +29,7 @@ import {SuperloginHttpRequester} from "./super_login_client/superlogin_http_requ
 export class AppModelService extends SuperLoginClient implements LoginPageInterface, HomePageModelInterface, LanguagePopoverPageModelInterface, EntryListPageModelInterface, SingleEntryPageModelInterface, EditModalPageModelInterface, CommentModalModelInterface, LinkedObjectsModalModelInterface {
   ////////////////////////////////////////////Properties////////////////////////////////////////////
 
-  private plattform: Platform;
+  private platform: Platform;
 
   //////////////Databases////////////
   /** all the databases for the different languages <Key: Language, Value: PouchDB database object>  */
@@ -38,6 +38,8 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   /** database that stores all the settings of the currently logged-in user*/
   private userSettingsDatabase: any;
 
+  /** database that stores all the global settings of the app*/
+  private globalSettingsDatabase: any;
 
   //////////////Global App Settings////////////
   private globalDepartmentConfig: GlobalDepartmentConfigDataObject;
@@ -45,10 +47,10 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
 
-  constructor(httpRequester: SuperloginHttpRequester, plattform: Platform) {
+  constructor(httpRequester: SuperloginHttpRequester, platform: Platform) {
     super(httpRequester);
 
-    this.plattform = plattform;
+    this.platform = platform;
 
     // load necessary PouchDB Plugins
     PouchDB.plugin(require("pouchdb-find"));
@@ -57,6 +59,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     // initialize properties
     this.entryDatabases = new Map<string, any>();
     this.userSettingsDatabase = null;
+    this.globalSettingsDatabase = null;
 
     this.globalDepartmentConfig = null;
     this.globalLanguageConfig = null;
@@ -72,6 +75,14 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     return await this.getUserLanguageFilterConfigDataobject();
   }
 
+  public getGlobalDepartmentConfigDataObject(): GlobalDepartmentConfigDataObject {
+    return this.globalDepartmentConfig;
+  };
+
+  public getDepartmentById(departmentId: string): DepartmentDataObject {
+    return GlobalDepartmentConfigDataObject.getDepartmentById(this.globalDepartmentConfig, departmentId);
+  }
+
   //////////////////////////////////////////
   //      SuperLoginClient Methods        //
   //////////////////////////////////////////
@@ -79,11 +90,12 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   public async initializeDatabases(user_databases: any): Promise<boolean> {
     Logger.log(user_databases);
 
-    // initialize settings database
+    // initialize settings databases
+    this.globalSettingsDatabase = this.initializeDatabase("global-settings", user_databases.application_settings);
     this.userSettingsDatabase = this.initializeDatabase("settings", user_databases.settings);
 
     // load global app settings
-    await this.loadGlobalAppSettings(user_databases.application_settings);
+    await this.loadGlobalAppSettings();
 
     // once the global app-settings have been loaded...
     // initialize all the entry databases from the different languages
@@ -111,6 +123,10 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     // destroy the user settings database so that there is now content stored
     // on the client anymore
     this.userSettingsDatabase.destroy();
+
+    // destroy the global settings database so that there is now content stored
+    // on the client anymore
+    this.globalSettingsDatabase.destroy();
 
     Logger.log("All database destroyed.");
   }
@@ -149,6 +165,9 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     // load currently selected department
     let userDepartmentSetting = await this.getUserDepartmentFilterConfigDataObject();
 
+    // load global department settings
+    let globalDepartmentConfig = await this.getGlobalDepartmentConfigDataObject();
+
     for (let departmentId of userDepartmentSetting.selectedDepartments) {
       let result: any = await this.entryDatabases.get(currentLanguageId).find({
         selector: {
@@ -159,7 +178,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
       });
 
       // add result to the list of departments
-      selectedHomePageDepartmentDataObjects.push(HomePageDepartmentDataobject.init(result.docs.length, GlobalDepartmentConfigDataObject.getDepartmentById(this.globalDepartmentConfig, departmentId)));
+      selectedHomePageDepartmentDataObjects.push(HomePageDepartmentDataobject.init(result.docs.length, GlobalDepartmentConfigDataObject.getDepartmentById(globalDepartmentConfig, departmentId)));
     }
 
     return selectedHomePageDepartmentDataObjects;
@@ -227,10 +246,6 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     return result;
   };
 
-  public getDepartmentById(departmentId: string): DepartmentDataObject {
-    return GlobalDepartmentConfigDataObject.getDepartmentById(this.globalDepartmentConfig, departmentId);
-  }
-
   //////////////////////////////////////////
   // LanguagePopoverPageInterface Methods //
   //////////////////////////////////////////
@@ -248,54 +263,34 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   //UserSettingsPageModelInterface Methods//
   //////////////////////////////////////////
 
-  public getGlobalDepartmentConfigDataObject(): GlobalDepartmentConfigDataObject {
-    return this.globalDepartmentConfig;
-  };
-
   /**
-   * This function gets the current {@link UserDepartmentFilterConfigDataobject} of the user.
+   * This function gets the current {@link UserDepartmentFilterConfigDataObject} of the user.
    * If it is not yet created in the database this function will create it.
    *
-   * @return {Promise<UserDepartmentFilterConfigDataobject>}
+   * @return {Promise<UserDepartmentFilterConfigDataObject>}
    */
-  public getUserDepartmentFilterConfigDataObject(): Promise<UserDepartmentFilterConfigDataObject> {
-    return new Promise<UserDepartmentFilterConfigDataObject>((resolve, reject) => {
-        this.getDocumentAsJSON(this.userSettingsDatabase, AppConfig.USER_APP_SETTINGS_DEPARTMENT_FILTERS).then(
-          (data: UserDepartmentFilterConfigDataObject) => {
-            // if document could be loaded return it
-            resolve(data);
-          }, (error: any) => {
-            switch (error.status) {
-              case 404:
-                // document has not yet been created and has to be created now
-                try {
-                  // generate initial user department settings
-                  let initialUserDepartmentSettings: UserDepartmentFilterConfigDataObject = UserDepartmentFilterConfigDataObject.init(this.globalDepartmentConfig);
+  public async getUserDepartmentFilterConfigDataObject(): Promise<UserDepartmentFilterConfigDataObject> {
+    try {
+      // try to load the document that contains the settings of the user
+      return await this.getDocumentAsJSON(this.userSettingsDatabase, AppConfig.USER_APP_SETTINGS_DEPARTMENT_FILTERS);
+    } catch (error) {
+      switch (error.status) {
+        case 404:
+          // generate initial user department settings and store them in the database
+          await this.userSettingsDatabase.put(UserDepartmentFilterConfigDataObject.init(this.getGlobalDepartmentConfigDataObject()));
 
-                  // create document
-                  this.userSettingsDatabase.put(initialUserDepartmentSettings).then((data) => {
-                    // return newly created document as soon as it has been created
-                    resolve(initialUserDepartmentSettings);
-                  }, (error) => {
-                    reject(error);
-                  });
-                } catch (error) {
-                  reject(error);
-                }
-                break;
-              default:
-                reject(error);
-            }
-          }
-        );
+          // try to load the complete document again
+          return await this.getDocumentAsJSON(this.userSettingsDatabase, AppConfig.USER_APP_SETTINGS_DEPARTMENT_FILTERS);
+        default:
+          throw error;
       }
-    );
-  };
+    }
+  }
 
   public async setUserDepartmentFilterConfigDataObject(userDepartmentFilterConfigDataObject: UserDepartmentFilterConfigDataObject): Promise<boolean> {
     return (await this.userSettingsDatabase.put(userDepartmentFilterConfigDataObject)
     ).ok;
-  };
+  }
 
   //////////////////////////////////////////
   //       EditModalInterface Methods     //
@@ -350,10 +345,10 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     // if the app runs in the context of an cordova application
     // all databases should be created and stored using SQLlite
     // in order to have the data stored persistently
-    if (this.plattform.is("cordova")) {
+    if (this.platform.is("cordova")) {
       // create PouchDB database objects
       let remoteDatabase: any = new PouchDB(url);
-      let database: any = new PouchDB(databaseName, {adapter: 'cordova-sqlite'});
+      let database: any = new PouchDB(databaseName, {adapter: "cordova-sqlite"});
 
       // sync the local and the remote database
       database.sync(remoteDatabase, {
@@ -367,7 +362,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
 
       return database;
 
-    // if the app runs in a browser as a web app...
+      // if the app runs in a browser as a web app...
     } else {
       // create PouchDB database objects using the default method
       let remoteDatabase: any = new PouchDB(url);
@@ -422,72 +417,64 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     // on the client anymore
     this.userSettingsDatabase.close();
 
+    // close the global settings database so that there is now content stored
+    // on the client anymore
+    this.globalSettingsDatabase.close();
+
     Logger.log("All database closed.");
   }
 
   /**
    * This method loads all the global app settings from the database and stores them locally in this class.
    *
-   * @param globalAppSettingsDbUrl is the URL to the remote global app settings DB
    * @return {Promise<boolean>} true if the operation was successfully or throws an error in the case of an error
    */
-  private async loadGlobalAppSettings(globalAppSettingsDbUrl: string): Promise<boolean> {
-    // get a global app setting database reference
-    let globalAppSettingsDb = new PouchDB(globalAppSettingsDbUrl);
-
+  private async loadGlobalAppSettings(): Promise<boolean> {
     // load the necessary data
     // load departments
-    this.globalDepartmentConfig = <GlobalDepartmentConfigDataObject>await this.getDocumentAsJSON(globalAppSettingsDb, AppConfig.GLOBAL_APP_SETTINGS_DEPARTMENTS);
+    this.globalDepartmentConfig = <GlobalDepartmentConfigDataObject>await this.getDocumentAsJSON(this.globalSettingsDatabase, AppConfig.GLOBAL_APP_SETTINGS_DEPARTMENTS);
 
     // load languages
-    this.globalLanguageConfig = <GlobalLanguageConfigDataobject>await this.getDocumentAsJSON(globalAppSettingsDb, AppConfig.GLOBAL_APP_SETTINGS_LANGUAGES);
+    this.globalLanguageConfig = <GlobalLanguageConfigDataobject>await this.getDocumentAsJSON(this.globalSettingsDatabase, AppConfig.GLOBAL_APP_SETTINGS_LANGUAGES);
 
-    // close the database since there is no use for it any more
-    globalAppSettingsDb.close();
+    // register change listener to get informed as soon as the global application settings change
+    this.globalSettingsDatabase.changes({
+      since: 'now',
+      live: true,
+      include_docs: false
+    }).on('change', function(change) {
+      // load global app setting again
+      this.loadGlobalAppSettings();
+    }).on('error', function (error) {
+      throw error;
+    });
 
     Logger.log("Global App Settings have been loaded successfully.");
 
     return true;
   }
 
-
   /**
-   * This function gets the current {@link UserLanguageFilterConfigDataobject} of the user.
+   * This function gets the current {@link UserLanguageFilterConfigDataObject} of the user.
    * If it is not yet created in the database this function will create it.
    *
-   * @return {Promise<UserLanguageFilterConfigDataobject>}
+   * @return {Promise<UserLanguageFilterConfigDataObject>}
    */
-  private getUserLanguageFilterConfigDataobject(): Promise<UserLanguageFilterConfigDataObject> {
-    return new Promise<UserLanguageFilterConfigDataObject>((resolve, reject) => {
-        this.getDocumentAsJSON(this.userSettingsDatabase, AppConfig.USER_APP_SETTINGS_LANGUAGE_FILTERS).then(
-          (data: UserLanguageFilterConfigDataObject) => {
-            // if document could be loaded return it
-            resolve(data);
-          }, (error: any) => {
-            switch (error.status) {
-              case 404:
-                // document has not yet been created and has to be created now
-                try {
-                  // generate initial user department settings
-                  let initialUserLanguageSettings: UserLanguageFilterConfigDataObject = UserLanguageFilterConfigDataObject.init(this.globalLanguageConfig);
+  public async getUserLanguageFilterConfigDataobject(): Promise<UserLanguageFilterConfigDataObject> {
+    try {
+      // try to load the document that contains the settings of the user
+      return await this.getDocumentAsJSON(this.userSettingsDatabase, AppConfig.USER_APP_SETTINGS_LANGUAGE_FILTERS);
+    } catch (error) {
+      switch (error.status) {
+        case 404:
+          // generate initial user language settings and store them in the database
+          await this.userSettingsDatabase.put(UserLanguageFilterConfigDataObject.init(this.getAllLanguages()));
 
-                  // create document
-                  this.userSettingsDatabase.put(initialUserLanguageSettings).then((data) => {
-                    // return newly created document as soon as it has been created
-                    resolve(initialUserLanguageSettings);
-                  }, (error) => {
-                    reject(error);
-                  });
-                } catch (error) {
-                  reject(error);
-                }
-                break;
-              default:
-                reject(error);
-            }
-          }
-        );
+          // try to load the complete document again
+          return await this.getDocumentAsJSON(this.userSettingsDatabase, AppConfig.USER_APP_SETTINGS_LANGUAGE_FILTERS);
+        default:
+          throw error;
       }
-    );
+    }
   }
 }

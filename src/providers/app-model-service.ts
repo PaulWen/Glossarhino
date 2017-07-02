@@ -1,4 +1,5 @@
 import {Injectable} from "@angular/core";
+import {Platform} from "ionic-angular";
 import PouchDB from "pouchdb";
 import PouchFind from "pouchdb-find";
 import "rxjs/add/operator/map";
@@ -29,6 +30,8 @@ import {SuperloginHttpRequester} from "./super_login_client/superlogin_http_requ
 export class AppModelService extends SuperLoginClient implements LoginPageInterface, HomePageModelInterface, LanguagePopoverPageModelInterface, EntryListPageModelInterface, SingleEntryPageModelInterface, EditModalPageModelInterface, CommentModalModelInterface, LinkedObjectsModalModelInterface {
   ////////////////////////////////////////////Properties////////////////////////////////////////////
 
+  private plattform: Platform;
+
   //////////////Databases////////////
   /** all the databases for the different languages <Key: Language, Value: PouchDB database object>  */
   private entryDatabases: Map<string, any>;
@@ -43,8 +46,10 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
 
-  constructor(httpRequester: SuperloginHttpRequester) {
+  constructor(httpRequester: SuperloginHttpRequester, plattform: Platform) {
     super(httpRequester);
+
+    this.plattform = plattform;
 
     // load necessary PouchDB Plugins
     PouchDB.plugin(PouchFind);
@@ -94,15 +99,28 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
 
 
   public destroyDatabases() {
-    // destroy and close all language databases so that there is now content stored
-    // on the client anymore
-    this.entryDatabases.forEach((database: any) => {
-      database.destroy();
-    });
+    // depending on the platform the databases have to be closed or destroyed
+    if (this.plattform.is("cordova")) {
+      // destroy all language databases so that there is now content stored
+      // on the client anymore
+      this.entryDatabases.forEach((database: any) => {
+        database.destroy();
+      });
 
-    // destroy and close the user settings database so that there is now content stored
-    // on the client anymore
-    this.userSettingsDatabase.destroy();
+      // destroy the user settings database so that there is now content stored
+      // on the client anymore
+      this.userSettingsDatabase.destroy();
+    } else {
+      // close all language databases so that there is now content stored
+      // on the client anymore
+      this.entryDatabases.forEach((database: any) => {
+        database.close();
+      });
+
+      // close the user settings database so that there is now content stored
+      // on the client anymore
+      this.userSettingsDatabase.close();
+    }
 
     Logger.log("All database closed and destroyed.");
   }
@@ -339,34 +357,33 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
    * @param url to the CouchDB database
    */
   private initializeDatabase(databaseName: string, url: string): any {
-    // create PouchDB database objects
-    let remoteDatabase: any = new PouchDB(url);
-    let database: any = new PouchDB(databaseName);
+    // if the app runs in the context of an cordova application
+    // all databases should be created and stored using SQLlite
+    // in order to have the data stored persistently
+    if (this.plattform.is("cordova")) {
+      Logger.debug("Create PouchDB using SQLlite.");
+      // create PouchDB database objects
+      let remoteDatabase: any = new PouchDB(url);
+      let database: any = new PouchDB(databaseName);
 
-    // sync the local and the remote database
-    database.sync(remoteDatabase, {
-      live: true, // sync in real-time
-      retry: true
-    }).on("error", function (error) {
-      Logger.error(error);
-    }).on("change", function (info) {
-      // handle change
-      Logger.debug("Change-Event-" + databaseName);
-    }).on("paused", function (err) {
-      // replication paused (e.g. replication up to date, user went offline)
-      Logger.debug("Paused-Event-" + databaseName);
-    }).on("active", function () {
-      // replicate resumed (e.g. new changes replicating, user went back online)
-      Logger.debug("Active-Event-" + databaseName);
-    }).on("denied", function (err) {
-      // a document failed to replicate (e.g. due to permissions)
-      Logger.debug("Denied-Event-" + databaseName);
-    }).on("complete", function (info) {
-      // handle complete
-      Logger.debug("Complete-Event-" + databaseName);
-    });
+      // sync the local and the remote database
+      database.sync(remoteDatabase, {
+        live: true, // sync in real-time
+        retry: true
+      }).on("error", function (error) {
+        Logger.error(error);
+      }).on("paused", function (err) {
+        Logger.log("Paused-Event-" + databaseName);
+      });
 
-    return database;
+      return database;
+
+    // if the app runs in a browser as a web app all databases should only be accessed remotely
+    } else {
+      Logger.debug("Create PouchDB remotely.");
+      // create PouchDB database object that references a remote database
+      return new PouchDB(url);
+    }
   }
 
   /**

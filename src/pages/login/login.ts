@@ -65,7 +65,7 @@ export class LoginPage {
       // log user in
       this.login(email, password, rememberLogin);
     }, (error: SuperLoginClientError) => {
-      if (error.hasOwnProperty('checkForError')) {
+      if (error.checkForError != undefined) {
         // error
         if (error.checkForError(SuperLoginClientError.AUTH_ERR_1)) {
           alert(SuperLoginClientError.AUTH_ERR_1);
@@ -94,7 +94,6 @@ export class LoginPage {
   private login(email: string, password: string, rememberLogin: boolean) {
     // Todo load page
 
-
     this.model.loginWithCredentials(email, password, rememberLogin, () => {
       // successfully loged-in
       this.navCtrl.setRoot("HomePage").then((canEnterView) => {
@@ -105,7 +104,7 @@ export class LoginPage {
       });
 
     }, (error: SuperLoginClientError) => {
-      if (error.hasOwnProperty('checkForError')) {
+      if (error.checkForError != undefined) {
         // error
         if (error.checkForError(SuperLoginClientError.LOGIN_ERR_1)) {
           alert(SuperLoginClientError.LOGIN_ERR_1);

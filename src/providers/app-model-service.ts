@@ -1,7 +1,6 @@
 import {Injectable} from "@angular/core";
 import {Platform} from "ionic-angular";
 import PouchDB from "pouchdb";
-import PouchFind from "pouchdb-find";
 import "rxjs/add/operator/map";
 import {AppConfig} from "../app/app-config";
 import {Logger} from "../app/logger";
@@ -52,7 +51,8 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     this.plattform = plattform;
 
     // load necessary PouchDB Plugins
-    PouchDB.plugin(PouchFind);
+    PouchDB.plugin(require("pouchdb-find"));
+    PouchDB.plugin(require("pouchdb-adapter-cordova-sqlite"));
 
     // initialize properties
     this.entryDatabases = new Map<string, any>();
@@ -99,28 +99,15 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
 
 
   public destroyDatabases() {
-    // depending on the platform the databases have to be closed or destroyed
-    if (this.plattform.is("cordova")) {
-      // destroy all language databases so that there is now content stored
-      // on the client anymore
-      this.entryDatabases.forEach((database: any) => {
-        database.destroy();
-      });
+    // destroy all language databases so that there is now content stored
+    // on the client anymore
+    this.entryDatabases.forEach((database: any) => {
+      database.destroy();
+    });
 
-      // destroy the user settings database so that there is now content stored
-      // on the client anymore
-      this.userSettingsDatabase.destroy();
-    } else {
-      // close all language databases so that there is now content stored
-      // on the client anymore
-      this.entryDatabases.forEach((database: any) => {
-        database.close();
-      });
-
-      // close the user settings database so that there is now content stored
-      // on the client anymore
-      this.userSettingsDatabase.close();
-    }
+    // destroy the user settings database so that there is now content stored
+    // on the client anymore
+    this.userSettingsDatabase.destroy();
 
     Logger.log("All database closed and destroyed.");
   }
@@ -361,8 +348,28 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     // all databases should be created and stored using SQLlite
     // in order to have the data stored persistently
     if (this.plattform.is("cordova")) {
+      alert('SQLite plugin is installed?: ' + (!!(<any>window).sqlitePlugin));
       Logger.debug("Create PouchDB using SQLlite.");
       // create PouchDB database objects
+      let remoteDatabase: any = new PouchDB(url);
+      let database: any = new PouchDB(databaseName, {adapter: 'cordova-sqlite'});
+
+      // sync the local and the remote database
+      database.sync(remoteDatabase, {
+        live: true, // sync in real-time
+        retry: true
+      }).on("error", function (error) {
+        Logger.error(error);
+      }).on("paused", function (err) {
+        Logger.log("Paused-Event-" + databaseName);
+      });
+
+      return database;
+
+    // if the app runs in a browser as a web app...
+    } else {
+      Logger.debug("Create PouchDB using the default method.");
+      // create PouchDB database objects using the default method
       let remoteDatabase: any = new PouchDB(url);
       let database: any = new PouchDB(databaseName);
 
@@ -377,12 +384,6 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
       });
 
       return database;
-
-    // if the app runs in a browser as a web app all databases should only be accessed remotely
-    } else {
-      Logger.debug("Create PouchDB remotely.");
-      // create PouchDB database object that references a remote database
-      return new PouchDB(url);
     }
   }
 

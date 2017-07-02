@@ -15,10 +15,6 @@ export class Logger {
   public static log(msg: any) {
     if (AppConfig.DEVELOPMENT) {
       console.log(msg);
-      // PouchDB.debug.enable('*');
-      PouchDB.debug.disable();
-    } else {
-      PouchDB.debug.disable();
     }
   }
 
@@ -31,7 +27,9 @@ export class Logger {
   }
 
   public static debug(msg: any) {
-    console.debug(msg);
+    if (AppConfig.DEVELOPMENT) {
+      console.debug(msg);
+    }
   }
 
 }

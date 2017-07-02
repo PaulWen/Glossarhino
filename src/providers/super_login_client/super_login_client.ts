@@ -1,4 +1,5 @@
 import {Injectable} from "@angular/core";
+import PouchDB from "pouchdb";
 import {Observable} from "rxjs/Rx";
 import {AppConfig} from "../../app/app-config";
 import {Logger} from "../../app/logger";
@@ -60,6 +61,16 @@ export abstract class SuperLoginClient {
   constructor(httpRequestor: SuperloginHttpRequester) {
     this.httpRequestor = httpRequestor;
     this.authenticated = false;
+
+    // if the application is not in production use than make the PouchDB object available
+    // in order to be able to use the Chrome PouchDB plugin to inspect the local data
+    if (AppConfig.DEVELOPMENT) {
+      (<any>window).PouchDB = PouchDB;
+//      PouchDB.debug.enable("*");
+      PouchDB.debug.disable();
+    } else {
+      PouchDB.debug.disable();
+    }
   }
 
 ////////////////////////////////////////Getter and Setter//////////////////////////////////////////
@@ -75,8 +86,13 @@ export abstract class SuperLoginClient {
    *
    * @param user_databases array of all user databases and the URL's to those
    */
-  abstract async initializeDatabases(user_databases: any): Promise<boolean>
+  abstract async initializeDatabases(user_databases: any): Promise<boolean>;
 
+  /**
+   * This function gets called as soon as the users gets logged out in order to remove all the data
+   * from the local client.
+   */
+  abstract destroyDatabases(): void;
 
   /**
    *  This method checks if the user is already authenticated.
@@ -360,6 +376,10 @@ export abstract class SuperLoginClient {
    * @param error callback function in case an error occurred
    */
   public logout(done: SuperLoginClientDoneResponse, error: SuperLoginClientErrorResponse) {
+    // destroy all databases
+    this.destroyDatabases();
+
+    // logout the user
     this.httpRequestor.postJsonData(AppConfig.WEB_SERVER_DOMAIN + "/auth/logout", this.getSessionToken(), {}).subscribe(
       (data: any) => {
         done();

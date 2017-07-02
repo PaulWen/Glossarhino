@@ -93,6 +93,20 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   }
 
 
+  public destroyDatabases() {
+    // destroy and close all language databases so that there is now content stored
+    // on the client anymore
+    this.entryDatabases.forEach((database: any) => {
+      database.destroy();
+    });
+
+    // destroy and close the user settings database so that there is now content stored
+    // on the client anymore
+    this.userSettingsDatabase.destroy();
+
+    Logger.log("All database closed and destroyed.");
+  }
+
   //////////////////////////////////////////
   //       HomePageInterface Methods      //
   //////////////////////////////////////////
@@ -335,6 +349,21 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
       retry: true
     }).on("error", function (error) {
       Logger.error(error);
+    }).on("change", function (info) {
+      // handle change
+      Logger.debug("Change-Event-" + databaseName);
+    }).on("paused", function (err) {
+      // replication paused (e.g. replication up to date, user went offline)
+      Logger.debug("Paused-Event-" + databaseName);
+    }).on("active", function () {
+      // replicate resumed (e.g. new changes replicating, user went back online)
+      Logger.debug("Active-Event-" + databaseName);
+    }).on("denied", function (err) {
+      // a document failed to replicate (e.g. due to permissions)
+      Logger.debug("Denied-Event-" + databaseName);
+    }).on("complete", function (info) {
+      // handle complete
+      Logger.debug("Complete-Event-" + databaseName);
     });
 
     return database;
@@ -371,13 +400,16 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     let globalAppSettingsDb = new PouchDB(globalAppSettingsDbUrl);
 
     // load the necessary data
-      // load departments
-      this.globalDepartmentConfig = <GlobalDepartmentConfigDataObject>await this.getDocumentAsJSON(globalAppSettingsDb, AppConfig.GLOBAL_APP_SETTINGS_DEPARTMENTS);
+    // load departments
+    this.globalDepartmentConfig = <GlobalDepartmentConfigDataObject>await this.getDocumentAsJSON(globalAppSettingsDb, AppConfig.GLOBAL_APP_SETTINGS_DEPARTMENTS);
 
-      // load languages
-      this.globalLanguageConfig = <GlobalLanguageConfigDataobject>await this.getDocumentAsJSON(globalAppSettingsDb, AppConfig.GLOBAL_APP_SETTINGS_LANGUAGES);
+    // load languages
+    this.globalLanguageConfig = <GlobalLanguageConfigDataobject>await this.getDocumentAsJSON(globalAppSettingsDb, AppConfig.GLOBAL_APP_SETTINGS_LANGUAGES);
 
-      Logger.log("Global App Settings have been loaded successfully.");
+    // close the database since there is no use for it any more
+    globalAppSettingsDb.close();
+
+    Logger.log("Global App Settings have been loaded successfully.");
 
     return true;
   }

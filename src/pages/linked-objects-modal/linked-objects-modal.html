@@ -27,11 +27,9 @@
       Departments
     </ion-list-header>
 
-    <ion-item *ngFor="let department of relatedDepartments"> {{
-      appModelService.getDepartmentById(department).departmentName }}
+    <ion-item *ngFor="let department of relatedDepartments"> {{ appModelService.getDepartmentById(department).departmentName }}
 
-      <ion-icon name="trash" item-end (click)="removeRelatedDepartment(department)"
-                *ngIf="isEditMode || isEditMode"></ion-icon>
+      <ion-icon name="trash" item-end (click)="removeRelatedDepartment(department)" *ngIf="isEditMode || isEditMode"></ion-icon>
 
     </ion-item>
 
@@ -50,15 +48,25 @@
 
     <ion-item *ngFor="let entry of relatedEntries"> {{ entry }}
 
-      <ion-icon name="trash" item-end *ngIf="isEditMode || isEditMode"
-                (click)="removeRelatedEntry(entry)"></ion-icon>
+      <ion-icon name="trash" item-end *ngIf="isEditMode || isEditMode" (click)="removeRelatedEntry(entry)"></ion-icon>
 
     </ion-item>
 
-    <ion-item>
-      <button ion-button *ngIf="isEditMode">
-        Add entry
+    <ion-item *ngIf="isEditMode">
+
+      <ion-toolbar>
+        <ion-item>
+          <ion-input [(ngModel)]="entry" placeholder="Add Entry ..." clearInput></ion-input>
+        </ion-item>
+
+        <ion-buttons end>
+          <button ion-button icon-only (click)="addAcronym()">
+        <ion-icon name="add"></ion-icon>
       </button>
+        </ion-buttons>
+
+      </ion-toolbar>
+
     </ion-item>
 
   </ion-list>
@@ -70,15 +78,25 @@
 
     <ion-item *ngFor="let synonym of synonyms"> {{ synonym }}
 
-      <ion-icon name="trash" item-end *ngIf="isEditMode"
-                (click)="removeSynonym(synonym)"></ion-icon>
+      <ion-icon name="trash" item-end *ngIf="isEditMode" (click)="removeSynonym(synonym)"></ion-icon>
 
     </ion-item>
 
-    <ion-item>
-      <button ion-button *ngIf="isEditMode" (click)="showAddSynonymAlert()">
-        Add synonym
+    <ion-item *ngIf="isEditMode">
+
+      <ion-toolbar>
+        <ion-item>
+          <ion-input [(ngModel)]="synonym" placeholder="Add Synonym ..." clearInput></ion-input>
+        </ion-item>
+
+        <ion-buttons end>
+          <button ion-button icon-only (click)="addSynonym()">
+        <ion-icon name="add"></ion-icon>
       </button>
+        </ion-buttons>
+
+      </ion-toolbar>
+
     </ion-item>
 
   </ion-list>
@@ -90,15 +108,27 @@
 
     <ion-item *ngFor="let acronym of acronyms"> {{ acronym }}
 
-      <ion-icon name="trash" item-end *ngIf="isEditMode"
-                (click)="removeAcronym(acronym)"></ion-icon>
+      <ion-icon name="trash" item-end *ngIf="isEditMode" (click)="removeAcronym(acronym)"></ion-icon>
 
     </ion-item>
 
-    <ion-item>
-      <button ion-button *ngIf="isEditMode" (click)="showAddAcronymAlert()">
-        Add acronym
+
+
+    <ion-item *ngIf="isEditMode">
+
+      <ion-toolbar>
+        <ion-item>
+          <ion-input [(ngModel)]="acronym" placeholder="Add Acronym ..." clearInput></ion-input>
+        </ion-item>
+
+        <ion-buttons end>
+          <button ion-button icon-only (click)="addAcronym()">
+        <ion-icon name="add"></ion-icon>
       </button>
+        </ion-buttons>
+
+      </ion-toolbar>
+
     </ion-item>
 
   </ion-list>

@@ -30,6 +30,10 @@ export class LinkedObjectsModalPage {
   // data objects
   private globalDepartmentConfigDataObject: GlobalDepartmentConfigDataObject;
 
+  // temp input objects
+  private synonym: string;
+  private acronym: string;
+
   constructor(navCtrl: NavController, navParams: NavParams, viewCtrl: ViewController, alertCtrl: AlertController, appModelService: AppModelService) {
     // instantiate ionic injected components
     this.navCtrl = navCtrl;
@@ -100,9 +104,11 @@ export class LinkedObjectsModalPage {
     }
   }
 
-  private addSynonym(newSynonym: string) {
-    this.synonyms.push(newSynonym);
+  private addSynonym() {
+    this.synonyms.push(this.synonym);
     this.synonyms.sort();
+
+    this.synonym = undefined;
   }
 
   private removeSynonym(synonymToRemove: string) {
@@ -112,9 +118,11 @@ export class LinkedObjectsModalPage {
     }
   }
 
-  private addAcronym(newAcronym: string) {
-    this.acronyms.push(newAcronym);
+  private addAcronym() {
+    this.acronyms.push(this.acronym);
     this.acronyms.sort();
+
+    this.acronym = undefined;
   }
 
   private removeAcronym(acronymToRemove: string) {
@@ -164,55 +172,4 @@ export class LinkedObjectsModalPage {
     });
     relatedDepartmentCheckboxAlert.present();
   }
-
-  private showAddSynonymAlert() {
-    let showAddSynonymAlert = this.alertCtrl.create({
-      title: "Add synonym",
-      message: "Enter a synonym to add it",
-      inputs: [
-        {
-          name: "synonym",
-          placeholder: "Synonym"
-        }
-      ],
-      buttons: [
-        {
-          text: "Cancel"
-        },
-        {
-          text: "Add",
-          handler: data => {
-            this.addSynonym(data.synonym);
-          }
-        }
-      ]
-    });
-    showAddSynonymAlert.present();
-  }
-
-  private showAddAcronymAlert() {
-    let showAddAcronymAlert = this.alertCtrl.create({
-      title: "Add acronym",
-      message: "Enter a acronym to add it",
-      inputs: [
-        {
-          name: "acronym",
-          placeholder: "Acronym"
-        }
-      ],
-      buttons: [
-        {
-          text: "Cancel"
-        },
-        {
-          text: "Add",
-          handler: data => {
-            this.addAcronym(data.acronym);
-          }
-        }
-      ]
-    });
-    showAddAcronymAlert.present();
-  }
-
 }

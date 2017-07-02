@@ -24,13 +24,10 @@ import {UserLanguageFilterConfigDataObject} from "./dataobjects/user-language-fi
 import {UserDataObject} from "./dataobjects/user.dataobject";
 import {SuperLoginClient} from "./super_login_client/super_login_client";
 import {SuperloginHttpRequester} from "./super_login_client/superlogin_http_requester";
-import {Network} from "@ionic-native/network";
 
 @Injectable()
 export class AppModelService extends SuperLoginClient implements LoginPageInterface, HomePageModelInterface, LanguagePopoverPageModelInterface, EntryListPageModelInterface, SingleEntryPageModelInterface, EditModalPageModelInterface, CommentModalModelInterface, LinkedObjectsModalModelInterface {
   ////////////////////////////////////////////Properties////////////////////////////////////////////
-
-  private platform: Platform;
 
   //////////////Databases////////////
   /** all the databases for the different languages <Key: Language, Value: PouchDB database object>  */
@@ -49,9 +46,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
 
   constructor(httpRequester: SuperloginHttpRequester, platform: Platform) {
-    super(httpRequester);
-
-    this.platform = platform;
+    super(httpRequester, platform);
 
     // load necessary PouchDB Plugins
     PouchDB.plugin(require("pouchdb-find"));
@@ -84,19 +79,11 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     return GlobalDepartmentConfigDataObject.getDepartmentById(this.globalDepartmentConfig, departmentId);
   }
 
-  public isOnline(): boolean {
-    if (this.platform.is("cordova")) {
-      return  (<any>navigator).connection.type != "none";
-    } else {
-      return true;
-    }
-  }
-
   //////////////////////////////////////////
   //      SuperLoginClient Methods        //
   //////////////////////////////////////////
 
-  public async initializeDatabases(user_databases: any): Promise<boolean> {
+  public async initializeDatabasesOnline(user_databases: any): Promise<boolean> {
     Logger.log(user_databases);
 
     // initialize settings databases
@@ -121,6 +108,38 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     return true;
   }
 
+
+  public async initializeDatabasesOffline(): Promise<boolean> {
+    // initialize settings databases
+    this.globalSettingsDatabase = await this.initializeDatabaseOffline("global-settings");
+    this.userSettingsDatabase = await this.initializeDatabaseOffline("settings");
+
+    // test if the settings databases could be loaded
+    if (this.globalSettingsDatabase == null || this.userSettingsDatabase == null) {
+      return false;
+    }
+
+    // load global app settings
+    await this.loadGlobalAppSettings();
+
+    // once the global app-settings have been loaded...
+    // initialize all the entry databases from the different languages
+    for (let language of this.globalLanguageConfig.languages) {
+      let languageDatabase = await this.initializeDatabaseOffline("language_" + language.languageId);
+
+      // test if the language database could be loaded
+      if (languageDatabase == null) {
+        return false;
+      }
+
+      // add database to list of language databases
+      this.entryDatabases.set(language.languageId, languageDatabase);
+    }
+
+    // register listener for closing all databases if the user closes the app
+    window.addEventListener("beforeunload", this.closeDatabases);
+    return true;
+  }
 
   public destroyDatabases() {
     // destroy all language databases so that there is now content stored
@@ -242,15 +261,17 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
 
     // create a new array of department specifics which does only include the department specifics which the user wants to see
     let newDepartmentSpecifics: Array<DepartmentEntrySpecificsDataObject> = [];
-    for (let departmentSpecifics of result.departmentSpecifics) {
-      // check if the department is currently selected by the user
-      if (UserDepartmentFilterConfigDataObject.isDepartmentSelected(selectedDepartments, departmentSpecifics.departmentId)) {
-        // if the department is selected by the user the department has to be added to the new array
-        newDepartmentSpecifics.push(departmentSpecifics);
+    if (result.departmentSpecifics != undefined) {
+      for (let departmentSpecifics of result.departmentSpecifics) {
+        // check if the department is currently selected by the user
+        if (UserDepartmentFilterConfigDataObject.isDepartmentSelected(selectedDepartments, departmentSpecifics.departmentId)) {
+          // if the department is selected by the user the department has to be added to the new array
+          newDepartmentSpecifics.push(departmentSpecifics);
+        }
       }
+      // update the result
+      result.departmentSpecifics = newDepartmentSpecifics;
     }
-    // update the result
-    result.departmentSpecifics = newDepartmentSpecifics;
 
     return result;
   };
@@ -377,7 +398,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
         retry: false
       }).on("error", function (error) {
         reject(error);
-      }).on('complete', function (info) {
+      }).on("complete", function (info) {
         // Once the "complete" event gets triggered the initial
         // sync between the remote and local database has been completed!
         // (Since the setup connection has been automatically closed it
@@ -397,6 +418,44 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
         resolve(database);
       });
     });
+  }
+
+  /**
+   * This function tries to create a local PouchDB from the local storage.
+   * This does only work if there has been a PouchDB database before with the same name as
+   * specified by the parameter and this database has not yet been destroyed.
+   *
+   * @param databaseName name of the database
+   * @return PouchDB database object or null if there is no PouchDB with the specified name in the local storage
+   */
+  private initializeDatabaseOffline(databaseName: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      // create an empty local database reference
+      let database: any = null;
+
+      // if the app runs in the context of an cordova application
+      // all databases should be created and stored using SQLite
+      // in order to have the data stored persistently
+      if (this.platform.is("cordova")) {
+        // create local PouchDB database object
+        database = new PouchDB(databaseName, {adapter: "cordova-sqlite", skip_setup: true});
+
+        // if the app runs in a browser as a web app the default method
+        // chosen by PouchDB should be used
+      } else {
+        // create local PouchDB database object
+        database = new PouchDB(databaseName, {skip_setup: true});
+      }
+
+      database.info().then(() => {
+        // the database could be loaded from the local storage
+        resolve(database);
+      }).catch((error) => {
+        // the database could NOT be loaded from the local storage
+        resolve(null);
+      });
+    });
+
   }
 
   /**
@@ -455,13 +514,13 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
 
     // register change listener to get informed as soon as the global application settings change
     this.globalSettingsDatabase.changes({
-      since: 'now',
+      since: "now",
       live: true,
       include_docs: false
-    }).on('change', function (change) {
+    }).on("change", function (change) {
       // load global app setting again
       this.loadGlobalAppSettings();
-    }).on('error', function (error) {
+    }).on("error", function (error) {
       throw error;
     });
 

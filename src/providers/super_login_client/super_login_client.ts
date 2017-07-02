@@ -8,6 +8,7 @@ import {SuperLoginClientDoneResponse} from "./super_login_client_done_reponse";
 import {SuperLoginClientError} from "./super_login_client_error";
 import {SuperLoginClientErrorResponse} from "./super_login_client_error_reponse";
 import {SuperloginHttpRequester} from "./superlogin_http_requester";
+import {Platform} from "ionic-angular";
 
 /**
  * This class is a service which implements TypeScript methods to communicate
@@ -45,11 +46,16 @@ export abstract class SuperLoginClient {
 
 ////////////////////////////////////////////Properties////////////////////////////////////////////
 
+  protected platform: Platform;
+
   /** provides functions to easily perform http requests */
   private httpRequestor: SuperloginHttpRequester;
 
   /** indicates if the user is currently authenticated */
   private authenticated: boolean;
+
+  /** indicates if the user works currently with offline data */
+  private offlineMode: boolean;
 
 ////////////////////////////////////////////Constructor////////////////////////////////////////////
 
@@ -58,9 +64,11 @@ export abstract class SuperLoginClient {
    *
    * @param httpRequestor
    */
-  constructor(httpRequestor: SuperloginHttpRequester) {
+  constructor(httpRequestor: SuperloginHttpRequester, platform: Platform) {
     this.httpRequestor = httpRequestor;
+    this.platform = platform;
     this.authenticated = false;
+    this.offlineMode = false;
 
     // if the application is not in production use than make the PouchDB object available
     // in order to be able to use the Chrome PouchDB plugin to inspect the local data
@@ -82,11 +90,35 @@ export abstract class SuperLoginClient {
 /////////////////////////////////////////////Methods///////////////////////////////////////////////
 
   /**
+   * This method checks if the user is currently online or offline.
+   *
+   * @return {boolean}
+   */
+  public isOnline(): boolean {
+    if (this.platform.is("cordova")) {
+      return  (<any>navigator).connection.type != "none";
+    } else {
+      return true;
+    }
+  }
+
+  /**
    * This function gets called by the SuperLoginClient when ever the user logs in successfully.
+   * (The user has to be online!)
    *
    * @param user_databases array of all user databases and the URL's to those
    */
-  abstract async initializeDatabases(user_databases: any): Promise<boolean>;
+  abstract async initializeDatabasesOnline(user_databases: any): Promise<boolean>;
+
+  /**
+   * This function gets called by the SuperLoginClient when the user is currently offline but he might have already loaded
+   * the needed data to the local storage because of an earlier login. This function tries to find the needed data
+   * in the local storage.
+   * (The user is offline!)
+   *
+   * @return true if the needed data could be loaded - false if the needed data could not be loaded
+   */
+  abstract async initializeDatabasesOffline(): Promise<boolean>;
 
   /**
    * This function gets called as soon as the users gets logged out in order to remove all the data
@@ -106,30 +138,56 @@ export abstract class SuperLoginClient {
         resolve(true);
       });
 
-      // if the user is not yet authenticated try to authenticate him by using the session/local storage data
+    // if the user is not yet authenticated...
     } else {
-      if (this.isSessionTokenStoredPersistent() != null) {
-        return Observable.create((observer) => {
-          this.loginWithSessionToken(this.getSessionToken(), this.isSessionTokenStoredPersistent(),
-            () => {
-              // end the observable and return the result
-              observer.next(true);
-              observer.complete();
-            },
-            (error: SuperLoginClientError) => {
-              // remove the invalid session token stored in the session/local storage
-              this.deleteSessionToken();
+      // ... check if the user is currently online
+      if (this.isOnline()) {
+        // try to authenticate him by using the session/local storage data
+        if (this.isSessionTokenStoredPersistent() != null) {
+          return Observable.create((observer) => {
+            this.loginWithSessionToken(this.getSessionToken(), this.isSessionTokenStoredPersistent(),
+              () => {
+                // end the observable and return the result
+                observer.next(true);
+                observer.complete();
+              },
+              (error: SuperLoginClientError) => {
+                // remove the invalid session token stored in the session/local storage
+                this.deleteSessionToken();
 
-              // end the observable and return the result
-              observer.next(false);
-              observer.complete();
-            }
-          );
-        }).toPromise();
+                // end the observable and return the result
+                observer.next(false);
+                observer.complete();
+              }
+            );
+          }).toPromise();
+        } else {
+          return new Promise((resolve, reject) => {
+            resolve(false);
+          });
+        }
+
+      // if the user is offline try to load data from the local storage
       } else {
-        return new Promise((resolve, reject) => {
-          resolve(false);
-        });
+        // if the user already works with the offline data the data has not to be loaded again
+        if (this.offlineMode) {
+          return new Promise((resolve, reject) => {
+            resolve(true);
+          });
+
+        // if the user does not yet work with the offline data it should be tried to load offline data
+        } else {
+          return new Promise((resolve, reject) => {
+            this.initializeDatabasesOffline().then((data)=>{
+              if (data) {
+                this.offlineMode = true;
+                resolve(true);
+              } else {
+                reject("No local data and no internet connection!");
+              }
+            });
+          });
+        }
       }
     }
   }
@@ -289,6 +347,7 @@ export abstract class SuperLoginClient {
   private finishAuthentication(sessionToken: string, stayAuthenticated: boolean, done: SuperLoginClientDoneResponse, error: SuperLoginClientErrorResponse) {
     // set authenticated to true
     this.authenticated = true;
+    this.offlineMode = false;
 
     // store the current session token
     this.saveSessionToken(stayAuthenticated, sessionToken);
@@ -312,7 +371,7 @@ export abstract class SuperLoginClient {
       // if the database names got loaded successfully
       (data: any) => {
         // give the database names to the database initializer
-        this.initializeDatabases(data).then((data) => {
+        this.initializeDatabasesOnline(data).then((data) => {
           done();
         }, (errorObject) => {
           error(errorObject);
@@ -384,6 +443,7 @@ export abstract class SuperLoginClient {
       (data: any) => {
         done();
         this.authenticated = false;
+        this.offlineMode = false;
       },
       (errorObject) => {
         let superLoginClientError: SuperLoginClientError = new SuperLoginClientError(errorObject);

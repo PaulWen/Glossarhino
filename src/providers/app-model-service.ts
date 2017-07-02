@@ -94,6 +94,9 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
       this.entryDatabases.set(language.languageId, languageDatabase);
     }
 
+    // register listener for closing all databases if the user closes the app
+    window.addEventListener("beforeunload", this.closeDatabases);
+
     return true;
   }
 
@@ -109,7 +112,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     // on the client anymore
     this.userSettingsDatabase.destroy();
 
-    Logger.log("All database closed and destroyed.");
+    Logger.log("All database destroyed.");
   }
 
   //////////////////////////////////////////
@@ -403,6 +406,24 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   //////////////////////////////////////////
   //            Other Methods             //
   //////////////////////////////////////////
+
+  /**
+   * This function can be called to close all databases.
+   * This function should be called if the user closes the app/browser permanently.
+   */
+  private closeDatabases() {
+    // close all language databases so that there is now content stored
+    // on the client anymore
+    this.entryDatabases.forEach((database: any) => {
+      database.close();
+    });
+
+    // close the user settings database so that there is now content stored
+    // on the client anymore
+    this.userSettingsDatabase.close();
+
+    Logger.log("All database closed.");
+  }
 
   /**
    * This method loads all the global app settings from the database and stores them locally in this class.

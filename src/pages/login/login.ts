@@ -35,7 +35,9 @@ export class LoginPage {
   }
 
   private async ionViewWillEnter() {
-    console.log("LoginPage check if loged in");
+    // Todo load page
+
+    console.log("LoginPage check if logged in");
     if (await this.model.isAuthenticated()) {
       // redirect to home page
       this.navCtrl.setRoot("HomePage").then((canEnterView) => {
@@ -49,7 +51,7 @@ export class LoginPage {
 
 
   private register(name: string, email: string, password: string, confirmPassword: string, rememberLogin: boolean) {
-    Logger.log("Register: " + email + "; " + password + "; " + confirmPassword + "; " + rememberLogin);
+    // Todo load page
 
     this.model.register(name, email, password, confirmPassword, () => {
       // successfully registred
@@ -86,7 +88,8 @@ export class LoginPage {
   }
 
   private login(email: string, password: string, rememberLogin: boolean) {
-    Logger.log("Login: " + email + "; " + password + "; " + rememberLogin);
+    // Todo load page
+
 
     this.model.loginWithCredentials(email, password, rememberLogin, () => {
       // successfully loged-in

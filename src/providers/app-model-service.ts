@@ -348,8 +348,6 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     // all databases should be created and stored using SQLlite
     // in order to have the data stored persistently
     if (this.plattform.is("cordova")) {
-      alert('SQLite plugin is installed?: ' + (!!(<any>window).sqlitePlugin));
-      Logger.debug("Create PouchDB using SQLlite.");
       // create PouchDB database objects
       let remoteDatabase: any = new PouchDB(url);
       let database: any = new PouchDB(databaseName, {adapter: 'cordova-sqlite'});
@@ -368,7 +366,6 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
 
     // if the app runs in a browser as a web app...
     } else {
-      Logger.debug("Create PouchDB using the default method.");
       // create PouchDB database objects using the default method
       let remoteDatabase: any = new PouchDB(url);
       let database: any = new PouchDB(databaseName);

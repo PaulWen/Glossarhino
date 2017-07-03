@@ -1,12 +1,12 @@
-import {Component} from "@angular/core";
-import {IonicPage, NavController, NavParams, ViewController} from "ionic-angular";
-import {Logger} from "../../app/logger";
-import {AppModelService} from "../../providers/app-model-service";
-import {CommentDataObject} from "../../providers/dataobjects/comment.dataobject";
-import {EntryDataObject} from "../../providers/dataobjects/entry.dataobject";
-import {UserLanguageFilterConfigDataObject} from "../../providers/dataobjects/user-language-filter-config.dataobject";
-import {UserDataObject} from "../../providers/dataobjects/user.dataobject";
-import {CommentModalModelInterface} from "./comment-modal.model-interface";
+import { Component } from "@angular/core";
+import { IonicPage, NavController, NavParams, ViewController } from "ionic-angular";
+import { Logger } from "../../app/logger";
+import { AppModelService } from "../../providers/app-model-service";
+import { CommentDataObject } from "../../providers/dataobjects/comment.dataobject";
+import { EntryDataObject } from "../../providers/dataobjects/entry.dataobject";
+import { UserLanguageFilterConfigDataObject } from "../../providers/dataobjects/user-language-filter-config.dataobject";
+import { UserDataObject } from "../../providers/dataobjects/user.dataobject";
+import { CommentModalModelInterface } from "./comment-modal.model-interface";
 
 @IonicPage()
 @Component({
@@ -97,6 +97,10 @@ export class CommentModalPage {
     this.appModelService.setEntryDataObject(this.entry, this.selectedLanguage.selectedLanguage).then((data) => {
 
     });
+  }
+
+  private sendMail(emailAddress: string) {
+    window.open("mailto:" + emailAddress, "_system");
   }
 
   //////////////////////////////////////////

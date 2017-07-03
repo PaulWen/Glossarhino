@@ -154,6 +154,9 @@ export class LinkedObjectsModalPage {
   }
 
   private addSynonym() {
+    if(this.synonyms == undefined) {
+      this.synonyms = [];
+    }
     this.synonyms.push(this.synonym);
     this.synonyms.sort();
 
@@ -168,6 +171,9 @@ export class LinkedObjectsModalPage {
   }
 
   private addAcronym() {
+    if (this.acronyms == undefined) {
+      this.acronyms = [];
+    }
     this.acronyms.push(this.acronym);
     this.acronyms.sort();
 

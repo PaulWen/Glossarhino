@@ -1,8 +1,11 @@
-import {Component} from "@angular/core";
-import {AlertController, IonicPage, NavController, NavParams, ViewController} from "ionic-angular";
-import {AppModelService} from "../../providers/app-model-service";
-import {GlobalDepartmentConfigDataObject} from "../../providers/dataobjects/global-department-config.dataobject";
-import {LinkedObjectsModalModelInterface} from "./linked-objects-modal.model-interface";
+import { Component } from "@angular/core";
+import { AlertController, IonicPage, NavController, NavParams, ViewController, ModalController, LoadingController } from "ionic-angular";
+import { AppModelService } from "../../providers/app-model-service";
+import { GlobalDepartmentConfigDataObject } from "../../providers/dataobjects/global-department-config.dataobject";
+import { LinkedObjectsModalModelInterface } from "./linked-objects-modal.model-interface";
+import { EntryDataObject } from "../../providers/dataobjects/entry.dataobject";
+import { UserLanguageFilterConfigDataObject } from "../../providers/dataobjects/user-language-filter-config.dataobject";
+import { Logger } from "../../app/logger";
 
 @IonicPage()
 @Component({
@@ -16,10 +19,12 @@ export class LinkedObjectsModalPage {
   private navParams: NavParams;
   private viewCtrl: ViewController;
   private alertCtrl: AlertController;
+  private modalCtrl: ModalController;
+  private loadingCtrl: LoadingController;
 
   // navParams
   private relatedDepartments: Array<string>;
-  private relatedEntries: Array<string>;
+  private relatedEntriesIds: Array<string>;
   private synonyms: Array<string>;
   private acronyms: Array<string>;
   private isEditMode: boolean;
@@ -29,21 +34,25 @@ export class LinkedObjectsModalPage {
 
   // data objects
   private globalDepartmentConfigDataObject: GlobalDepartmentConfigDataObject;
+  private selectedLanguageDataObject: UserLanguageFilterConfigDataObject;
+  private relatedEntries: Promise<Array<EntryDataObject>>;
 
   // temp input objects
   private synonym: string;
   private acronym: string;
 
-  constructor(navCtrl: NavController, navParams: NavParams, viewCtrl: ViewController, alertCtrl: AlertController, appModelService: AppModelService) {
+  constructor(navCtrl: NavController, navParams: NavParams, viewCtrl: ViewController, alertCtrl: AlertController, modalCtrl: ModalController, loadingCtrl: LoadingController, appModelService: AppModelService) {
     // instantiate ionic injected components
     this.navCtrl = navCtrl;
     this.navParams = navParams;
     this.viewCtrl = viewCtrl;
     this.alertCtrl = alertCtrl;
+    this.modalCtrl = modalCtrl;
+    this.loadingCtrl = loadingCtrl;
 
     // get navParams
     this.relatedDepartments = this.navParams.get("relatedDepartments");
-    this.relatedEntries = this.navParams.get("relatedEntries");
+    this.relatedEntriesIds = this.navParams.get("relatedEntries");
     this.synonyms = this.navParams.get("synonyms");
     this.acronyms = this.navParams.get("acronyms");
     this.isEditMode = this.navParams.get("isEditMode") ? this.navParams.get("isEditMode") : false;
@@ -60,10 +69,11 @@ export class LinkedObjectsModalPage {
 
   private ionViewDidLoad() {
     this.loadData();
+
   }
 
-  private ionViewCanEnter(): Promise<boolean> | boolean {
-    return this.appModelService.isAuthenticated();
+  private ionViewCanEnter(): Promise<boolean> {
+    return this.appModelService.isAuthenticated(this.loadingCtrl);
   }
 
   //////////////////////////////////////////
@@ -72,6 +82,34 @@ export class LinkedObjectsModalPage {
 
   private loadData() {
     this.globalDepartmentConfigDataObject = this.appModelService.getGlobalDepartmentConfigDataObject();
+
+    // get selected language
+    this.appModelService.getSelectedLanguage().then((data) => {
+      this.selectedLanguageDataObject = data;
+
+      // load relatedEntries
+      this.relatedEntries = this.loadEntries(this.relatedEntriesIds);
+    }, (error) => {
+      Logger.log("Loading selected language failed (Class: LinkedObjectsModalPage, Method: loadData()");
+      Logger.error(error);
+    });
+  }
+
+  private loadEntries(relatedEntriesIds: Array<string>) {
+
+    return new Promise((resolve, reject) => {
+      let relatedEntries = []; // instantiate array
+
+      relatedEntriesIds.forEach(entryId => {
+        // get entry and push to relatedEntries array  
+        this.appModelService.getEntryDataObjectToShow(entryId, this.selectedLanguageDataObject.selectedLanguage).then((data) => {
+          relatedEntries.push(data);
+        }, (error) => {
+          reject(error);
+        });
+      });
+      resolve(relatedEntries);
+    });
   }
 
   private addRelatedDepartment(newRelatedDepartmentId: string) {
@@ -93,15 +131,25 @@ export class LinkedObjectsModalPage {
   }
 
   private addRelatedEntry(newRelatedEntryDocumentId: string) {
-    this.relatedEntries.push(newRelatedEntryDocumentId);
-    this.relatedEntries.sort();
+    if(this.relatedEntriesIds == undefined) {
+      this.relatedEntriesIds = [];
+    }
+
+    this.relatedEntriesIds.push(newRelatedEntryDocumentId);
+    this.relatedEntriesIds.sort();
+
+    // reload page
+    this.loadData();
   }
 
   private removeRelatedEntry(relatedEntryToRemoveDocumentId: string) {
-    let index: number = this.relatedEntries.findIndex(relatedDepartmentDocumentId => relatedDepartmentDocumentId == relatedEntryToRemoveDocumentId);
+    let index: number = this.relatedEntriesIds.findIndex(relatedDepartmentDocumentId => relatedDepartmentDocumentId == relatedEntryToRemoveDocumentId);
     if (index > -1) {
-      this.relatedEntries.splice(index, 1);
+      this.relatedEntriesIds.splice(index, 1);
     }
+
+    // reload page
+    this.loadData();
   }
 
   private addSynonym() {
@@ -139,7 +187,7 @@ export class LinkedObjectsModalPage {
   private closeLinkedObjectsModal() {
     this.viewCtrl.dismiss({
       relatedDepartments: this.relatedDepartments,
-      relatedEntries: this.relatedEntries,
+      relatedEntries: this.relatedEntriesIds,
       synonyms: this.synonyms,
       acronyms: this.acronyms
     });
@@ -150,17 +198,13 @@ export class LinkedObjectsModalPage {
     relatedDepartmentCheckboxAlert.setTitle("Select related departments");
 
     this.globalDepartmentConfigDataObject.departments.forEach(department => {
-
       if (this.relatedDepartments.find(departmentId => departmentId == department.departmentId) == undefined) {
-
         relatedDepartmentCheckboxAlert.addInput({
           type: "radio",
           label: department.departmentName,
           value: department.departmentId.toString()
         });
-
       }
-
     });
 
     relatedDepartmentCheckboxAlert.addButton("Cancel");
@@ -171,5 +215,21 @@ export class LinkedObjectsModalPage {
       }
     });
     relatedDepartmentCheckboxAlert.present();
+  }
+
+  private openEntryListModal() {
+    let entryListModal = this.modalCtrl.create("EntryListPage", {
+      seachbarFocus: false,
+      pushToEdit: true
+    });
+    entryListModal.present().then((canEnterView) => {
+      if (!canEnterView) {
+        // in the case that the view can not be entered redirect the user to the login page
+        this.navCtrl.setRoot("LoginPage");
+      }
+    });
+    entryListModal.onDidDismiss((data) => {
+      this.addRelatedEntry(data.entryDocumentId);
+    })
   }
 }

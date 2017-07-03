@@ -1,5 +1,6 @@
 import {SuperLoginClientDoneResponse} from "../../providers/super_login_client/super_login_client_done_reponse";
 import {SuperLoginClientErrorResponse} from "../../providers/super_login_client/super_login_client_error_reponse";
+import { LoadingController } from "ionic-angular";
 /**
  * Interface to define what the App-Model needs implemented in order to work
  */
@@ -10,7 +11,7 @@ export interface LoginPageInterface {
    *
    * @returns true or false depending on if the user is already authenticated
    */
-  isAuthenticated(): Promise<boolean> | boolean;
+  isAuthenticated(loadingCtrl: LoadingController): Promise<boolean>;
 
   /**
    * The function uses superlogin-client to login the user withe the given credentials.
@@ -21,7 +22,7 @@ export interface LoginPageInterface {
    * @param done callback function once the request was successful
    * @param error callback function in case an error occurred
    */
-  loginWithCredentials(email: string, password: string, stayAuthenticated: boolean, done: SuperLoginClientDoneResponse, error: SuperLoginClientErrorResponse): void;
+  loginWithCredentials(email: string, password: string, stayAuthenticated: boolean, done: SuperLoginClientDoneResponse, error: SuperLoginClientErrorResponse, loadingCtrl: LoadingController): void;
 
   /**
    * The function uses superlogin-client to register the user with the given information. The user will not

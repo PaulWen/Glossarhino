@@ -24,3 +24,14 @@
     height: 80%;
   }
 }
+
+// set button hover to color
+.bar-button-default-md:hover:not(.disable-hover), .bar-button-clear-md-default:hover:not(.disable-hover), .bar-button-md-default:hover:not(.disable-hover) {
+    color: color($colors, primary, base);
+}
+
+// set toolbar background color
+.toolbar-background-md {
+    border-color: color($colors, dark, base);
+    background: color($colors, light, base);
+}

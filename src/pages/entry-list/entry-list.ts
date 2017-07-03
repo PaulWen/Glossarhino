@@ -1,17 +1,18 @@
-import {Component, ViewChild} from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import {
   IonicPage,
   NavController,
   NavParams,
   PopoverController,
   Searchbar,
-  ViewController
+  ViewController,
+  LoadingController
 } from "ionic-angular";
-import {Logger} from "../../app/logger";
-import {AppModelService} from "../../providers/app-model-service";
-import {EntryListPageEntryDataObject} from "../../providers/dataobjects/entrylistpage.entry.dataobject";
-import {UserLanguageFilterConfigDataObject} from "../../providers/dataobjects/user-language-filter-config.dataobject";
-import {EntryListPageModelInterface} from "./entry-list.model-interface";
+import { Logger } from "../../app/logger";
+import { AppModelService } from "../../providers/app-model-service";
+import { EntryListPageEntryDataObject } from "../../providers/dataobjects/entrylistpage.entry.dataobject";
+import { UserLanguageFilterConfigDataObject } from "../../providers/dataobjects/user-language-filter-config.dataobject";
+import { EntryListPageModelInterface } from "./entry-list.model-interface";
 
 @IonicPage({
   segment: "entrylist/:departmentId",
@@ -28,10 +29,12 @@ export class EntryListPage {
   private navParams: NavParams;
   private popoverCtrl: PopoverController;
   private viewCtrl: ViewController;
+  private loadingCtrl: LoadingController;
 
   // navParams
   private departmentId: string;
   private searchbarFocus: boolean;
+  private pushToEdit: boolean;
 
   // model object
   private appModelService: EntryListPageModelInterface;
@@ -46,17 +49,19 @@ export class EntryListPage {
   private searchText: string;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
-  constructor(navCtrl: NavController, navParams: NavParams, popoverCtrl: PopoverController, viewCtrl: ViewController, appModelService: AppModelService) {
+  constructor(navCtrl: NavController, navParams: NavParams, popoverCtrl: PopoverController, viewCtrl: ViewController, loadingCtrl: LoadingController, appModelService: AppModelService) {
 
     // instantiate ionic injected components
     this.navCtrl = navCtrl;
     this.navParams = navParams;
     this.popoverCtrl = popoverCtrl;
     this.viewCtrl = viewCtrl;
+    this.loadingCtrl = loadingCtrl;
 
     // get navParams
     this.departmentId = this.navParams.get("departmentId");
     this.searchbarFocus = this.navParams.get("searchbarFocus");
+    this.pushToEdit = this.navParams.get("pushToEdit");
 
     // instantiate model
     this.appModelService = appModelService;
@@ -72,8 +77,8 @@ export class EntryListPage {
   //      Ionic Lifecycle Functions       //
   //////////////////////////////////////////
 
-  private ionViewCanEnter(): Promise<boolean> | boolean {
-    return this.appModelService.isAuthenticated();
+  private ionViewCanEnter(): Promise<boolean> {
+    return this.appModelService.isAuthenticated(this.loadingCtrl);
   }
 
   private ionViewWillEnter() {
@@ -137,6 +142,14 @@ export class EntryListPage {
 
   // Navigation method for single entry
   private pushEntry(entryDocumentId: string) {
+    if (!this.pushToEdit) {
+      this.pushSingleEntry(entryDocumentId);
+    } else {
+      this.closeEntryListModal(entryDocumentId);
+    }
+  }
+
+  private pushSingleEntry(entryDocumentId: string) {
     this.navCtrl.push("SingleEntryPage", {
       entryDocumentId: entryDocumentId
     }).then((canEnterView) => {
@@ -144,6 +157,12 @@ export class EntryListPage {
         // in the case that the view can not be entered redirect the user to the login page
         this.navCtrl.setRoot("LoginPage");
       }
+    });
+  }
+
+  private closeEntryListModal(entryDocumentId: string) {
+    this.viewCtrl.dismiss({
+      entryDocumentId: entryDocumentId
     });
   }
 
@@ -162,7 +181,4 @@ export class EntryListPage {
     });
   }
 
-  private closeEntryListModal() {
-    this.viewCtrl.dismiss();
-  }
 }

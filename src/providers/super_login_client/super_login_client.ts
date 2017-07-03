@@ -1,14 +1,14 @@
-import {Injectable} from "@angular/core";
+import { Injectable } from "@angular/core";
 import PouchDB from "pouchdb";
-import {Observable} from "rxjs/Rx";
-import {AppConfig} from "../../app/app-config";
-import {Logger} from "../../app/logger";
-import {UserDataObject} from "../dataobjects/user.dataobject";
-import {SuperLoginClientDoneResponse} from "./super_login_client_done_reponse";
-import {SuperLoginClientError} from "./super_login_client_error";
-import {SuperLoginClientErrorResponse} from "./super_login_client_error_reponse";
-import {SuperloginHttpRequester} from "./superlogin_http_requester";
-import {Platform} from "ionic-angular";
+import { Observable } from "rxjs/Rx";
+import { AppConfig } from "../../app/app-config";
+import { Logger } from "../../app/logger";
+import { UserDataObject } from "../dataobjects/user.dataobject";
+import { SuperLoginClientDoneResponse } from "./super_login_client_done_reponse";
+import { SuperLoginClientError } from "./super_login_client_error";
+import { SuperLoginClientErrorResponse } from "./super_login_client_error_reponse";
+import { SuperloginHttpRequester } from "./superlogin_http_requester";
+import { Platform, LoadingController } from "ionic-angular";
 
 /**
  * This class is a service which implements TypeScript methods to communicate
@@ -38,13 +38,13 @@ import {Platform} from "ionic-angular";
 @Injectable()
 export abstract class SuperLoginClient {
 
-////////////////////////////////////////////Constants/////////////////////////////////////////////
+  ////////////////////////////////////////////Constants/////////////////////////////////////////////
 
   private static get SESSION_TOKEN_STORAGE_ID(): string {
     return "session_token";
   };
 
-////////////////////////////////////////////Properties////////////////////////////////////////////
+  ////////////////////////////////////////////Properties////////////////////////////////////////////
 
   protected platform: Platform;
 
@@ -57,7 +57,7 @@ export abstract class SuperLoginClient {
   /** indicates if the user works currently with offline data */
   private offlineMode: boolean;
 
-////////////////////////////////////////////Constructor////////////////////////////////////////////
+  ////////////////////////////////////////////Constructor////////////////////////////////////////////
 
   /**
    * Constructor of the class SuperLoginClient.
@@ -74,20 +74,20 @@ export abstract class SuperLoginClient {
     // in order to be able to use the Chrome PouchDB plugin to inspect the local data
     if (AppConfig.DEVELOPMENT) {
       (<any>window).PouchDB = PouchDB;
-//      PouchDB.debug.enable("*");
+      //      PouchDB.debug.enable("*");
       PouchDB.debug.disable();
     } else {
       PouchDB.debug.disable();
     }
   }
 
-////////////////////////////////////////Getter and Setter//////////////////////////////////////////
+  ////////////////////////////////////////Getter and Setter//////////////////////////////////////////
 
 
-////////////////////////////////////////Inherited Methods//////////////////////////////////////////
+  ////////////////////////////////////////Inherited Methods//////////////////////////////////////////
 
 
-/////////////////////////////////////////////Methods///////////////////////////////////////////////
+  /////////////////////////////////////////////Methods///////////////////////////////////////////////
 
   /**
    * This method checks if the user is currently online or offline.
@@ -96,7 +96,7 @@ export abstract class SuperLoginClient {
    */
   public isOnline(): boolean {
     if (this.platform.is("cordova")) {
-      return  (<any>navigator).connection.type != "none";
+      return (<any>navigator).connection.type != "none";
     } else {
       return true;
     }
@@ -108,7 +108,7 @@ export abstract class SuperLoginClient {
    *
    * @param user_databases array of all user databases and the URL's to those
    */
-  abstract async initializeDatabasesOnline(user_databases: any): Promise<boolean>;
+  abstract async initializeDatabasesOnline(user_databases: any, loadingCtrl: LoadingController): Promise<boolean>;
 
   /**
    * This function gets called by the SuperLoginClient when the user is currently offline but he might have already loaded
@@ -118,7 +118,7 @@ export abstract class SuperLoginClient {
    *
    * @return true if the needed data could be loaded - false if the needed data could not be loaded
    */
-  abstract async initializeDatabasesOffline(): Promise<boolean>;
+  abstract async initializeDatabasesOffline(loadingCtrl: LoadingController): Promise<boolean>;
 
   /**
    * This function gets called as soon as the users gets logged out in order to remove all the data
@@ -131,14 +131,16 @@ export abstract class SuperLoginClient {
    *
    * @returns true or false depending on if the user is already authenticated
    */
-  public isAuthenticated(): Promise<boolean> {
+  public isAuthenticated(loadingCtrl: LoadingController): Promise<boolean> {
+
     // check if the user is already authenticated
     if (this.authenticated) {
       return new Promise((resolve, reject) => {
         resolve(true);
+        return;
       });
 
-    // if the user is not yet authenticated...
+      // if the user is not yet authenticated...
     } else {
       // ... check if the user is currently online
       if (this.isOnline()) {
@@ -159,31 +161,36 @@ export abstract class SuperLoginClient {
                 observer.next(false);
                 observer.complete();
               }
-            );
+            , loadingCtrl);
           }).toPromise();
         } else {
           return new Promise((resolve, reject) => {
+
             resolve(false);
+            return;
           });
         }
 
-      // if the user is offline try to load data from the local storage
+        // if the user is offline try to load data from the local storage
       } else {
         // if the user already works with the offline data the data has not to be loaded again
         if (this.offlineMode) {
           return new Promise((resolve, reject) => {
             resolve(true);
+            return;
           });
 
-        // if the user does not yet work with the offline data it should be tried to load offline data
+          // if the user does not yet work with the offline data it should be tried to load offline data
         } else {
           return new Promise((resolve, reject) => {
-            this.initializeDatabasesOffline().then((data)=>{
+            this.initializeDatabasesOffline(loadingCtrl).then((data) => {
               if (data) {
                 this.offlineMode = true;
                 resolve(true);
+                return;
               } else {
                 reject("No local data and no internet connection!");
+                return;
               }
             });
           });
@@ -279,7 +286,7 @@ export abstract class SuperLoginClient {
    * @param done callback function once the request was successful
    * @param error callback function in case an error occurred
    */
-  public loginWithCredentials(email: string, password: string, stayAuthenticated: boolean, done: SuperLoginClientDoneResponse, error: SuperLoginClientErrorResponse) {
+  public loginWithCredentials(email: string, password: string, stayAuthenticated: boolean, done: SuperLoginClientDoneResponse, error: SuperLoginClientErrorResponse, loadingCtrl: LoadingController) {
     // log the user in
     this.httpRequestor.postJsonData(AppConfig.WEB_SERVER_DOMAIN + "/auth/login", null, {
       // since the username is not allowed to include Capital letters we have to make sure that it does not
@@ -288,7 +295,7 @@ export abstract class SuperLoginClient {
     }).subscribe(
       (data: any) => {
         // finish the authentication
-        this.finishAuthentication(data.token + ":" + data.password, stayAuthenticated, done, error);
+        this.finishAuthentication(data.token + ":" + data.password, stayAuthenticated, done, error, loadingCtrl);
         Logger.log("Authenticated.");
       },
       (errorObject) => {
@@ -302,7 +309,7 @@ export abstract class SuperLoginClient {
         error(superLoginClientError);
         Logger.log("Authentication failed.");
       }
-    );
+      );
   }
 
   /**
@@ -316,13 +323,13 @@ export abstract class SuperLoginClient {
    *
    * @returns {Observable<boolean>} returns true or false depending on if a valid session token could be loaded
    */
-  private loginWithSessionToken(sessionToken: string, stayAuthenticated: boolean, done: SuperLoginClientDoneResponse, error: SuperLoginClientErrorResponse) {
+  private loginWithSessionToken(sessionToken: string, stayAuthenticated: boolean, done: SuperLoginClientDoneResponse, error: SuperLoginClientErrorResponse, loadingCtrl: LoadingController) {
     // check if the given session token is valid
     this.httpRequestor.getJsonData(AppConfig.WEB_SERVER_DOMAIN + "/auth/session", sessionToken).subscribe(
       // if session token is still valid
       (data: any) => {
         // finish the authentication
-        this.finishAuthentication(sessionToken, stayAuthenticated, done, error);
+        this.finishAuthentication(sessionToken, stayAuthenticated, done, error, loadingCtrl);
         Logger.log("Authenticated.");
       },
 
@@ -344,7 +351,7 @@ export abstract class SuperLoginClient {
    * @param done callback function once the request was successful
    * @param error callback function in case an error occurred
    */
-  private finishAuthentication(sessionToken: string, stayAuthenticated: boolean, done: SuperLoginClientDoneResponse, error: SuperLoginClientErrorResponse) {
+  private finishAuthentication(sessionToken: string, stayAuthenticated: boolean, done: SuperLoginClientDoneResponse, error: SuperLoginClientErrorResponse, loadingCtrl: LoadingController) {
     // set authenticated to true
     this.authenticated = true;
     this.offlineMode = false;
@@ -356,7 +363,7 @@ export abstract class SuperLoginClient {
     this.extendSessionToken();
 
     // providing the app with the URLs to the user databases
-    this.initializeUserDatabases(done, error);
+    this.initializeUserDatabases(done, error, loadingCtrl);
   }
 
   /**
@@ -365,13 +372,13 @@ export abstract class SuperLoginClient {
    * @param done callback function once the request was successful
    * @param error callback function in case an error occurred
    */
-  private initializeUserDatabases(done: SuperLoginClientDoneResponse, error: SuperLoginClientErrorResponse): void {
+  private initializeUserDatabases(done: SuperLoginClientDoneResponse, error: SuperLoginClientErrorResponse, loadingCtrl: LoadingController): void {
     // load the database names
     this.httpRequestor.getJsonData(AppConfig.WEB_SERVER_DOMAIN + "/auth/user-db/", this.getSessionToken()).subscribe(
       // if the database names got loaded successfully
       (data: any) => {
         // give the database names to the database initializer
-        this.initializeDatabasesOnline(data).then((data) => {
+        this.initializeDatabasesOnline(data, loadingCtrl).then((data) => {
           done();
         }, (errorObject) => {
           error(errorObject);
@@ -425,7 +432,7 @@ export abstract class SuperLoginClient {
 
         Logger.log("Could not create new account.");
       }
-    );
+      );
   }
 
   /**

@@ -4,7 +4,8 @@ import {
   AlertController,
   IonicPage,
   NavController,
-  PopoverController
+  PopoverController,
+  LoadingController
 } from "ionic-angular";
 import {Alerts} from "../../app/alerts";
 import {Logger} from "../../app/logger";
@@ -27,6 +28,7 @@ export class HomePage {
   private popoverCtrl: PopoverController;
   private actionSheetCtrl: ActionSheetController;
   private alertCtrl: AlertController;
+  private loadingCtrl: LoadingController;
 
   // model service object
   private appModelService: HomePageModelInterface;
@@ -41,12 +43,13 @@ export class HomePage {
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
 
-  constructor(navCtrl: NavController, popoverCtrl: PopoverController, actionSheetCtrl: ActionSheetController, alertCtrl: AlertController, appModelService: AppModelService) {
+  constructor(navCtrl: NavController, popoverCtrl: PopoverController, actionSheetCtrl: ActionSheetController, alertCtrl: AlertController, loadingCtrl: LoadingController, appModelService: AppModelService) {
     // instantiate ionic injected components
     this.navCtrl = navCtrl;
     this.popoverCtrl = popoverCtrl;
     this.actionSheetCtrl = actionSheetCtrl;
     this.alertCtrl = alertCtrl;
+    this.loadingCtrl = loadingCtrl;
 
     // instantiate model service object
     this.appModelService = appModelService;
@@ -65,7 +68,7 @@ export class HomePage {
 
   private ionViewCanEnter(): Promise<boolean> {
     // check authentication
-    return this.appModelService.isAuthenticated();
+    return this.appModelService.isAuthenticated(this.loadingCtrl);
   }
 
   //////////////////////////////////////////

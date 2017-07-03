@@ -1,12 +1,12 @@
-import {Component} from "@angular/core";
-import {IonicPage, NavController, NavParams, ViewController} from "ionic-angular";
-import {Logger} from "../../app/logger";
-import {AppModelService} from "../../providers/app-model-service";
-import {CommentDataObject} from "../../providers/dataobjects/comment.dataobject";
-import {EntryDataObject} from "../../providers/dataobjects/entry.dataobject";
-import {UserLanguageFilterConfigDataObject} from "../../providers/dataobjects/user-language-filter-config.dataobject";
-import {UserDataObject} from "../../providers/dataobjects/user.dataobject";
-import {CommentModalModelInterface} from "./comment-modal.model-interface";
+import { Component } from "@angular/core";
+import { IonicPage, NavController, NavParams, ViewController, LoadingController } from "ionic-angular";
+import { Logger } from "../../app/logger";
+import { AppModelService } from "../../providers/app-model-service";
+import { CommentDataObject } from "../../providers/dataobjects/comment.dataobject";
+import { EntryDataObject } from "../../providers/dataobjects/entry.dataobject";
+import { UserLanguageFilterConfigDataObject } from "../../providers/dataobjects/user-language-filter-config.dataobject";
+import { UserDataObject } from "../../providers/dataobjects/user.dataobject";
+import { CommentModalModelInterface } from "./comment-modal.model-interface";
 
 @IonicPage()
 @Component({
@@ -19,6 +19,7 @@ export class CommentModalPage {
   private navCtrl: NavController;
   private navParams: NavParams;
   private viewCtrl: ViewController;
+  private loadingCtrl: LoadingController;
 
   // navParams
   private entry: EntryDataObject;
@@ -32,11 +33,12 @@ export class CommentModalPage {
   private selectedLanguage: UserLanguageFilterConfigDataObject;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
-  constructor(navCtrl: NavController, navParams: NavParams, viewCtrl: ViewController, appModel: AppModelService) {
+  constructor(navCtrl: NavController, navParams: NavParams, viewCtrl: ViewController, loadingCtrl: LoadingController, appModel: AppModelService) {
     // instantiate ionic injected components
     this.navCtrl = navCtrl;
     this.navParams = navParams;
     this.viewCtrl = viewCtrl;
+    this.loadingCtrl = loadingCtrl;
 
     // get navParams
     this.entry = this.navParams.get("entry");
@@ -51,8 +53,8 @@ export class CommentModalPage {
   //      Ionic Lifecycle Functions       //
   //////////////////////////////////////////
 
-  private ionViewCanEnter(): Promise<boolean> | boolean {
-    return this.appModelService.isAuthenticated();
+  private ionViewCanEnter(): Promise<boolean> {
+    return this.appModelService.isAuthenticated(this.loadingCtrl);
   }
 
   private ionViewWillEnter() {
@@ -97,6 +99,10 @@ export class CommentModalPage {
     this.appModelService.setEntryDataObject(this.entry, this.selectedLanguage.selectedLanguage).then((data) => {
 
     });
+  }
+
+  private sendMail(emailAddress: string) {
+    window.open("mailto:" + emailAddress, "_system");
   }
 
   //////////////////////////////////////////

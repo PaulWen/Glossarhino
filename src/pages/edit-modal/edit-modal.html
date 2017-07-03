@@ -37,7 +37,7 @@
             Title
           </ion-card-header>
           <ion-card-content>
-            <ion-input type="text" [ngModel]="entry?.name"
+            <ion-input type="text" [ngModel]="entry?.name" placeholder="Title"
                        (ngModelChange)="entry.name = $event"></ion-input>
           </ion-card-content>
         </ion-card>
@@ -49,7 +49,7 @@
             Description
           </ion-card-header>
           <ion-card-content>
-            <ion-textarea type="text" placeholder="Description" rows="15"
+            <ion-textarea fz-elastic type="text" placeholder="Description"
                           [ngModel]="entry?.description"
                           (ngModelChange)="entry.description = $event"></ion-textarea>
           </ion-card-content>
@@ -79,7 +79,7 @@
             <ion-col col-xl-4 col-12>
               <ion-item>
                 <ion-label floating>Name</ion-label>
-                <ion-input type="text" [ngModel]="entry?.contact"
+                <ion-input type="text" [ngModel]="entry?.contact" placeholder="Name"
                            (ngModelChange)="entry.contact = $event"></ion-input>
               </ion-item>
             </ion-col>
@@ -87,7 +87,7 @@
             <ion-col col-xl-4 col-12>
               <ion-item>
                 <ion-label floating>E-Mail</ion-label>
-                <ion-input type="text" [ngModel]="entry?.email"
+                <ion-input type="text" [ngModel]="entry?.email" placeholder="E-Mail"
                            (ngModelChange)="entry.email = $event"></ion-input>
               </ion-item>
             </ion-col>
@@ -108,7 +108,7 @@
             }}
           </ion-card-header>
           <ion-card-content>
-            <ion-textarea type="text" placeholder="Description" rows="10"
+            <ion-textarea fz-elastic type="text" placeholder="Description"
                           [ngModel]="entry.departmentSpecifics[i].description"
                           (ngModelChange)="entry.departmentSpecifics[i].description = $event"></ion-textarea>
           </ion-card-content>

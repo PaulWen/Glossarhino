@@ -21,8 +21,8 @@
 
     <div class="comment-metadata">
 
-      <div> {{ comment.contact }}</div>
-      <div> {{ comment.timeStamp | date: shortDate }}</div>
+      <button ion-button clear small (click)="sendMail(comment.email)"> {{ comment.contact }} </button>
+      <div> {{ comment.timeStamp | date: short }}</div>
 
     </div>
 

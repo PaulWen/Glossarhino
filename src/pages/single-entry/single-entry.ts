@@ -1,5 +1,5 @@
-import {Component} from "@angular/core";
-import {Promise} from "es6-promise";
+import { Component } from "@angular/core";
+import { Promise } from "es6-promise";
 import {
   ActionSheetController,
   AlertController,
@@ -7,15 +7,16 @@ import {
   ModalController,
   NavController,
   NavParams,
-  PopoverController
+  PopoverController,
+  LoadingController
 } from "ionic-angular";
-import {Alerts} from "../../app/alerts";
-import {Logger} from "../../app/logger";
-import {AppModelService} from "../../providers/app-model-service";
-import {AttachmentDataObject} from "../../providers/dataobjects/attachment.dataobject";
-import {EntryDataObject} from "../../providers/dataobjects/entry.dataobject";
-import {UserLanguageFilterConfigDataObject} from "../../providers/dataobjects/user-language-filter-config.dataobject";
-import {SingleEntryPageModelInterface} from "./single-entry.model-interface";
+import { Alerts } from "../../app/alerts";
+import { Logger } from "../../app/logger";
+import { AppModelService } from "../../providers/app-model-service";
+import { AttachmentDataObject } from "../../providers/dataobjects/attachment.dataobject";
+import { EntryDataObject } from "../../providers/dataobjects/entry.dataobject";
+import { UserLanguageFilterConfigDataObject } from "../../providers/dataobjects/user-language-filter-config.dataobject";
+import { SingleEntryPageModelInterface } from "./single-entry.model-interface";
 
 @IonicPage({
   segment: "singleentry/:entryDocumentId",
@@ -34,6 +35,7 @@ export class SingleEntryPage {
   private actionSheetCtrl: ActionSheetController;
   private popoverCtrl: PopoverController;
   private alertCtrl: AlertController;
+  private loadingCtrl: LoadingController;
 
   // navParams
   private entryDocumentId: string;
@@ -49,7 +51,7 @@ export class SingleEntryPage {
   private showDepartmentFilterAlertAppModel;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
-  constructor(navCtrl: NavController, navParams: NavParams, modalCtrl: ModalController, actionSheetCtrl: ActionSheetController, popoverCtrl: PopoverController, alertCtrl: AlertController, appModelService: AppModelService) {
+  constructor(navCtrl: NavController, navParams: NavParams, modalCtrl: ModalController, actionSheetCtrl: ActionSheetController, popoverCtrl: PopoverController, alertCtrl: AlertController, loadingCtrl: LoadingController, appModelService: AppModelService) {
 
     // instantiate ionic injected components
     this.navCtrl = navCtrl;
@@ -58,6 +60,7 @@ export class SingleEntryPage {
     this.actionSheetCtrl = actionSheetCtrl;
     this.popoverCtrl = popoverCtrl;
     this.alertCtrl = alertCtrl;
+    this.loadingCtrl = loadingCtrl;
 
     // get navParams
     this.entryDocumentId = this.navParams.get("entryDocumentId");
@@ -74,8 +77,8 @@ export class SingleEntryPage {
   //      Ionic Lifecycle Functions       //
   //////////////////////////////////////////
 
-  private ionViewCanEnter(): Promise<boolean> | boolean {
-    return this.appModelService.isAuthenticated();
+  private ionViewCanEnter(): Promise<boolean> {
+    return this.appModelService.isAuthenticated(this.loadingCtrl);
   }
 
   private ionViewWillEnter() {
@@ -96,8 +99,14 @@ export class SingleEntryPage {
       this.appModelService.getEntryDataObjectToShow(this.entryDocumentId, this.selectedLanguage.selectedLanguage).then((data) => {
         this.entry = data;
       }, (error) => {
-        Logger.log("Loading Entry Data Object failed (Class: SingleEntryPage, Method: loadData()");
-        Logger.error(error);
+        switch (error.status) {
+          case 404:
+            this.showNoEntryAlert();
+
+          default:
+            Logger.log("Loading Entry Data Object failed (Class: SingleEntryPage, Method: loadData()");
+            Logger.error(error);
+        }
       });
 
       // reset refresher if handed over in method
@@ -250,6 +259,18 @@ export class SingleEntryPage {
   private openAttachment(url: string) {
     //window.location.href = url.href;
     window.open(url, "_system");
+  }
+
+  private showNoEntryAlert() {
+    let alert = this.alertCtrl.create({
+      title: "Entry not available!",
+      subTitle: "Sorry, the entry is not yet available in this language.",
+      buttons: ['OK']
+    });
+    alert.present();
+    alert.onDidDismiss(() => {
+      this.navCtrl.setRoot("HomePage");
+    })
   }
 
 }

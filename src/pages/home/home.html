@@ -20,7 +20,7 @@
 
 </ion-header>
 
-<ion-content #content class="card-background-page">
+<ion-content class="card-background-page">
 
   <ion-refresher (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
@@ -29,18 +29,18 @@
   <!-- ion-grid for responsive design -->
   <ion-grid>
     <ion-row align-items-center justify-content-center>
+
       <!-- col for "All" departments -->
       <ion-col col-xl-2 col-lg-3 col-md-6 col-sm-6 col-xs-6 col-6>
         <ion-card (click)="pushEntryListPage()" tappable>
           <img src="assets/img/homePage/all.png"/>
           <div class="card-title">All</div>
-          <div class="card-subtitle"> {{ numberOfAllEntries }} Entries</div>
+          <div class="card-subtitle"> {{ countOfAllEntries }} Entries</div>
         </ion-card>
       </ion-col>
 
       <!-- col for the different departments -->
-      <ng-container *ngFor="let department of selectedDepartments">
-        <ion-col col-xl-2 col-lg-3 col-md-6 col-sm-6 col-xs-6 col-6>
+        <ion-col col-xl-2 col-lg-3 col-md-6 col-sm-6 col-xs-6 col-6 *ngFor="let department of selectedDepartments">
           <!-- Cards show one category each, currently using dummy implementation -->
           <ion-card (click)="pushEntryListPage(department.details.departmentId)" tappable>
             <img src="assets/img/homePage/{{department.details.departmentId}}.png"/>
@@ -49,7 +49,7 @@
             </div>
           </ion-card>
         </ion-col>
-      </ng-container>
+
     </ion-row>
   </ion-grid>
 

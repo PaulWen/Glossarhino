@@ -32,14 +32,12 @@ export class HomePage {
 
   // model service object
   private appModelService: HomePageModelInterface;
+  private showDepartmentFilterAlertAppModelService;
 
   // dataobjects
   private selectedDepartments: Array<HomePageDepartmentDataobject>;
   private selectedLanguageDataObject: UserLanguageFilterConfigDataObject;
-  private numberOfAllEntries: number;
-
-  // selectFilterAlert objects
-  private showDepartmentFilterAlertAppModel;
+  private countOfAllEntries: number;  
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
 
@@ -53,7 +51,7 @@ export class HomePage {
 
     // instantiate model service object
     this.appModelService = appModelService;
-    this.showDepartmentFilterAlertAppModel = appModelService;
+    this.showDepartmentFilterAlertAppModelService = appModelService;
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
@@ -75,14 +73,19 @@ export class HomePage {
   //            Page Functions            //
   //////////////////////////////////////////
 
+  /**
+   * Function loads data for the page, at first the selectedLanguageDataObject, because it is needed for other data to be loaded. After the selectedLanguageDataObject is loaded, the countOfAllEntries
+   * @param refresher optional parameter, hand over, if reload triggered from "pull-to-refresh"
+   */
   private loadData(refresher?) {
     // get selected language
     this.appModelService.getSelectedLanguage().then((data) => {
       this.selectedLanguageDataObject = data;
 
       // load other data as soon as language loaded
+      // load countOfAllEntries for first card
       this.appModelService.getCountOfAllEntries(this.selectedLanguageDataObject.selectedLanguage).then((data) => {
-        this.numberOfAllEntries = data;
+        this.countOfAllEntries = data;
       }, (error) => {
         Logger.log("Loading all listings failed (Class: HomePage, Method: loadData()");
         Logger.error(error);
@@ -107,6 +110,10 @@ export class HomePage {
     });
   }
 
+  /**
+   * Function refreshes the data from the Model and is triggered by "pull-down" of content
+   * @param refresher Refresher is handed over, to reset it once the refresh is complete.
+   */
   private doRefresh(refresher) {
     this.loadData(refresher);
   }
@@ -115,6 +122,9 @@ export class HomePage {
   //         Navigation Functions         //
   //////////////////////////////////////////
 
+  /**
+   * Presents an ActionSheet to consolidate more possible actions
+   */
   private presentActionSheet() {
     let actionSheet = this.actionSheetCtrl.create({
       title: "More Actions",
@@ -127,7 +137,7 @@ export class HomePage {
         }, {
           text: "Filter",
           handler: () => {
-            this.showDepartmentFilterAlert(this.alertCtrl, this.showDepartmentFilterAlertAppModel);
+            this.showDepartmentFilterAlert(this.alertCtrl, this.showDepartmentFilterAlertAppModelService);
           }
         }, {
           text: "Logout",
@@ -159,6 +169,9 @@ export class HomePage {
     });
   }
 
+  /**
+   * Function to go to search view of EntryListPage
+   */
   private pushSearch() {
     this.navCtrl.push("EntryListPage", {
       searchbarFocus: true
@@ -170,6 +183,9 @@ export class HomePage {
     });
   }
 
+  /**
+   * Function to go to new entry view of EditModalpage
+   */
   private pushNewEntry() {
     this.navCtrl.push("EditModalPage", {
       addNewEntry: true
@@ -181,6 +197,11 @@ export class HomePage {
     });
   }
 
+  /**
+   * Shows a filter alert for departments
+   * @param alertCtrl Hand over AlertController of the page to show an alert on that page
+   * @param appModelService Hand over AppModelService to be able to load current preferences and all available departments
+   */
   private showDepartmentFilterAlert(alertCtrl: AlertController, appModelService: AppModelService) {
     Alerts.showDepartmentFilterAlert(alertCtrl, appModelService).then(() => {
       this.loadData();
@@ -199,6 +220,10 @@ export class HomePage {
     });
   }
 
+  /**
+   * Open list of entries for the selected department…
+   * @param departmentId Optional, hand over undefined, if user selected "all"
+   */
   private pushEntryListPage(departmentId?: string) {
     this.navCtrl.push("EntryListPage", {
       departmentId: departmentId
@@ -209,4 +234,5 @@ export class HomePage {
       }
     });
   }
+  
 }

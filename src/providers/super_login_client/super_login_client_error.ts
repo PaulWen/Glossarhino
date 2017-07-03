@@ -78,7 +78,10 @@ export class SuperLoginClientError {
    * @returns {boolean}
    */
   public checkForError(error: string): boolean {
-    return (this.errorMessage
-           ).indexOf(error) > -1;
+    if (this.errorMessage.indexOf != undefined) {
+      return (this.errorMessage).indexOf(error) > -1;
+    }
+
+    return false;
   }
 }

@@ -39,6 +39,7 @@ export class LanguagePopoverPage {
   //////////////////////////////////////////
   //      Ionic Lifecycle Functions       //
   //////////////////////////////////////////
+  
   private ionViewDidLoad() {
     // load data
     this.loadData();
@@ -48,9 +49,10 @@ export class LanguagePopoverPage {
     return this.languagePopoverPageModelInterface.isAuthenticated();
   }
 
-  /**
-   * PAGE METHODS
-   */
+  //////////////////////////////////////////
+  //           Page Functions             //
+  //////////////////////////////////////////
+
   private loadData() {
     // get current language
     this.languagePopoverPageModelInterface.getSelectedLanguage().then((data) => {
@@ -64,9 +66,10 @@ export class LanguagePopoverPage {
     });
   };
 
-  /**
-   * NAVIGATION METHODS
-   */
+  //////////////////////////////////////////
+  //         Navigation Functions         //
+  //////////////////////////////////////////
+
   private dismissPopover() {
     // convert input into number
     this.selectedLanguageDataObject.selectedLanguage = this.selectedLanguageDataObject.selectedLanguage;

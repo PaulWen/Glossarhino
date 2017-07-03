@@ -1,5 +1,5 @@
-import {Component} from "@angular/core";
-import {Promise} from "es6-promise";
+import { Component } from "@angular/core";
+import { Promise } from "es6-promise";
 import {
   ActionSheetController,
   AlertController,
@@ -9,13 +9,13 @@ import {
   NavParams,
   PopoverController
 } from "ionic-angular";
-import {Alerts} from "../../app/alerts";
-import {Logger} from "../../app/logger";
-import {AppModelService} from "../../providers/app-model-service";
-import {AttachmentDataObject} from "../../providers/dataobjects/attachment.dataobject";
-import {EntryDataObject} from "../../providers/dataobjects/entry.dataobject";
-import {UserLanguageFilterConfigDataObject} from "../../providers/dataobjects/user-language-filter-config.dataobject";
-import {SingleEntryPageModelInterface} from "./single-entry.model-interface";
+import { Alerts } from "../../app/alerts";
+import { Logger } from "../../app/logger";
+import { AppModelService } from "../../providers/app-model-service";
+import { AttachmentDataObject } from "../../providers/dataobjects/attachment.dataobject";
+import { EntryDataObject } from "../../providers/dataobjects/entry.dataobject";
+import { UserLanguageFilterConfigDataObject } from "../../providers/dataobjects/user-language-filter-config.dataobject";
+import { SingleEntryPageModelInterface } from "./single-entry.model-interface";
 
 @IonicPage({
   segment: "singleentry/:entryDocumentId",
@@ -96,8 +96,14 @@ export class SingleEntryPage {
       this.appModelService.getEntryDataObjectToShow(this.entryDocumentId, this.selectedLanguage.selectedLanguage).then((data) => {
         this.entry = data;
       }, (error) => {
-        Logger.log("Loading Entry Data Object failed (Class: SingleEntryPage, Method: loadData()");
-        Logger.error(error);
+        switch (error.status) {
+          case 404:
+            this.showNoEntryAlert();
+
+          default:
+            Logger.log("Loading Entry Data Object failed (Class: SingleEntryPage, Method: loadData()");
+            Logger.error(error);
+        }
       });
 
       // reset refresher if handed over in method
@@ -250,6 +256,18 @@ export class SingleEntryPage {
   private openAttachment(url: string) {
     //window.location.href = url.href;
     window.open(url, "_system");
+  }
+
+  private showNoEntryAlert() {
+    let alert = this.alertCtrl.create({
+      title: "Entry not available!",
+      subTitle: "Sorry, the entry is not yet available in this language.",
+      buttons: ['OK']
+    });
+    alert.present();
+    alert.onDidDismiss(() => {
+      this.navCtrl.setRoot("HomePage");
+    })
   }
 
 }

@@ -49,7 +49,7 @@
             Description
           </ion-card-header>
           <ion-card-content>
-            <ion-textarea type="text" placeholder="Description" rows="15"
+            <ion-textarea fz-elastic type="text" placeholder="Description"
                           [ngModel]="entry?.description"
                           (ngModelChange)="entry.description = $event"></ion-textarea>
           </ion-card-content>
@@ -108,7 +108,7 @@
             }}
           </ion-card-header>
           <ion-card-content>
-            <ion-textarea type="text" placeholder="Description" rows="10"
+            <ion-textarea fz-elastic type="text" placeholder="Description"
                           [ngModel]="entry.departmentSpecifics[i].description"
                           (ngModelChange)="entry.departmentSpecifics[i].description = $event"></ion-textarea>
           </ion-card-content>

@@ -53,7 +53,7 @@ export class LoginPage {
   }
 
   private async ionViewWillEnter() {
-    console.log("LoginPage check if logged in");
+    Logger.log("LoginPage check if logged in");
     if (await this.appModelService.isAuthenticated(this.loadingCtrl)) {
       // redirect to home page
       this.navCtrl.setRoot("HomePage").then((canEnterView) => {
@@ -70,7 +70,7 @@ export class LoginPage {
     // test if user is online
     if (this.appModelService.isOnline()) {
       this.appModelService.register(name, email, password, confirmPassword, () => {
-        // successfully registred
+        // successfully registered
         this.navCtrl.setRoot("HomePage").then((canEnterView) => {
           if (!canEnterView) {
             // in the case that the view can not be entered redirect the user to the login page
@@ -85,42 +85,73 @@ export class LoginPage {
           // error
           if ((<any>error.getErrorMessage()).loaded != undefined && (<any>error.getErrorMessage()).loaded == 0) {
             // the above query test for a "ProgressEvent" object which appears if there is no internet connection
-            this.showNoInternetConnectionAlert();
+            this.translateService.get('NO_CONNECTION_ALERT').subscribe(
+              (data) => {
+                alert(data);
+              }
+            );
           }
           if (error.checkForError(SuperLoginClientError.AUTH_ERR_1)) {
-            alert(SuperLoginClientError.AUTH_ERR_1);
+            this.translateService.get('AUTH_ERR_1').subscribe(
+              (data) => {
+                alert(data);
+              }
+            );
           }
           if (error.checkForError(SuperLoginClientError.AUTH_ERR_2)) {
-            alert(SuperLoginClientError.AUTH_ERR_2);
+            this.translateService.get('AUTH_ERR_2').subscribe(
+              (data) => {
+                alert(data);
+              }
+            );
           }
           if (error.checkForError(SuperLoginClientError.AUTH_ERR_3)) {
-            alert(SuperLoginClientError.AUTH_ERR_3);
+            this.translateService.get('AUTH_ERR_3').subscribe(
+              (data) => {
+                alert(data);
+              }
+            );
           }
           if (error.checkForError(SuperLoginClientError.AUTH_ERR_4)) {
-            alert(SuperLoginClientError.AUTH_ERR_4);
+            this.translateService.get('AUTH_ERR_4').subscribe(
+              (data) => {
+                alert(data);
+              }
+            );
           }
           if (error.checkForError(SuperLoginClientError.AUTH_ERR_5)) {
-            alert(SuperLoginClientError.AUTH_ERR_5);
+            this.translateService.get('AUTH_ERR_5').subscribe(
+              (data) => {
+                alert(data);
+              }
+            );
           }
           if (error.checkForError(SuperLoginClientError.AUTH_ERR_6)) {
-            alert(SuperLoginClientError.AUTH_ERR_6);
+            this.translateService.get('AUTH_ERR_6').subscribe(
+              (data) => {
+                alert(data);
+              }
+            );
           }
         } else {
           throw error;
         }
       });
     } else {
-      this.showNoInternetConnectionAlert();
+      this.translateService.get('NO_CONNECTION_ALERT').subscribe(
+        (data) => {
+          alert(data);
+        }
+      );
     }
   }
 
   private login(email: string, password: string, rememberLogin: boolean) {
-    this.showNoInternetConnectionAlert();
     // test if user is online
     if (this.appModelService.isOnline()) {
       try {
         this.appModelService.loginWithCredentials(email, password, rememberLogin, () => {
-          // successfully loged-in
+          // successfully logged-in
           this.navCtrl.setRoot("HomePage").then((canEnterView) => {
             if (!canEnterView) {
               // in the case that the view can not be entered redirect the user to the login page
@@ -133,13 +164,25 @@ export class LoginPage {
             // error
             if ((<any>error.getErrorMessage()).loaded != undefined && (<any>error.getErrorMessage()).loaded == 0) {
               // the above query test for a "ProgressEvent" object which appears if there is no internet connection
-              this.showNoInternetConnectionAlert();
+              this.translateService.get('NO_CONNECTION_ALERT').subscribe(
+                (data) => {
+                  alert(data);
+                }
+              );
             }
             if (error.checkForError(SuperLoginClientError.LOGIN_ERR_1)) {
-              alert(SuperLoginClientError.LOGIN_ERR_1);
+              this.translateService.get('LOGIN_ERR_1').subscribe(
+                (data) => {
+                  alert(data);
+                }
+              );
             }
             if (error.checkForError(SuperLoginClientError.LOGIN_ERR_2)) {
-              alert(SuperLoginClientError.LOGIN_ERR_2);
+              this.translateService.get('LOGIN_ERR_2').subscribe(
+                (data) => {
+                  alert(data);
+                }
+              );
             }
           } else {
             throw error;
@@ -150,16 +193,11 @@ export class LoginPage {
         Logger.debug(error);
       }
     } else {
-      this.showNoInternetConnectionAlert();
+      this.translateService.get('NO_CONNECTION_ALERT').subscribe(
+        (data) => {
+          alert(data);
+        }
+      );
     }
   }
-
-  private showNoInternetConnectionAlert() {
-    this.translateService.get('NO_CONNECTION_ALERT').subscribe(
-      (data) => {
-        alert(data);
-      }
-    );
-  }
-
 }

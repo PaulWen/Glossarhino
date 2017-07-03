@@ -39,7 +39,7 @@
       <ion-col col-12>
         <ion-card>
           <ion-card-header>
-            Description
+            {{ "DESCRIPTION" | translate:param }}
           </ion-card-header>
           <!-- use innerHtml versus {{}}, because links are not rendered otherwise -->
           <ion-card-content [innerHtml]="entry?.description">
@@ -115,7 +115,7 @@
       <ion-col col-xl-3 col-lg-3 col-md-6 col-sm-6 col-xs-6 col-12 *ngIf="entry?.attachments">
         <ion-card>
           <ion-card-header>
-            Attachments
+            {{ "ATTACHMENTS" | translate:param }}
           </ion-card-header>
           <ion-card-content>
 
@@ -136,7 +136,7 @@
                *ngIf="entry?.relatedDepartments">
         <ion-card>
           <ion-card-header>
-            Departments
+            {{ "DESCRIPTION" | translate:param }}
           </ion-card-header>
           <ion-card-content>
 
@@ -155,7 +155,7 @@
       <ion-col col-xl-3 col-lg-3 col-md-6 col-sm-6 col-xs-6 col-12 *ngIf="entry?.relatedEntries">
         <ion-card>
           <ion-card-header>
-            Entries
+            {{ "ENTRIES" | translate:param }}
           </ion-card-header>
           <ion-card-content>
 
@@ -174,7 +174,7 @@
       <ion-col col-xl-3 col-lg-3 col-md-6 col-sm-6 col-xs-6 col-12 *ngIf="entry?.synonyms">
         <ion-card>
           <ion-card-header>
-            Synonyms
+            {{ "SYNONYMS" | translate:param }}
           </ion-card-header>
           <ion-card-content>
 

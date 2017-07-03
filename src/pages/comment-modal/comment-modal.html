@@ -3,11 +3,11 @@
   <ion-navbar>
     <ion-buttons start>
       <button ion-button (click)="closeCommentModal()">
-        <span ion-text color="primary" showWhen="ios">Close</span>
+        <span ion-text color="primary" showWhen="ios">{{ 'CLOSE' | translate:param }}</span>
         <ion-icon name="md-close" showWhen="android,windows, core"></ion-icon>
       </button>
     </ion-buttons>
-    <ion-title>Comments</ion-title>
+    <ion-title>{{ 'COMMENTS' | translate:param }}</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -33,7 +33,7 @@
 <ion-footer *ngIf="appModelService.isOnline()">
   <ion-toolbar>
     <ion-item>
-      <ion-input [(ngModel)]="commentContent" placeholder="Add Comment ..." clearInput></ion-input>
+      <ion-input [(ngModel)]="commentContent" placeholder="{{ 'ADD_COMMENT_PLACEHOLDER' | translate:param }}" clearInput></ion-input>
     </ion-item>
 
     <ion-buttons end>

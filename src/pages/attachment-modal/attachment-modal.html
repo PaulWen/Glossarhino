@@ -12,9 +12,9 @@
         <span ion-text color="primary" showWhen="ios">Done</span>
         <ion-icon name="md-checkmark" showWhen="android,windows, core"></ion-icon>
       </button>
-      
+
     </ion-buttons>
-    <ion-title>Attachments</ion-title>
+    <ion-title>{{ "ATTACHMENTS" | translate:param }}</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -24,17 +24,19 @@
 
   <!-- Print list with all attachments retreived for entry and department -->
   <ion-list>
-    <button ion-item *ngFor="let attachment of attachments" (click)="openAttachment(attachment.url)">
+    <button ion-item *ngFor="let attachment of attachments"
+            (click)="openAttachment(attachment.url)">
 
       {{ attachment.name }}
 
-      <ion-icon name="trash" item-end *ngIf="isEditMode" (click)="removeAttachment(attachment)"></ion-icon>
+      <ion-icon name="trash" item-end *ngIf="isEditMode"
+                (click)="removeAttachment(attachment)"></ion-icon>
 
     </button>
 
     <button ion-button *ngIf="isEditMode" (click)="showAddAttachmentAlert()">
-        Add attachment
-      </button>
+      {{ "ADD_ATTACHMENTS" | translate:param }}
+    </button>
 
   </ion-list>
 

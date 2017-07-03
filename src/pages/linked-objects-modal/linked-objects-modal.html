@@ -4,17 +4,17 @@
     <ion-buttons start>
 
       <button ion-button (click)="closeLinkedObjectsModal()" *ngIf="!isEditMode">
-        <span ion-text color="primary" showWhen="ios">Close</span>
+        <span ion-text color="primary" showWhen="ios">{{ "CLOSE" | translate:param }}</span>
         <ion-icon name="md-close" showWhen="android,windows, core"></ion-icon>
       </button>
 
       <button ion-button (click)="closeLinkedObjectsModal(true)" *ngIf="isEditMode">
-        <span ion-text color="primary" showWhen="ios">Done</span>
+        <span ion-text color="primary" showWhen="ios">{{ "DONE" | translate:param }}</span>
         <ion-icon name="md-checkmark" showWhen="android,windows, core"></ion-icon>
       </button>
 
     </ion-buttons>
-    <ion-title>Related</ion-title>
+    <ion-title>{{ "RELATED" | translate:param }}</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -24,7 +24,7 @@
 
   <ion-item-group *ngIf="relatedDepartments != undefined || isEditMode">
     <ion-item-divider color="light">
-      Departments
+      {{ "DEPARTMENTS" | translate:param }}
     </ion-item-divider>
 
     <ion-item *ngFor="let department of relatedDepartments"> {{ appModelService.getDepartmentById(department).departmentName }}
@@ -35,7 +35,7 @@
 
     <ion-item *ngIf="isEditMode">
       <button ion-button (click)="showRelatedDepartmentsCheckboxAlert()">
-        Add department
+        {{ "ADD_DEPARTMENT" | translate:param }}
       </button>
     </ion-item>
 
@@ -43,7 +43,7 @@
 
   <ion-item-group *ngIf="synonyms != undefined || isEditMode">
     <ion-item-divider color="light">
-      Entries
+      {{ "ENTRIES" | translate:param }}
     </ion-item-divider>
 
     <ion-item *ngFor="let entry of (relatedEntries | async)"> {{ entry.name }}
@@ -54,7 +54,7 @@
 
     <ion-item *ngIf="isEditMode">
       <button ion-button (click)="openEntryListModal()">
-        Add entry
+      {{ "ADD_ENTRY" | translate:param }}
       </button>
     </ion-item>
 
@@ -62,7 +62,7 @@
 
   <ion-item-group *ngIf="synonyms != undefined || isEditMode">
     <ion-item-divider color="light">
-      Synonyms
+      {{ "SYNONYMS" | translate:param }}
     </ion-item-divider>
 
     <ion-item *ngFor="let synonym of synonyms"> {{ synonym }}
@@ -75,7 +75,7 @@
 
       <ion-toolbar>
         <ion-item>
-          <ion-input [(ngModel)]="synonym" placeholder="Add Synonym ..." clearInput></ion-input>
+          <ion-input [(ngModel)]="synonym" placeholder="{{ 'ADD_SYNONYM_DOTS' | translate:param }}" clearInput></ion-input>
         </ion-item>
 
         <ion-buttons end>
@@ -92,7 +92,7 @@
 
   <ion-item-group *ngIf="acronyms != undefined || isEditMode">
     <ion-item-divider color="light">
-      Acronyms
+      {{ "ACRONYMS" | translate:param }}
     </ion-item-divider>
 
     <ion-item *ngFor="let acronym of acronyms"> {{ acronym }}
@@ -105,7 +105,7 @@
 
       <ion-toolbar>
         <ion-item>
-          <ion-input [(ngModel)]="acronym" placeholder="Add Acronym ..." clearInput></ion-input>
+          <ion-input [(ngModel)]="acronym" placeholder="{{ 'ADD_ACRONYM_DOTS' | translate:param }}" clearInput></ion-input>
         </ion-item>
 
         <ion-buttons end>

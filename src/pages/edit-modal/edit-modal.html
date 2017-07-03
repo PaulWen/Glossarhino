@@ -3,14 +3,14 @@
   <ion-navbar>
     <ion-buttons start>
       <button ion-button (click)="closeEditModal(false)">
-        <span ion-text color="primary" showWhen="ios">Cancel</span>
+        <span ion-text color="primary" showWhen="ios">{{ "CANCEL" | translate:param }}</span>
         <ion-icon name="md-close" showWhen="android,windows, core"></ion-icon>
       </button>
     </ion-buttons>
-    <ion-title>Edit: {{ entry?.name }}</ion-title>
+    <ion-title>{{ "EDIT" | translate:param }}: {{ entry?.name }}</ion-title>
     <ion-buttons end>
       <button ion-button (click)="closeEditModal(true)">
-        <span ion-text color="primary" showWhen="ios">Done</span>
+        <span ion-text color="primary" showWhen="ios">{{ "DONE" | translate:param }}</span>
         <ion-icon name="md-checkmark" showWhen="android,windows, core"></ion-icon>
       </button>
     </ion-buttons>
@@ -34,10 +34,10 @@
       <ion-col col-12>
         <ion-card>
           <ion-card-header>
-            Title
+            {{ "TITLE" | translate:param }}
           </ion-card-header>
           <ion-card-content>
-            <ion-input type="text" [ngModel]="entry?.name" placeholder="Title"
+            <ion-input type="text" [ngModel]="entry?.name" placeholder="{{ 'TITLE' | translate:param }}"
                        (ngModelChange)="entry.name = $event"></ion-input>
           </ion-card-content>
         </ion-card>
@@ -46,10 +46,10 @@
       <ion-col col-12>
         <ion-card>
           <ion-card-header>
-            Description
+            {{ "DESCRIPTION" | translate:param }}
           </ion-card-header>
           <ion-card-content>
-            <ion-textarea fz-elastic type="text" placeholder="Description"
+            <ion-textarea fz-elastic type="text" placeholder="{{ 'DESCRIPTION' | translate:param }}"
                           [ngModel]="entry?.description"
                           (ngModelChange)="entry.description = $event"></ion-textarea>
           </ion-card-content>
@@ -61,33 +61,33 @@
                 <button ion-button icon-left clear small (click)="openAttachmentModal(entry?.attachments)">
                   <ion-icon name="attach">
                   </ion-icon>
-                  Edit attachments
+                  {{ "EDIT_ATTACHMENTS" | translate:param }}
                 </button>
               </ion-item>
             </ion-col>
-            
+
             <ion-col col-xl-2 col-12>
               <ion-item>
                 <button ion-button icon-left clear small (click)="openLinkedObjectsModal(entry?.relatedDepartments, entry?.relatedEntries, entry?.synonyms, entry?.acronyms)">
                   <ion-icon name="link">
                   </ion-icon>
-                  Edit links
+                  {{ "EDIT_LINKS" | translate:param }}
                 </button>
               </ion-item>
             </ion-col>
 
             <ion-col col-xl-4 col-12>
               <ion-item>
-                <ion-label floating>Name</ion-label>
-                <ion-input type="text" [ngModel]="entry?.contact" placeholder="Name"
+                <ion-label floating>{{ "NAME" | translate:param }}</ion-label>
+                <ion-input type="text" [ngModel]="entry?.contact" placeholder="{{ 'NAME' | translate:param }}"
                            (ngModelChange)="entry.contact = $event"></ion-input>
               </ion-item>
             </ion-col>
 
             <ion-col col-xl-4 col-12>
               <ion-item>
-                <ion-label floating>E-Mail</ion-label>
-                <ion-input type="text" [ngModel]="entry?.email" placeholder="E-Mail"
+                <ion-label floating>{{ "E_MAIL" | translate:param }}</ion-label>
+                <ion-input type="text" [ngModel]="entry?.email" placeholder="{{ 'E_MAIL' | translate:param }}"
                            (ngModelChange)="entry.email = $event"></ion-input>
               </ion-item>
             </ion-col>
@@ -108,7 +108,7 @@
             }}
           </ion-card-header>
           <ion-card-content>
-            <ion-textarea fz-elastic type="text" placeholder="Description"
+            <ion-textarea fz-elastic type="text" placeholder="{{ 'DESCRIPTION' | translate:param }}"
                           [ngModel]="entry.departmentSpecifics[i].description"
                           (ngModelChange)="entry.departmentSpecifics[i].description = $event"></ion-textarea>
           </ion-card-content>
@@ -116,7 +116,7 @@
 
             <ion-col col-lg-5 col-12>
               <ion-item>
-                <ion-label floating>Name</ion-label>
+                <ion-label floating>{{ "NAME" | translate:param }}</ion-label>
                 <ion-input type="text" [ngModel]="entry.departmentSpecifics[i].contact"
                            (ngModelChange)="entry.departmentSpecifics[i].contact = $event"></ion-input>
               </ion-item>
@@ -124,7 +124,7 @@
 
             <ion-col col-lg-5 col-12>
               <ion-item>
-                <ion-label floating>E-Mail</ion-label>
+                <ion-label floating>{{ "E_MAIL" | translate:param }}</ion-label>
                 <ion-input type="text" [ngModel]="entry.departmentSpecifics[i].email"
                            (ngModelChange)="entry.departmentSpecifics[i].email = $event"></ion-input>
               </ion-item>
@@ -142,9 +142,9 @@
       </ion-col>
     </ion-row>
 
-    <button ion-button (click)="showAddDepartmentRadioAlert()">Add department specification</button>
+    <button ion-button (click)="showAddDepartmentRadioAlert()">{{ "ADD_DEPARTMENT_SPECIFICATION" | translate:param }}</button>
 
-    <button ion-button (click)="removeEntryDataObject(entry, selectedLanguageDataObject.selectedLanguage)" color="danger">Delete Entry</button>
+    <button ion-button (click)="removeEntryDataObject(entry, selectedLanguageDataObject.selectedLanguage)" color="danger">{{ "DELETE_ENTRY" | translate:param }}</button>
 
   </ion-grid>
 

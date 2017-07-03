@@ -2,7 +2,7 @@
           (ngModelChange)="selectedLanguageDataObject.selectedLanguage = $event">
 
   <ion-list-header>
-    Language
+    {{ "LANGUAGE" | translate:param }}
   </ion-list-header>
 
   <ion-item *ngFor="let language of allLanguages?.languages">

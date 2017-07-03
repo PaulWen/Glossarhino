@@ -1,6 +1,9 @@
 import { Component } from "@angular/core";
 import { IonicPage, NavController, NavParams, ViewController, AlertController } from "ionic-angular";
 import { AttachmentDataObject } from "../../providers/dataobjects/attachment.dataobject";
+import {TranslateService} from "@ngx-translate/core";
+import {Observable} from "rxjs/Observable";
+import {Logger} from "../../app/logger";
 
 @IonicPage()
 @Component({
@@ -19,8 +22,11 @@ export class AttachmentModalPage {
   private attachments: Array<AttachmentDataObject>;
   private isEditMode: boolean;
 
+  // other
+  private translateService: TranslateService;
+
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
-  constructor(navCtrl: NavController, navParams: NavParams, viewCtrl: ViewController, alertCtrl: AlertController) {
+  constructor(navCtrl: NavController, navParams: NavParams, viewCtrl: ViewController, alertCtrl: AlertController,translateService: TranslateService) {
     // instantiate ionic injected components
     this.navCtrl = navCtrl;
     this.navParams = navParams;
@@ -30,6 +36,9 @@ export class AttachmentModalPage {
     //get navParams
     this.attachments = this.navParams.get("attachments");
     this.isEditMode = this.navParams.get("isEditMode");
+
+    // other
+    this.translateService = translateService;
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
@@ -73,30 +82,41 @@ export class AttachmentModalPage {
   }
 
   private showAddAttachmentAlert() {
-    let showAddAttachmentAlert = this.alertCtrl.create({
-        title: "Add attachment",
-        message: "Enter a name and an URL for the attachment:",
-        inputs: [
-          {
-            name: "name",
-            placeholder: "Name"
-          }, {
-            name: "url",
-            placeholder: "URL"
-          }
-        ],
-        buttons: [
-          {
-            text: "Cancel"
-          }, {
-            text: "Add",
-            handler: data => {
-              this.addAttachment(data);
+    Observable.zip(
+      this.translateService.get("ADD_ATTACHMENTS"),
+      this.translateService.get("ADD_ATTACHMENT_ALERT_INTRO"),
+      this.translateService.get("NAME"),
+      this.translateService.get("URL"),
+      this.translateService.get("CANCEL"),
+      this.translateService.get("ADD"),
+      (addAttachment: string, addAttachmentAlertIntro: string, name: string, url: string, cancel: string, add: string) => {
+        return this.alertCtrl.create({
+          title: addAttachment,
+          message: addAttachmentAlertIntro,
+          inputs: [
+            {
+              name: "name",
+              placeholder: name
+            }, {
+              name: "url",
+              placeholder: url
             }
-          }
-        ]
-      });
-      showAddAttachmentAlert.present();
+          ],
+          buttons: [
+            {
+              text: cancel
+            }, {
+              text: add,
+              handler: data => {
+                this.addAttachment(data);
+              }
+            }
+          ]
+        })
+      }
+    ).subscribe((alert)=>{
+      alert.present();
+    });
   }
 
 }

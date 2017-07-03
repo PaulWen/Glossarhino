@@ -2,6 +2,7 @@ import {NgModule} from "@angular/core";
 import {IonicPageModule} from "ionic-angular";
 import {EditModalPage} from "./edit-modal";
 import { ElasticModule } from 'ng-elastic';
+import {TranslateModule} from "@ngx-translate/core";
 
 @NgModule({
   declarations: [
@@ -9,7 +10,8 @@ import { ElasticModule } from 'ng-elastic';
   ],
   imports: [
     IonicPageModule.forChild(EditModalPage),
-    ElasticModule
+    ElasticModule,
+    TranslateModule
   ],
   exports: [
     EditModalPage

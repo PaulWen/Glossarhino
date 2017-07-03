@@ -1,4 +1,4 @@
-import {Component, ViewChild} from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import {
   IonicPage,
   NavController,
@@ -7,11 +7,11 @@ import {
   Searchbar,
   ViewController
 } from "ionic-angular";
-import {Logger} from "../../app/logger";
-import {AppModelService} from "../../providers/app-model-service";
-import {EntryListPageEntryDataObject} from "../../providers/dataobjects/entrylistpage.entry.dataobject";
-import {UserLanguageFilterConfigDataObject} from "../../providers/dataobjects/user-language-filter-config.dataobject";
-import {EntryListPageModelInterface} from "./entry-list.model-interface";
+import { Logger } from "../../app/logger";
+import { AppModelService } from "../../providers/app-model-service";
+import { EntryListPageEntryDataObject } from "../../providers/dataobjects/entrylistpage.entry.dataobject";
+import { UserLanguageFilterConfigDataObject } from "../../providers/dataobjects/user-language-filter-config.dataobject";
+import { EntryListPageModelInterface } from "./entry-list.model-interface";
 
 @IonicPage({
   segment: "entrylist/:departmentId",
@@ -32,6 +32,7 @@ export class EntryListPage {
   // navParams
   private departmentId: string;
   private searchbarFocus: boolean;
+  private pushToEdit: boolean;
 
   // model object
   private appModelService: EntryListPageModelInterface;
@@ -57,6 +58,7 @@ export class EntryListPage {
     // get navParams
     this.departmentId = this.navParams.get("departmentId");
     this.searchbarFocus = this.navParams.get("searchbarFocus");
+    this.pushToEdit = this.navParams.get("pushToEdit");
 
     // instantiate model
     this.appModelService = appModelService;
@@ -137,6 +139,14 @@ export class EntryListPage {
 
   // Navigation method for single entry
   private pushEntry(entryDocumentId: string) {
+    if (!this.pushToEdit) {
+      this.pushSingleEntry(entryDocumentId);
+    } else {
+      this.closeEntryListModal(entryDocumentId);
+    }
+  }
+
+  private pushSingleEntry(entryDocumentId: string) {
     this.navCtrl.push("SingleEntryPage", {
       entryDocumentId: entryDocumentId
     }).then((canEnterView) => {
@@ -144,6 +154,12 @@ export class EntryListPage {
         // in the case that the view can not be entered redirect the user to the login page
         this.navCtrl.setRoot("LoginPage");
       }
+    });
+  }
+
+  private closeEntryListModal(entryDocumentId: string) {
+    this.viewCtrl.dismiss({
+      entryDocumentId: entryDocumentId
     });
   }
 
@@ -162,7 +178,4 @@ export class EntryListPage {
     });
   }
 
-  private closeEntryListModal() {
-    this.viewCtrl.dismiss();
-  }
 }

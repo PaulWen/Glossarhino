@@ -1,14 +1,14 @@
-import { Injectable } from "@angular/core";
+import {Injectable} from "@angular/core";
+import {LoadingController, Platform} from "ionic-angular";
 import PouchDB from "pouchdb";
-import { Observable } from "rxjs/Rx";
-import { AppConfig } from "../../app/app-config";
-import { Logger } from "../../app/logger";
-import { UserDataObject } from "../dataobjects/user.dataobject";
-import { SuperLoginClientDoneResponse } from "./super_login_client_done_reponse";
-import { SuperLoginClientError } from "./super_login_client_error";
-import { SuperLoginClientErrorResponse } from "./super_login_client_error_reponse";
-import { SuperloginHttpRequester } from "./superlogin_http_requester";
-import { Platform, LoadingController } from "ionic-angular";
+import {Observable} from "rxjs/Rx";
+import {AppConfig} from "../../app/app-config";
+import {Logger} from "../../app/logger";
+import {UserDataObject} from "../dataobjects/user.dataobject";
+import {SuperLoginClientDoneResponse} from "./super_login_client_done_reponse";
+import {SuperLoginClientError} from "./super_login_client_error";
+import {SuperLoginClientErrorResponse} from "./super_login_client_error_reponse";
+import {SuperloginHttpRequester} from "./superlogin_http_requester";
 
 /**
  * This class is a service which implements TypeScript methods to communicate
@@ -73,7 +73,8 @@ export abstract class SuperLoginClient {
     // if the application is not in production use than make the PouchDB object available
     // in order to be able to use the Chrome PouchDB plugin to inspect the local data
     if (AppConfig.DEVELOPMENT) {
-      (<any>window).PouchDB = PouchDB;
+      (<any>window
+      ).PouchDB = PouchDB;
       //      PouchDB.debug.enable("*");
       PouchDB.debug.disable();
     } else {
@@ -96,7 +97,8 @@ export abstract class SuperLoginClient {
    */
   public isOnline(): boolean {
     if (this.platform.is("cordova")) {
-      return (<any>navigator).connection.type != "none";
+      return (<any>navigator
+             ).connection.type != "none";
     } else {
       return true;
     }
@@ -161,7 +163,8 @@ export abstract class SuperLoginClient {
                 observer.next(false);
                 observer.complete();
               }
-            , loadingCtrl);
+              , loadingCtrl
+            );
           }).toPromise();
         } else {
           return new Promise((resolve, reject) => {
@@ -309,7 +312,7 @@ export abstract class SuperLoginClient {
         error(superLoginClientError);
         Logger.log("Authentication failed.");
       }
-      );
+    );
   }
 
   /**
@@ -432,7 +435,7 @@ export abstract class SuperLoginClient {
 
         Logger.log("Could not create new account.");
       }
-      );
+    );
   }
 
   /**

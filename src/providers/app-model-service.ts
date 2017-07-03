@@ -278,7 +278,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   //////////////////////////////////////////
 
   public async getEntryDataObjectToShow(_id: string, languageId: string): Promise<EntryDataObject> {
-    // loead data
+    // load data
     let result: EntryDataObject = await this.getDocumentAsJSON(this.entryDatabases.get(languageId), _id);
     let selectedDepartments: UserDepartmentFilterConfigDataObject = await this.getUserDepartmentFilterConfigDataObject();
 

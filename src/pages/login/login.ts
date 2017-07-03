@@ -1,9 +1,9 @@
-import { Component } from "@angular/core";
-import { IonicPage, NavController, NavParams, LoadingController } from "ionic-angular";
-import { Logger } from "../../app/logger";
-import { AppModelService } from "../../providers/app-model-service";
-import { SuperLoginClientError } from "../../providers/super_login_client/super_login_client_error";
-import { LoginPageInterface } from "./login-interface";
+import {Component} from "@angular/core";
+import {IonicPage, LoadingController, NavController, NavParams} from "ionic-angular";
+import {Logger} from "../../app/logger";
+import {AppModelService} from "../../providers/app-model-service";
+import {SuperLoginClientError} from "../../providers/super_login_client/super_login_client_error";
+import {LoginPageInterface} from "./login-interface";
 
 /**
  * LoginPage where the user authenticates itself and is also able to create a new account.
@@ -29,7 +29,6 @@ export class LoginPage {
   private loginOpened: boolean;
 
 
-
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
   constructor(navCtrl: NavController, navParams: NavParams, loadingCtrl: LoadingController, appModelService: AppModelService) {
     // instantiate ionic injected components
@@ -51,8 +50,6 @@ export class LoginPage {
   }
 
   private async ionViewWillEnter() {
-    // Todo load page
-
     console.log("LoginPage check if logged in");
     if (await this.appModelService.isAuthenticated(this.loadingCtrl)) {
       // redirect to home page
@@ -67,73 +64,90 @@ export class LoginPage {
 
 
   private register(name: string, email: string, password: string, confirmPassword: string, rememberLogin: boolean) {
-    // Todo load page
+    // test if user is online
+    if (this.appModelService.isOnline()) {
+      this.appModelService.register(name, email, password, confirmPassword, () => {
+        // successfully registred
+        this.navCtrl.setRoot("HomePage").then((canEnterView) => {
+          if (!canEnterView) {
+            // in the case that the view can not be entered redirect the user to the login page
+            this.navCtrl.setRoot("LoginPage");
+          }
+        });
 
-    this.appModelService.register(name, email, password, confirmPassword, () => {
-      // successfully registred
-      this.navCtrl.setRoot("HomePage").then((canEnterView) => {
-        if (!canEnterView) {
-          // in the case that the view can not be entered redirect the user to the login page
-          this.navCtrl.setRoot("LoginPage");
+        // log user in
+        this.login(email, password, rememberLogin);
+      }, (error: SuperLoginClientError) => {
+        if (error.checkForError != undefined) {
+          // error
+          if ((<any>error.getErrorMessage()).loaded != undefined && (<any>error.getErrorMessage()).loaded == 0) {
+            // the above query test for a "ProgressEvent" object which appears if there is no internet connection
+            alert("No internet connection!");
+          }
+          if (error.checkForError(SuperLoginClientError.AUTH_ERR_1)) {
+            alert(SuperLoginClientError.AUTH_ERR_1);
+          }
+          if (error.checkForError(SuperLoginClientError.AUTH_ERR_2)) {
+            alert(SuperLoginClientError.AUTH_ERR_2);
+          }
+          if (error.checkForError(SuperLoginClientError.AUTH_ERR_3)) {
+            alert(SuperLoginClientError.AUTH_ERR_3);
+          }
+          if (error.checkForError(SuperLoginClientError.AUTH_ERR_4)) {
+            alert(SuperLoginClientError.AUTH_ERR_4);
+          }
+          if (error.checkForError(SuperLoginClientError.AUTH_ERR_5)) {
+            alert(SuperLoginClientError.AUTH_ERR_5);
+          }
+          if (error.checkForError(SuperLoginClientError.AUTH_ERR_6)) {
+            alert(SuperLoginClientError.AUTH_ERR_6);
+          }
+        } else {
+          throw error;
         }
       });
-
-      // log user in
-      this.login(email, password, rememberLogin);
-    }, (error: SuperLoginClientError) => {
-      if (error.checkForError != undefined) {
-        // error
-        if (error.checkForError(SuperLoginClientError.AUTH_ERR_1)) {
-          alert(SuperLoginClientError.AUTH_ERR_1);
-        }
-        if (error.checkForError(SuperLoginClientError.AUTH_ERR_2)) {
-          alert(SuperLoginClientError.AUTH_ERR_2);
-        }
-        if (error.checkForError(SuperLoginClientError.AUTH_ERR_3)) {
-          alert(SuperLoginClientError.AUTH_ERR_3);
-        }
-        if (error.checkForError(SuperLoginClientError.AUTH_ERR_4)) {
-          alert(SuperLoginClientError.AUTH_ERR_4);
-        }
-        if (error.checkForError(SuperLoginClientError.AUTH_ERR_5)) {
-          alert(SuperLoginClientError.AUTH_ERR_5);
-        }
-        if (error.checkForError(SuperLoginClientError.AUTH_ERR_6)) {
-          alert(SuperLoginClientError.AUTH_ERR_6);
-        }
-      } else {
-        throw error;
-      }
-    });
+    } else {
+      alert("No internet connection!");
+    }
   }
 
   private login(email: string, password: string, rememberLogin: boolean) {
-    // Todo load page
+    // test if user is online
+    if (this.appModelService.isOnline()) {
+      try {
+        this.appModelService.loginWithCredentials(email, password, rememberLogin, () => {
+          // successfully loged-in
+          this.navCtrl.setRoot("HomePage").then((canEnterView) => {
+            if (!canEnterView) {
+              // in the case that the view can not be entered redirect the user to the login page
+              this.navCtrl.setRoot("LoginPage");
+            }
+          });
 
-    this.appModelService.loginWithCredentials(email, password, rememberLogin, () => {
-      // successfully loged-in
-      this.navCtrl.setRoot("HomePage").then((canEnterView) => {
-        if (!canEnterView) {
-          // in the case that the view can not be entered redirect the user to the login page
-          this.navCtrl.setRoot("LoginPage");
-        }
-      });
+        }, (error: SuperLoginClientError) => {
+          if (error.checkForError != undefined) {
+            // error
+            if ((<any>error.getErrorMessage()).loaded != undefined && (<any>error.getErrorMessage()).loaded == 0) {
+              // the above query test for a "ProgressEvent" object which appears if there is no internet connection
+              alert("No internet connection!");
+            }
+            if (error.checkForError(SuperLoginClientError.LOGIN_ERR_1)) {
+              alert(SuperLoginClientError.LOGIN_ERR_1);
+            }
+            if (error.checkForError(SuperLoginClientError.LOGIN_ERR_2)) {
+              alert(SuperLoginClientError.LOGIN_ERR_2);
+            }
+          } else {
+            throw error;
+          }
 
-    }, (error: SuperLoginClientError) => {
-      if (error.checkForError != undefined) {
-        // error
-        if (error.checkForError(SuperLoginClientError.LOGIN_ERR_1)) {
-          alert(SuperLoginClientError.LOGIN_ERR_1);
-        }
-
-        if (error.checkForError(SuperLoginClientError.LOGIN_ERR_2)) {
-          alert(SuperLoginClientError.LOGIN_ERR_2);
-        }
-      } else {
-        throw error;
+        }, this.loadingCtrl);
+      } catch (error) {
+        Logger.debug(error);
       }
-
-    }, this.loadingCtrl);
+    } else {
+      alert("No internet connection!");
+    }
   }
 
 }

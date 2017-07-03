@@ -36,4 +36,7 @@ export interface LoginPageInterface {
    * @param error callback function in case an error occurred
    */
   register(name: string, email: string, password: string, confirmPassword: string, done: SuperLoginClientDoneResponse, error: SuperLoginClientErrorResponse): void;
+
+
+  isOnline(): boolean;
 }

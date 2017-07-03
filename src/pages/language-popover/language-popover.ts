@@ -1,5 +1,5 @@
 import {Component} from "@angular/core";
-import {IonicPage, NavController, NavParams, ViewController} from "ionic-angular";
+import { IonicPage, NavController, NavParams, ViewController, LoadingController } from "ionic-angular";
 import {Logger} from "../../app/logger";
 import {AppModelService} from "../../providers/app-model-service";
 import {GlobalLanguageConfigDataobject} from "../../providers/dataobjects/global-language-config.dataobject";
@@ -17,21 +17,23 @@ export class LanguagePopoverPage {
   private navCtrl: NavController;
   private navParams: NavParams;
   private viewCtrl: ViewController;
+  private loadingCtrl: LoadingController;
 
   // model objects
-  private languagePopoverPageModelInterface: LanguagePopoverPageModelInterface;
+  private appModelService: LanguagePopoverPageModelInterface;
   private allLanguages: GlobalLanguageConfigDataobject;
   private selectedLanguageDataObject: UserLanguageFilterConfigDataObject;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
-  constructor(navCtrl: NavController, navParams: NavParams, viewCtrl: ViewController, appModel: AppModelService) {
+  constructor(navCtrl: NavController, navParams: NavParams, viewCtrl: ViewController, loadingCtrl: LoadingController, appModel: AppModelService) {
     // instantiate ionic injected components
     this.navCtrl = navCtrl;
     this.navParams = navParams;
     this.viewCtrl = viewCtrl;
+    this.loadingCtrl = loadingCtrl;
 
     // instantiate model object
-    this.languagePopoverPageModelInterface = appModel;
+    this.appModelService = appModel;
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
@@ -46,7 +48,7 @@ export class LanguagePopoverPage {
   };
 
   private ionViewCanEnter(): Promise<boolean> {
-    return this.languagePopoverPageModelInterface.isAuthenticated();
+    return this.appModelService.isAuthenticated(this.loadingCtrl);
   }
 
   //////////////////////////////////////////
@@ -55,11 +57,11 @@ export class LanguagePopoverPage {
 
   private loadData() {
     // get current language
-    this.languagePopoverPageModelInterface.getSelectedLanguage().then((data) => {
+    this.appModelService.getSelectedLanguage().then((data) => {
       this.selectedLanguageDataObject = data;
 
       // get all languages
-      this.allLanguages = this.languagePopoverPageModelInterface.getAllLanguages();
+      this.allLanguages = this.appModelService.getAllLanguages();
 
     }, (error) => {
       Logger.log("Loading current language failed (Class: LanguagePopoverPage, Method: loadData()");
@@ -73,7 +75,7 @@ export class LanguagePopoverPage {
   private dismissPopover() {
     // convert input into number
     this.selectedLanguageDataObject.selectedLanguage = this.selectedLanguageDataObject.selectedLanguage;
-    this.languagePopoverPageModelInterface.setSelectedLanguage(this.selectedLanguageDataObject);
+    this.appModelService.setSelectedLanguage(this.selectedLanguageDataObject);
     this.viewCtrl.dismiss();
   };
 }

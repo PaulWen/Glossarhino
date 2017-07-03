@@ -1,9 +1,9 @@
-import {Component} from "@angular/core";
-import {IonicPage, NavController, NavParams} from "ionic-angular";
-import {Logger} from "../../app/logger";
-import {AppModelService} from "../../providers/app-model-service";
-import {SuperLoginClientError} from "../../providers/super_login_client/super_login_client_error";
-import {LoginPageInterface} from "./login-interface";
+import { Component } from "@angular/core";
+import { IonicPage, NavController, NavParams, LoadingController } from "ionic-angular";
+import { Logger } from "../../app/logger";
+import { AppModelService } from "../../providers/app-model-service";
+import { SuperLoginClientError } from "../../providers/super_login_client/super_login_client_error";
+import { LoginPageInterface } from "./login-interface";
 
 /**
  * LoginPage where the user authenticates itself and is also able to create a new account.
@@ -15,20 +15,36 @@ import {LoginPageInterface} from "./login-interface";
 })
 export class LoginPage {
 
-////////////////////////////////////////////Properties/////////////////////////////////////////////
+  ////////////////////////////////////////////Properties/////////////////////////////////////////////
 
-  private model: LoginPageInterface;
+  // ionic injected components
+  private navCtrl: NavController;
+  private navParams: NavParams;
+  private loadingCtrl: LoadingController;
 
+  // model service object
+  private appModelService: LoginPageInterface;
+
+  //other
   private loginOpened: boolean;
 
-////////////////////////////////////////////Constructor////////////////////////////////////////////
 
-  constructor(private navCtrl: NavController, private navParams: NavParams, appModelService: AppModelService) {
-    this.model = appModelService;
+
+  ////////////////////////////////////////////Constructor////////////////////////////////////////////
+  constructor(navCtrl: NavController, navParams: NavParams, loadingCtrl: LoadingController, appModelService: AppModelService) {
+    // instantiate ionic injected components
+    this.navCtrl = navCtrl;
+    this.navParams = navParams;
+    this.loadingCtrl = loadingCtrl;
+
+    // instantiate model service object
+    this.appModelService = appModelService;
+
+    // instantiate other
     this.loginOpened = true;
   }
 
-/////////////////////////////////////////////Methods///////////////////////////////////////////////
+  /////////////////////////////////////////////Methods///////////////////////////////////////////////
 
   private ionViewCanEnter(): Promise<boolean> | boolean {
     return true;
@@ -38,7 +54,7 @@ export class LoginPage {
     // Todo load page
 
     console.log("LoginPage check if logged in");
-    if (await this.model.isAuthenticated()) {
+    if (await this.appModelService.isAuthenticated(this.loadingCtrl)) {
       // redirect to home page
       this.navCtrl.setRoot("HomePage").then((canEnterView) => {
         if (!canEnterView) {
@@ -53,7 +69,7 @@ export class LoginPage {
   private register(name: string, email: string, password: string, confirmPassword: string, rememberLogin: boolean) {
     // Todo load page
 
-    this.model.register(name, email, password, confirmPassword, () => {
+    this.appModelService.register(name, email, password, confirmPassword, () => {
       // successfully registred
       this.navCtrl.setRoot("HomePage").then((canEnterView) => {
         if (!canEnterView) {
@@ -94,7 +110,7 @@ export class LoginPage {
   private login(email: string, password: string, rememberLogin: boolean) {
     // Todo load page
 
-    this.model.loginWithCredentials(email, password, rememberLogin, () => {
+    this.appModelService.loginWithCredentials(email, password, rememberLogin, () => {
       // successfully loged-in
       this.navCtrl.setRoot("HomePage").then((canEnterView) => {
         if (!canEnterView) {
@@ -117,6 +133,7 @@ export class LoginPage {
         throw error;
       }
 
-    });
+    }, this.loadingCtrl);
   }
+
 }

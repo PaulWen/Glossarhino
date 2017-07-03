@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { AlertController, IonicPage, NavController, NavParams, ViewController, ModalController } from "ionic-angular";
+import { AlertController, IonicPage, NavController, NavParams, ViewController, ModalController, LoadingController } from "ionic-angular";
 import { AppModelService } from "../../providers/app-model-service";
 import { GlobalDepartmentConfigDataObject } from "../../providers/dataobjects/global-department-config.dataobject";
 import { LinkedObjectsModalModelInterface } from "./linked-objects-modal.model-interface";
@@ -20,6 +20,7 @@ export class LinkedObjectsModalPage {
   private viewCtrl: ViewController;
   private alertCtrl: AlertController;
   private modalCtrl: ModalController;
+  private loadingCtrl: LoadingController;
 
   // navParams
   private relatedDepartments: Array<string>;
@@ -40,13 +41,14 @@ export class LinkedObjectsModalPage {
   private synonym: string;
   private acronym: string;
 
-  constructor(navCtrl: NavController, navParams: NavParams, viewCtrl: ViewController, alertCtrl: AlertController, modalCtrl: ModalController, appModelService: AppModelService) {
+  constructor(navCtrl: NavController, navParams: NavParams, viewCtrl: ViewController, alertCtrl: AlertController, modalCtrl: ModalController, loadingCtrl: LoadingController, appModelService: AppModelService) {
     // instantiate ionic injected components
     this.navCtrl = navCtrl;
     this.navParams = navParams;
     this.viewCtrl = viewCtrl;
     this.alertCtrl = alertCtrl;
     this.modalCtrl = modalCtrl;
+    this.loadingCtrl = loadingCtrl;
 
     // get navParams
     this.relatedDepartments = this.navParams.get("relatedDepartments");
@@ -70,8 +72,8 @@ export class LinkedObjectsModalPage {
 
   }
 
-  private ionViewCanEnter(): Promise<boolean> | boolean {
-    return this.appModelService.isAuthenticated();
+  private ionViewCanEnter(): Promise<boolean> {
+    return this.appModelService.isAuthenticated(this.loadingCtrl);
   }
 
   //////////////////////////////////////////

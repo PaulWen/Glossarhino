@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController, AlertController, ModalController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController, AlertController, ModalController, LoadingController } from 'ionic-angular';
 import { EditModalPageModelInterface } from "./edit-modal.model-interface";
 import { EntryDataObject } from "../../providers/dataobjects/entry.dataobject";
 import { AppModelService } from "../../providers/app-model-service";
@@ -24,6 +24,7 @@ export class EditModalPage {
   private viewCtrl: ViewController;
   private alertCtrl: AlertController;
   private modalCtrl: ModalController;
+  private loadingCtrl: LoadingController;  
 
   // navParams
   private _id: string;
@@ -38,13 +39,14 @@ export class EditModalPage {
   private selectedLanguageDataObject: UserLanguageFilterConfigDataObject;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
-  constructor(navCtrl: NavController, navParams: NavParams, viewCtrl: ViewController, modalCtrl: ModalController, alertCtrl: AlertController, appModelService: AppModelService) {
+  constructor(navCtrl: NavController, navParams: NavParams, viewCtrl: ViewController, modalCtrl: ModalController, alertCtrl: AlertController, loadingCtrl: LoadingController, appModelService: AppModelService) {
     // instantiate ionic injected components
     this.navCtrl = navCtrl;
     this.navParams = navParams;
     this.viewCtrl = viewCtrl;
     this.alertCtrl = alertCtrl;
     this.modalCtrl = modalCtrl;
+    this.loadingCtrl = loadingCtrl;
 
     // get navParams
     this._id = this.navParams.get("_id");
@@ -64,8 +66,8 @@ export class EditModalPage {
     this.loadData();
   }
 
-  private ionViewCanEnter(): Promise<boolean> | boolean {
-    return this.appModelService.isAuthenticated();
+  private ionViewCanEnter(): Promise<boolean> {
+    return this.appModelService.isAuthenticated(this.loadingCtrl);
   }
 
   //////////////////////////////////////////

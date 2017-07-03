@@ -5,7 +5,8 @@ import {
   NavParams,
   PopoverController,
   Searchbar,
-  ViewController
+  ViewController,
+  LoadingController
 } from "ionic-angular";
 import { Logger } from "../../app/logger";
 import { AppModelService } from "../../providers/app-model-service";
@@ -28,6 +29,7 @@ export class EntryListPage {
   private navParams: NavParams;
   private popoverCtrl: PopoverController;
   private viewCtrl: ViewController;
+  private loadingCtrl: LoadingController;
 
   // navParams
   private departmentId: string;
@@ -47,13 +49,14 @@ export class EntryListPage {
   private searchText: string;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
-  constructor(navCtrl: NavController, navParams: NavParams, popoverCtrl: PopoverController, viewCtrl: ViewController, appModelService: AppModelService) {
+  constructor(navCtrl: NavController, navParams: NavParams, popoverCtrl: PopoverController, viewCtrl: ViewController, loadingCtrl: LoadingController, appModelService: AppModelService) {
 
     // instantiate ionic injected components
     this.navCtrl = navCtrl;
     this.navParams = navParams;
     this.popoverCtrl = popoverCtrl;
     this.viewCtrl = viewCtrl;
+    this.loadingCtrl = loadingCtrl;
 
     // get navParams
     this.departmentId = this.navParams.get("departmentId");
@@ -74,8 +77,8 @@ export class EntryListPage {
   //      Ionic Lifecycle Functions       //
   //////////////////////////////////////////
 
-  private ionViewCanEnter(): Promise<boolean> | boolean {
-    return this.appModelService.isAuthenticated();
+  private ionViewCanEnter(): Promise<boolean> {
+    return this.appModelService.isAuthenticated(this.loadingCtrl);
   }
 
   private ionViewWillEnter() {

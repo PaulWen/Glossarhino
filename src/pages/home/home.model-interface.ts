@@ -4,6 +4,7 @@ import {UserDepartmentFilterConfigDataObject} from "../../providers/dataobjects/
 import {UserLanguageFilterConfigDataObject} from "../../providers/dataobjects/user-language-filter-config.dataobject";
 import {SuperLoginClientDoneResponse} from "../../providers/super_login_client/super_login_client_done_reponse";
 import {SuperLoginClientErrorResponse} from "../../providers/super_login_client/super_login_client_error_reponse";
+import { LoadingController } from "ionic-angular";
 
 export interface HomePageModelInterface {
 
@@ -12,7 +13,7 @@ export interface HomePageModelInterface {
    *
    * @returns true or false depending on if the user is already authenticated
    */
-  isAuthenticated(): Promise<boolean>;
+  isAuthenticated(loadingCtrl: LoadingController): Promise<boolean>;
 
   /**
    * The method logs out the user. The current session token gets invalid.

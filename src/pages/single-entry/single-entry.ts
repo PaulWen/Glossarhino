@@ -7,7 +7,8 @@ import {
   ModalController,
   NavController,
   NavParams,
-  PopoverController
+  PopoverController,
+  LoadingController
 } from "ionic-angular";
 import { Alerts } from "../../app/alerts";
 import { Logger } from "../../app/logger";
@@ -34,6 +35,7 @@ export class SingleEntryPage {
   private actionSheetCtrl: ActionSheetController;
   private popoverCtrl: PopoverController;
   private alertCtrl: AlertController;
+  private loadingCtrl: LoadingController;
 
   // navParams
   private entryDocumentId: string;
@@ -49,7 +51,7 @@ export class SingleEntryPage {
   private showDepartmentFilterAlertAppModel;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
-  constructor(navCtrl: NavController, navParams: NavParams, modalCtrl: ModalController, actionSheetCtrl: ActionSheetController, popoverCtrl: PopoverController, alertCtrl: AlertController, appModelService: AppModelService) {
+  constructor(navCtrl: NavController, navParams: NavParams, modalCtrl: ModalController, actionSheetCtrl: ActionSheetController, popoverCtrl: PopoverController, alertCtrl: AlertController, loadingCtrl: LoadingController, appModelService: AppModelService) {
 
     // instantiate ionic injected components
     this.navCtrl = navCtrl;
@@ -58,6 +60,7 @@ export class SingleEntryPage {
     this.actionSheetCtrl = actionSheetCtrl;
     this.popoverCtrl = popoverCtrl;
     this.alertCtrl = alertCtrl;
+    this.loadingCtrl = loadingCtrl;
 
     // get navParams
     this.entryDocumentId = this.navParams.get("entryDocumentId");
@@ -74,8 +77,8 @@ export class SingleEntryPage {
   //      Ionic Lifecycle Functions       //
   //////////////////////////////////////////
 
-  private ionViewCanEnter(): Promise<boolean> | boolean {
-    return this.appModelService.isAuthenticated();
+  private ionViewCanEnter(): Promise<boolean> {
+    return this.appModelService.isAuthenticated(this.loadingCtrl);
   }
 
   private ionViewWillEnter() {

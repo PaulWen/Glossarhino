@@ -4,6 +4,7 @@ import {Logger} from "../../app/logger";
 import {AppModelService} from "../../providers/app-model-service";
 import {SuperLoginClientError} from "../../providers/super_login_client/super_login_client_error";
 import {LoginPageInterface} from "./login-interface";
+import {TranslateService} from "@ngx-translate/core";
 
 /**
  * LoginPage where the user authenticates itself and is also able to create a new account.
@@ -26,11 +27,12 @@ export class LoginPage {
   private appModelService: LoginPageInterface;
 
   //other
+  private translateService: TranslateService;
   private loginOpened: boolean;
 
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
-  constructor(navCtrl: NavController, navParams: NavParams, loadingCtrl: LoadingController, appModelService: AppModelService) {
+  constructor(navCtrl: NavController, navParams: NavParams, loadingCtrl: LoadingController, appModelService: AppModelService, translateService: TranslateService) {
     // instantiate ionic injected components
     this.navCtrl = navCtrl;
     this.navParams = navParams;
@@ -40,6 +42,7 @@ export class LoginPage {
     this.appModelService = appModelService;
 
     // instantiate other
+    this.translateService = translateService;
     this.loginOpened = true;
   }
 
@@ -82,7 +85,7 @@ export class LoginPage {
           // error
           if ((<any>error.getErrorMessage()).loaded != undefined && (<any>error.getErrorMessage()).loaded == 0) {
             // the above query test for a "ProgressEvent" object which appears if there is no internet connection
-            alert("No internet connection!");
+            this.showNoInternetConnectionAlert();
           }
           if (error.checkForError(SuperLoginClientError.AUTH_ERR_1)) {
             alert(SuperLoginClientError.AUTH_ERR_1);
@@ -107,11 +110,12 @@ export class LoginPage {
         }
       });
     } else {
-      alert("No internet connection!");
+      this.showNoInternetConnectionAlert();
     }
   }
 
   private login(email: string, password: string, rememberLogin: boolean) {
+    this.showNoInternetConnectionAlert();
     // test if user is online
     if (this.appModelService.isOnline()) {
       try {
@@ -129,7 +133,7 @@ export class LoginPage {
             // error
             if ((<any>error.getErrorMessage()).loaded != undefined && (<any>error.getErrorMessage()).loaded == 0) {
               // the above query test for a "ProgressEvent" object which appears if there is no internet connection
-              alert("No internet connection!");
+              this.showNoInternetConnectionAlert();
             }
             if (error.checkForError(SuperLoginClientError.LOGIN_ERR_1)) {
               alert(SuperLoginClientError.LOGIN_ERR_1);
@@ -146,8 +150,16 @@ export class LoginPage {
         Logger.debug(error);
       }
     } else {
-      alert("No internet connection!");
+      this.showNoInternetConnectionAlert();
     }
+  }
+
+  private showNoInternetConnectionAlert() {
+    this.translateService.get('NO_CONNECTION_ALERT').subscribe(
+      (data) => {
+        alert(data);
+      }
+    );
   }
 
 }

@@ -24,6 +24,7 @@ import { UserLanguageFilterConfigDataObject } from "./dataobjects/user-language-
 import { UserDataObject } from "./dataobjects/user.dataobject";
 import { SuperLoginClient } from "./super_login_client/super_login_client";
 import { SuperloginHttpRequester } from "./super_login_client/superlogin_http_requester";
+import {TranslateService} from "@ngx-translate/core";
 
 @Injectable()
 export class AppModelService extends SuperLoginClient implements LoginPageInterface, HomePageModelInterface, LanguagePopoverPageModelInterface, EntryListPageModelInterface, SingleEntryPageModelInterface, EditModalPageModelInterface, CommentModalModelInterface, LinkedObjectsModalModelInterface {
@@ -43,9 +44,13 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   private globalDepartmentConfig: GlobalDepartmentConfigDataObject;
   private globalLanguageConfig: GlobalLanguageConfigDataobject;
 
+  //////////////Other////////////
+  private translateService: TranslateService;
+
+
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
 
-  constructor(httpRequester: SuperloginHttpRequester, platform: Platform) {
+  constructor(httpRequester: SuperloginHttpRequester, platform: Platform, translateService: TranslateService) {
     super(httpRequester, platform);
 
     // load necessary PouchDB Plugins
@@ -59,6 +64,11 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
 
     this.globalDepartmentConfig = null;
     this.globalLanguageConfig = null;
+
+    this.translateService = translateService;
+
+    // set the default language of the app ui (this language will be used as a fallback when a translation isn't found in the current language)
+    this.translateService.setDefaultLang("0");
   }
 
   ////////////////////////////////////////Inherited Methods//////////////////////////////////////////
@@ -88,9 +98,6 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     let loadingAlert = this.presentLoadingDefault(loadingCtrl);
 
     try {
-
-
-
       Logger.log(user_databases);
 
       // initialize settings databases
@@ -99,6 +106,9 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
 
       // load global app settings
       await this.loadGlobalAppSettings();
+
+      // set the current language of the app ui
+      this.translateService.use((await this.getUserLanguageFilterConfigDataobject()).selectedLanguage);
 
       // once the global app-settings have been loaded...
       // initialize all the entry databases from the different languages
@@ -138,6 +148,9 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
 
       // load global app settings
       await this.loadGlobalAppSettings();
+
+      // set the current language of the app ui
+      this.translateService.use((await this.getUserLanguageFilterConfigDataobject()).selectedLanguage);
 
       // once the global app-settings have been loaded...
       // initialize all the entry databases from the different languages
@@ -308,8 +321,11 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   }
 
   public async setSelectedLanguage(userLanguageSetting: UserLanguageFilterConfigDataObject): Promise<boolean> {
-    return (await this.userSettingsDatabase.put(userLanguageSetting)
-    ).ok;
+    // set the current language of the app ui
+    this.translateService.use(userLanguageSetting.selectedLanguage);
+
+    // update the user setting in the database
+    return (await this.userSettingsDatabase.put(userLanguageSetting)).ok;
   }
 
   //////////////////////////////////////////
@@ -585,5 +601,4 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
 
     return loading;
   }
-
 }

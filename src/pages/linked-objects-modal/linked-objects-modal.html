@@ -41,7 +41,7 @@
 
   </ion-item-group>
 
-  <ion-item-group>
+  <ion-item-group *ngIf="synonyms != undefined || isEditMode">
     <ion-item-divider color="light">
       Entries
     </ion-item-divider>

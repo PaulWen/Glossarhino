@@ -100,6 +100,7 @@ export class LinkedObjectsModalPage {
     return new Promise((resolve, reject) => {
       let relatedEntries = []; // instantiate array
 
+      if(relatedEntriesIds != undefined) {
       relatedEntriesIds.forEach(entryId => {
         // get entry and push to relatedEntries array  
         this.appModelService.getEntryDataObjectToShow(entryId, this.selectedLanguageDataObject.selectedLanguage).then((data) => {
@@ -109,7 +110,7 @@ export class LinkedObjectsModalPage {
         });
       });
       resolve(relatedEntries);
-    });
+    }});
   }
 
   private addRelatedDepartment(newRelatedDepartmentId: string) {

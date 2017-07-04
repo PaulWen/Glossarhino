@@ -24,6 +24,8 @@
   "ADD": "Add",
   "CANCEL": "Cancel",
   "URL": "URL",
+  "DONE": "Done",
+  "CLOSE": "Close",
 
   "XXXXXXXXXCommentModalXXXXXXXXX": "",
   "COMMENTS": "Comments",
@@ -36,6 +38,7 @@
   "TITLE": "Title",
   "DESCRIPTION": "Description",
   "EDIT_ATTACHMENTS": "Edit attachments",
+  "EDIT_LINKS": "Edit links",
   "ADD_DEPARTMENT_SPECIFICATION": "Add department specification",
   "DELETE_ENTRY": "Delete Entry",
 

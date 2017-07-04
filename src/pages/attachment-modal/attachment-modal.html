@@ -4,12 +4,12 @@
     <ion-buttons start>
 
       <button ion-button (click)="closeAttachmentModal()" *ngIf="!isEditMode">
-        <span ion-text color="primary" showWhen="ios">Close</span>
+        <span ion-text color="primary" showWhen="ios">{{ "CLOSE" | translate:param }}</span>
         <ion-icon name="md-close" showWhen="android,windows, core"></ion-icon>
       </button>
 
       <button ion-button (click)="closeAttachmentModal(true)" *ngIf="isEditMode">
-        <span ion-text color="primary" showWhen="ios">Done</span>
+        <span ion-text color="primary" showWhen="ios">{{ "DONE" | translate:param }}</span>
         <ion-icon name="md-checkmark" showWhen="android,windows, core"></ion-icon>
       </button>
 
@@ -21,23 +21,35 @@
 
 
 <ion-content padding>
-
   <!-- Print list with all attachments retreived for entry and department -->
   <ion-list>
-    <button ion-item *ngFor="let attachment of attachments"
-            (click)="openAttachment(attachment.url)">
 
+    <button ion-item *ngFor="let attachment of attachments" (click)="openAttachment(attachment.url)">
       {{ attachment.name }}
-
-      <ion-icon name="trash" item-end *ngIf="isEditMode"
-                (click)="removeAttachment(attachment)"></ion-icon>
-
+      <ion-icon name="trash" item-end *ngIf="isEditMode" (click)="removeAttachment(attachment)">
+      </ion-icon>
     </button>
 
-    <button ion-button *ngIf="isEditMode" (click)="showAddAttachmentAlert()">
-      {{ "ADD_ATTACHMENTS" | translate:param }}
-    </button>
+    <ion-item *ngIf="isEditMode">
+
+      <ion-toolbar>
+        <ion-item>
+          <ion-input [(ngModel)]="name" placeholder="{{ 'NAME' | translate:param }}" clearInput></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-input [(ngModel)]="url" placeholder="{{ 'URL' | translate:param }}" clearInput (keyup.enter)="addAttachment()"></ion-input>
+        </ion-item>
+
+        <ion-buttons end>
+          <button ion-button icon-only (click)="addAttachment()">
+            <ion-icon name="add"></ion-icon>
+          </button>
+        </ion-buttons>
+
+      </ion-toolbar>
+
+    </ion-item>
 
   </ion-list>
-
 </ion-content>

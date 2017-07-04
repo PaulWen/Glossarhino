@@ -75,7 +75,7 @@
 
       <ion-toolbar>
         <ion-item>
-          <ion-input [(ngModel)]="synonym" placeholder="{{ 'ADD_SYNONYM_DOTS' | translate:param }}" clearInput></ion-input>
+          <ion-input [(ngModel)]="synonym" placeholder="{{ 'ADD_SYNONYM_DOTS' | translate:param }}" clearInput (keyup.enter)="addSynonym()"></ion-input>
         </ion-item>
 
         <ion-buttons end>
@@ -105,7 +105,7 @@
 
       <ion-toolbar>
         <ion-item>
-          <ion-input [(ngModel)]="acronym" placeholder="{{ 'ADD_ACRONYM_DOTS' | translate:param }}" clearInput></ion-input>
+          <ion-input [(ngModel)]="acronym" placeholder="{{ 'ADD_ACRONYM_DOTS' | translate:param }}" clearInput (keyup.enter)="addAcronym()"></ion-input>
         </ion-item>
 
         <ion-buttons end>

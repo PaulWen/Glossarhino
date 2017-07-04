@@ -22,6 +22,10 @@ export class AttachmentModalPage {
   private attachments: Array<AttachmentDataObject>;
   private isEditMode: boolean;
 
+  // temp input objects
+  private name: string;
+  private url: string;
+
   // other
   private translateService: TranslateService;
 
@@ -47,16 +51,16 @@ export class AttachmentModalPage {
   //           Page Functions             //
   //////////////////////////////////////////
 
-  /**
-   * Method to open an attachment when selected by the user. Will open in the systems browser.
-   * @param url
-   */
   private openAttachment(url: string) {
     //window.location.href = url.href;
     window.open(url, "_system");
   }
 
-  private addAttachment(newAttachment: AttachmentDataObject) {
+  private addAttachment(name: string, url: string) {
+    let newAttachment: AttachmentDataObject = {
+      "name": name,
+      "url": url
+    }
     this.attachments.push(newAttachment);
   }
 
@@ -65,57 +69,15 @@ export class AttachmentModalPage {
     if (index > -1) {
       this.attachments.splice(index, 1);
     }
-
   }
 
   //////////////////////////////////////////
   //         Navigation Functions         //
   //////////////////////////////////////////
 
-  /**
-   * Method to close the AttachmentModal when pressing the assigned button
-   */
   private closeAttachmentModal() {
     this.viewCtrl.dismiss({
       attachments: this.attachments
-    });
-  }
-
-  private showAddAttachmentAlert() {
-    Observable.zip(
-      this.translateService.get("ADD_ATTACHMENTS"),
-      this.translateService.get("ADD_ATTACHMENT_ALERT_INTRO"),
-      this.translateService.get("NAME"),
-      this.translateService.get("URL"),
-      this.translateService.get("CANCEL"),
-      this.translateService.get("ADD"),
-      (addAttachment: string, addAttachmentAlertIntro: string, name: string, url: string, cancel: string, add: string) => {
-        return this.alertCtrl.create({
-          title: addAttachment,
-          message: addAttachmentAlertIntro,
-          inputs: [
-            {
-              name: "name",
-              placeholder: name
-            }, {
-              name: "url",
-              placeholder: url
-            }
-          ],
-          buttons: [
-            {
-              text: cancel
-            }, {
-              text: add,
-              handler: data => {
-                this.addAttachment(data);
-              }
-            }
-          ]
-        })
-      }
-    ).subscribe((alert)=>{
-      alert.present();
     });
   }
 

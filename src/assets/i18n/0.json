@@ -26,6 +26,8 @@
   "ADD": "Hinzufügen",
   "CANCEL": "Abbrechen",
   "URL": "URL",
+  "DONE": "Fertig",
+  "CLOSE": "Schließen",
 
   "XXXXXXXXXCommentModalXXXXXXXXX": "",
   "COMMENTS": "Kommentare",
@@ -38,6 +40,7 @@
   "TITLE": "Titel",
   "DESCRIPTION": "Beschreibung",
   "EDIT_ATTACHMENTS": "Anhang bearbeiten",
+  "EDIT_LINKS": "Verlinkungen bearbeiten",
   "ADD_DEPARTMENT_SPECIFICATION": "Füge Abteilungsspezifikation hinzu",
   "DELETE_ENTRY": "Delete Entry",
 

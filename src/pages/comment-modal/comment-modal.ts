@@ -85,20 +85,20 @@ export class CommentModalPage {
   }
 
   private addComment() {
-    let newComment: CommentDataObject = CommentDataObject.init(this.currentUser.name, this.currentUser.email);
-    newComment.content = this.commentContent;
-    newComment.timeStamp = new Date();
 
-    if (this.entry.comments == undefined) {
-      this.entry.comments = [];
-    }
+    let newComment: CommentDataObject = CommentDataObject.init(this.commentContent, this.currentUser.name, this.currentUser.email, new Date());
+
+    this.entry.comments = this.entry.comments ? this.entry.comments : [];
 
     this.entry.comments.push(newComment);
     this.commentContent = null;
 
-    this.appModelService.setEntryDataObject(this.entry, this.selectedLanguage.selectedLanguage).then((data) => {
-
-    });
+    this.appModelService.setEntryDataObject(this.entry, this.selectedLanguage.selectedLanguage).then(() => {
+      Logger.log("Successfully added comment (Class: CommentModalPage, Method: addComment())");
+    }, (error) => {
+      Logger.log("Adding comment failed (Class: CommentModalPage, Method: addComment())");
+      Logger.error(error);
+    })
   }
 
   private sendMail(emailAddress: string) {

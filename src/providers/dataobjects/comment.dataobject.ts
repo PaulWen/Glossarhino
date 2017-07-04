@@ -12,12 +12,12 @@ export abstract class CommentDataObject {
   abstract get timeStamp(): Date;
   abstract set timeStamp(timeStamp: Date);
 
-  public static init(contact: string, email: string): CommentDataObject {
+  public static init(content: string, contact: string, email: string, timeStamp: Date): CommentDataObject {
     return {
-      "content": undefined,
+      "content": content,
       "contact": contact,
       "email": email,
-      "timeStamp": undefined
+      "timeStamp": timeStamp
     };
   }
 }

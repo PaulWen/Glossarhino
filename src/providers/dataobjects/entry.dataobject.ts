@@ -41,9 +41,9 @@ export abstract class EntryDataObject {
   abstract get departmentSpecifics(): Array<DepartmentEntrySpecificsDataObject>;
   abstract set departmentSpecifics(departmentSpecifics: Array<DepartmentEntrySpecificsDataObject>);
 
-  public static init(): EntryDataObject {
+  public static init(_id?: string): EntryDataObject {
     return {
-      "_id": undefined,
+      "_id": _id ? _id : undefined,
       "name": "",
       "description": "",
       "contact": "",

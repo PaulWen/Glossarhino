@@ -258,15 +258,11 @@ export class SingleEntryPage {
   }
 
   private showNoEntryAlert() {
-    let alert = this.alertCtrl.create({
-      title: "Entry not available!",
-      subTitle: "Sorry, the entry is not yet available in this language.",
-      buttons: ['OK']
-    });
-    alert.present();
-    alert.onWillDismiss(() => {
-      this.navCtrl.setRoot("HomePage");
-    })
+    Logger.log(this.entryDocumentId);
+    Logger.log(this.selectedLanguageDataObject.selectedLanguage);
+
+    
+    Alerts.showNoEntryAlert(this.alertCtrl, this.navCtrl, this.entryDocumentId, this.selectedLanguageDataObject.selectedLanguage);
   }
 
 }

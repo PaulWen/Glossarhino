@@ -1,4 +1,4 @@
-import {Component} from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import {
   ActionSheetController,
   AlertController,
@@ -14,6 +14,7 @@ import {HomePageDepartmentDataobject} from "../../providers/dataobjects/homepage
 import {UserLanguageFilterConfigDataObject} from "../../providers/dataobjects/user-language-filter-config.dataobject";
 import {SuperLoginClientError} from "../../providers/super_login_client/super_login_client_error";
 import {HomePageModelInterface} from "./home.model-interface";
+import { DepartmentFilterComponent } from "../../components/department-filter/department-filter";
 
 @IonicPage()
 @Component({
@@ -38,6 +39,9 @@ export class HomePage {
   private selectedDepartments: Array<HomePageDepartmentDataobject>;
   private selectedLanguageDataObject: UserLanguageFilterConfigDataObject;
   private countOfAllEntries: number;
+
+  // department filter
+  @ViewChild(DepartmentFilterComponent) departmentFilterComponent: DepartmentFilterComponent;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
 
@@ -137,7 +141,10 @@ export class HomePage {
         }, {
           text: "Filter",
           handler: () => {
-            this.showDepartmentFilterAlert(this.alertCtrl, this.showDepartmentFilterAlertAppModelService);
+            //this.showDepartmentFilterAlert(this.alertCtrl, this.showDepartmentFilterAlertAppModelService);
+            this.departmentFilterComponent.showAlert().then(() => {
+              this.loadData();
+            });
           }
         }, {
           text: "Logout",
@@ -194,19 +201,6 @@ export class HomePage {
         // in the case that the view can not be entered redirect the user to the login page
         this.navCtrl.setRoot("LoginPage");
       }
-    });
-  }
-
-  /**
-   * Shows a filter alert for departments
-   * @param alertCtrl Hand over AlertController of the page to show an alert on that page
-   * @param appModelService Hand over AppModelService to be able to load current preferences and all available departments
-   */
-  private showDepartmentFilterAlert(alertCtrl: AlertController, appModelService: AppModelService) {
-    Alerts.showDepartmentFilterAlert(alertCtrl, appModelService).then(() => {
-      this.loadData();
-    }, (error) => {
-      Logger.error(error);
     });
   }
 

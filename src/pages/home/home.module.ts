@@ -2,16 +2,16 @@ import {NgModule} from "@angular/core";
 import {IonicPageModule} from "ionic-angular";
 import {HomePage} from "./home";
 import {TranslateModule} from "@ngx-translate/core";
-import { DepartmentFilterComponent } from "../../components/department-filter/department-filter";
+import { DepartmentFilterComponentModule } from "../../components/department-filter/department-filter.module";
 
 @NgModule({
   declarations: [
-    HomePage,
-    DepartmentFilterComponent
+    HomePage
   ],
   imports: [
     IonicPageModule.forChild(HomePage),
-    TranslateModule
+    TranslateModule,
+    DepartmentFilterComponentModule
   ]
 })
 export class HomePageModule {

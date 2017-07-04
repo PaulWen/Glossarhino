@@ -78,7 +78,7 @@ export class HomePage {
   //////////////////////////////////////////
 
   /**
-   * Function loads data for the page, at first the selectedLanguageDataObject, because it is needed for other data to be loaded. After the selectedLanguageDataObject is loaded, the countOfAllEntries
+   * Function loads data for the page, at first the selectedLanguageDataObject, because it is needed for other data to be loaded.
    * @param refresher optional parameter, hand over, if reload triggered from "pull-to-refresh"
    */
   private loadData(refresher?) {
@@ -141,7 +141,6 @@ export class HomePage {
         }, {
           text: "Filter",
           handler: () => {
-            //this.showDepartmentFilterAlert(this.alertCtrl, this.showDepartmentFilterAlertAppModelService);
             this.departmentFilterComponent.showAlert().then(() => {
               this.loadData();
             });

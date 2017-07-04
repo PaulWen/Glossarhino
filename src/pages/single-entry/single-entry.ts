@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import { Promise } from "es6-promise";
 import {
   ActionSheetController,
@@ -17,6 +17,7 @@ import { AttachmentDataObject } from "../../providers/dataobjects/attachment.dat
 import { EntryDataObject } from "../../providers/dataobjects/entry.dataobject";
 import { UserLanguageFilterConfigDataObject } from "../../providers/dataobjects/user-language-filter-config.dataobject";
 import { SingleEntryPageModelInterface } from "./single-entry.model-interface";
+import { DepartmentFilterComponent } from "../../components/department-filter/department-filter";
 
 @IonicPage({
   segment: "singleentry/:entryDocumentId",
@@ -45,10 +46,10 @@ export class SingleEntryPage {
 
   // data objects
   private entry: EntryDataObject;
-  private selectedLanguage: UserLanguageFilterConfigDataObject;
+  private selectedLanguageDataObject: UserLanguageFilterConfigDataObject;
 
-  // selectFilterAlert objects
-  private showDepartmentFilterAlertAppModel;
+  // department filter
+  @ViewChild(DepartmentFilterComponent) departmentFilterComponent: DepartmentFilterComponent;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
   constructor(navCtrl: NavController, navParams: NavParams, modalCtrl: ModalController, actionSheetCtrl: ActionSheetController, popoverCtrl: PopoverController, alertCtrl: AlertController, loadingCtrl: LoadingController, appModelService: AppModelService) {
@@ -67,8 +68,6 @@ export class SingleEntryPage {
 
     // instantiate model
     this.appModelService = appModelService;
-    this.showDepartmentFilterAlertAppModel = appModelService;
-
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
@@ -89,14 +88,18 @@ export class SingleEntryPage {
   //           Page Functions             //
   //////////////////////////////////////////
 
+  /**
+   * Function loads data for the page, at first the selectedLanguageDataObject, because it is needed for other data to be loaded.
+   * @param refresher optional parameter, hand over, if reload triggered from "pull-to-refresh"
+   */
   private loadData(refresher?) {
     //get selected language
     this.appModelService.getSelectedLanguage().then((data) => {
-      this.selectedLanguage = data;
+      this.selectedLanguageDataObject = data;
 
       // load other data as soon as language loaded
       // get EntryDataObject
-      this.appModelService.getEntryDataObjectToShow(this.entryDocumentId, this.selectedLanguage.selectedLanguage).then((data) => {
+      this.appModelService.getEntryDataObjectToShow(this.entryDocumentId, this.selectedLanguageDataObject.selectedLanguage).then((data) => {
         this.entry = data;
       }, (error) => {
         switch (error.status) {
@@ -128,6 +131,10 @@ export class SingleEntryPage {
     window.open("mailto:" + emailAddress, "_system");
   }
 
+  /**
+   * Returns the length of an array and 0 if array is undefined.
+   * @param array Array to return the length from.
+   */  
   private getArrayLength(array: Array<any>): number {
     if (array == undefined) {
       return 0;
@@ -153,7 +160,9 @@ export class SingleEntryPage {
         }, {
           text: "Filter",
           handler: () => {
-            this.showDepartmentFilterAlert(this.alertCtrl, this.showDepartmentFilterAlertAppModel);
+            this.departmentFilterComponent.showAlert().then(() => {
+              this.loadData();
+            });
           }
         }, {
           text: "Cancel",
@@ -208,14 +217,6 @@ export class SingleEntryPage {
     });
   }
 
-  private showDepartmentFilterAlert(alertCtrl: AlertController, appModelService: AppModelService) {
-    Alerts.showDepartmentFilterAlert(alertCtrl, appModelService).then(() => {
-      this.loadData();
-    }, (error) => {
-      Logger.error(error);
-    });
-  }
-
   private openCommentModal(entry: EntryDataObject) {
     let commentModal = this.modalCtrl.create("CommentModalPage", {
       entry: entry
@@ -256,11 +257,6 @@ export class SingleEntryPage {
     });
   }
 
-  private openAttachment(url: string) {
-    //window.location.href = url.href;
-    window.open(url, "_system");
-  }
-
   private showNoEntryAlert() {
     let alert = this.alertCtrl.create({
       title: "Entry not available!",
@@ -268,7 +264,7 @@ export class SingleEntryPage {
       buttons: ['OK']
     });
     alert.present();
-    alert.onDidDismiss(() => {
+    alert.onWillDismiss(() => {
       this.navCtrl.setRoot("HomePage");
     })
   }

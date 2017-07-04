@@ -46,6 +46,8 @@
 
   "XXXXXXXXXHomePageXXXXXXXXX": "",
   "APP_NAME": "Glossarhino",
+  "ALL": "Alle",
+  "ENTRIES": "Einträge",
 
   "XXXXXXXXXLanguagePopoverXXXXXXXXX": "",
   "LANGUAGE": "Sprache",
@@ -60,6 +62,11 @@
   "ADD_SYNONYM_DOTS": "Füge Synonym hinzu ...",
   "ACRONYMS": "Acronyme",
   "ADD_ACRONYM_DOTS": "Füge Acronym hinzu ...",
+
+  "XXXXXXXXXDepartmentFilterComponentXXXXXXXXX": "",
+  "DEPARTMENT_FILTER": "Abteilungsfilter",
+  "OKAY_TEXT": "Okay",
+  "CANCEL_TEXT": "Abbrechen",
 
 
 

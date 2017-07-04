@@ -1,9 +1,9 @@
-import {AlertController, LoadingController} from "ionic-angular";
-import {AppModelService} from "../providers/app-model-service";
-import {DepartmentDataObject} from "../providers/dataobjects/department.dataobject";
-import {GlobalDepartmentConfigDataObject} from "../providers/dataobjects/global-department-config.dataobject";
-import {UserDepartmentFilterConfigDataObject} from "../providers/dataobjects/user-department-filter-config.dataobject";
-import {Logger} from "./logger";
+import { AlertController, LoadingController } from "ionic-angular";
+import { AppModelService } from "../providers/app-model-service";
+import { DepartmentDataObject } from "../providers/dataobjects/department.dataobject";
+import { GlobalDepartmentConfigDataObject } from "../providers/dataobjects/global-department-config.dataobject";
+import { UserDepartmentFilterConfigDataObject } from "../providers/dataobjects/user-department-filter-config.dataobject";
+import { Logger } from "./logger";
 
 /**
  * This class implements all the alerts needed for the app
@@ -85,6 +85,9 @@ export class Alerts {
     });
   }
 
+  //////////////////////////////////////////
+  //            Loading Alert             //
+  //////////////////////////////////////////
 
   public static presentLoadingDefault(loadingCtrl: LoadingController): any {
     let loading = loadingCtrl.create({

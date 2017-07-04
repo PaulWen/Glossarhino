@@ -44,11 +44,13 @@
 
   "XXXXXXXXXHomePageXXXXXXXXX": "",
   "APP_NAME": "Glossarhino",
+  "ALL" : "All",
+  "ENTRIES" : "Entries",
 
   "XXXXXXXXXLanguagePopoverXXXXXXXXX": "",
   "LANGUAGE": "Language",
 
-  "XXXXXXXXXLinkedObjectModalXXXXXXXXX": "",
+  
   "RELATED": "Related",
   "DEPARTMENTS": "Departments",
   "ADD_DEPARTMENT": "Add department",
@@ -59,7 +61,10 @@
   "ACRONYMS": "Acronyms",
   "ADD_ACRONYM_DOTS": "Add Acronym ...",
 
-
+  "XXXXXXXXXDepartmentFilterComponentXXXXXXXXX": "",
+  "DEPARTMENT_FILTER" : "Department Filter",
+  "OKAY_TEXT": "Okay",
+  "CANCEL_TEXT": "Cancel",
 
 
 

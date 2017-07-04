@@ -1,0 +1,6 @@
+<ion-item>
+    <ion-label>{{ "DEPARTMENT_FILTER" | translate:param }}</ion-label>
+    <ion-select [ngModel]="userDepartmentFilterConfig?.selectedDepartments" (ngModelChange)="userDepartmentFilterConfig.selectedDepartments = $event" (ionChange)="setPreferences()" multiple="true" okText="{{ 'OKAY_TEXT' | translate:param }}" cancelText="{{ 'CANCEL_TEXT' | translate:param }}">
+      <ion-option *ngFor="let department of globalDepartmentConfig.departments" value="{{department.departmentId}}"> {{ department.departmentName }} </ion-option>
+    </ion-select>
+  </ion-item>

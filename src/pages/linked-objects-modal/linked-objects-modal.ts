@@ -96,24 +96,30 @@ export class LinkedObjectsModalPage {
   }
 
   private loadEntries(relatedEntriesIds: Array<string>) {
-
     return new Promise((resolve, reject) => {
       let relatedEntries = []; // instantiate array
 
-      if(relatedEntriesIds != undefined) {
-      relatedEntriesIds.forEach(entryId => {
-        // get entry and push to relatedEntries array  
-        this.appModelService.getEntryDataObjectToShow(entryId, this.selectedLanguageDataObject.selectedLanguage).then((data) => {
-          relatedEntries.push(data);
-        }, (error) => {
-          reject(error);
+      if (relatedEntriesIds != undefined) {
+
+        relatedEntriesIds.forEach(entryId => {
+          // get entry and push to relatedEntries array  
+          this.appModelService.getEntryDataObjectToShow(entryId, this.selectedLanguageDataObject.selectedLanguage).then((data) => {
+            relatedEntries.push(data);
+          }, (error) => {
+            reject(error);
+          });
         });
-      });
-      resolve(relatedEntries);
-    }});
+
+        resolve(relatedEntries);
+
+      }
+    });
   }
 
   private addRelatedDepartment(newRelatedDepartmentId: string) {
+    // check if already initialized, if not do so
+    this.relatedDepartments = this.relatedDepartments ? this.relatedDepartments : [];
+
     this.relatedDepartments.push(newRelatedDepartmentId);
     this.relatedDepartments.sort((a, b) => {
       if (a < b)
@@ -132,9 +138,8 @@ export class LinkedObjectsModalPage {
   }
 
   private addRelatedEntry(newRelatedEntryDocumentId: string) {
-    if(this.relatedEntriesIds == undefined) {
-      this.relatedEntriesIds = [];
-    }
+    // check if already initialized, if not do so
+    this.relatedEntriesIds = this.relatedEntriesIds ? this.relatedEntriesIds : [];
 
     this.relatedEntriesIds.push(newRelatedEntryDocumentId);
     this.relatedEntriesIds.sort();
@@ -154,9 +159,9 @@ export class LinkedObjectsModalPage {
   }
 
   private addSynonym() {
-    if(this.synonyms == undefined) {
-      this.synonyms = [];
-    }
+    // check if already initialized, if not do so
+    this.synonyms = this.synonyms ? this.synonyms : [];
+
     this.synonyms.push(this.synonym);
     this.synonyms.sort();
 
@@ -171,9 +176,9 @@ export class LinkedObjectsModalPage {
   }
 
   private addAcronym() {
-    if (this.acronyms == undefined) {
-      this.acronyms = [];
-    }
+    // check if already initialized, if not do so
+    this.acronyms = this.acronyms ? this.acronyms : [];
+
     this.acronyms.push(this.acronym);
     this.acronyms.sort();
 
@@ -224,6 +229,9 @@ export class LinkedObjectsModalPage {
     relatedDepartmentCheckboxAlert.present();
   }
 
+  /**
+   * Method allows user to search for entry to add as related entry.
+   */  
   private openEntryListModal() {
     let entryListModal = this.modalCtrl.create("EntryListPage", {
       seachbarFocus: false,

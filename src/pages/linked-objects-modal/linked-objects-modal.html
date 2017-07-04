@@ -1,5 +1,4 @@
 <ion-header>
-
   <ion-navbar>
     <ion-buttons start>
 
@@ -16,7 +15,6 @@
     </ion-buttons>
     <ion-title>{{ "RELATED" | translate:param }}</ion-title>
   </ion-navbar>
-
 </ion-header>
 
 
@@ -38,7 +36,6 @@
         {{ "ADD_DEPARTMENT" | translate:param }}
       </button>
     </ion-item>
-
   </ion-item-group>
 
   <ion-item-group *ngIf="synonyms != undefined || isEditMode">
@@ -57,7 +54,6 @@
       {{ "ADD_ENTRY" | translate:param }}
       </button>
     </ion-item>
-
   </ion-item-group>
 
   <ion-item-group *ngIf="synonyms != undefined || isEditMode">
@@ -72,22 +68,20 @@
     </ion-item>
 
     <ion-item *ngIf="isEditMode">
-
       <ion-toolbar>
+
         <ion-item>
           <ion-input [(ngModel)]="synonym" placeholder="{{ 'ADD_SYNONYM_DOTS' | translate:param }}" clearInput (keyup.enter)="addSynonym()"></ion-input>
         </ion-item>
 
         <ion-buttons end>
           <button ion-button icon-only (click)="addSynonym()">
-        <ion-icon name="add"></ion-icon>
-      </button>
+            <ion-icon name="add"></ion-icon>
+          </button>
         </ion-buttons>
 
       </ion-toolbar>
-
     </ion-item>
-
   </ion-item-group>
 
   <ion-item-group *ngIf="acronyms != undefined || isEditMode">
@@ -96,28 +90,24 @@
     </ion-item-divider>
 
     <ion-item *ngFor="let acronym of acronyms"> {{ acronym }}
-
       <ion-icon name="trash" item-end *ngIf="isEditMode" (click)="removeAcronym(acronym)"></ion-icon>
-
     </ion-item>
 
     <ion-item *ngIf="isEditMode">
-
       <ion-toolbar>
+
         <ion-item>
           <ion-input [(ngModel)]="acronym" placeholder="{{ 'ADD_ACRONYM_DOTS' | translate:param }}" clearInput (keyup.enter)="addAcronym()"></ion-input>
         </ion-item>
 
         <ion-buttons end>
           <button ion-button icon-only (click)="addAcronym()">
-        <ion-icon name="add"></ion-icon>
-      </button>
+            <ion-icon name="add"></ion-icon>
+          </button>
         </ion-buttons>
 
       </ion-toolbar>
-
     </ion-item>
-
   </ion-item-group>
 
 </ion-content>

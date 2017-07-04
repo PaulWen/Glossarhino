@@ -2,6 +2,7 @@ import {Injectable} from "@angular/core";
 import {LoadingController, Platform} from "ionic-angular";
 import PouchDB from "pouchdb";
 import {Observable} from "rxjs/Rx";
+import {Alerts} from "../../app/alerts";
 import {AppConfig} from "../../app/app-config";
 import {Logger} from "../../app/logger";
 import {UserDataObject} from "../dataobjects/user.dataobject";
@@ -110,7 +111,7 @@ export abstract class SuperLoginClient {
    *
    * @param user_databases array of all user databases and the URL's to those
    */
-  abstract async initializeDatabasesOnline(user_databases: any, loadingCtrl: LoadingController): Promise<boolean>;
+  abstract async initializeDatabasesOnline(user_databases: any): Promise<boolean>;
 
   /**
    * This function gets called by the SuperLoginClient when the user is currently offline but he might have already loaded
@@ -120,7 +121,7 @@ export abstract class SuperLoginClient {
    *
    * @return true if the needed data could be loaded - false if the needed data could not be loaded
    */
-  abstract async initializeDatabasesOffline(loadingCtrl: LoadingController): Promise<boolean>;
+  abstract async initializeDatabasesOffline(): Promise<boolean>;
 
   /**
    * This function gets called as soon as the users gets logged out in order to remove all the data
@@ -134,7 +135,6 @@ export abstract class SuperLoginClient {
    * @returns true or false depending on if the user is already authenticated
    */
   public isAuthenticated(loadingCtrl: LoadingController): Promise<boolean> {
-
     // check if the user is already authenticated
     if (this.authenticated) {
       return new Promise((resolve, reject) => {
@@ -148,9 +148,15 @@ export abstract class SuperLoginClient {
       if (this.isOnline()) {
         // try to authenticate him by using the session/local storage data
         if (this.isSessionTokenStoredPersistent() != null) {
+          // open loading dialog since this may take a while
+          let loadingAlert = Alerts.presentLoadingDefault(loadingCtrl);
+
           return Observable.create((observer) => {
             this.loginWithSessionToken(this.getSessionToken(), this.isSessionTokenStoredPersistent(),
               () => {
+                // close loading dialog
+                loadingAlert.dismiss();
+
                 // end the observable and return the result
                 observer.next(true);
                 observer.complete();
@@ -159,16 +165,17 @@ export abstract class SuperLoginClient {
                 // remove the invalid session token stored in the session/local storage
                 this.deleteSessionToken();
 
+                // close loading dialog
+                loadingAlert.dismiss();
+
                 // end the observable and return the result
                 observer.next(false);
                 observer.complete();
               }
-              , loadingCtrl
             );
           }).toPromise();
         } else {
           return new Promise((resolve, reject) => {
-
             resolve(false);
             return;
           });
@@ -185,13 +192,23 @@ export abstract class SuperLoginClient {
 
           // if the user does not yet work with the offline data it should be tried to load offline data
         } else {
+          // open loading dialog since this may take a while
+          let loadingAlert = Alerts.presentLoadingDefault(loadingCtrl);
+
           return new Promise((resolve, reject) => {
-            this.initializeDatabasesOffline(loadingCtrl).then((data) => {
+            this.initializeDatabasesOffline().then((data) => {
               if (data) {
                 this.offlineMode = true;
+
+                // close loading dialog
+                loadingAlert.dismiss();
+
                 resolve(true);
                 return;
               } else {
+                // close loading dialog
+                loadingAlert.dismiss();
+
                 reject("No local data and no internet connection!");
                 return;
               }
@@ -289,7 +306,7 @@ export abstract class SuperLoginClient {
    * @param done callback function once the request was successful
    * @param error callback function in case an error occurred
    */
-  public loginWithCredentials(email: string, password: string, stayAuthenticated: boolean, done: SuperLoginClientDoneResponse, error: SuperLoginClientErrorResponse, loadingCtrl: LoadingController) {
+  public loginWithCredentials(email: string, password: string, stayAuthenticated: boolean, done: SuperLoginClientDoneResponse, error: SuperLoginClientErrorResponse) {
     // log the user in
     this.httpRequestor.postJsonData(AppConfig.WEB_SERVER_DOMAIN + "/auth/login", null, {
       // since the username is not allowed to include Capital letters we have to make sure that it does not
@@ -298,7 +315,7 @@ export abstract class SuperLoginClient {
     }).subscribe(
       (data: any) => {
         // finish the authentication
-        this.finishAuthentication(data.token + ":" + data.password, stayAuthenticated, done, error, loadingCtrl);
+        this.finishAuthentication(data.token + ":" + data.password, stayAuthenticated, done, error);
         Logger.log("Authenticated.");
       },
       (errorObject) => {
@@ -326,13 +343,13 @@ export abstract class SuperLoginClient {
    *
    * @returns {Observable<boolean>} returns true or false depending on if a valid session token could be loaded
    */
-  private loginWithSessionToken(sessionToken: string, stayAuthenticated: boolean, done: SuperLoginClientDoneResponse, error: SuperLoginClientErrorResponse, loadingCtrl: LoadingController) {
+  private loginWithSessionToken(sessionToken: string, stayAuthenticated: boolean, done: SuperLoginClientDoneResponse, error: SuperLoginClientErrorResponse) {
     // check if the given session token is valid
     this.httpRequestor.getJsonData(AppConfig.WEB_SERVER_DOMAIN + "/auth/session", sessionToken).subscribe(
       // if session token is still valid
       (data: any) => {
         // finish the authentication
-        this.finishAuthentication(sessionToken, stayAuthenticated, done, error, loadingCtrl);
+        this.finishAuthentication(sessionToken, stayAuthenticated, done, error);
         Logger.log("Authenticated.");
       },
 
@@ -354,7 +371,7 @@ export abstract class SuperLoginClient {
    * @param done callback function once the request was successful
    * @param error callback function in case an error occurred
    */
-  private finishAuthentication(sessionToken: string, stayAuthenticated: boolean, done: SuperLoginClientDoneResponse, error: SuperLoginClientErrorResponse, loadingCtrl: LoadingController) {
+  private finishAuthentication(sessionToken: string, stayAuthenticated: boolean, done: SuperLoginClientDoneResponse, error: SuperLoginClientErrorResponse) {
     // set authenticated to true
     this.authenticated = true;
     this.offlineMode = false;
@@ -366,7 +383,7 @@ export abstract class SuperLoginClient {
     this.extendSessionToken();
 
     // providing the app with the URLs to the user databases
-    this.initializeUserDatabases(done, error, loadingCtrl);
+    this.initializeUserDatabases(done, error);
   }
 
   /**
@@ -375,13 +392,13 @@ export abstract class SuperLoginClient {
    * @param done callback function once the request was successful
    * @param error callback function in case an error occurred
    */
-  private initializeUserDatabases(done: SuperLoginClientDoneResponse, error: SuperLoginClientErrorResponse, loadingCtrl: LoadingController): void {
+  private initializeUserDatabases(done: SuperLoginClientDoneResponse, error: SuperLoginClientErrorResponse): void {
     // load the database names
     this.httpRequestor.getJsonData(AppConfig.WEB_SERVER_DOMAIN + "/auth/user-db/", this.getSessionToken()).subscribe(
       // if the database names got loaded successfully
       (data: any) => {
         // give the database names to the database initializer
-        this.initializeDatabasesOnline(data, loadingCtrl).then((data) => {
+        this.initializeDatabasesOnline(data).then((data) => {
           done();
         }, (errorObject) => {
           error(errorObject);

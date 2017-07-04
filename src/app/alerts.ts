@@ -1,4 +1,4 @@
-import {AlertController} from "ionic-angular";
+import {AlertController, LoadingController} from "ionic-angular";
 import {AppModelService} from "../providers/app-model-service";
 import {DepartmentDataObject} from "../providers/dataobjects/department.dataobject";
 import {GlobalDepartmentConfigDataObject} from "../providers/dataobjects/global-department-config.dataobject";
@@ -83,5 +83,16 @@ export class Alerts {
         reject(error);
       });
     });
+  }
+
+
+  public static presentLoadingDefault(loadingCtrl: LoadingController): any {
+    let loading = loadingCtrl.create({
+      content: 'Please wait...'
+    });
+
+    loading.present();
+
+    return loading;
   }
 }

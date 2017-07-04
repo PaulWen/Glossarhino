@@ -37,7 +37,7 @@ export class HomePage {
   // dataobjects
   private selectedDepartments: Array<HomePageDepartmentDataobject>;
   private selectedLanguageDataObject: UserLanguageFilterConfigDataObject;
-  private countOfAllEntries: number;  
+  private countOfAllEntries: number;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
 
@@ -211,11 +211,20 @@ export class HomePage {
   }
 
   private logout() {
+    // open loading dialog since this may take a while
+    let loadingAlert = Alerts.presentLoadingDefault(this.loadingCtrl);
+
     this.appModelService.logout(() => {
       // successfully loged-out
       this.navCtrl.setRoot("LoginPage");
 
+      // close loading dialog
+      loadingAlert.dismiss();
+
     }, (error: SuperLoginClientError) => {
+      // close loading dialog
+      loadingAlert.dismiss();
+
       alert(error.getErrorMessage());
     });
   }
@@ -234,5 +243,5 @@ export class HomePage {
       }
     });
   }
-  
+
 }

@@ -5,6 +5,7 @@ import {AppModelService} from "../../providers/app-model-service";
 import {SuperLoginClientError} from "../../providers/super_login_client/super_login_client_error";
 import {LoginPageInterface} from "./login-interface";
 import {TranslateService} from "@ngx-translate/core";
+import {Alerts} from "../../app/alerts";
 
 /**
  * LoginPage where the user authenticates itself and is also able to create a new account.
@@ -67,20 +68,21 @@ export class LoginPage {
 
 
   private register(name: string, email: string, password: string, confirmPassword: string, rememberLogin: boolean) {
+    // open loading dialog since this may take a while
+    let loadingAlert = Alerts.presentLoadingDefault(this.loadingCtrl);
+
     // test if user is online
     if (this.appModelService.isOnline()) {
       this.appModelService.register(name, email, password, confirmPassword, () => {
-        // successfully registered
-        this.navCtrl.setRoot("HomePage").then((canEnterView) => {
-          if (!canEnterView) {
-            // in the case that the view can not be entered redirect the user to the login page
-            this.navCtrl.setRoot("LoginPage");
-          }
-        });
+        // close loading dialog
+        loadingAlert.dismiss();
 
         // log user in
         this.login(email, password, rememberLogin);
       }, (error: SuperLoginClientError) => {
+        // close loading dialog
+        loadingAlert.dismiss();
+
         if (error.checkForError != undefined) {
           // error
           if ((<any>error.getErrorMessage()).loaded != undefined && (<any>error.getErrorMessage()).loaded == 0) {
@@ -147,6 +149,9 @@ export class LoginPage {
   }
 
   private login(email: string, password: string, rememberLogin: boolean) {
+    // open loading dialog since this may take a while
+    let loadingAlert = Alerts.presentLoadingDefault(this.loadingCtrl);
+
     // test if user is online
     if (this.appModelService.isOnline()) {
       try {
@@ -159,7 +164,13 @@ export class LoginPage {
             }
           });
 
+          // close loading dialog
+          loadingAlert.dismiss();
+
         }, (error: SuperLoginClientError) => {
+          // close loading dialog
+          loadingAlert.dismiss();
+
           if (error.checkForError != undefined) {
             // error
             if ((<any>error.getErrorMessage()).loaded != undefined && (<any>error.getErrorMessage()).loaded == 0) {

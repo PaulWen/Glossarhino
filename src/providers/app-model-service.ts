@@ -1,30 +1,30 @@
-import { Injectable } from "@angular/core";
-import { Platform, LoadingController } from "ionic-angular";
+import {Injectable} from "@angular/core";
+import {TranslateService} from "@ngx-translate/core";
+import {LoadingController, Platform} from "ionic-angular";
 import PouchDB from "pouchdb";
 import "rxjs/add/operator/map";
-import { AppConfig } from "../app/app-config";
-import { Logger } from "../app/logger";
-import { CommentModalModelInterface } from "../pages/comment-modal/comment-modal.model-interface";
-import { EditModalPageModelInterface } from "../pages/edit-modal/edit-modal.model-interface";
-import { EntryListPageModelInterface } from "../pages/entry-list/entry-list.model-interface";
-import { HomePageModelInterface } from "../pages/home/home.model-interface";
-import { LanguagePopoverPageModelInterface } from "../pages/language-popover/language-popover.model-interface";
-import { LinkedObjectsModalModelInterface } from "../pages/linked-objects-modal/linked-objects-modal.model-interface";
-import { LoginPageInterface } from "../pages/login/login-interface";
-import { SingleEntryPageModelInterface } from "../pages/single-entry/single-entry.model-interface";
-import { DepartmentEntrySpecificsDataObject } from "./dataobjects/department-entry-description.dataobject";
-import { DepartmentDataObject } from "./dataobjects/department.dataobject";
-import { EntryDataObject } from "./dataobjects/entry.dataobject";
-import { EntryListPageEntryDataObject } from "./dataobjects/entrylistpage.entry.dataobject";
-import { GlobalDepartmentConfigDataObject } from "./dataobjects/global-department-config.dataobject";
-import { GlobalLanguageConfigDataobject } from "./dataobjects/global-language-config.dataobject";
-import { HomePageDepartmentDataobject } from "./dataobjects/homepage.department.dataobject";
-import { UserDepartmentFilterConfigDataObject } from "./dataobjects/user-department-filter-config.dataobject";
-import { UserLanguageFilterConfigDataObject } from "./dataobjects/user-language-filter-config.dataobject";
-import { UserDataObject } from "./dataobjects/user.dataobject";
-import { SuperLoginClient } from "./super_login_client/super_login_client";
-import { SuperloginHttpRequester } from "./super_login_client/superlogin_http_requester";
-import {TranslateService} from "@ngx-translate/core";
+import {AppConfig} from "../app/app-config";
+import {Logger} from "../app/logger";
+import {CommentModalModelInterface} from "../pages/comment-modal/comment-modal.model-interface";
+import {EditModalPageModelInterface} from "../pages/edit-modal/edit-modal.model-interface";
+import {EntryListPageModelInterface} from "../pages/entry-list/entry-list.model-interface";
+import {HomePageModelInterface} from "../pages/home/home.model-interface";
+import {LanguagePopoverPageModelInterface} from "../pages/language-popover/language-popover.model-interface";
+import {LinkedObjectsModalModelInterface} from "../pages/linked-objects-modal/linked-objects-modal.model-interface";
+import {LoginPageInterface} from "../pages/login/login-interface";
+import {SingleEntryPageModelInterface} from "../pages/single-entry/single-entry.model-interface";
+import {DepartmentEntrySpecificsDataObject} from "./dataobjects/department-entry-description.dataobject";
+import {DepartmentDataObject} from "./dataobjects/department.dataobject";
+import {EntryDataObject} from "./dataobjects/entry.dataobject";
+import {EntryListPageEntryDataObject} from "./dataobjects/entrylistpage.entry.dataobject";
+import {GlobalDepartmentConfigDataObject} from "./dataobjects/global-department-config.dataobject";
+import {GlobalLanguageConfigDataobject} from "./dataobjects/global-language-config.dataobject";
+import {HomePageDepartmentDataobject} from "./dataobjects/homepage.department.dataobject";
+import {UserDepartmentFilterConfigDataObject} from "./dataobjects/user-department-filter-config.dataobject";
+import {UserLanguageFilterConfigDataObject} from "./dataobjects/user-language-filter-config.dataobject";
+import {UserDataObject} from "./dataobjects/user.dataobject";
+import {SuperLoginClient} from "./super_login_client/super_login_client";
+import {SuperloginHttpRequester} from "./super_login_client/superlogin_http_requester";
 
 @Injectable()
 export class AppModelService extends SuperLoginClient implements LoginPageInterface, HomePageModelInterface, LanguagePopoverPageModelInterface, EntryListPageModelInterface, SingleEntryPageModelInterface, EditModalPageModelInterface, CommentModalModelInterface, LinkedObjectsModalModelInterface {
@@ -93,88 +93,70 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   //      SuperLoginClient Methods        //
   //////////////////////////////////////////
 
-  public async initializeDatabasesOnline(user_databases: any, loadingCtrl: LoadingController): Promise<boolean> {
-    // present loadingAlert
-    let loadingAlert = this.presentLoadingDefault(loadingCtrl);
+  public async initializeDatabasesOnline(user_databases: any): Promise<boolean> {
+    Logger.log(user_databases);
 
-    try {
-      Logger.log(user_databases);
+    // initialize settings databases
+    this.globalSettingsDatabase = await this.initializeDatabase("global-settings", user_databases.application_settings);
+    this.userSettingsDatabase = await this.initializeDatabase("settings", user_databases.settings);
 
-      // initialize settings databases
-      this.globalSettingsDatabase = await this.initializeDatabase("global-settings", user_databases.application_settings);
-      this.userSettingsDatabase = await this.initializeDatabase("settings", user_databases.settings);
+    // load global app settings
+    await this.loadGlobalAppSettings();
 
-      // load global app settings
-      await this.loadGlobalAppSettings();
+    // set the current language of the app ui
+    this.translateService.use((await this.getUserLanguageFilterConfigDataobject()
+    ).selectedLanguage);
 
-      // set the current language of the app ui
-      this.translateService.use((await this.getUserLanguageFilterConfigDataobject()).selectedLanguage);
+    // once the global app-settings have been loaded...
+    // initialize all the entry databases from the different languages
+    for (let language of this.globalLanguageConfig.languages) {
+      let languageDatabase = await this.initializeDatabase("language_" + language.languageId, user_databases["language_" + language.languageId]);
 
-      // once the global app-settings have been loaded...
-      // initialize all the entry databases from the different languages
-      for (let language of this.globalLanguageConfig.languages) {
-        let languageDatabase = await this.initializeDatabase("language_" + language.languageId, user_databases["language_" + language.languageId]);
-
-        // add database to list of language databases
-        this.entryDatabases.set(language.languageId, languageDatabase);
-      }
-
-      // register listener for closing all databases if the user closes the app
-      window.addEventListener("beforeunload", this.closeDatabases);
-
-      loadingAlert.dismiss();
-      return true;
-    } catch (error) {
-      loadingAlert.dismiss();
-      throw error;
+      // add database to list of language databases
+      this.entryDatabases.set(language.languageId, languageDatabase);
     }
+
+    // register listener for closing all databases if the user closes the app
+    window.addEventListener("beforeunload", this.closeDatabases);
+
+    return true;
   }
 
 
-  public async initializeDatabasesOffline(loadingCtrl: LoadingController): Promise<boolean> {
-    // present loadingAlert
-    let loadingAlert = this.presentLoadingDefault(loadingCtrl);
+  public async initializeDatabasesOffline(): Promise<boolean> {
+    // initialize settings databases
+    this.globalSettingsDatabase = await this.initializeDatabaseOffline("global-settings");
+    this.userSettingsDatabase = await this.initializeDatabaseOffline("settings");
 
-    try {
-      // initialize settings databases
-      this.globalSettingsDatabase = await this.initializeDatabaseOffline("global-settings");
-      this.userSettingsDatabase = await this.initializeDatabaseOffline("settings");
+    // test if the settings databases could be loaded
+    if (this.globalSettingsDatabase == null || this.userSettingsDatabase == null) {
+      return false;
+    }
 
-      // test if the settings databases could be loaded
-      if (this.globalSettingsDatabase == null || this.userSettingsDatabase == null) {
-        loadingAlert.dismiss();
+    // load global app settings
+    await this.loadGlobalAppSettings();
+
+    // set the current language of the app ui
+    this.translateService.use((await this.getUserLanguageFilterConfigDataobject()
+    ).selectedLanguage);
+
+    // once the global app-settings have been loaded...
+    // initialize all the entry databases from the different languages
+    for (let language of this.globalLanguageConfig.languages) {
+      let languageDatabase = await this.initializeDatabaseOffline("language_" + language.languageId);
+
+      // test if the language database could be loaded
+      if (languageDatabase == null) {
         return false;
       }
 
-      // load global app settings
-      await this.loadGlobalAppSettings();
-
-      // set the current language of the app ui
-      this.translateService.use((await this.getUserLanguageFilterConfigDataobject()).selectedLanguage);
-
-      // once the global app-settings have been loaded...
-      // initialize all the entry databases from the different languages
-      for (let language of this.globalLanguageConfig.languages) {
-        let languageDatabase = await this.initializeDatabaseOffline("language_" + language.languageId);
-
-        // test if the language database could be loaded
-        if (languageDatabase == null) {
-          loadingAlert.dismiss();
-          return false;
-        }
-
-        // add database to list of language databases
-        this.entryDatabases.set(language.languageId, languageDatabase);
-      }
-
-      // register listener for closing all databases if the user closes the app
-      window.addEventListener("beforeunload", this.closeDatabases);
-      loadingAlert.dismiss();
-      return true;
-    } catch (error) {
-      loadingAlert.dismiss();
-      throw error;
+      // add database to list of language databases
+      this.entryDatabases.set(language.languageId, languageDatabase);
     }
+
+    // register listener for closing all databases if the user closes the app
+    window.addEventListener("beforeunload", this.closeDatabases);
+    return true;
   }
 
   public destroyDatabases() {
@@ -202,18 +184,18 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   public async getCountOfAllEntries(currentLanguageId: string): Promise<number> {
     // load the IDs of all entries that are available in one language (before the _design docs)
     let result1: any = (await this.entryDatabases.get(currentLanguageId).allDocs({
-      include_docs: true,
-      attachments: false,
-      endkey: "_design"
-    })
+        include_docs: true,
+        attachments: false,
+        endkey: "_design"
+      })
     ).rows;
 
     // load the IDs of all entries that are available in one language (after the _design docs)
     let result2: any = (await this.entryDatabases.get(currentLanguageId).allDocs({
-      include_docs: true,
-      attachments: false,
-      startkey: "_design\uffff"
-    })
+        include_docs: true,
+        attachments: false,
+        startkey: "_design\uffff"
+      })
     ).rows;
 
     let result = result1.concat(result2);
@@ -262,9 +244,9 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     // search only for entries where the name, acronyms or synonyms include the search string (based on a regular expression in order to make it case insensitive)
     let regexp = new RegExp(searchString ? searchString : "", "i");
     selector["$or"] = [
-      { name: { $regex: regexp } },
-      { synonyms: { $regex: regexp } },
-      { acronyms: { $regex: regexp } }
+      {name: {$regex: regexp}},
+      {synonyms: {$regex: regexp}},
+      {acronyms: {$regex: regexp}}
     ];
 
     // if departmentId is defined search only for entries that are relevant for the specific department
@@ -275,8 +257,8 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     }
 
     let result: Array<EntryListPageEntryDataObject> = (await this.entryDatabases.get(selectedLanguage).find({
-      selector: selector, fields: ["_id", "name", "synonyms", "acronyms"]
-    })
+        selector: selector, fields: ["_id", "name", "synonyms", "acronyms"]
+      })
     ).docs;
 
     // order data
@@ -325,7 +307,8 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     this.translateService.use(userLanguageSetting.selectedLanguage);
 
     // update the user setting in the database
-    return (await this.userSettingsDatabase.put(userLanguageSetting)).ok;
+    return (await this.userSettingsDatabase.put(userLanguageSetting)
+    ).ok;
   }
 
   //////////////////////////////////////////
@@ -422,7 +405,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
       // in order to have the data stored persistently
       if (this.platform.is("cordova")) {
         // create local PouchDB database object
-        database = new PouchDB(databaseName, { adapter: "cordova-sqlite" });
+        database = new PouchDB(databaseName, {adapter: "cordova-sqlite"});
 
         // if the app runs in a browser as a web app the default method
         // chosen by PouchDB should be used
@@ -477,13 +460,13 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
       // in order to have the data stored persistently
       if (this.platform.is("cordova")) {
         // create local PouchDB database object
-        database = new PouchDB(databaseName, { adapter: "cordova-sqlite", skip_setup: true });
+        database = new PouchDB(databaseName, {adapter: "cordova-sqlite", skip_setup: true});
 
         // if the app runs in a browser as a web app the default method
         // chosen by PouchDB should be used
       } else {
         // create local PouchDB database object
-        database = new PouchDB(databaseName, { skip_setup: true });
+        database = new PouchDB(databaseName, {skip_setup: true});
       }
 
       database.info().then(() => {
@@ -590,15 +573,5 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
           throw error;
       }
     }
-  }
-
-  private presentLoadingDefault(loadingCtrl: LoadingController): any {
-    let loading = loadingCtrl.create({
-      content: 'Please wait...'
-    });
-
-    loading.present();
-
-    return loading;
   }
 }

@@ -26,17 +26,13 @@
   "ADD": "Hinzufügen",
   "CANCEL": "Abbrechen",
   "URL": "URL",
-  "DONE": "Fertig",
-  "CLOSE": "Schließen",
 
   "XXXXXXXXXCommentModalXXXXXXXXX": "",
   "COMMENTS": "Kommentare",
-  "CLOSE": "Schließen",
   "ADD_COMMENT_PLACEHOLDER": "Füge Kommentar hinzu ...",
 
   "XXXXXXXXXEditModalXXXXXXXXX": "",
   "EDIT": "Bearbeiten",
-  "DONE": "Fertig",
   "TITLE": "Titel",
   "DESCRIPTION": "Beschreibung",
   "EDIT_ATTACHMENTS": "Anhang bearbeiten",
@@ -51,7 +47,6 @@
   "XXXXXXXXXHomePageXXXXXXXXX": "",
   "APP_NAME": "Glossarhino",
   "ALL": "Alle",
-  "ENTRIES": "Einträge",
 
   "XXXXXXXXXLanguagePopoverXXXXXXXXX": "",
   "LANGUAGE": "Sprache",
@@ -66,17 +61,13 @@
   "ADD_SYNONYM_DOTS": "Füge Synonym hinzu ...",
   "ACRONYMS": "Acronyme",
   "ADD_ACRONYM_DOTS": "Füge Acronym hinzu ...",
+  "CLOSE": "Schließen",
+  "DONE": "Fertig",
 
   "XXXXXXXXXDepartmentFilterComponentXXXXXXXXX": "",
   "DEPARTMENT_FILTER": "Abteilungsfilter",
   "OKAY_TEXT": "Okay",
   "CANCEL_TEXT": "Abbrechen",
-
-
-
-
-
-
 
   "XXXXXXXXXENDXXXXXXXXX": ""
 }

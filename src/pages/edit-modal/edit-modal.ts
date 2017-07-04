@@ -29,6 +29,7 @@ export class EditModalPage {
   // navParams
   private _id: string;
   private addNewEntry: boolean;
+  private newEntryLanguageId: string;
 
   // model object
   private appModelService: EditModalPageModelInterface;
@@ -51,6 +52,7 @@ export class EditModalPage {
     // get navParams
     this._id = this.navParams.get("_id");
     this.addNewEntry = this.navParams.get("addNewEntry");
+    this.newEntryLanguageId = this.navParams.get("newEntryLanguageId");
 
     // instantiate model object
     this.appModelService = appModelService;
@@ -141,10 +143,10 @@ export class EditModalPage {
 
   private closeEditModal(save: boolean) {
     if (save) {
+      
       if (this.addNewEntry) {
-        this.appModelService.newEntryDataObject(this.entry, this.selectedLanguageDataObject.selectedLanguage).then((data) => {
+        this.appModelService.newEntryDataObject(this.entry, this.newEntryLanguageId).then((data) => {
           this.viewCtrl.dismiss();
-
         });
       } else {
         this.appModelService.setEntryDataObject(this.entry, this.selectedLanguageDataObject.selectedLanguage).then(() => {
@@ -154,7 +156,7 @@ export class EditModalPage {
           Logger.error(error);
         });
       }
-
+      
     } else {
       this.viewCtrl.dismiss();
     }

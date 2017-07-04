@@ -29,12 +29,10 @@
 
   "XXXXXXXXXCommentModalXXXXXXXXX": "",
   "COMMENTS": "Comments",
-  "CLOSE": "Close",
   "ADD_COMMENT_PLACEHOLDER": "Add Comment ...",
 
   "XXXXXXXXXEditModalXXXXXXXXX": "",
   "EDIT": "Edit",
-  "DONE": "Done",
   "TITLE": "Title",
   "DESCRIPTION": "Description",
   "EDIT_ATTACHMENTS": "Edit attachments",
@@ -49,12 +47,16 @@
   "XXXXXXXXXHomePageXXXXXXXXX": "",
   "APP_NAME": "Glossarhino",
   "ALL" : "All",
-  "ENTRIES" : "Entries",
 
   "XXXXXXXXXLanguagePopoverXXXXXXXXX": "",
   "LANGUAGE": "Language",
 
+  "XXXXXXXXXDepartmentFilterComponentXXXXXXXXX": "",
+  "DEPARTMENT_FILTER": "Department Filter",
+  "OKAY_TEXT": "Okay",
+  "CANCEL_TEXT": "Cancel",
   
+  "XXXXXXXXXLinkedObjectModalXXXXXXXXX": "",
   "RELATED": "Related",
   "DEPARTMENTS": "Departments",
   "ADD_DEPARTMENT": "Add department",
@@ -64,15 +66,6 @@
   "ADD_SYNONYM_DOTS": "Add Synonym ...",
   "ACRONYMS": "Acronyms",
   "ADD_ACRONYM_DOTS": "Add Acronym ...",
-
-  "XXXXXXXXXDepartmentFilterComponentXXXXXXXXX": "",
-  "DEPARTMENT_FILTER" : "Department Filter",
-  "OKAY_TEXT": "Okay",
-  "CANCEL_TEXT": "Cancel",
-
-
-
-
 
   "XXXXXXXXXENDXXXXXXXXX": ""
 }

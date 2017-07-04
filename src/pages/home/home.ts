@@ -43,6 +43,9 @@ export class HomePage {
   // department filter
   @ViewChild(DepartmentFilterComponent) departmentFilterComponent: DepartmentFilterComponent;
 
+  // languageSelectionAlert AppModelService
+  private languageSelectionAlertAppModelService: AppModelService;
+
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
 
   constructor(navCtrl: NavController, popoverCtrl: PopoverController, actionSheetCtrl: ActionSheetController, alertCtrl: AlertController, loadingCtrl: LoadingController, appModelService: AppModelService) {
@@ -55,7 +58,7 @@ export class HomePage {
 
     // instantiate model service object
     this.appModelService = appModelService;
-    this.showDepartmentFilterAlertAppModelService = appModelService;
+    this.languageSelectionAlertAppModelService = appModelService;
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
@@ -126,9 +129,6 @@ export class HomePage {
   //         Navigation Functions         //
   //////////////////////////////////////////
 
-  /**
-   * Presents an ActionSheet to consolidate more possible actions
-   */
   private presentActionSheet() {
     let actionSheet = this.actionSheetCtrl.create({
       title: "More Actions",
@@ -193,13 +193,22 @@ export class HomePage {
    * Function to go to new entry view of EditModalpage
    */
   private pushNewEntry() {
-    this.navCtrl.push("EditModalPage", {
-      addNewEntry: true
-    }).then((canEnterView) => {
-      if (!canEnterView) {
-        // in the case that the view can not be entered redirect the user to the login page
-        this.navCtrl.setRoot("LoginPage");
-      }
+    // user input language
+    let languageId: string;
+    Alerts.showLanguageSelectionAlert(this.alertCtrl, this.languageSelectionAlertAppModelService).then((data) => {
+      languageId = data;
+      
+      // open EditModalPage once user selected language of entry
+      this.navCtrl.push("EditModalPage", {
+        addNewEntry: true,
+        newEntryLanguageId: languageId
+      }).then((canEnterView) => {
+        if (!canEnterView) {
+          // in the case that the view can not be entered redirect the user to the login page
+          this.navCtrl.setRoot("LoginPage");
+        }
+      });
+
     });
   }
 

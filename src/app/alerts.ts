@@ -4,6 +4,7 @@ import { DepartmentDataObject } from "../providers/dataobjects/department.dataob
 import { GlobalDepartmentConfigDataObject } from "../providers/dataobjects/global-department-config.dataobject";
 import { UserDepartmentFilterConfigDataObject } from "../providers/dataobjects/user-department-filter-config.dataobject";
 import { Logger } from "./logger";
+import { GlobalLanguageConfigDataobject } from "../providers/dataobjects/global-language-config.dataobject";
 
 /**
  * This class implements all the alerts needed for the app
@@ -97,5 +98,40 @@ export class Alerts {
     loading.present();
 
     return loading;
+  }
+
+  //////////////////////////////////////////
+  //           Language Alert             //
+  //////////////////////////////////////////
+
+  public static showLanguageSelectionAlert(alertCtrl: AlertController, appModelService: AppModelService): Promise<string> {
+    return new Promise((resolve, reject) => {
+      let allLanguages: GlobalLanguageConfigDataobject = appModelService.getAllLanguages();
+
+      let languageSelectionAlert = alertCtrl.create();
+      languageSelectionAlert.setTitle("Select language");
+
+      allLanguages.languages.forEach(language => {
+        languageSelectionAlert.addInput({
+          type: "radio",
+          label: language.languageName,
+          value: language.languageId
+        });
+      });
+
+      // add cancel button
+      languageSelectionAlert.addButton("Cancel");
+
+      // add okay button
+      languageSelectionAlert.addButton({
+        text: "OK",
+        handler: data => {
+          resolve(data);
+        }
+      });
+
+      // show alert
+      languageSelectionAlert.present();
+    });
   }
 }

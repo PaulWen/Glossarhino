@@ -55,7 +55,7 @@
   "DEPARTMENT_FILTER": "Department Filter",
   "OKAY_TEXT": "Okay",
   "CANCEL_TEXT": "Cancel",
-  
+
   "XXXXXXXXXLinkedObjectModalXXXXXXXXX": "",
   "RELATED": "Related",
   "DEPARTMENTS": "Departments",
@@ -83,12 +83,12 @@
 
   "XXXXXXXXXSingle-entry.tsXXXXXXXXX": "",
   "NO_ENTRY_ALERT_TITLE": "Entry not available!",
-  "NO_ENTRY_ALERT_SUBTITLE": "Sorry, the entry is not yet available in this language",
+  "NO_ENTRY_ALERT_SUBTITLE": "Sorry, the entry is not yet available in this language. You can add it by pressing the \"Add\" button",
 
 
   "XXXXXXXXXAlerts.tsXXXXXXXXX": "",
   "LOADING": "Loading...",
-  "SELECT_DEPARTMENTS": "Select departments",
+  "SELECT_LANGUAGE": "Select language",
 
 
 

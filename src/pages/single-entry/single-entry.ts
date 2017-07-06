@@ -18,6 +18,8 @@ import { EntryDataObject } from "../../providers/dataobjects/entry.dataobject";
 import { UserLanguageFilterConfigDataObject } from "../../providers/dataobjects/user-language-filter-config.dataobject";
 import { SingleEntryPageModelInterface } from "./single-entry.model-interface";
 import { DepartmentFilterComponent } from "../../components/department-filter/department-filter";
+import {TranslateService} from "@ngx-translate/core";
+import {Observable} from "rxjs/Observable";
 
 @IonicPage({
   segment: "singleentry/:entryDocumentId",
@@ -70,7 +72,10 @@ export class SingleEntryPage {
     this.entryDocumentId = this.navParams.get("entryDocumentId");
 
     // instantiate model
-    this.appModelService = appModelService;
+    this.appModelService = appModelService
+
+    // other
+    this.translateService = translateService;
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
@@ -137,7 +142,7 @@ export class SingleEntryPage {
   /**
    * Returns the length of an array and 0 if array is undefined.
    * @param array Array to return the length from.
-   */  
+   */
   private getArrayLength(array: Array<any>): number {
     if (array == undefined) {
       return 0;
@@ -150,31 +155,43 @@ export class SingleEntryPage {
   //         Navigation Functions         //
   //////////////////////////////////////////
 
+
   private presentActionSheet() {
-    let actionSheet = this.actionSheetCtrl.create({
-      title: "More Actions",
-      buttons: [
-        {
-          text: "Edit",
-          handler: () => {
-            Logger.log("Edit clicked");
-            this.openEditModal(this.entry._id);
-          }
-        }, {
-          text: "Filter",
-          handler: () => {
-            this.departmentFilterComponent.showAlert().then(() => {
-              this.loadData();
-            });
-          }
-        }, {
-          text: "Cancel",
-          role: "cancel",
-          handler: () => {
-            Logger.log("Cancel clicked");
-          }
-        }
-      ]
+    Observable.zip(
+      this.translateService.get("MORE_ACTIONS"),
+      this.translateService.get("EDIT"),
+      this.translateService.get("FILTER"),
+      this.translateService.get("CANCEL"),
+      (moreActions: string, edit: string, filter: string, cancel: string) => {
+        return this.actionSheetCtrl.create({
+          title: moreActions,
+          buttons: [
+            {
+              text: edit,
+              handler: () => {
+                Logger.log("Edit clicked");
+                this.openEditModal(this.entry._id);
+              }
+            }, {
+              text: filter,
+              handler: () => {
+                this.departmentFilterComponent.showAlert().then(() => {
+                  this.loadData();
+                });
+              }
+            }, {
+              text: cancel,
+              role: "cancel",
+              handler: () => {
+                Logger.log("Cancel clicked");
+              }
+            }
+          ]
+        });
+
+      }
+    ).subscribe((actionSheetCtrl)=>{
+      actionSheetCtrl.present();
     });
 
   }
@@ -264,8 +281,8 @@ export class SingleEntryPage {
     Logger.log(this.entryDocumentId);
     Logger.log(this.selectedLanguageDataObject.selectedLanguage);
 
-    
-    Alerts.showNoEntryAlert(this.alertCtrl, this.navCtrl, this.entryDocumentId, this.selectedLanguageDataObject.selectedLanguage);
+
+    Alerts.showNoEntryAlert(this.alertCtrl, this.navCtrl, this.entryDocumentId, this.selectedLanguageDataObject.selectedLanguage, this.translateService);
   }
 
 }

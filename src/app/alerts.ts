@@ -5,6 +5,8 @@ import { GlobalDepartmentConfigDataObject } from "../providers/dataobjects/globa
 import { UserDepartmentFilterConfigDataObject } from "../providers/dataobjects/user-department-filter-config.dataobject";
 import { Logger } from "./logger";
 import { GlobalLanguageConfigDataobject } from "../providers/dataobjects/global-language-config.dataobject";
+import {Observable} from "rxjs/Observable";
+import {TranslateService} from "@ngx-translate/core";
 
 /**
  * This class implements all the alerts needed for the app
@@ -19,12 +21,18 @@ export class Alerts {
   //            Loading Alert             //
   //////////////////////////////////////////
 
-  public static presentLoadingDefault(loadingCtrl: LoadingController): any {
-    let loading = loadingCtrl.create({
-      content: 'Please wait...'
-    });
+  public static presentLoadingDefault(loadingCtrl: LoadingController, translateService: TranslateService): any {
+    let loading = loadingCtrl.create();
 
-    loading.present();
+    Observable.zip(
+      translateService.get("LOADING"),
+      (loadingStr: string) => {
+        loading.setContent(loadingStr);
+        return loading;
+      }
+    ).subscribe((loadingCtl)=>{
+      loadingCtl.present();
+    });
 
     return loading;
   }
@@ -33,35 +41,43 @@ export class Alerts {
   //           Language Alert             //
   //////////////////////////////////////////
 
-  public static showLanguageSelectionAlert(alertCtrl: AlertController, appModelService: AppModelService): Promise<string> {
+  public static showLanguageSelectionAlert(alertCtrl: AlertController, appModelService: AppModelService, translateService: TranslateService): Promise<string> {
     return new Promise((resolve, reject) => {
-      let allLanguages: GlobalLanguageConfigDataobject = appModelService.getAllLanguages();
+      Observable.zip(
+        translateService.get("SELECT_LANGUAGE"),
+        translateService.get("CANCEL"),
+        translateService.get("OK"),
+        (selectLanguage: string, cancel: string, ok: string) => {
+          let allLanguages: GlobalLanguageConfigDataobject = appModelService.getAllLanguages();
 
-      let languageSelectionAlert = alertCtrl.create({
-        title: "Select language"
-      });
+          let languageSelectionAlert = alertCtrl.create({
+            title: selectLanguage
+          });
 
-      allLanguages.languages.forEach(language => {
-        languageSelectionAlert.addInput({
-          type: "radio",
-          label: language.languageName,
-          value: language.languageId
-        });
-      });
+          allLanguages.languages.forEach(language => {
+            languageSelectionAlert.addInput({
+              type: "radio",
+              label: language.languageName,
+              value: language.languageId
+            });
+          });
 
-      // add cancel button
-      languageSelectionAlert.addButton("Cancel");
+          // add cancel button
+          languageSelectionAlert.addButton(cancel);
 
-      // add okay button
-      languageSelectionAlert.addButton({
-        text: "OK",
-        handler: data => {
-          resolve(data);
+          // add okay button
+          languageSelectionAlert.addButton({
+            text: ok,
+            handler: data => {
+              resolve(data);
+            }
+          });
+
+          return languageSelectionAlert;
         }
+      ).subscribe((alert)=>{
+        alert.present();
       });
-
-      // show alert
-      languageSelectionAlert.present();
     });
   }
 
@@ -69,38 +85,47 @@ export class Alerts {
   //           No Entry Alert             //
   //////////////////////////////////////////
 
-  public static showNoEntryAlert(alertCtrl: AlertController, navCtrl: NavController, entryDocumentId: string, languageId: string) {
-    let noEntryAlert = alertCtrl.create({
-      title: "Entry not available!",
-      subTitle: "Sorry, the entry is not yet available in this language. You can add it by pressing the \"Add\" button"
-    });
+  public static showNoEntryAlert(alertCtrl: AlertController, navCtrl: NavController, entryDocumentId: string, languageId: string, translateService: TranslateService) {
+    Observable.zip(
+      translateService.get("NO_ENTRY_ALERT_TITLE"),
+      translateService.get("NO_ENTRY_ALERT_TITLE"),
+      translateService.get("ADD"),
+      translateService.get("OK"),
+      (noEntryAlertTitle: string, noEntryAlertSubtitle: string, add: string, ok: string) => {
+        let noEntryAlert = alertCtrl.create({
+          title: noEntryAlertTitle,
+          subTitle: noEntryAlertSubtitle
+        });
 
-    // add add button
-    noEntryAlert.addButton({
-      text: "Add",
-      handler: () => {
-        navCtrl.push("EditModalPage", {
-          addNewEntry: true,
-          newEntryDocumentId: entryDocumentId,
-          newEntryLanguageId: languageId
-        }).then((canEnterView) => {
-          if (!canEnterView) {
-            // in the case that the view can not be entered redirect the user to the login page
-            navCtrl.setRoot("LoginPage");
+        // add add button
+        noEntryAlert.addButton({
+          text: add,
+          handler: () => {
+            navCtrl.push("EditModalPage", {
+              addNewEntry: true,
+              newEntryDocumentId: entryDocumentId,
+              newEntryLanguageId: languageId
+            }).then((canEnterView) => {
+              if (!canEnterView) {
+                // in the case that the view can not be entered redirect the user to the login page
+                navCtrl.setRoot("LoginPage");
+              }
+            });
           }
         });
+
+        // add okay button
+        noEntryAlert.addButton({
+          text: "OK",
+          handler: () => {
+            navCtrl.setRoot("HomePage");
+          }
+        });
+
+        return noEntryAlert;
       }
+    ).subscribe((alert)=>{
+      alert.present();
     });
-
-    // add okay button
-    noEntryAlert.addButton({
-      text: "OK",
-      handler: () => {
-        navCtrl.setRoot("HomePage");
-      }
-    });
-
-    noEntryAlert.present();
-
   }
 }

@@ -15,6 +15,8 @@ import {UserLanguageFilterConfigDataObject} from "../../providers/dataobjects/us
 import {SuperLoginClientError} from "../../providers/super_login_client/super_login_client_error";
 import {HomePageModelInterface} from "./home.model-interface";
 import { DepartmentFilterComponent } from "../../components/department-filter/department-filter";
+import {TranslateService} from "@ngx-translate/core";
+import {Observable} from "rxjs/Observable";
 
 @IonicPage()
 @Component({
@@ -46,6 +48,9 @@ export class HomePage {
   // languageSelectionAlert AppModelService
   private languageSelectionAlertAppModelService: AppModelService;
 
+  // other
+  private translateService: TranslateService;
+
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
 
   constructor(navCtrl: NavController, popoverCtrl: PopoverController, actionSheetCtrl: ActionSheetController, alertCtrl: AlertController, loadingCtrl: LoadingController, appModelService: AppModelService, translateService: TranslateService) {
@@ -59,6 +64,9 @@ export class HomePage {
     // instantiate model service object
     this.appModelService = appModelService;
     this.languageSelectionAlertAppModelService = appModelService;
+
+    // other
+    this.translateService = translateService;
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
@@ -129,32 +137,46 @@ export class HomePage {
   //         Navigation Functions         //
   //////////////////////////////////////////
 
+  /**
+   * Presents an ActionSheet to consolidate more possible actions
+   */
   private presentActionSheet() {
-    let actionSheet = this.actionSheetCtrl.create({
-      title: "More Actions",
-      buttons: [
-        {
-          text: "New Entry",
-          handler: () => {
-            this.pushNewEntry();
-          }
-        }, {
-          text: "Filter",
-          handler: () => {
-            this.departmentFilterComponent.showAlert().then(() => {
-              this.loadData();
-            });
-          }
-        }, {
-          text: "Logout",
-          handler: () => {
-            this.logout();
-          }
-        }, {
-          text: "Cancel",
-          role: "cancel"
-        }
-      ]
+    Observable.zip(
+      this.translateService.get("MORE_ACTIONS"),
+      this.translateService.get("NEW_ENTRY"),
+      this.translateService.get("FILTER"),
+      this.translateService.get("LOGOUT"),
+      this.translateService.get("CANCEL"),
+      (moreActions: string, newEntry: string, filter: string, logout: string, cancel: string) => {
+        return this.actionSheetCtrl.create({
+          title: moreActions,
+          buttons: [
+            {
+              text: newEntry,
+              handler: () => {
+                this.pushNewEntry();
+              }
+            }, {
+              text: filter,
+              handler: () => {
+                this.departmentFilterComponent.showAlert().then(() => {
+                  this.loadData();
+                });
+              }
+            }, {
+              text: logout,
+              handler: () => {
+                this.logout();
+              }
+            }, {
+              text: cancel,
+              role: "cancel"
+            }
+          ]
+        });
+      }
+    ).subscribe((alert)=>{
+      alert.present();
     });
   }
 
@@ -194,9 +216,9 @@ export class HomePage {
   private pushNewEntry() {
     // user input language
     let languageId: string;
-    Alerts.showLanguageSelectionAlert(this.alertCtrl, this.languageSelectionAlertAppModelService).then((data) => {
+    Alerts.showLanguageSelectionAlert(this.alertCtrl, this.languageSelectionAlertAppModelService, this.translateService).then((data) => {
       languageId = data;
-      
+
       // open EditModalPage once user selected language of entry
       this.navCtrl.push("EditModalPage", {
         addNewEntry: true,

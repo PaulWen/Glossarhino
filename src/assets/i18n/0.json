@@ -82,12 +82,12 @@
 
   "XXXXXXXXXSingle-entry.tsXXXXXXXXX": "",
   "NO_ENTRY_ALERT_TITLE": "Eintrag ist nicht verfügbar!",
-  "NO_ENTRY_ALERT_SUBTITLE": "Leider ist der Eintrag in der aktuell ausgewählten Sprache nicht verfügbar!",
+  "NO_ENTRY_ALERT_SUBTITLE": "Leider ist der Eintrag in der aktuell ausgewählten Sprache nicht verfügbar. Sie können den Beitrag durch einen Klick auf \"Hinzufügen\" erstellen.",
 
 
   "XXXXXXXXXAlerts.tsXXXXXXXXX": "",
   "LOADING": "Lade...",
-  "SELECT_DEPARTMENTS": "Wähle Abteilungen",
+  "SELECT_LANGUAGE": "Wähle eine Sprache",
 
 
 

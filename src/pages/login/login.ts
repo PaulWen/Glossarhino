@@ -69,7 +69,7 @@ export class LoginPage {
 
   private register(name: string, email: string, password: string, confirmPassword: string, rememberLogin: boolean) {
     // open loading dialog since this may take a while
-    let loadingAlert = Alerts.presentLoadingDefault(this.loadingCtrl);
+    let loadingAlert = Alerts.presentLoadingDefault(this.loadingCtrl, this.translateService);
 
     // test if user is online
     if (this.appModelService.isOnline()) {
@@ -150,7 +150,7 @@ export class LoginPage {
 
   private login(email: string, password: string, rememberLogin: boolean) {
     // open loading dialog since this may take a while
-    let loadingAlert = Alerts.presentLoadingDefault(this.loadingCtrl);
+    let loadingAlert = Alerts.presentLoadingDefault(this.loadingCtrl, this.translateService);
 
     // test if user is online
     if (this.appModelService.isOnline()) {

@@ -44,14 +44,10 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
   private globalDepartmentConfig: GlobalDepartmentConfigDataObject;
   private globalLanguageConfig: GlobalLanguageConfigDataobject;
 
-  //////////////Other////////////
-  private translateService: TranslateService;
-
-
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
 
   constructor(httpRequester: SuperloginHttpRequester, platform: Platform, translateService: TranslateService) {
-    super(httpRequester, platform);
+    super(httpRequester, platform, translateService);
 
     // load necessary PouchDB Plugins
     PouchDB.plugin(require("pouchdb-find"));

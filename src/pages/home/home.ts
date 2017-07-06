@@ -14,6 +14,8 @@ import {HomePageDepartmentDataobject} from "../../providers/dataobjects/homepage
 import {UserLanguageFilterConfigDataObject} from "../../providers/dataobjects/user-language-filter-config.dataobject";
 import {SuperLoginClientError} from "../../providers/super_login_client/super_login_client_error";
 import {HomePageModelInterface} from "./home.model-interface";
+import {Observable} from "rxjs/Observable";
+import {TranslateService} from "@ngx-translate/core";
 
 @IonicPage()
 @Component({
@@ -39,9 +41,12 @@ export class HomePage {
   private selectedLanguageDataObject: UserLanguageFilterConfigDataObject;
   private countOfAllEntries: number;
 
+  // other
+  private translateService: TranslateService;
+
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
 
-  constructor(navCtrl: NavController, popoverCtrl: PopoverController, actionSheetCtrl: ActionSheetController, alertCtrl: AlertController, loadingCtrl: LoadingController, appModelService: AppModelService) {
+  constructor(navCtrl: NavController, popoverCtrl: PopoverController, actionSheetCtrl: ActionSheetController, alertCtrl: AlertController, loadingCtrl: LoadingController, appModelService: AppModelService, translateService: TranslateService) {
     // instantiate ionic injected components
     this.navCtrl = navCtrl;
     this.popoverCtrl = popoverCtrl;
@@ -52,6 +57,9 @@ export class HomePage {
     // instantiate model service object
     this.appModelService = appModelService;
     this.showDepartmentFilterAlertAppModelService = appModelService;
+
+    // other
+    this.translateService = translateService;
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
@@ -126,31 +134,41 @@ export class HomePage {
    * Presents an ActionSheet to consolidate more possible actions
    */
   private presentActionSheet() {
-    let actionSheet = this.actionSheetCtrl.create({
-      title: "More Actions",
-      buttons: [
-        {
-          text: "New Entry",
-          handler: () => {
-            this.pushNewEntry();
-          }
-        }, {
-          text: "Filter",
-          handler: () => {
-            this.showDepartmentFilterAlert(this.alertCtrl, this.showDepartmentFilterAlertAppModelService);
-          }
-        }, {
-          text: "Logout",
-          handler: () => {
-            this.logout();
-          }
-        }, {
-          text: "Cancel",
-          role: "cancel"
-        }
-      ]
+    Observable.zip(
+      this.translateService.get("MORE_ACTIONS"),
+      this.translateService.get("NEW_ENTRY"),
+      this.translateService.get("FILTER"),
+      this.translateService.get("LOGOUT"),
+      this.translateService.get("CANCEL"),
+      (moreActions: string, newEntry: string, filter: string, logout: string, cancel: string) => {
+        return this.actionSheetCtrl.create({
+          title: moreActions,
+          buttons: [
+            {
+              text: newEntry,
+              handler: () => {
+                this.pushNewEntry();
+              }
+            }, {
+              text: filter,
+              handler: () => {
+                this.showDepartmentFilterAlert(this.alertCtrl, this.showDepartmentFilterAlertAppModelService);
+              }
+            }, {
+              text: logout,
+              handler: () => {
+                this.logout();
+              }
+            }, {
+              text: cancel,
+              role: "cancel"
+            }
+          ]
+        });
+      }
+    ).subscribe((alert)=>{
+      alert.present();
     });
-    actionSheet.present();
   }
 
   private presentLanguagePopover(event: any) {
@@ -203,7 +221,7 @@ export class HomePage {
    * @param appModelService Hand over AppModelService to be able to load current preferences and all available departments
    */
   private showDepartmentFilterAlert(alertCtrl: AlertController, appModelService: AppModelService) {
-    Alerts.showDepartmentFilterAlert(alertCtrl, appModelService).then(() => {
+    Alerts.showDepartmentFilterAlert(alertCtrl, appModelService, this.translateService).then(() => {
       this.loadData();
     }, (error) => {
       Logger.error(error);
@@ -212,7 +230,7 @@ export class HomePage {
 
   private logout() {
     // open loading dialog since this may take a while
-    let loadingAlert = Alerts.presentLoadingDefault(this.loadingCtrl);
+    let loadingAlert = Alerts.presentLoadingDefault(this.loadingCtrl, this.translateService);
 
     this.appModelService.logout(() => {
       // successfully loged-out

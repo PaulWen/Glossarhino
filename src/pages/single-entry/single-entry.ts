@@ -17,6 +17,8 @@ import { AttachmentDataObject } from "../../providers/dataobjects/attachment.dat
 import { EntryDataObject } from "../../providers/dataobjects/entry.dataobject";
 import { UserLanguageFilterConfigDataObject } from "../../providers/dataobjects/user-language-filter-config.dataobject";
 import { SingleEntryPageModelInterface } from "./single-entry.model-interface";
+import {TranslateService} from "@ngx-translate/core";
+import {Observable} from "rxjs/Observable";
 
 @IonicPage({
   segment: "singleentry/:entryDocumentId",
@@ -50,8 +52,11 @@ export class SingleEntryPage {
   // selectFilterAlert objects
   private showDepartmentFilterAlertAppModel;
 
+  // other
+  private translateService: TranslateService;
+
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
-  constructor(navCtrl: NavController, navParams: NavParams, modalCtrl: ModalController, actionSheetCtrl: ActionSheetController, popoverCtrl: PopoverController, alertCtrl: AlertController, loadingCtrl: LoadingController, appModelService: AppModelService) {
+  constructor(navCtrl: NavController, navParams: NavParams, modalCtrl: ModalController, actionSheetCtrl: ActionSheetController, popoverCtrl: PopoverController, alertCtrl: AlertController, loadingCtrl: LoadingController, appModelService: AppModelService, translateService: TranslateService) {
 
     // instantiate ionic injected components
     this.navCtrl = navCtrl;
@@ -69,6 +74,8 @@ export class SingleEntryPage {
     this.appModelService = appModelService;
     this.showDepartmentFilterAlertAppModel = appModelService;
 
+    // other
+    this.translateService = translateService;
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
@@ -141,30 +148,41 @@ export class SingleEntryPage {
   //////////////////////////////////////////
 
   private presentActionSheet() {
-    let actionSheet = this.actionSheetCtrl.create({
-      title: "More Actions",
-      buttons: [
-        {
-          text: "Edit",
-          handler: () => {
-            Logger.log("Edit clicked");
-            this.openEditModal(this.entry._id);
-          }
-        }, {
-          text: "Filter",
-          handler: () => {
-            this.showDepartmentFilterAlert(this.alertCtrl, this.showDepartmentFilterAlertAppModel);
-          }
-        }, {
-          text: "Cancel",
-          role: "cancel",
-          handler: () => {
-            Logger.log("Cancel clicked");
-          }
-        }
-      ]
+    Observable.zip(
+      this.translateService.get("MORE_ACTIONS"),
+      this.translateService.get("EDIT"),
+      this.translateService.get("FILTER"),
+      this.translateService.get("CANCEL"),
+      (moreActions: string, edit: string, filter: string, cancel: string) => {
+        return this.actionSheetCtrl.create({
+          title: moreActions,
+          buttons: [
+            {
+              text: edit,
+              handler: () => {
+                Logger.log("Edit clicked");
+                this.openEditModal(this.entry._id);
+              }
+            }, {
+              text: filter,
+              handler: () => {
+                this.showDepartmentFilterAlert(this.alertCtrl, this.showDepartmentFilterAlertAppModel);
+              }
+            }, {
+              text: cancel,
+              role: "cancel",
+              handler: () => {
+                Logger.log("Cancel clicked");
+              }
+            }
+          ]
+        });
+
+      }
+    ).subscribe((actionSheetCtrl)=>{
+      actionSheetCtrl.present();
     });
-    actionSheet.present();
+
   }
 
   private presentLanguagePopover(event: any) {
@@ -209,7 +227,7 @@ export class SingleEntryPage {
   }
 
   private showDepartmentFilterAlert(alertCtrl: AlertController, appModelService: AppModelService) {
-    Alerts.showDepartmentFilterAlert(alertCtrl, appModelService).then(() => {
+    Alerts.showDepartmentFilterAlert(alertCtrl, appModelService, this.translateService).then(() => {
       this.loadData();
     }, (error) => {
       Logger.error(error);
@@ -262,15 +280,23 @@ export class SingleEntryPage {
   }
 
   private showNoEntryAlert() {
-    let alert = this.alertCtrl.create({
-      title: "Entry not available!",
-      subTitle: "Sorry, the entry is not yet available in this language.",
-      buttons: ['OK']
+    Observable.zip(
+      this.translateService.get("NO_ENTRY_ALERT_TITLE"),
+      this.translateService.get("NO_ENTRY_ALERT_SUBTITLE"),
+      this.translateService.get("OK"),
+      (noEntryAlertTitle: string, noEntryAlertSubtitle: string, ok: string) => {
+        return this.alertCtrl.create({
+          title: noEntryAlertTitle,
+          subTitle: noEntryAlertSubtitle,
+          buttons: [ok]
+        });
+      }
+    ).subscribe((alert)=>{
+      alert.present();
+      alert.onDidDismiss(() => {
+        this.navCtrl.setRoot("HomePage");
+      })
     });
-    alert.present();
-    alert.onDidDismiss(() => {
-      this.navCtrl.setRoot("HomePage");
-    })
   }
 
 }

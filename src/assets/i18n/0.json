@@ -8,8 +8,6 @@
   "PASSWORD": "Passwort",
   "REPEAT_PASSWORD": "Wiederhole Passwort",
   "CREATE_NEW_ACCOUNT": "Neuen Account erstellen",
-
-
   "AUTH_ERR_1": "Die E-Mail Adresse wird bereits verwendet.",
   "AUTH_ERR_2": "Das Passwort muss mindestend 6 Zeichen lang sein.",
   "AUTH_ERR_3": "Es muss eine E-Mail angegeben werden.",
@@ -61,8 +59,28 @@
   "ACRONYMS": "Acronyme",
   "ADD_ACRONYM_DOTS": "Füge Acronym hinzu ...",
 
+  "XXXXXXXXXEdit-modal.tsXXXXXXXXX": "",
+  "OK": "OK",
+  "SELECT_DEPARTMENT": "Wähle eine Abteilung",
+
+  "XXXXXXXXXHome.tsXXXXXXXXX": "",
+  "MORE_ACTIONS": "Optionen",
+  "NEW_ENTRY": "Neuer Eintrag",
+  "FILTER": "Filter",
+  "LOGOUT": "Abmelden",
+
+  "XXXXXXXXXLinked-objects-modal.tsXXXXXXXXX": "",
+  "SELECT_RELATED_DEPARTMENTS": "Wähle zugehörige Abteilungen",
 
 
+  "XXXXXXXXXSingle-entry.tsXXXXXXXXX": "",
+  "NO_ENTRY_ALERT_TITLE": "Eintrag ist nicht verfügbar!",
+  "NO_ENTRY_ALERT_SUBTITLE": "Leider ist der Eintrag in der aktuell ausgewählten Sprache nicht verfügbar!",
+
+
+  "XXXXXXXXXAlerts.tsXXXXXXXXX": "",
+  "LOADING": "Lade...",
+  "SELECT_DEPARTMENTS": "Wähle Abteilungen",
 
 
 

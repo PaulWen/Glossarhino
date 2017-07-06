@@ -6,6 +6,8 @@ import { LinkedObjectsModalModelInterface } from "./linked-objects-modal.model-i
 import { EntryDataObject } from "../../providers/dataobjects/entry.dataobject";
 import { UserLanguageFilterConfigDataObject } from "../../providers/dataobjects/user-language-filter-config.dataobject";
 import { Logger } from "../../app/logger";
+import {TranslateService} from "@ngx-translate/core";
+import {Observable} from "rxjs/Observable";
 
 @IonicPage()
 @Component({
@@ -41,7 +43,10 @@ export class LinkedObjectsModalPage {
   private synonym: string;
   private acronym: string;
 
-  constructor(navCtrl: NavController, navParams: NavParams, viewCtrl: ViewController, alertCtrl: AlertController, modalCtrl: ModalController, loadingCtrl: LoadingController, appModelService: AppModelService) {
+  // other
+  private translateService: TranslateService;
+
+  constructor(navCtrl: NavController, navParams: NavParams, viewCtrl: ViewController, alertCtrl: AlertController, modalCtrl: ModalController, loadingCtrl: LoadingController, appModelService: AppModelService, translateService: TranslateService) {
     // instantiate ionic injected components
     this.navCtrl = navCtrl;
     this.navParams = navParams;
@@ -59,6 +64,9 @@ export class LinkedObjectsModalPage {
 
     // instantiate model
     this.appModelService = appModelService;
+
+    // other
+    this.translateService = translateService;
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
@@ -102,7 +110,7 @@ export class LinkedObjectsModalPage {
 
       if(relatedEntriesIds != undefined) {
       relatedEntriesIds.forEach(entryId => {
-        // get entry and push to relatedEntries array  
+        // get entry and push to relatedEntries array
         this.appModelService.getEntryDataObjectToShow(entryId, this.selectedLanguageDataObject.selectedLanguage).then((data) => {
           relatedEntries.push(data);
         }, (error) => {
@@ -201,27 +209,37 @@ export class LinkedObjectsModalPage {
   }
 
   private showRelatedDepartmentsCheckboxAlert() {
-    let relatedDepartmentCheckboxAlert = this.alertCtrl.create();
-    relatedDepartmentCheckboxAlert.setTitle("Select related departments");
+    Observable.zip(
+      this.translateService.get("SELECT_RELATED_DEPARTMENTS"),
+      this.translateService.get("CANCEL"),
+      this.translateService.get("OK"),
+      (selectRelatedDepartments: string, cancel: string, ok: string) => {
+        let relatedDepartmentCheckboxAlert = this.alertCtrl.create();
+        relatedDepartmentCheckboxAlert.setTitle(selectRelatedDepartments);
 
-    this.globalDepartmentConfigDataObject.departments.forEach(department => {
-      if (this.relatedDepartments.find(departmentId => departmentId == department.departmentId) == undefined) {
-        relatedDepartmentCheckboxAlert.addInput({
-          type: "radio",
-          label: department.departmentName,
-          value: department.departmentId.toString()
+        this.globalDepartmentConfigDataObject.departments.forEach(department => {
+          if (this.relatedDepartments.find(departmentId => departmentId == department.departmentId) == undefined) {
+            relatedDepartmentCheckboxAlert.addInput({
+              type: "radio",
+              label: department.departmentName,
+              value: department.departmentId.toString()
+            });
+          }
         });
-      }
-    });
 
-    relatedDepartmentCheckboxAlert.addButton("Cancel");
-    relatedDepartmentCheckboxAlert.addButton({
-      text: "OK",
-      handler: data => {
-        this.addRelatedDepartment(data);
+        relatedDepartmentCheckboxAlert.addButton(cancel);
+        relatedDepartmentCheckboxAlert.addButton({
+          text: ok,
+          handler: data => {
+            this.addRelatedDepartment(data);
+          }
+        });
+
+        return relatedDepartmentCheckboxAlert;
       }
+    ).subscribe((alert)=>{
+      alert.present();
     });
-    relatedDepartmentCheckboxAlert.present();
   }
 
   private openEntryListModal() {

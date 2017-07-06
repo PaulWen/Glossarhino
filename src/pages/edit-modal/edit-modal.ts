@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController, AlertController, ModalController, LoadingController } from 'ionic-angular';
+import { Component } from "@angular/core";
+import { IonicPage, NavController, NavParams, ViewController, AlertController, ModalController, LoadingController } from "ionic-angular";
 import { EditModalPageModelInterface } from "./edit-modal.model-interface";
 import { EntryDataObject } from "../../providers/dataobjects/entry.dataobject";
 import { AppModelService } from "../../providers/app-model-service";
@@ -9,6 +9,8 @@ import { GlobalDepartmentConfigDataObject } from "../../providers/dataobjects/gl
 import { DepartmentEntrySpecificsDataObject } from "../../providers/dataobjects/department-entry-description.dataobject";
 import { DepartmentDataObject } from "../../providers/dataobjects/department.dataobject";
 import { AttachmentDataObject } from "../../providers/dataobjects/attachment.dataobject";
+import {TranslateService} from "@ngx-translate/core";
+import {Observable} from "rxjs/Rx";
 
 @IonicPage()
 @Component({
@@ -24,7 +26,7 @@ export class EditModalPage {
   private viewCtrl: ViewController;
   private alertCtrl: AlertController;
   private modalCtrl: ModalController;
-  private loadingCtrl: LoadingController;  
+  private loadingCtrl: LoadingController;
 
   // navParams
   private _id: string;
@@ -38,8 +40,11 @@ export class EditModalPage {
   private entry: EntryDataObject;
   private selectedLanguageDataObject: UserLanguageFilterConfigDataObject;
 
+  // others
+  private translateService: TranslateService;
+
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
-  constructor(navCtrl: NavController, navParams: NavParams, viewCtrl: ViewController, modalCtrl: ModalController, alertCtrl: AlertController, loadingCtrl: LoadingController, appModelService: AppModelService) {
+  constructor(navCtrl: NavController, navParams: NavParams, viewCtrl: ViewController, modalCtrl: ModalController, alertCtrl: AlertController, loadingCtrl: LoadingController, appModelService: AppModelService, translateService: TranslateService) {
     // instantiate ionic injected components
     this.navCtrl = navCtrl;
     this.navParams = navParams;
@@ -54,6 +59,9 @@ export class EditModalPage {
 
     // instantiate model object
     this.appModelService = appModelService;
+
+    // other
+    this.translateService = translateService;
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
@@ -161,34 +169,46 @@ export class EditModalPage {
   }
 
   private showAddDepartmentRadioAlert() {
-    let departmentRadioAlert = this.alertCtrl.create();
-    departmentRadioAlert.setTitle("Select department");
+    Observable.zip(
+      this.translateService.get("SELECT_DEPARTMENT"),
+      this.translateService.get("OK"),
+      this.translateService.get("CANCEL"),
+      (selectDepartment: string, ok: string, cancel: string) => {
+        let departmentRadioAlert = this.alertCtrl.create();
 
-    //check array of departments and remove the ones already included in the entryDataObject
-    let temporaryArray: Array<DepartmentDataObject> = [];
-    this.globalDepartmentConfigDataObject.departments.forEach(department => {
-      if (this.entry.departmentSpecifics && this.entry.departmentSpecifics.find(departmentSpecifics => departmentSpecifics.departmentId == department.departmentId) != undefined) {
-      } else {
-        temporaryArray.push(department);
+        departmentRadioAlert.setTitle(selectDepartment);
+
+        //check array of departments and remove the ones already included in the entryDataObject
+        let temporaryArray: Array<DepartmentDataObject> = [];
+        this.globalDepartmentConfigDataObject.departments.forEach(department => {
+          if (this.entry.departmentSpecifics && this.entry.departmentSpecifics.find(departmentSpecifics => departmentSpecifics.departmentId == department.departmentId) != undefined) {
+          } else {
+            temporaryArray.push(department);
+          }
+        });
+
+        temporaryArray.forEach(department => {
+          departmentRadioAlert.addInput({
+            type: "radio",
+            label: department.departmentName,
+            value: department.departmentId.toString()
+          });
+        });
+
+        departmentRadioAlert.addButton(cancel);
+        departmentRadioAlert.addButton({
+          text: ok,
+          handler: data => {
+            this.addDepartmentSpecification(data);
+          }
+        });
+
+        return departmentRadioAlert;
+
       }
+    ).subscribe((alert)=>{
+      alert.present();
     });
-
-    temporaryArray.forEach(department => {
-      departmentRadioAlert.addInput({
-        type: "radio",
-        label: department.departmentName,
-        value: department.departmentId.toString()
-      });
-    });
-
-    departmentRadioAlert.addButton("Cancel");
-    departmentRadioAlert.addButton({
-      text: "OK",
-      handler: data => {
-        this.addDepartmentSpecification(data);
-      }
-    });
-    departmentRadioAlert.present();
   }
 
   private openAttachmentModal(attachments: Array<AttachmentDataObject>) {

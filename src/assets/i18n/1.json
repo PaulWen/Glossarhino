@@ -59,8 +59,28 @@
   "ACRONYMS": "Acronyms",
   "ADD_ACRONYM_DOTS": "Add Acronym ...",
 
+  "XXXXXXXXXEdit-modal.tsXXXXXXXXX": "",
+  "OK": "OK",
+  "SELECT_DEPARTMENT": "Select department",
+
+  "XXXXXXXXXHome.tsXXXXXXXXX": "",
+  "MORE_ACTIONS": "More Actions",
+  "NEW_ENTRY": "New Entry",
+  "FILTER": "Filter",
+  "LOGOUT": "Logout",
+
+  "XXXXXXXXXLinked-objects-modal.tsXXXXXXXXX": "",
+  "SELECT_RELATED_DEPARTMENTS": "Select related departments",
 
 
+  "XXXXXXXXXSingle-entry.tsXXXXXXXXX": "",
+  "NO_ENTRY_ALERT_TITLE": "Entry not available!",
+  "NO_ENTRY_ALERT_SUBTITLE": "Sorry, the entry is not yet available in this language",
+
+
+  "XXXXXXXXXAlerts.tsXXXXXXXXX": "",
+  "LOADING": "Loading...",
+  "SELECT_DEPARTMENTS": "Select departments",
 
 
 

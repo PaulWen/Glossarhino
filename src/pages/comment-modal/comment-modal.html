@@ -20,24 +20,37 @@
     <div> {{ comment.content }}</div>
 
     <div class="comment-metadata">
-
       <button ion-button clear small (click)="sendMail(comment.email)"> {{ comment.contact }} </button>
-      <div> {{ comment.timeStamp | date: short }}</div>
-
+      <div> {{ comment.timeStamp | date: "dd.MM.yy, HH:mm"}}</div>
     </div>
 
   </div>
 
 </ion-content>
 
-<ion-footer *ngIf="appModelService.isOnline()">
-  <ion-toolbar>
+<ion-footer>
+  <ion-toolbar *ngIf="appModelService.isOnline()">
+
     <ion-item>
-      <ion-input [(ngModel)]="commentContent" placeholder="{{ 'ADD_COMMENT_PLACEHOLDER' | translate:param }}" clearInput></ion-input>
+      <ion-input  [(ngModel)]="commentContent" placeholder="{{ 'ADD_COMMENT_PLACEHOLDER' | translate:param }}" clearInput></ion-input>
     </ion-item>
 
     <ion-buttons end>
       <button ion-button icon-only (click)="addComment()">
+        <ion-icon name="arrow-round-up"></ion-icon>
+      </button>
+    </ion-buttons>
+
+  </ion-toolbar>
+
+  <ion-toolbar *ngIf="!appModelService.isOnline()">
+
+    <ion-item>
+      <ion-input [(ngModel)]="commentContent" placeholder="{{ 'ADD_COMMENT_PLACEHOLDER' | translate:param }}" clearInput disabled></ion-input>
+    </ion-item>
+
+    <ion-buttons end>
+      <button ion-button icon-only (click)="addComment()" disabled>
         <ion-icon name="arrow-round-up"></ion-icon>
       </button>
     </ion-buttons>

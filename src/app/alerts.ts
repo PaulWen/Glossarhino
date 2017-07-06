@@ -1,11 +1,10 @@
-import {AlertController, LoadingController} from "ionic-angular";
-import {AppModelService} from "../providers/app-model-service";
-import {DepartmentDataObject} from "../providers/dataobjects/department.dataobject";
-import {GlobalDepartmentConfigDataObject} from "../providers/dataobjects/global-department-config.dataobject";
-import {UserDepartmentFilterConfigDataObject} from "../providers/dataobjects/user-department-filter-config.dataobject";
-import {Logger} from "./logger";
-import {TranslateService} from "@ngx-translate/core";
-import {Observable} from "rxjs/Observable";
+import { AlertController, LoadingController, NavController } from "ionic-angular";
+import { AppModelService } from "../providers/app-model-service";
+import { DepartmentDataObject } from "../providers/dataobjects/department.dataobject";
+import { GlobalDepartmentConfigDataObject } from "../providers/dataobjects/global-department-config.dataobject";
+import { UserDepartmentFilterConfigDataObject } from "../providers/dataobjects/user-department-filter-config.dataobject";
+import { Logger } from "./logger";
+import { GlobalLanguageConfigDataobject } from "../providers/dataobjects/global-language-config.dataobject";
 
 /**
  * This class implements all the alerts needed for the app
@@ -17,100 +16,91 @@ export class Alerts {
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
 
   //////////////////////////////////////////
-  //       Department Filter Alert        //
+  //            Loading Alert             //
   //////////////////////////////////////////
 
-  private static mergeGlobalDepartmentConfigWithUserPreferences(globalDepartmentConfig: GlobalDepartmentConfigDataObject, userDepartmentFilterConfig: UserDepartmentFilterConfigDataObject): Array<{ details: DepartmentDataObject, checked: boolean }> {
-    let mergedDepartmentConfig: Array<{ details: DepartmentDataObject, checked: boolean }> = [];
-
-    globalDepartmentConfig.departments.forEach(department => {
-      if (userDepartmentFilterConfig.selectedDepartments.find(selectedDepartment => selectedDepartment == department.departmentId) == undefined) {
-        mergedDepartmentConfig.push({
-          details: department,
-          checked: false
-        });
-      } else {
-        mergedDepartmentConfig.push({
-          details: department,
-          checked: true
-        });
-      }
+  public static presentLoadingDefault(loadingCtrl: LoadingController): any {
+    let loading = loadingCtrl.create({
+      content: 'Please wait...'
     });
-    return mergedDepartmentConfig;
-  }
 
-  public static showDepartmentFilterAlert(alertCtrl: AlertController, appModelService: AppModelService, translateService: TranslateService): Promise<boolean> {
-    return new Promise((resolve, reject) => {
-      // load all strings first
-      Observable.zip(
-        translateService.get("SELECT_DEPARTMENTS"),
-        translateService.get("CANCEL"),
-        translateService.get("OK"),
-        (selectDepartments: string, cancel: string, ok: string) => {
-          // load data to create inputs for all departments
-          let globalDepartmentConfig: GlobalDepartmentConfigDataObject = appModelService.getGlobalDepartmentConfigDataObject();
-          appModelService.getUserDepartmentFilterConfigDataObject().then((userDepartmentFilterConfig: UserDepartmentFilterConfigDataObject) => {
-            let mergedDepartmentConfig: Array<{ details: DepartmentDataObject, checked: boolean }> = this.mergeGlobalDepartmentConfigWithUserPreferences(globalDepartmentConfig, userDepartmentFilterConfig);
-
-            // create dialog
-            let departmentFilterAlert = alertCtrl.create();
-            departmentFilterAlert.setTitle(selectDepartments);
-
-
-            // create inputs for the departments
-            mergedDepartmentConfig.forEach(department => {
-              departmentFilterAlert.addInput({
-                type: "checkbox",
-                label: department.details.departmentName,
-                value: department.details.departmentId.toString(),
-                checked: department.checked
-              });
-            });
-
-            // add cancel button
-            departmentFilterAlert.addButton(cancel);
-
-            // add okay button
-            departmentFilterAlert.addButton({
-              text: ok,
-              handler: data => {
-                // update user settings
-                userDepartmentFilterConfig.selectedDepartments = data;
-                appModelService.setUserDepartmentFilterConfigDataObject(userDepartmentFilterConfig).then((data) => {
-                  resolve(data);
-                });
-              }
-            });
-
-            // show alert
-            departmentFilterAlert.present();
-
-          }, (error) => {
-            Logger.log("Loading mergedDepartmentConfig failed (Class: Alerts, Method: showDepartmentFilterAlert()");
-            Logger.error(error);
-            reject(error);
-          });
-        }
-      ).subscribe(()=>{
-        // this subscription is necessary so that the function defined for the Observable.zip(...) gets executed
-      });
-    });
-  }
-
-
-  public static presentLoadingDefault(loadingCtrl: LoadingController, translateService: TranslateService): any {
-    let loading = loadingCtrl.create();
-
-    Observable.zip(
-      translateService.get("LOADING"),
-      (loadingStr: string) => {
-        loading.setContent(loadingStr);
-        return loading;
-      }
-    ).subscribe((loadingCtl)=>{
-      loadingCtl.present();
-    });
+    loading.present();
 
     return loading;
+  }
+
+  //////////////////////////////////////////
+  //           Language Alert             //
+  //////////////////////////////////////////
+
+  public static showLanguageSelectionAlert(alertCtrl: AlertController, appModelService: AppModelService): Promise<string> {
+    return new Promise((resolve, reject) => {
+      let allLanguages: GlobalLanguageConfigDataobject = appModelService.getAllLanguages();
+
+      let languageSelectionAlert = alertCtrl.create({
+        title: "Select language"
+      });
+
+      allLanguages.languages.forEach(language => {
+        languageSelectionAlert.addInput({
+          type: "radio",
+          label: language.languageName,
+          value: language.languageId
+        });
+      });
+
+      // add cancel button
+      languageSelectionAlert.addButton("Cancel");
+
+      // add okay button
+      languageSelectionAlert.addButton({
+        text: "OK",
+        handler: data => {
+          resolve(data);
+        }
+      });
+
+      // show alert
+      languageSelectionAlert.present();
+    });
+  }
+
+  //////////////////////////////////////////
+  //           No Entry Alert             //
+  //////////////////////////////////////////
+
+  public static showNoEntryAlert(alertCtrl: AlertController, navCtrl: NavController, entryDocumentId: string, languageId: string) {
+    let noEntryAlert = alertCtrl.create({
+      title: "Entry not available!",
+      subTitle: "Sorry, the entry is not yet available in this language. You can add it by pressing the \"Add\" button"
+    });
+
+    // add add button
+    noEntryAlert.addButton({
+      text: "Add",
+      handler: () => {
+        navCtrl.push("EditModalPage", {
+          addNewEntry: true,
+          newEntryDocumentId: entryDocumentId,
+          newEntryLanguageId: languageId
+        }).then((canEnterView) => {
+          if (!canEnterView) {
+            // in the case that the view can not be entered redirect the user to the login page
+            navCtrl.setRoot("LoginPage");
+          }
+        });
+      }
+    });
+
+    // add okay button
+    noEntryAlert.addButton({
+      text: "OK",
+      handler: () => {
+        navCtrl.setRoot("HomePage");
+      }
+    });
+
+    noEntryAlert.present();
+
   }
 }

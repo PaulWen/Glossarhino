@@ -31,6 +31,8 @@ export class EditModalPage {
   // navParams
   private _id: string;
   private addNewEntry: boolean;
+  private newEntryDocumentId: string;
+  private newEntryLanguageId: string;
 
   // model object
   private appModelService: EditModalPageModelInterface;
@@ -56,6 +58,8 @@ export class EditModalPage {
     // get navParams
     this._id = this.navParams.get("_id");
     this.addNewEntry = this.navParams.get("addNewEntry");
+    this.newEntryDocumentId = this.navParams.get("newEntryDocumentId");
+    this.newEntryLanguageId = this.navParams.get("newEntryLanguageId");
 
     // instantiate model object
     this.appModelService = appModelService;
@@ -86,33 +90,33 @@ export class EditModalPage {
     // load global department config
     this.globalDepartmentConfigDataObject = this.appModelService.getGlobalDepartmentConfigDataObject();
 
-    // get selected language
-    this.appModelService.getSelectedLanguage().then((data) => {
-      this.selectedLanguageDataObject = data;
+    if (this.addNewEntry) {
+      this.entry = EntryDataObject.init(this.newEntryDocumentId);
+    } else {
 
-      //load other data as soon as language loaded
-      // get EntryDataObject
-      if (this.addNewEntry) {
-        this.entry = EntryDataObject.init();
-      } else {
+      // get selected language
+      this.appModelService.getSelectedLanguage().then((data) => {
+        this.selectedLanguageDataObject = data;
+
+        //load other data as soon as language loaded
+        // get EntryDataObject
         this.appModelService.getCompleteEntryDataObject(this._id, this.selectedLanguageDataObject.selectedLanguage).then((data) => {
           this.entry = data;
         }, (error) => {
           Logger.log("Loading Entry Data Object failed (Class: EditModalPage, Method: loadData()");
           Logger.error(error);
         });
-      }
 
+        // reset refresher if handed over in method
+        if (refresher) {
+          refresher.complete();
+        }
 
-      // reset refresher if handed over in method
-      if (refresher) {
-        refresher.complete();
-      }
-
-    }, (error) => {
-      Logger.log("Loading Entry Data Object failed (Class: EditModalPage, Method: loadData()");
-      Logger.error(error);
-    });
+      }, (error) => {
+        Logger.log("Loading Entry Data Object failed (Class: EditModalPage, Method: loadData()");
+        Logger.error(error);
+      });
+    }  
   }
 
   private doRefresh(refresher) {
@@ -149,10 +153,11 @@ export class EditModalPage {
 
   private closeEditModal(save: boolean) {
     if (save) {
+      
       if (this.addNewEntry) {
-        this.appModelService.newEntryDataObject(this.entry, this.selectedLanguageDataObject.selectedLanguage).then((data) => {
-          this.viewCtrl.dismiss();
-
+        Logger.log(this.entry);
+        this.appModelService.newEntryDataObject(this.entry, this.newEntryLanguageId).then((data) => {
+          this.navCtrl.setRoot("HomePage");
         });
       } else {
         this.appModelService.setEntryDataObject(this.entry, this.selectedLanguageDataObject.selectedLanguage).then(() => {
@@ -162,7 +167,7 @@ export class EditModalPage {
           Logger.error(error);
         });
       }
-
+      
     } else {
       this.viewCtrl.dismiss();
     }

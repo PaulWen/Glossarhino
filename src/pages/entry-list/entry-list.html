@@ -1,6 +1,8 @@
 <ion-header>
-
   <ion-navbar>
+
+    <!-- Title for browser tab even though not present on page itself -->
+    <ion-title [hidden]="true"> {{ "ENTRY_LIST" | translate:param }} </ion-title>
 
     <ion-searchbar #searchbar placeholder="{{ 'SEARCH_ENTRIES' | translate:param }}" autocorrect="off" type="text"
                    [(ngModel)]="searchText" [hidden]="searchbarIsHidden"
@@ -14,7 +16,6 @@
     </ion-buttons>
 
   </ion-navbar>
-
 </ion-header>
 
 <ion-content padding>

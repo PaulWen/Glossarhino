@@ -107,13 +107,18 @@ export class EntryListPage {
   //            Page Functions            //
   //////////////////////////////////////////
 
+  /**
+   * 
+   * @param departmendId Optional parameter, if not defined entries of all departments are loaded.
+   * @param refresher  Optional parameter, needs to be handed over to complete pull-to-refresh spinner.
+   */
   private loadData(departmendId?: string, refresher?) {
     // get selected language
     this.appModelService.getSelectedLanguage().then((data) => {
       this.selectedLanguage = data;
 
-      // load other data as soon as language loaded
-      // get entryname list
+      // load data depending on selected language
+      // get entry list
       this.appModelService.getEntryListPageEntryDataObjects(this.searchText, this.selectedLanguage.selectedLanguage, departmendId).then((data) => {
         this.entryList = data;
       }, (error) => {
@@ -121,7 +126,7 @@ export class EntryListPage {
         Logger.error(error);
       });
 
-      // reset refresher if handed over in method
+      // complete refresher
       if (refresher) {
         refresher.complete();
       }
@@ -140,16 +145,19 @@ export class EntryListPage {
   //         Navigation Functions         //
   //////////////////////////////////////////
 
-  // Navigation method for single entry
+  /**
+   * Push entry, depending on the calling page, SingleEntryPage will be pushed or the EntryListPageModal will be dismissed, in both cases the entryDocumentId is handed over.
+   * @param entryDocumentId 
+   */
   private pushEntry(entryDocumentId: string) {
     if (!this.pushToEdit) {
-      this.pushSingleEntry(entryDocumentId);
+      this.pushSingleEntryPage(entryDocumentId);
     } else {
-      this.closeEntryListModal(entryDocumentId);
+      this.closeEntryListPageModal(entryDocumentId);
     }
   }
 
-  private pushSingleEntry(entryDocumentId: string) {
+  private pushSingleEntryPage(entryDocumentId: string) {
     this.navCtrl.push("SingleEntryPage", {
       entryDocumentId: entryDocumentId
     }).then((canEnterView) => {
@@ -160,7 +168,7 @@ export class EntryListPage {
     });
   }
 
-  private closeEntryListModal(entryDocumentId: string) {
+  private closeEntryListPageModal(entryDocumentId: string) {
     this.viewCtrl.dismiss({
       entryDocumentId: entryDocumentId
     });

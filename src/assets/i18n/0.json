@@ -27,23 +27,24 @@
 
   "XXXXXXXXXCommentModalXXXXXXXXX": "",
   "COMMENTS": "Kommentare",
-  "CLOSE": "Schließen",
   "ADD_COMMENT_PLACEHOLDER": "Füge Kommentar hinzu ...",
 
   "XXXXXXXXXEditModalXXXXXXXXX": "",
   "EDIT": "Bearbeiten",
-  "DONE": "Fertig",
   "TITLE": "Titel",
   "DESCRIPTION": "Beschreibung",
   "EDIT_ATTACHMENTS": "Anhang bearbeiten",
+  "EDIT_LINKS": "Verlinkungen bearbeiten",
   "ADD_DEPARTMENT_SPECIFICATION": "Füge Abteilungsspezifikation hinzu",
   "DELETE_ENTRY": "Delete Entry",
 
   "XXXXXXXXXEntryListXXXXXXXXX": "",
   "SEARCH_ENTRIES": "Suche Eintrag",
+  "ENTRY_LIST": "Liste der Einträge",
 
   "XXXXXXXXXHomePageXXXXXXXXX": "",
   "APP_NAME": "Glossarhino",
+  "ALL": "Alle",
 
   "XXXXXXXXXLanguagePopoverXXXXXXXXX": "",
   "LANGUAGE": "Sprache",
@@ -58,7 +59,13 @@
   "ADD_SYNONYM_DOTS": "Füge Synonym hinzu ...",
   "ACRONYMS": "Acronyme",
   "ADD_ACRONYM_DOTS": "Füge Acronym hinzu ...",
+  "CLOSE": "Schließen",
+  "DONE": "Fertig",
 
+  "XXXXXXXXXDepartmentFilterComponentXXXXXXXXX": "",
+  "DEPARTMENT_FILTER": "Abteilungsfilter",
+  "OKAY_TEXT": "Okay",
+  "CANCEL_TEXT": "Abbrechen",
   "XXXXXXXXXEdit-modal.tsXXXXXXXXX": "",
   "OK": "OK",
   "SELECT_DEPARTMENT": "Wähle eine Abteilung",

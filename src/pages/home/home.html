@@ -26,6 +26,9 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
+  <!-- include department filter component, but hide, because it should be opened by controller only -->
+  <department-filter [hidden]="true"></department-filter>
+
   <!-- ion-grid for responsive design -->
   <ion-grid>
     <ion-row align-items-center justify-content-center>
@@ -34,8 +37,8 @@
       <ion-col col-xl-2 col-lg-3 col-md-6 col-sm-6 col-xs-6 col-6>
         <ion-card (click)="pushEntryListPage()" tappable>
           <img src="assets/img/homePage/all.png"/>
-          <div class="card-title">All</div>
-          <div class="card-subtitle"> {{ countOfAllEntries }} Entries</div>
+          <div class="card-title">{{ "ALL" | translate:param }}</div>
+          <div class="card-subtitle"> {{ countOfAllEntries }} {{ "ENTRIES" | translate:param }}</div>
         </ion-card>
       </ion-col>
 
@@ -45,7 +48,7 @@
           <ion-card (click)="pushEntryListPage(department.details.departmentId)" tappable>
             <img src="assets/img/homePage/{{department.details.departmentId}}.png"/>
             <div class="card-title">{{ department.details.departmentName }}</div>
-            <div class="card-subtitle"> {{ department.countOfEntries }} Entries
+            <div class="card-subtitle"> {{ department.countOfEntries }} {{ "ENTRIES" | translate:param }}
             </div>
           </ion-card>
         </ion-col>

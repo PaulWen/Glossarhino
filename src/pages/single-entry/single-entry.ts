@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import { Promise } from "es6-promise";
 import {
   ActionSheetController,
@@ -17,8 +17,7 @@ import { AttachmentDataObject } from "../../providers/dataobjects/attachment.dat
 import { EntryDataObject } from "../../providers/dataobjects/entry.dataobject";
 import { UserLanguageFilterConfigDataObject } from "../../providers/dataobjects/user-language-filter-config.dataobject";
 import { SingleEntryPageModelInterface } from "./single-entry.model-interface";
-import {TranslateService} from "@ngx-translate/core";
-import {Observable} from "rxjs/Observable";
+import { DepartmentFilterComponent } from "../../components/department-filter/department-filter";
 
 @IonicPage({
   segment: "singleentry/:entryDocumentId",
@@ -47,10 +46,10 @@ export class SingleEntryPage {
 
   // data objects
   private entry: EntryDataObject;
-  private selectedLanguage: UserLanguageFilterConfigDataObject;
+  private selectedLanguageDataObject: UserLanguageFilterConfigDataObject;
 
-  // selectFilterAlert objects
-  private showDepartmentFilterAlertAppModel;
+  // department filter
+  @ViewChild(DepartmentFilterComponent) departmentFilterComponent: DepartmentFilterComponent;
 
   // other
   private translateService: TranslateService;
@@ -72,10 +71,6 @@ export class SingleEntryPage {
 
     // instantiate model
     this.appModelService = appModelService;
-    this.showDepartmentFilterAlertAppModel = appModelService;
-
-    // other
-    this.translateService = translateService;
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
@@ -96,14 +91,18 @@ export class SingleEntryPage {
   //           Page Functions             //
   //////////////////////////////////////////
 
+  /**
+   * Function loads data for the page, at first the selectedLanguageDataObject, because it is needed for other data to be loaded.
+   * @param refresher optional parameter, hand over, if reload triggered from "pull-to-refresh"
+   */
   private loadData(refresher?) {
     //get selected language
     this.appModelService.getSelectedLanguage().then((data) => {
-      this.selectedLanguage = data;
+      this.selectedLanguageDataObject = data;
 
       // load other data as soon as language loaded
       // get EntryDataObject
-      this.appModelService.getEntryDataObjectToShow(this.entryDocumentId, this.selectedLanguage.selectedLanguage).then((data) => {
+      this.appModelService.getEntryDataObjectToShow(this.entryDocumentId, this.selectedLanguageDataObject.selectedLanguage).then((data) => {
         this.entry = data;
       }, (error) => {
         switch (error.status) {
@@ -135,6 +134,10 @@ export class SingleEntryPage {
     window.open("mailto:" + emailAddress, "_system");
   }
 
+  /**
+   * Returns the length of an array and 0 if array is undefined.
+   * @param array Array to return the length from.
+   */  
   private getArrayLength(array: Array<any>): number {
     if (array == undefined) {
       return 0;
@@ -148,39 +151,30 @@ export class SingleEntryPage {
   //////////////////////////////////////////
 
   private presentActionSheet() {
-    Observable.zip(
-      this.translateService.get("MORE_ACTIONS"),
-      this.translateService.get("EDIT"),
-      this.translateService.get("FILTER"),
-      this.translateService.get("CANCEL"),
-      (moreActions: string, edit: string, filter: string, cancel: string) => {
-        return this.actionSheetCtrl.create({
-          title: moreActions,
-          buttons: [
-            {
-              text: edit,
-              handler: () => {
-                Logger.log("Edit clicked");
-                this.openEditModal(this.entry._id);
-              }
-            }, {
-              text: filter,
-              handler: () => {
-                this.showDepartmentFilterAlert(this.alertCtrl, this.showDepartmentFilterAlertAppModel);
-              }
-            }, {
-              text: cancel,
-              role: "cancel",
-              handler: () => {
-                Logger.log("Cancel clicked");
-              }
-            }
-          ]
-        });
-
-      }
-    ).subscribe((actionSheetCtrl)=>{
-      actionSheetCtrl.present();
+    let actionSheet = this.actionSheetCtrl.create({
+      title: "More Actions",
+      buttons: [
+        {
+          text: "Edit",
+          handler: () => {
+            Logger.log("Edit clicked");
+            this.openEditModal(this.entry._id);
+          }
+        }, {
+          text: "Filter",
+          handler: () => {
+            this.departmentFilterComponent.showAlert().then(() => {
+              this.loadData();
+            });
+          }
+        }, {
+          text: "Cancel",
+          role: "cancel",
+          handler: () => {
+            Logger.log("Cancel clicked");
+          }
+        }
+      ]
     });
 
   }
@@ -226,14 +220,6 @@ export class SingleEntryPage {
     });
   }
 
-  private showDepartmentFilterAlert(alertCtrl: AlertController, appModelService: AppModelService) {
-    Alerts.showDepartmentFilterAlert(alertCtrl, appModelService, this.translateService).then(() => {
-      this.loadData();
-    }, (error) => {
-      Logger.error(error);
-    });
-  }
-
   private openCommentModal(entry: EntryDataObject) {
     let commentModal = this.modalCtrl.create("CommentModalPage", {
       entry: entry
@@ -274,29 +260,12 @@ export class SingleEntryPage {
     });
   }
 
-  private openAttachment(url: string) {
-    //window.location.href = url.href;
-    window.open(url, "_system");
-  }
-
   private showNoEntryAlert() {
-    Observable.zip(
-      this.translateService.get("NO_ENTRY_ALERT_TITLE"),
-      this.translateService.get("NO_ENTRY_ALERT_SUBTITLE"),
-      this.translateService.get("OK"),
-      (noEntryAlertTitle: string, noEntryAlertSubtitle: string, ok: string) => {
-        return this.alertCtrl.create({
-          title: noEntryAlertTitle,
-          subTitle: noEntryAlertSubtitle,
-          buttons: [ok]
-        });
-      }
-    ).subscribe((alert)=>{
-      alert.present();
-      alert.onDidDismiss(() => {
-        this.navCtrl.setRoot("HomePage");
-      })
-    });
+    Logger.log(this.entryDocumentId);
+    Logger.log(this.selectedLanguageDataObject.selectedLanguage);
+
+    
+    Alerts.showNoEntryAlert(this.alertCtrl, this.navCtrl, this.entryDocumentId, this.selectedLanguageDataObject.selectedLanguage);
   }
 
 }

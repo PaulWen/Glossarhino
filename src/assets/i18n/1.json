@@ -24,30 +24,38 @@
   "ADD": "Add",
   "CANCEL": "Cancel",
   "URL": "URL",
+  "DONE": "Done",
+  "CLOSE": "Close",
 
   "XXXXXXXXXCommentModalXXXXXXXXX": "",
   "COMMENTS": "Comments",
-  "CLOSE": "Close",
   "ADD_COMMENT_PLACEHOLDER": "Add Comment ...",
 
   "XXXXXXXXXEditModalXXXXXXXXX": "",
   "EDIT": "Edit",
-  "DONE": "Done",
   "TITLE": "Title",
   "DESCRIPTION": "Description",
   "EDIT_ATTACHMENTS": "Edit attachments",
+  "EDIT_LINKS": "Edit links",
   "ADD_DEPARTMENT_SPECIFICATION": "Add department specification",
   "DELETE_ENTRY": "Delete Entry",
 
   "XXXXXXXXXEntryListXXXXXXXXX": "",
-  "SEARCH_ENTRIES": "Search entries",
+  "SEARCH_ENTRIES": "Search entry",
+  "ENTRY_LIST": "Entry List",
 
   "XXXXXXXXXHomePageXXXXXXXXX": "",
   "APP_NAME": "Glossarhino",
+  "ALL" : "All",
 
   "XXXXXXXXXLanguagePopoverXXXXXXXXX": "",
   "LANGUAGE": "Language",
 
+  "XXXXXXXXXDepartmentFilterComponentXXXXXXXXX": "",
+  "DEPARTMENT_FILTER": "Department Filter",
+  "OKAY_TEXT": "Okay",
+  "CANCEL_TEXT": "Cancel",
+  
   "XXXXXXXXXLinkedObjectModalXXXXXXXXX": "",
   "RELATED": "Related",
   "DEPARTMENTS": "Departments",

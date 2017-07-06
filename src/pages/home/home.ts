@@ -1,4 +1,4 @@
-import {Component} from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import {
   ActionSheetController,
   AlertController,
@@ -14,8 +14,7 @@ import {HomePageDepartmentDataobject} from "../../providers/dataobjects/homepage
 import {UserLanguageFilterConfigDataObject} from "../../providers/dataobjects/user-language-filter-config.dataobject";
 import {SuperLoginClientError} from "../../providers/super_login_client/super_login_client_error";
 import {HomePageModelInterface} from "./home.model-interface";
-import {Observable} from "rxjs/Observable";
-import {TranslateService} from "@ngx-translate/core";
+import { DepartmentFilterComponent } from "../../components/department-filter/department-filter";
 
 @IonicPage()
 @Component({
@@ -41,8 +40,11 @@ export class HomePage {
   private selectedLanguageDataObject: UserLanguageFilterConfigDataObject;
   private countOfAllEntries: number;
 
-  // other
-  private translateService: TranslateService;
+  // department filter
+  @ViewChild(DepartmentFilterComponent) departmentFilterComponent: DepartmentFilterComponent;
+
+  // languageSelectionAlert AppModelService
+  private languageSelectionAlertAppModelService: AppModelService;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
 
@@ -56,10 +58,7 @@ export class HomePage {
 
     // instantiate model service object
     this.appModelService = appModelService;
-    this.showDepartmentFilterAlertAppModelService = appModelService;
-
-    // other
-    this.translateService = translateService;
+    this.languageSelectionAlertAppModelService = appModelService;
   }
 
   /////////////////////////////////////////////Methods///////////////////////////////////////////////
@@ -82,7 +81,7 @@ export class HomePage {
   //////////////////////////////////////////
 
   /**
-   * Function loads data for the page, at first the selectedLanguageDataObject, because it is needed for other data to be loaded. After the selectedLanguageDataObject is loaded, the countOfAllEntries
+   * Function loads data for the page, at first the selectedLanguageDataObject, because it is needed for other data to be loaded.
    * @param refresher optional parameter, hand over, if reload triggered from "pull-to-refresh"
    */
   private loadData(refresher?) {
@@ -130,44 +129,32 @@ export class HomePage {
   //         Navigation Functions         //
   //////////////////////////////////////////
 
-  /**
-   * Presents an ActionSheet to consolidate more possible actions
-   */
   private presentActionSheet() {
-    Observable.zip(
-      this.translateService.get("MORE_ACTIONS"),
-      this.translateService.get("NEW_ENTRY"),
-      this.translateService.get("FILTER"),
-      this.translateService.get("LOGOUT"),
-      this.translateService.get("CANCEL"),
-      (moreActions: string, newEntry: string, filter: string, logout: string, cancel: string) => {
-        return this.actionSheetCtrl.create({
-          title: moreActions,
-          buttons: [
-            {
-              text: newEntry,
-              handler: () => {
-                this.pushNewEntry();
-              }
-            }, {
-              text: filter,
-              handler: () => {
-                this.showDepartmentFilterAlert(this.alertCtrl, this.showDepartmentFilterAlertAppModelService);
-              }
-            }, {
-              text: logout,
-              handler: () => {
-                this.logout();
-              }
-            }, {
-              text: cancel,
-              role: "cancel"
-            }
-          ]
-        });
-      }
-    ).subscribe((alert)=>{
-      alert.present();
+    let actionSheet = this.actionSheetCtrl.create({
+      title: "More Actions",
+      buttons: [
+        {
+          text: "New Entry",
+          handler: () => {
+            this.pushNewEntry();
+          }
+        }, {
+          text: "Filter",
+          handler: () => {
+            this.departmentFilterComponent.showAlert().then(() => {
+              this.loadData();
+            });
+          }
+        }, {
+          text: "Logout",
+          handler: () => {
+            this.logout();
+          }
+        }, {
+          text: "Cancel",
+          role: "cancel"
+        }
+      ]
     });
   }
 
@@ -205,26 +192,22 @@ export class HomePage {
    * Function to go to new entry view of EditModalpage
    */
   private pushNewEntry() {
-    this.navCtrl.push("EditModalPage", {
-      addNewEntry: true
-    }).then((canEnterView) => {
-      if (!canEnterView) {
-        // in the case that the view can not be entered redirect the user to the login page
-        this.navCtrl.setRoot("LoginPage");
-      }
-    });
-  }
+    // user input language
+    let languageId: string;
+    Alerts.showLanguageSelectionAlert(this.alertCtrl, this.languageSelectionAlertAppModelService).then((data) => {
+      languageId = data;
+      
+      // open EditModalPage once user selected language of entry
+      this.navCtrl.push("EditModalPage", {
+        addNewEntry: true,
+        newEntryLanguageId: languageId
+      }).then((canEnterView) => {
+        if (!canEnterView) {
+          // in the case that the view can not be entered redirect the user to the login page
+          this.navCtrl.setRoot("LoginPage");
+        }
+      });
 
-  /**
-   * Shows a filter alert for departments
-   * @param alertCtrl Hand over AlertController of the page to show an alert on that page
-   * @param appModelService Hand over AppModelService to be able to load current preferences and all available departments
-   */
-  private showDepartmentFilterAlert(alertCtrl: AlertController, appModelService: AppModelService) {
-    Alerts.showDepartmentFilterAlert(alertCtrl, appModelService, this.translateService).then(() => {
-      this.loadData();
-    }, (error) => {
-      Logger.error(error);
     });
   }
 

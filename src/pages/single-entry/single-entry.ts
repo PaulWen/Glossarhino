@@ -8,7 +8,8 @@ import {
   NavController,
   NavParams,
   PopoverController,
-  LoadingController
+  LoadingController,
+  ViewController
 } from "ionic-angular";
 import { Alerts } from "../../app/alerts";
 import { Logger } from "../../app/logger";
@@ -37,9 +38,11 @@ export class SingleEntryPage {
   private popoverCtrl: PopoverController;
   private alertCtrl: AlertController;
   private loadingCtrl: LoadingController;
+  private viewCtrl: ViewController;
 
   // navParams
   private entryDocumentId: string;
+  private isModal: boolean;
 
   // model object
   private appModelService: SingleEntryPageModelInterface;
@@ -52,7 +55,7 @@ export class SingleEntryPage {
   @ViewChild(DepartmentFilterComponent) departmentFilterComponent: DepartmentFilterComponent;
 
   ////////////////////////////////////////////Constructor////////////////////////////////////////////
-  constructor(navCtrl: NavController, navParams: NavParams, modalCtrl: ModalController, actionSheetCtrl: ActionSheetController, popoverCtrl: PopoverController, alertCtrl: AlertController, loadingCtrl: LoadingController, appModelService: AppModelService) {
+  constructor(navCtrl: NavController, navParams: NavParams, modalCtrl: ModalController, actionSheetCtrl: ActionSheetController, popoverCtrl: PopoverController, alertCtrl: AlertController, loadingCtrl: LoadingController, viewCtrl: ViewController, appModelService: AppModelService) {
 
     // instantiate ionic injected components
     this.navCtrl = navCtrl;
@@ -62,9 +65,12 @@ export class SingleEntryPage {
     this.popoverCtrl = popoverCtrl;
     this.alertCtrl = alertCtrl;
     this.loadingCtrl = loadingCtrl;
+    this.viewCtrl = viewCtrl;
 
     // get navParams
     this.entryDocumentId = this.navParams.get("entryDocumentId");
+    this.isModal = this.navParams.get("isModal");
+
 
     // instantiate model
     this.appModelService = appModelService;
@@ -263,6 +269,10 @@ export class SingleEntryPage {
 
     
     Alerts.showNoEntryAlert(this.alertCtrl, this.navCtrl, this.entryDocumentId, this.selectedLanguageDataObject.selectedLanguage);
+  }
+
+  private closeSingleEntryModal() {
+    this.viewCtrl.dismiss();
   }
 
 }

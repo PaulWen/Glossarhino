@@ -210,13 +210,21 @@ export class LinkedObjectsModalPage {
     relatedDepartmentCheckboxAlert.setTitle("Select related departments");
 
     this.globalDepartmentConfigDataObject.departments.forEach(department => {
-      if (this.relatedDepartments.find(departmentId => departmentId == department.departmentId) == undefined) {
+      if (this.relatedDepartments == undefined) {
         relatedDepartmentCheckboxAlert.addInput({
           type: "radio",
           label: department.departmentName,
           value: department.departmentId.toString()
         });
-      }
+      } else {
+        if (this.relatedDepartments.find(departmentId => departmentId == department.departmentId) == undefined) {
+          relatedDepartmentCheckboxAlert.addInput({
+            type: "radio",
+            label: department.departmentName,
+            value: department.departmentId.toString()
+          });
+        }
+      }  
     });
 
     relatedDepartmentCheckboxAlert.addButton("Cancel");
@@ -244,7 +252,9 @@ export class LinkedObjectsModalPage {
       }
     });
     entryListModal.onDidDismiss((data) => {
-      this.addRelatedEntry(data.entryDocumentId);
+      if (data) {
+        this.addRelatedEntry(data.entryDocumentId);
+      }  
     })
   }
 }

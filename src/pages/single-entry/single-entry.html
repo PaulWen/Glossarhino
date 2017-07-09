@@ -15,6 +15,11 @@
       <button ion-button icon-only (click)="presentActionSheet()">
         <ion-icon name="more"></ion-icon>
       </button>
+
+      <button ion-button (click)="closeSingleEntryModal()" *ngIf="isModal">
+        <span ion-text color="primary" showWhen="ios">{{ "CANCEL" | translate:param }}</span>
+        <ion-icon name="md-close" showWhen="android,windows, core"></ion-icon>
+      </button>
     </ion-buttons>
 
   </ion-navbar>

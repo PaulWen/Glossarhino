@@ -147,8 +147,11 @@ export class EditModalPage {
     if (save) {
       
       if (this.addNewEntry) {
-        Logger.log(this.entry);
         this.appModelService.newEntryDataObject(this.entry, this.newEntryLanguageId).then((data) => {
+          this.modalCtrl.create("SingleEntryPage", {
+            entryDocumentId: data,
+            isModal: true
+          }).present();
           this.navCtrl.setRoot("HomePage");
         });
       } else {
@@ -161,7 +164,11 @@ export class EditModalPage {
       }
       
     } else {
-      this.viewCtrl.dismiss();
+      if (this.addNewEntry) {
+        this.navCtrl.setRoot("HomePage");
+      } else {
+        this.viewCtrl.dismiss();
+      }  
     }
   }
 
@@ -208,7 +215,9 @@ export class EditModalPage {
       }
     });
     attachmentModal.onDidDismiss((data) => {
-      this.entry.attachments = data.attachments;
+      if (data) {
+        this.entry.attachments = data.attachments;
+      }  
     });
   }
 
@@ -227,11 +236,13 @@ export class EditModalPage {
       }
     });
     linkedObjectsModal.onDidDismiss((data) => {
-      // set linkedObjects in object
-      this.entry.relatedDepartments = data.relatedDepartments;
-      this.entry.relatedEntries = data.relatedEntries;
-      this.entry.synonyms = data.synonyms;
-      this.entry.acronyms = data.acronyms;
+      if (data) {
+        // set linkedObjects in object
+        this.entry.relatedDepartments = data.relatedDepartments;
+        this.entry.relatedEntries = data.relatedEntries;
+        this.entry.synonyms = data.synonyms;
+        this.entry.acronyms = data.acronyms;
+      }  
     });
   }
 }

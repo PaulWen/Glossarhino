@@ -199,7 +199,7 @@ export class HomePage {
       languageId = data;
       
       // open EditModalPage once user selected language of entry
-      this.navCtrl.push("EditModalPage", {
+      this.navCtrl.setRoot("EditModalPage", {
         addNewEntry: true,
         newEntryLanguageId: languageId
       }).then((canEnterView) => {

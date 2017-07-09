@@ -55,7 +55,7 @@
   "DEPARTMENT_FILTER": "Department Filter",
   "OKAY_TEXT": "Okay",
   "CANCEL_TEXT": "Cancel",
-  
+
   "XXXXXXXXXLinkedObjectModalXXXXXXXXX": "",
   "RELATED": "Related",
   "DEPARTMENTS": "Departments",
@@ -66,6 +66,32 @@
   "ADD_SYNONYM_DOTS": "Add Synonym ...",
   "ACRONYMS": "Acronyms",
   "ADD_ACRONYM_DOTS": "Add Acronym ...",
+
+  "XXXXXXXXXEdit-modal.tsXXXXXXXXX": "",
+  "OK": "OK",
+  "SELECT_DEPARTMENT": "Select department",
+
+  "XXXXXXXXXHome.tsXXXXXXXXX": "",
+  "MORE_ACTIONS": "More Actions",
+  "NEW_ENTRY": "New Entry",
+  "FILTER": "Filter",
+  "LOGOUT": "Logout",
+
+  "XXXXXXXXXLinked-objects-modal.tsXXXXXXXXX": "",
+  "SELECT_RELATED_DEPARTMENTS": "Select related departments",
+
+
+  "XXXXXXXXXSingle-entry.tsXXXXXXXXX": "",
+  "NO_ENTRY_ALERT_TITLE": "Entry not available!",
+  "NO_ENTRY_ALERT_SUBTITLE": "Sorry, the entry is not yet available in this language. You can add it by pressing the \"Add\" button",
+
+
+  "XXXXXXXXXAlerts.tsXXXXXXXXX": "",
+  "LOADING": "Loading...",
+  "SELECT_LANGUAGE": "Select language",
+
+
+
 
   "XXXXXXXXXENDXXXXXXXXX": ""
 }

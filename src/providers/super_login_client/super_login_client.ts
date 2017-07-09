@@ -10,6 +10,7 @@ import {SuperLoginClientDoneResponse} from "./super_login_client_done_reponse";
 import {SuperLoginClientError} from "./super_login_client_error";
 import {SuperLoginClientErrorResponse} from "./super_login_client_error_reponse";
 import {SuperloginHttpRequester} from "./superlogin_http_requester";
+import {TranslateService} from "@ngx-translate/core";
 
 /**
  * This class is a service which implements TypeScript methods to communicate
@@ -48,6 +49,7 @@ export abstract class SuperLoginClient {
   ////////////////////////////////////////////Properties////////////////////////////////////////////
 
   protected platform: Platform;
+  protected translateService: TranslateService;
 
   /** provides functions to easily perform http requests */
   private httpRequestor: SuperloginHttpRequester;
@@ -65,9 +67,10 @@ export abstract class SuperLoginClient {
    *
    * @param httpRequestor
    */
-  constructor(httpRequestor: SuperloginHttpRequester, platform: Platform) {
+  constructor(httpRequestor: SuperloginHttpRequester, platform: Platform, translateService: TranslateService) {
     this.httpRequestor = httpRequestor;
     this.platform = platform;
+    this.translateService = translateService;
     this.authenticated = false;
     this.offlineMode = false;
 
@@ -149,7 +152,7 @@ export abstract class SuperLoginClient {
         // try to authenticate him by using the session/local storage data
         if (this.isSessionTokenStoredPersistent() != null) {
           // open loading dialog since this may take a while
-          let loadingAlert = Alerts.presentLoadingDefault(loadingCtrl);
+          let loadingAlert = Alerts.presentLoadingDefault(loadingCtrl, this.translateService);
 
           return Observable.create((observer) => {
             this.loginWithSessionToken(this.getSessionToken(), this.isSessionTokenStoredPersistent(),
@@ -193,7 +196,7 @@ export abstract class SuperLoginClient {
           // if the user does not yet work with the offline data it should be tried to load offline data
         } else {
           // open loading dialog since this may take a while
-          let loadingAlert = Alerts.presentLoadingDefault(loadingCtrl);
+          let loadingAlert = Alerts.presentLoadingDefault(loadingCtrl, this.translateService);
 
           return new Promise((resolve, reject) => {
             this.initializeDatabasesOffline().then((data) => {

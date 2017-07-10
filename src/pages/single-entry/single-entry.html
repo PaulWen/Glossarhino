@@ -57,25 +57,27 @@
             </button>
 
             <div class="buttons">
-              <button ion-button clear small (click)="openCommentModal(entry)" id="badge-button">
+              <button ion-button clear small (click)="openCommentModal(entry)" class="badge-button">
                 <ion-icon name="quote">
-                  <ion-badge id="badge"> {{ getArrayLength(entry?.comments) }}</ion-badge>
+                  
                 </ion-icon>
+                <ion-badge class="badge"> {{ getArrayLength(entry?.comments) }}</ion-badge>
               </button>
 
-              <button ion-button clear small (click)="openAttachmentModal(entry?.attachments)" id="badge-button">
+              <button ion-button clear small (click)="openAttachmentModal(entry?.attachments)" class="badge-button">
                 <ion-icon name="attach">
-                  <ion-badge id="badge"> {{ getArrayLength(entry?.attachments) }}</ion-badge>
+                  
                 </ion-icon>
+                <ion-badge class="badge"> {{ getArrayLength(entry?.attachments) }}</ion-badge>
               </button>
 
               <button ion-button clear small (click)="openLinkedObjectsModal(entry?.relatedDepartments, entry?.relatedEntries, entry?.synonyms, entry?.acronyms)"
-                id="badge-button">
-                <ion-icon name="link">
-                  <ion-badge id="badge"> {{ getArrayLength(entry?.relatedDepartments) +
-                    getArrayLength(entry?.relatedEntries) + getArrayLength(entry?.synonyms) +
-                    getArrayLength(entry?.acronyms) }} </ion-badge>
+                class="badge-button">
+                <ion-icon name="link" item-start>
+                  
                 </ion-icon>
+                <ion-badge class="badge" item-end> {{ getArrayLength(entry?.relatedDepartments) + getArrayLength(entry?.relatedEntries) + getArrayLength(entry?.synonyms) +
+                  getArrayLength(entry?.acronyms) }} </ion-badge>
               </button>
             </div>
 

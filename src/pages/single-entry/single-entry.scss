@@ -12,16 +12,20 @@ page-single-entry {
     flex: 1;
   }
 
-  #badge-button {
-    overflow: visible !important;
+  .badge-button {
+    //overflow: visible !important;
+    padding: 0;
+    // to show badge on top-right on chrome as well (overflow: visible not working on chrome)
+    height: 4rem;
+    margin-right: 0.5rem;
   }
 
-  #badge {
-    position: absolute;
+  .badge {
+    position: relative;
     font-size: 1rem;
-    font-weight: normal;
-    top: -1rem;
-    right: -1rem;
+    // move badge to top-right
+    margin-bottom: 2rem;
+    margin-left: 0.2rem;
   }
 
   .card-footer {

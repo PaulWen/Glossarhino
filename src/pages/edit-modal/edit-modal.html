@@ -144,7 +144,7 @@
 
     <button ion-button (click)="showAddDepartmentRadioAlert()">{{ "ADD_DEPARTMENT_SPECIFICATION" | translate:param }}</button>
 
-    <button ion-button (click)="removeEntryDataObject(entry, selectedLanguageDataObject.selectedLanguage)" color="danger">{{ "DELETE_ENTRY" | translate:param }}</button>
+    <button ion-button *ngIf="!addNewEntry" (click)="removeEntryDataObject(entry, selectedLanguageDataObject.selectedLanguage)" color="danger">{{ "DELETE_ENTRY" | translate:param }}</button>
 
   </ion-grid>
 

@@ -101,6 +101,8 @@ export abstract class SuperLoginClient {
    */
   public isOnline(): boolean {
     if (this.platform.is("cordova")) {
+      alert((<any>navigator
+      ).connection.type);
       return (<any>navigator
              ).connection.type != "none";
     } else {

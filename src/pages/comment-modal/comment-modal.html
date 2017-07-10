@@ -32,7 +32,7 @@
   <ion-toolbar *ngIf="appModelService.isOnline()">
 
     <ion-item>
-      <ion-input  [(ngModel)]="commentContent" placeholder="{{ 'ADD_COMMENT_PLACEHOLDER' | translate:param }}" clearInput></ion-input>
+      <ion-input  [(ngModel)]="commentContent" placeholder="{{ 'ADD_COMMENT_PLACEHOLDER' | translate:param }}" clearInput (keyup.enter)="addComment()"></ion-input>
     </ion-item>
 
     <ion-buttons end>

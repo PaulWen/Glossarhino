@@ -20,7 +20,7 @@ import { UserLanguageFilterConfigDataObject } from "../../providers/dataobjects/
 import { SingleEntryPageModelInterface } from "./single-entry.model-interface";
 import { DepartmentFilterComponent } from "../../components/department-filter/department-filter";
 import {TranslateService} from "@ngx-translate/core";
-import {Observable} from "rxjs/Observable";
+import {Observable} from "rxjs/Rx";
 
 @IonicPage({
   segment: "singleentry/:entryDocumentId",

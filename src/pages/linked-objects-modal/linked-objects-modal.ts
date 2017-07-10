@@ -7,7 +7,7 @@ import { EntryDataObject } from "../../providers/dataobjects/entry.dataobject";
 import { UserLanguageFilterConfigDataObject } from "../../providers/dataobjects/user-language-filter-config.dataobject";
 import { Logger } from "../../app/logger";
 import {TranslateService} from "@ngx-translate/core";
-import {Observable} from "rxjs/Observable";
+import {Observable} from "rxjs/Rx";
 
 @IonicPage()
 @Component({
@@ -110,7 +110,7 @@ export class LinkedObjectsModalPage {
       if (relatedEntriesIds != undefined) {
 
         relatedEntriesIds.forEach(entryId => {
-          // get entry and push to relatedEntries array  
+          // get entry and push to relatedEntries array
           this.appModelService.getEntryDataObjectToShow(entryId, this.selectedLanguageDataObject.selectedLanguage).then((data) => {
             relatedEntries.push(data);
           }, (error) => {
@@ -237,7 +237,7 @@ export class LinkedObjectsModalPage {
             value: department.departmentId.toString()
           });
         }
-      }  
+      }
     });
 
         relatedDepartmentCheckboxAlert.addButton(cancel);
@@ -257,7 +257,7 @@ export class LinkedObjectsModalPage {
 
   /**
    * Method allows user to search for entry to add as related entry.
-   */  
+   */
   private openEntryListModal() {
     let entryListModal = this.modalCtrl.create("EntryListPage", {
       seachbarFocus: false,
@@ -272,7 +272,7 @@ export class LinkedObjectsModalPage {
     entryListModal.onDidDismiss((data) => {
       if (data) {
         this.addRelatedEntry(data.entryDocumentId);
-      }  
+      }
     })
   }
 }

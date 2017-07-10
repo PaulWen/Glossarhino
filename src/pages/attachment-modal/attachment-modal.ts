@@ -2,8 +2,8 @@ import { Component } from "@angular/core";
 import { IonicPage, NavController, NavParams, ViewController, AlertController } from "ionic-angular";
 import { AttachmentDataObject } from "../../providers/dataobjects/attachment.dataobject";
 import {TranslateService} from "@ngx-translate/core";
-import {Observable} from "rxjs/Observable";
 import {Logger} from "../../app/logger";
+import {Observable} from "rxjs/Rx";
 
 @IonicPage()
 @Component({

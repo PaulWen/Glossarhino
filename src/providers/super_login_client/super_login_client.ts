@@ -1,4 +1,5 @@
 import {Injectable} from "@angular/core";
+import {TranslateService} from "@ngx-translate/core";
 import {LoadingController, Platform} from "ionic-angular";
 import PouchDB from "pouchdb";
 import {Observable} from "rxjs/Rx";
@@ -10,7 +11,6 @@ import {SuperLoginClientDoneResponse} from "./super_login_client_done_reponse";
 import {SuperLoginClientError} from "./super_login_client_error";
 import {SuperLoginClientErrorResponse} from "./super_login_client_error_reponse";
 import {SuperloginHttpRequester} from "./superlogin_http_requester";
-import {TranslateService} from "@ngx-translate/core";
 
 /**
  * This class is a service which implements TypeScript methods to communicate
@@ -138,88 +138,80 @@ export abstract class SuperLoginClient {
    * @returns true or false depending on if the user is already authenticated
    */
   public isAuthenticated(loadingCtrl: LoadingController): Promise<boolean> {
-    // check if the user is already authenticated
-    if (this.authenticated) {
-      return new Promise((resolve, reject) => {
-        resolve(true);
-        return;
+    return new Promise((resolve, reject) => {
+      // wait until the device is ready (does also wait for the Cordova deviceready event)
+      this.platform.ready().then(() => {
+
+        // check if the user is already authenticated
+        if (this.authenticated) {
+          resolve(true);
+          return;
+
+          // if the user is not yet authenticated...
+        } else {
+          // ... check if the user is currently online
+          if (this.isOnline()) {
+            // try to authenticate him by using the session/local storage data
+            if (this.isSessionTokenStoredPersistent() != null) {
+              // open loading dialog since this may take a while
+              let loadingAlert = Alerts.presentLoadingDefault(loadingCtrl, this.translateService);
+
+              this.loginWithSessionToken(this.getSessionToken(), this.isSessionTokenStoredPersistent(),
+                () => {
+                  // close loading dialog
+                  loadingAlert.dismiss();
+
+                  // return result
+                  resolve(true);
+                },
+                (error: SuperLoginClientError) => {
+                  // remove the invalid session token stored in the session/local storage
+                  this.deleteSessionToken();
+
+                  // close loading dialog
+                  loadingAlert.dismiss();
+
+                  // return result
+                  resolve(false);
+                }
+              );
+            } else {
+              resolve(false);
+            }
+
+            // if the user is offline try to load data from the local storage
+          } else {
+            // if the user already works with the offline data the data has not to be loaded again
+            if (this.offlineMode) {
+              resolve(true);
+
+              // if the user does not yet work with the offline data it should be tried to load offline data
+            } else {
+              // open loading dialog since this may take a while
+              let loadingAlert = Alerts.presentLoadingDefault(loadingCtrl, this.translateService);
+
+              this.initializeDatabasesOffline().then((data) => {
+                if (data) {
+                  this.offlineMode = true;
+
+                  // close loading dialog
+                  loadingAlert.dismiss();
+
+                  resolve(true);
+                  return;
+                } else {
+                  // close loading dialog
+                  loadingAlert.dismiss();
+
+                  reject("No local data and no internet connection!");
+                  return;
+                }
+              });
+            }
+          }
+        }
       });
-
-      // if the user is not yet authenticated...
-    } else {
-      // ... check if the user is currently online
-      if (this.isOnline()) {
-        // try to authenticate him by using the session/local storage data
-        if (this.isSessionTokenStoredPersistent() != null) {
-          // open loading dialog since this may take a while
-          let loadingAlert = Alerts.presentLoadingDefault(loadingCtrl, this.translateService);
-
-          return Observable.create((observer) => {
-            this.loginWithSessionToken(this.getSessionToken(), this.isSessionTokenStoredPersistent(),
-              () => {
-                // close loading dialog
-                loadingAlert.dismiss();
-
-                // end the observable and return the result
-                observer.next(true);
-                observer.complete();
-              },
-              (error: SuperLoginClientError) => {
-                // remove the invalid session token stored in the session/local storage
-                this.deleteSessionToken();
-
-                // close loading dialog
-                loadingAlert.dismiss();
-
-                // end the observable and return the result
-                observer.next(false);
-                observer.complete();
-              }
-            );
-          }).toPromise();
-        } else {
-          return new Promise((resolve, reject) => {
-            resolve(false);
-            return;
-          });
-        }
-
-        // if the user is offline try to load data from the local storage
-      } else {
-        // if the user already works with the offline data the data has not to be loaded again
-        if (this.offlineMode) {
-          return new Promise((resolve, reject) => {
-            resolve(true);
-            return;
-          });
-
-          // if the user does not yet work with the offline data it should be tried to load offline data
-        } else {
-          // open loading dialog since this may take a while
-          let loadingAlert = Alerts.presentLoadingDefault(loadingCtrl, this.translateService);
-
-          return new Promise((resolve, reject) => {
-            this.initializeDatabasesOffline().then((data) => {
-              if (data) {
-                this.offlineMode = true;
-
-                // close loading dialog
-                loadingAlert.dismiss();
-
-                resolve(true);
-                return;
-              } else {
-                // close loading dialog
-                loadingAlert.dismiss();
-
-                reject("No local data and no internet connection!");
-                return;
-              }
-            });
-          });
-        }
-      }
-    }
+    });
   }
 
 

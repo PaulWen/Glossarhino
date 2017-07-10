@@ -16,7 +16,7 @@ import {SuperLoginClientError} from "../../providers/super_login_client/super_lo
 import {HomePageModelInterface} from "./home.model-interface";
 import { DepartmentFilterComponent } from "../../components/department-filter/department-filter";
 import {TranslateService} from "@ngx-translate/core";
-import {Observable} from "rxjs/Observable";
+import {Observable} from "rxjs/Rx";
 
 @IonicPage()
 @Component({

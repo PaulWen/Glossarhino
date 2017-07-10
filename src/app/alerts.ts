@@ -5,7 +5,7 @@ import { GlobalDepartmentConfigDataObject } from "../providers/dataobjects/globa
 import { UserDepartmentFilterConfigDataObject } from "../providers/dataobjects/user-department-filter-config.dataobject";
 import { Logger } from "./logger";
 import { GlobalLanguageConfigDataobject } from "../providers/dataobjects/global-language-config.dataobject";
-import {Observable} from "rxjs/Observable";
+import {Observable} from "rxjs/Rx";
 import {TranslateService} from "@ngx-translate/core";
 
 /**

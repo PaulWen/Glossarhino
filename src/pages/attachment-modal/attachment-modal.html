@@ -3,10 +3,16 @@
   <ion-navbar>
     <ion-buttons start>
 
-      <button ion-button (click)="closeAttachmentModal()" *ngIf="!isEditMode">
+      <button ion-button (click)="closeAttachmentModal()">
         <span ion-text color="primary" showWhen="ios">{{ "CLOSE" | translate:param }}</span>
         <ion-icon name="md-close" showWhen="android,windows, core"></ion-icon>
       </button>
+
+    </ion-buttons>
+
+    <ion-title>{{ "ATTACHMENTS" | translate:param }}</ion-title>
+
+    <ion-buttons end>
 
       <button ion-button (click)="closeAttachmentModal(true)" *ngIf="isEditMode">
         <span ion-text color="primary" showWhen="ios">{{ "DONE" | translate:param }}</span>
@@ -14,7 +20,7 @@
       </button>
 
     </ion-buttons>
-    <ion-title>{{ "ATTACHMENTS" | translate:param }}</ion-title>
+
   </ion-navbar>
 
 </ion-header>

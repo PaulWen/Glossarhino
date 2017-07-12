@@ -218,6 +218,9 @@ export class HomePage {
     let languageId: string;
     Alerts.showLanguageSelectionAlert(this.alertCtrl, this.languageSelectionAlertAppModelService, this.translateService).then((data) => {
       languageId = data;
+      // set selectedLanguage
+      this.selectedLanguageDataObject.selectedLanguage = languageId;
+      this.appModelService.setSelectedLanguage(this.selectedLanguageDataObject);
 
       // open EditModalPage once user selected language of entry
       this.navCtrl.setRoot("EditModalPage", {

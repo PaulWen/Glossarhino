@@ -30,6 +30,7 @@ export interface HomePageModelInterface {
   getSelectedLanguage(): Promise<UserLanguageFilterConfigDataObject>;
   getSelectedHomePageDepartmentDataobjects(currentLanguageId: string): Promise<Array<HomePageDepartmentDataobject>>;
   getCountOfAllEntries(selectedLanguage: string): Promise<number>;
+  setSelectedLanguage(userLanguageSetting: UserLanguageFilterConfigDataObject): Promise<boolean>;
 
   // data for user filter settings
   getGlobalDepartmentConfigDataObject(): GlobalDepartmentConfigDataObject;

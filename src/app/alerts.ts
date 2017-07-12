@@ -88,7 +88,7 @@ export class Alerts {
   public static showNoEntryAlert(alertCtrl: AlertController, navCtrl: NavController, entryDocumentId: string, languageId: string, translateService: TranslateService) {
     Observable.zip(
       translateService.get("NO_ENTRY_ALERT_TITLE"),
-      translateService.get("NO_ENTRY_ALERT_TITLE"),
+      translateService.get("NO_ENTRY_ALERT_SUBTITLE"),
       translateService.get("ADD"),
       translateService.get("OK"),
       (noEntryAlertTitle: string, noEntryAlertSubtitle: string, add: string, ok: string) => {

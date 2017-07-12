@@ -1,0 +1,47 @@
+{
+  "_id": "6766f814e6011eae9ef28f8c5c002efb",
+  "name": "Erstmusterprüfbericht",
+  "description": "Nachweis der zeichnungs- und funktionsgerechten Ausführung  der Teile durch Musterprüfung. Erstmuster sind Produkte und Materialien, die vollständig mit serienmäßigen Betriebsmitteln und unter serienmä- ßigen Bedingungen hergestellt wurden (DIN 55350 Teil 15). Auf Basis von Erstmustern erfolgt beim Kunden eine Erstbemusterung bzw. Erstmusterprüfung nach PPF oder PPAP. Anstelle des EMPB wird in neueren Publikationen des VDA der Produktions- und Prozessfreigabe- Bericht (PPF-Bericht) gebraucht.",
+  "contact": "Max Mustermann",
+  "email": "max.mustermann@lehre.dhbw-stuttgart.de",
+  "relatedDepartments": [
+    "0",
+    "1",
+    "2"
+  ],
+  "attachments": [
+    {
+      "name": "Test Image",
+      "url": "https://c1.staticflickr.com/6/5337/8940995208_5da979c52f.jpg"
+    },
+    {
+      "name": "DHBW Broschüre",
+      "url": "http://www.dhbw.de/fileadmin/user_upload/Dokumente/Hochschulkommunikation/DHBW_Imagebroschuere_web.pdf"
+    }
+  ],
+  "departmentSpecifics": [
+    {
+      "departmentId": "1",
+      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
+      "contact": "Max Mustermann",
+      "email": "max.mustermann@dhbw-stuttgart.de"
+    },
+    {
+      "departmentId": "2",
+      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
+      "contact": "Max Mustermann",
+      "email": "max.mustermann@dhbw-stuttgart.de"
+    }
+  ],
+  "acronyms": [
+    "EMPB"
+  ],
+  "comments": [
+    {
+      "content": "Erster Kommentar",
+      "contact": "Test",
+      "email": "test@test.de",
+      "timeStamp": "2017-07-04T14:43:23.734Z"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "_id": "2149CE87-146A-50B1-B6D8-450C9C7ACCB8",
+  "name": "Quality Gate",
+  "relatedDepartments": [
+    "0",
+    "1",
+    "2",
+    "3",
+    "5"
+  ],
+  "description": "Ein  Quality  Gate  ist  ein  im  Produktentstehungsprozess festgelegter\nKontrollpunkt, an dem die zuvor vereinbarten Leistungen durch die benannten  Lieferanten  und  Kunden  gemeinsam  gemessen  und hinsichtlich ihrer Qualität bewertet werden.",
+  "contact": "",
+  "email": "",
+  "acronyms": [
+    "QG"
+  ]
+}

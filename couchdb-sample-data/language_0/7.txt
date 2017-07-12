@@ -1,0 +1,17 @@
+{
+  "_id": "0AE71C41-CB5A-CFAC-A60A-485476436530",
+  "name": "Qualitäts-Plan",
+  "relatedDepartments": [
+    "0",
+    "1",
+    "2",
+    "3",
+    "5"
+  ],
+  "description": "Ein Plan bzw. Terminplan, der alle Aktivitäten zur Sicherung der Qualität über den ganzen Verlauf des Produktentstehungsprozesses enthält.",
+  "contact": "",
+  "email": "",
+  "synonyms": [
+    "Q-Plan"
+  ]
+}

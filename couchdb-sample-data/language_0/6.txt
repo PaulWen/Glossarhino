@@ -1,0 +1,17 @@
+{
+  "_id": "FFD1A7DC-D91F-D4C6-9EFB-7CF0AD54ADBF",
+  "name": "Entwicklungs- und Fertigungstiefe",
+  "description": "Strategie, die festlegt, welche Umfänge eines Produkts intern oder extern entwickelt bzw. hergestellt werden.",
+  "contact": "",
+  "relatedDepartments": [
+    "0",
+    "1",
+    "2",
+    "3",
+    "5"
+  ],
+  "email": "",
+  "acronyms": [
+    "EFTI"
+  ]
+}

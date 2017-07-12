@@ -1,0 +1,36 @@
+{
+  "_id": "6766f814e6011eae9ef28f8c5c008552",
+  "name": "Rafferprobung",
+  "description": "Diese Erprobungsart versucht innerhalb kürzester Zeit ein Erprobungs- ergebnis zu erreichen, welches unter normalen Erprobungsbedingun- gen wesentlich länger dauert. Zu diesem Zweck wird das Produkt zu- meist unter  Überlast getestet. Bsp.: 'Schlechtweg': Ein Fahrzeug wird auf dem Schlechtweg getestet statt auf der 'normalen' Straße. Damit wird innerhalb kürzester Zeit ein Dauerlauf von  vielen  Kilometern getestet. 'Vergiftung': Wenn in den Abgasstrom einer Abgasnachbehandlungs- anlage Öl eingesprüht wird, dann wird innerhalb kürzester Zeit eine extrem lange Betriebsdauer simuliert.",
+  "contact": "Max Mustermann",
+  "email": "max.mustermann@lehre.dhbw-stuttgart.de",
+  "relatedDepartments": [
+    "0",
+    "1",
+    "2"
+  ],
+  "attachments": [
+    {
+      "name": "Test Image",
+      "url": "https://c1.staticflickr.com/6/5337/8940995208_5da979c52f.jpg"
+    },
+    {
+      "name": "DHBW Broschüre",
+      "url": "http://www.dhbw.de/fileadmin/user_upload/Dokumente/Hochschulkommunikation/DHBW_Imagebroschuere_web.pdf"
+    }
+  ],
+  "departmentSpecifics": [
+    {
+      "departmentId": "1",
+      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
+      "contact": "Max Mustermann",
+      "email": "max.mustermann@dhbw-stuttgart.de"
+    },
+    {
+      "departmentId": "2",
+      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
+      "contact": "Max Mustermann",
+      "email": "max.mustermann@dhbw-stuttgart.de"
+    }
+  ]
+}

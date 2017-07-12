@@ -1,0 +1,37 @@
+{
+  "_id": "departments",
+  "departments": [
+    {
+      "departmentId": "0",
+      "departmentName": "Projektleitung"
+    },
+    {
+      "departmentId": "1",
+      "departmentName": "Entwicklung"
+    },
+    {
+      "departmentId": "2",
+      "departmentName": "Produktion"
+    },
+    {
+      "departmentId": "3",
+      "departmentName": "Einkauf"
+    },
+    {
+      "departmentId": "4",
+      "departmentName": "Controlling"
+    },
+    {
+      "departmentId": "5",
+      "departmentName": "Marketing"
+    },
+    {
+      "departmentId": "6",
+      "departmentName": "Vorkostenplanung"
+    },
+    {
+      "departmentId": "7",
+      "departmentName": "After Sales"
+    }
+  ]
+}

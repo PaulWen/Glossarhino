@@ -1,0 +1,17 @@
+{
+  "_id": "D6ECDBBF-06D1-D472-892D-9683C11B4E75",
+  "name": "Lieferantenentwicklungskosten",
+  "description": "Kosten, die dem Lieferanten bei der Entwicklung eines vom Auftraggeber vergebenen Fremdentwicklungsumfangs entstehen.",
+  "contact": "",
+  "relatedDepartments": [
+    "0",
+    "1",
+    "2",
+    "3",
+    "5"
+  ],
+  "email": "",
+  "acronyms": [
+    "LEK"
+  ]
+}

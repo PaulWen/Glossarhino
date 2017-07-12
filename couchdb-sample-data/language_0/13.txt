@@ -1,0 +1,14 @@
+{
+  "_id": "81875BAE-6848-1498-8236-020F832581D9",
+  "name": "B10-Lebensdauer",
+  "relatedDepartments": [
+    "0",
+    "1",
+    "2",
+    "3",
+    "5"
+  ],
+  "description": "Bezeichnet die Lebensdauer im Rahmen des Zuverlässigkeitsmana- gements; Der B10-Wert ist jene Zeit, bei der unter gegebenen Bedin- gungen 10% aller Produkte/Komponenten etc. ausgefallen sind, das heißt, eine Zuverlässigkeit von 90% besteht.",
+  "contact": "",
+  "email": ""
+}

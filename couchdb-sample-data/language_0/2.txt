@@ -1,0 +1,17 @@
+{
+  "_id": "8CCD91A7-07D0-E3E6-B7AD-A620CE1E41E0",
+  "name": "Digital Mockup Unit",
+  "description": "Das Digital-Mock-up (DMU) ist die digitale Darstellung eines Produktes für die realitätsnahe Simulation, sowohl statisch als  auch dynamisch auf virtueller 3D-CAD-Datenbasis. Es simuliert sämtliche erforderliche Funktionalitäten, die für die Entwicklung, die Herstellung und den Ser- vice benötigt werden.",
+  "contact": "",
+  "relatedDepartments": [
+    "0",
+    "1",
+    "2",
+    "3",
+    "5"
+  ],
+  "email": "",
+  "acronyms": [
+    "DMU"
+  ]
+}

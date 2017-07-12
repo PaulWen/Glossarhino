@@ -1,0 +1,14 @@
+{
+  "_id": "843B581C-61A7-6D43-BF4D-7BCED72A2D1E",
+  "name": "A-Muster",
+  "description": "Ein in früher Phase mit Prototypenwerkzeugen oder durch Handarbeit (nicht notwendigerweise aus Serienmaterial) hergestellter Prototyp des Produktes, um die prinzipielle Tauglichkeit der wesentlichen Innovatio- nen des Produktes nachweisen zu können.",
+  "contact": "",
+  "email": "",
+  "relatedDepartments": [
+    "0",
+    "1",
+    "2",
+    "3",
+    "5"
+  ]
+}

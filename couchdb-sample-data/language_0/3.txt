@@ -1,0 +1,14 @@
+{
+  "_id": "99D7EDD5-BCEC-3175-9DE0-ECEABF1EA458",
+  "name": "Dauerfestigkeit",
+  "description": "Bestätigung der Funktions- und Leistungstüchtigkeit gemäß Spezifikati- on hinsichtlich der geplanten Nutzungsdauer des Produktes.",
+  "contact": "",
+  "relatedDepartments": [
+    "0",
+    "1",
+    "2",
+    "3",
+    "5"
+  ],
+  "email": ""
+}

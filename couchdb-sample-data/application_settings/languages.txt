@@ -1,0 +1,13 @@
+{
+  "_id": "languages",
+  "languages": [
+    {
+      "languageId": "0",
+      "languageName": "Deutsch"
+    },
+    {
+      "languageId": "1",
+      "languageName": "English"
+    }
+  ]
+}

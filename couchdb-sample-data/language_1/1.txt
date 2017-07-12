@@ -1,0 +1,10 @@
+{
+  "_id": "696723EC-9894-FF3B-9324-F745E65BF8E3",
+  "name": "Information Security",
+  "description": "",
+  "contact": "",
+  "email": "",
+  "relatedEntries": [
+    "72FF7184-610D-C2A5-9C54-3DD6090E3ED0"
+  ]
+}

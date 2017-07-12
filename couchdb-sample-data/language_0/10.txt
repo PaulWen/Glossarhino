@@ -1,0 +1,93 @@
+{
+  "_id": "6766f814e6011eae9ef28f8c5c00013b",
+  "name": "P-Freigabe",
+  "description": "Die P-Freigabe (Produktionsfreigabe) wird benutzt als verbindliche Freigabe zum Anfragen, Beauftragen und Erstellen von Serienproduktionsmitteln. Die Freigabe des Konstruktionsstandes erfolgt immer bauteilspezifisch. Es wird hierbei nicht zwischen einer Freigabe zur Anfrage und Beauftragung und einer weiteren Freigabe zur Erstellung (sog. 'Fräsfreigabe') unterschieden. Zeitlich/inhaltlich ist diese Freigabe im Normalfall im Anschluss an eine erfolgreiche C-Muster- <a href='#/singleentry/6766f814e6011eae9ef28f8c5c008552'>Rafferprobung</a> mit genügend Erfahrung aus der Dauerlauf-/Zuverlässigkeitserprobung positioniert.",
+  "contact": "Simon Weber",
+  "email": "simon.weber@lehre.dhbw-stuttgart.de",
+  "relatedDepartments": [
+    "0",
+    "1",
+    "2",
+    "3",
+    "5"
+  ],
+  "synonyms": [
+    "Test1",
+    "Test2"
+  ],
+  "acronyms": [
+    "T1",
+    "T2"
+  ],
+  "attachments": [
+    {
+      "name": "Test Image",
+      "url": "https://c1.staticflickr.com/6/5337/8940995208_5da979c52f.jpg"
+    },
+    {
+      "name": "DHBW Broschüre",
+      "url": "http://www.dhbw.de/fileadmin/user_upload/Dokumente/Hochschulkommunikation/DHBW_Imagebroschuere_web.pdf"
+    }
+  ],
+  "departmentSpecifics": [
+    {
+      "departmentId": "1",
+      "description": "Problematisch an der P-Freigabe ist, dass sie von der Entwicklung einen verbindlichen Zeichnungsstand erfordert, der im Nachhinein nur noch sehr eingeschränkt geändert werden kann.\n",
+      "contact": "Simon Weber",
+      "email": "simon.weber@dhbw-stuttgart.de"
+    },
+    {
+      "departmentId": "2",
+      "description": "Für uns ist es wichtig, dass die P-Freigabe möglichst früh im Produktentstehungsprozess von der Entwicklung gegeben wird. Dies ermöglicht uns eine frühzeitige Beschaffung von Maschinen, sodass wir termingerecht mit der Produktion starten können.",
+      "contact": "Simon Weber",
+      "email": "simon.weber@dhbw-stuttgart.de"
+    },
+    {
+      "departmentId": "3",
+      "description": "Eine möglichst frühzeitige P-Freigabe hilft uns im Einkauf, um rechtzeitig Maschinen zu guten Preisen beschaffen zu können.\n",
+      "contact": "Simon Weber",
+      "email": "simon.weber@dhbw-stuttgart.de"
+    },
+    {
+      "departmentId": "5",
+      "description": "Die P-Freigabe ist von uns von keiner besonderen Relevanz.",
+      "contact": "Simon Weber",
+      "email": "simon.weber@dhbw-stuttgart.de"
+    }
+  ],
+  "comments": [
+    {
+      "content": "Dies ist ein Test-Kommentar.",
+      "contact": "Simon Weber",
+      "email": "simon@dhbw-stuttgart.de",
+      "timeStamp": "2017-06-30T08:28:31.059Z"
+    },
+    {
+      "content": "Test",
+      "contact": "Test",
+      "email": "test@test.de",
+      "timeStamp": "2017-07-01T18:36:42.284Z"
+    },
+    {
+      "content": "Noch ein Kommentar",
+      "contact": "Test",
+      "email": "test@test.de",
+      "timeStamp": "2017-07-01T18:48:24.067Z"
+    },
+    {
+      "content": "Die Erklärung zu diesem Begriff hat mir gut geholfen!",
+      "contact": "Simon Weber",
+      "email": "simonweber96@gmail.com",
+      "timeStamp": "2017-07-03T11:10:28.648Z"
+    },
+    {
+      "content": "Test",
+      "contact": "Test",
+      "email": "test@test.de",
+      "timeStamp": "2017-07-04T14:43:10.831Z"
+    }
+  ],
+  "relatedEntries": [
+    "6766f814e6011eae9ef28f8c5c008552"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "_id": "0DE4931E-038F-CFF8-AB33-A2775E54545B",
+  "name": "Production Part Approval Process",
+  "relatedDepartments": [
+    "0",
+    "1",
+    "2",
+    "3",
+    "5"
+  ],
+  "description": "Mit dem Begriff PPAP, zu Deutsch „Produktionsteilabnahmeverfahren“, wird ein Verfahren beschrieben, das zum Ziel hat, einen Nachweis darüber zu erbringen, dass ein Komponentenlieferant in der Lage ist, ein Produkt den Kundenanforderungen entsprechend spezifikations- konform und dauerhaft herzustellen. Entsprechend stehen sowohl das Produkt selbst als auch der Produktionsprozess im Betrachtungsfokus des PPAP-Verfahrens. Das PPAP-Verfahren ist von der amerikani- schen Automotive Industry Action Group (AIAG) im „PPAP manual“ der QS 9000 festgeschrieben. Ein ähnliches und im deutschsprachigen Raum verwendetes Verfahren stellt die „Produkt- und Prozessfreigabe (PPF)“ dar, die im VDA Band 2, Kapitel 4, beschrieben  ist.",
+  "contact": "",
+  "email": "",
+  "acronyms": [
+    "PPAP"
+  ]
+}

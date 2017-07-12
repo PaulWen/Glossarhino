@@ -1,0 +1,14 @@
+{
+  "_id": "F47685BE-A5D4-50FE-8A3B-8DD34DE8FE7F",
+  "name": "C-Muster",
+  "description": "Ein weiterentwickelter Prototyp, hergestellt aus Serienmaterial, der zur Überbrüfung der Dauerfestigkeit des Produktes herangezogen  wird. Der Prototyp wird in einigen (Neu-)Teilen noch mit Prototypenwerkzeu- gen gefertigt, aber Produktionsprozess und -methoden sind nahezu serienreif. Mit erfolgreichem Abschluss der C-Muster-Phase sind Auf- und Einbaubarkeit, Funktion, Festigkeit und Dauerfestigkeit abgesi- chert.",
+  "contact": "",
+  "relatedDepartments": [
+    "0",
+    "1",
+    "2",
+    "3",
+    "5"
+  ],
+  "email": ""
+}

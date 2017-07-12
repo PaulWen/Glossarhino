@@ -356,7 +356,7 @@ export class AppModelService extends SuperLoginClient implements LoginPageInterf
     ).ok;
   }
 
-  public async newEntryDataObject(entryDataObject: EntryDataObject, languageId: string): Promise<String> {
+  public async newEntryDataObject(entryDataObject: EntryDataObject, languageId: string): Promise<string> {
     return (await this.entryDatabases.get(languageId).post(entryDataObject)
     ).id;
   }

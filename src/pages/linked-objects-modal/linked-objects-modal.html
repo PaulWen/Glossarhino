@@ -20,7 +20,7 @@
 
 <ion-content padding>
 
-  <ion-item-group *ngIf="relatedDepartments != undefined || isEditMode">
+  <ion-item-group *ngIf="(relatedDepartments != undefined && relatedDepartments.length > 0) || isEditMode">
     <ion-item-divider color="light">
       {{ "DEPARTMENTS" | translate:param }}
     </ion-item-divider>
@@ -38,22 +38,24 @@
     </ion-item>
   </ion-item-group>
 
-  <ion-item-group *ngIf="synonyms != undefined || isEditMode">
-    <ion-item-divider color="light">
-      {{ "ENTRIES" | translate:param }}
-    </ion-item-divider>
+  <ion-item-group *ngIf="(relatedEntries | async) != undefined || isEditMode">
 
-    <ion-item *ngFor="let entry of (relatedEntries | async)"> {{ entry.name }}
+      <ion-item-divider color="light">
+        {{ "ENTRIES" | translate:param }}
+      </ion-item-divider>
 
-      <ion-icon name="trash" item-end *ngIf="isEditMode" (click)="removeRelatedEntry(entry._id)"></ion-icon>
+      <ion-item *ngFor="let entry of (relatedEntries | async)"> {{ entry.name }}
 
-    </ion-item>
+        <ion-icon name="trash" item-end *ngIf="isEditMode" (click)="removeRelatedEntry(entry._id)"></ion-icon>
 
-    <ion-item *ngIf="isEditMode">
-      <button ion-button (click)="openEntryListModal()">
+      </ion-item>
+
+      <ion-item *ngIf="isEditMode">
+        <button ion-button (click)="openEntryListModal()">
       {{ "ADD_ENTRY" | translate:param }}
       </button>
-    </ion-item>
+      </ion-item>
+
   </ion-item-group>
 
   <ion-item-group *ngIf="synonyms != undefined || isEditMode">

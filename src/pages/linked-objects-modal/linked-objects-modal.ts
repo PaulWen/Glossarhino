@@ -103,7 +103,7 @@ export class LinkedObjectsModalPage {
     });
   }
 
-  private loadEntries(relatedEntriesIds: Array<string>) {
+  private loadEntries(relatedEntriesIds: Array<string>): Promise<Array<EntryDataObject>> {
     return new Promise((resolve, reject) => {
       let relatedEntries = []; // instantiate array
 
@@ -143,6 +143,9 @@ export class LinkedObjectsModalPage {
     if (index > -1) {
       this.relatedDepartments.splice(index, 1);
     }
+    if (this.relatedDepartments.length == 0) {
+      this.relatedDepartments = undefined;
+    }
   }
 
   private addRelatedEntry(newRelatedEntryDocumentId: string) {
@@ -160,6 +163,10 @@ export class LinkedObjectsModalPage {
     let index: number = this.relatedEntriesIds.findIndex(relatedDepartmentDocumentId => relatedDepartmentDocumentId == relatedEntryToRemoveDocumentId);
     if (index > -1) {
       this.relatedEntriesIds.splice(index, 1);
+    }
+
+    if (this.relatedEntriesIds.length == 0) {
+      this.relatedEntriesIds = undefined;
     }
 
     // reload page
@@ -181,6 +188,9 @@ export class LinkedObjectsModalPage {
     if (index > -1) {
       this.synonyms.splice(index, 1);
     }
+    if (this.synonyms.length == 0) {
+      this.synonyms = undefined;
+    }
   }
 
   private addAcronym() {
@@ -197,6 +207,9 @@ export class LinkedObjectsModalPage {
     let index: number = this.acronyms.findIndex(acronym => acronym == acronymToRemove);
     if (index > -1) {
       this.acronyms.splice(index, 1);
+    }
+    if (this.acronyms.length == 0) {
+      this.acronyms = undefined;
     }
   }
 

@@ -136,6 +136,9 @@ export class EditModalPage {
     if (index > -1) {
       this.entry.departmentSpecifics.splice(index, 1);
     }
+    if (this.entry.departmentSpecifics.length == 0) {
+      this.entry.departmentSpecifics = undefined;
+    }
   }
 
   private removeEntryDataObject(entryDataObject: EntryDataObject, languageId: string) {
